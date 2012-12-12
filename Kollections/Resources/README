@@ -1,0 +1,40 @@
+README - Kollections
+
+__________________________________________________________________
+DEVELOPER NOTES
+------------------------------------------------------------------
+
+
+
+
+
+
+
+__________________________________________________________________
+TO DO
+------------------------------------------------------------------
+- Add KKCache/KKUtility methods for kollection objects
+- Add pertinant constants for kollection object tracking
+- Add log out call to My Profile screen
+- Allow for a user created using Parse to link themselves with FB and/or Twitter via Settings page: https://www.parse.com/docs/ios_guide#fbusers-link/iOS
+- Add ability to post to Facebook: https://www.parse.com/docs/ios_guide#fbusers-signup/iOS
+- Add icon to FB URL scheme in Target --> Info "icon@2x.png"
+- Add app store ID to FB app settings page once added to iTunes for direct linking to it in app store
+
+
+
+
+__________________________________________________________________
+COMPLETED
+------------------------------------------------------------------
+
+
+
+
+
+
+
+__________________________________________________________________
+FUTURE
+------------------------------------------------------------------
+- Add Viddy support with 15-second video clips

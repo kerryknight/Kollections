@@ -1,10 +1,5 @@
-//
-//  main.m
-//  Kollections
-//
-//  Created by Kerry Knight on 12/11/12.
-//  Copyright (c) 2012 Kerry Knight. All rights reserved.
-//
+
+// Copyright 2011 Ping Labs, Inc. All rights reserved.
 
 #import <UIKit/UIKit.h>
 
