@@ -21,8 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    [[self tabBar] setBackgroundImage:[UIImage imageNamed:@"BackgroundTabBar.png"]];
-    [[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"BackgroundTabBarItemSelected.png"]];
+    [[self tabBar] setBackgroundImage:[UIImage imageNamed:@"kkTabBarBackground.png"]];
+    [[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"kkTabBarDown.png"]];
     
     self.navController = [[UINavigationController alloc] init];
     [KKUtility addBottomDropShadowToNavigationBarForNavigationController:self.navController];
@@ -45,9 +45,9 @@
     [super setViewControllers:viewControllers animated:animated];
     
     UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.frame = CGRectMake( 94.0f, 0.0f, 131.0f, self.tabBar.bounds.size.height);
-    [cameraButton setImage:[UIImage imageNamed:@"ButtonCamera.png"] forState:UIControlStateNormal];
-    [cameraButton setImage:[UIImage imageNamed:@"ButtonCameraSelected.png"] forState:UIControlStateHighlighted];
+    cameraButton.frame = CGRectMake(128.0f, 0.0f, 64.0f, self.tabBar.bounds.size.height);
+    [cameraButton setImage:[UIImage imageNamed:@"kkCameraUp.png"] forState:UIControlStateNormal];
+    [cameraButton setImage:[UIImage imageNamed:@"kkCameraDown.png"] forState:UIControlStateHighlighted];
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:cameraButton];
     

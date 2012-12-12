@@ -9,6 +9,13 @@
 #import "KKWelcomeViewController.h"
 #import "KKAppDelegate.h"
 
+@interface KKWelcomeViewController () {
+}
+
+-(void)setDisplayNameEqualToAdditionalField;
+
+@end
+
 @implementation KKWelcomeViewController
 
 #pragma mark - UIViewController
@@ -58,19 +65,58 @@
         return;
     }
     
-    // Check if user is missing a Facebook ID
-    if ([KKUtility userHasValidFacebookData:[PFUser currentUser]]) {
-        // User has Facebook ID.
-        
-        // refresh Facebook friends on each launch
-        PF_FBRequest *request = [PF_FBRequest requestForMyFriends];
-        [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
-        [request startWithCompletionHandler:nil];
+    //check what type of login we have
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //we're logged in with Facebook
+        // Check if user is missing a Facebook ID
+        if ([KKUtility userHasValidFacebookData:[PFUser currentUser]]) {
+            // User has Facebook ID.
+            
+            // refresh Facebook friends on each launch
+            PF_FBRequest *request = [PF_FBRequest requestForMyFriends];
+            [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
+            [request startWithCompletionHandler:nil];
+        } else {
+            NSLog(@"User missing Facebook ID; Should check to see if they connected via Facebook first before querying again.");
+            PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture,email"];
+            [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
+            [request startWithCompletionHandler:nil];
+        }
+    } else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
+        //we're logged in with Twitter //UPDATE
     } else {
-        NSLog(@"User missing Facebook ID; Should check to see if they connected via Facebook first before querying again.");
-        PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture,email"];
-        [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
-        [request startWithCompletionHandler:nil];
+        //we're logged with via a Parse account so set the displayName
+        [self setDisplayNameEqualToAdditionalField];
+    }
+}
+
+-(void)setDisplayNameEqualToAdditionalField {
+//    NSLog(@"%s", __FUNCTION__);
+    //check if it's a parse signee; if so, set their displayName field to the additional field from signup
+    //check what type of login we have
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]] && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //the user signed up via Parse so set their displayName field which we don't set otherwise
+        PFUser *user = [PFUser currentUser];
+        PFQuery *query = [PFQuery queryWithClassName:@"_User"];//use the table name in Parse
+        [query whereKey:@"objectId" equalTo:user.objectId];
+        query.limit = 1;
+        
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                if (objects.count > 0) {
+                    PFObject *_user = [objects objectAtIndex:0];
+                    [_user setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
+                    [_user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        if (!error) {
+                            //success so can update UI appropriately now
+                            NSLog(@"saved displayName successfully");
+                        } else {
+                            //error saving displayName back to Parse
+                        }
+                    }];
+                }
+            }
+        }];
     }
 }
 

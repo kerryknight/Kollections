@@ -24,43 +24,42 @@
 
 @implementation KKLogInViewController
 
-- (void)viewDidLoad
-{
-    NSLog(@"%s", __FUNCTION__);
+- (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
     
-    [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"mainBG.png"]]];
-    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"titleBarLogo.png"]]];
+    [self.logInView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];
+    [self.logInView setLogo:[[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]]];
     
     // Set buttons appearance
-    [self.logInView.passwordForgottenButton setBackgroundImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateNormal];
-    [self.logInView.passwordForgottenButton setBackgroundImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateHighlighted];
+    [self.logInView.passwordForgottenButton setBackgroundImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateNormal];//fake; so it's invisible
+    [self.logInView.passwordForgottenButton setBackgroundImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateHighlighted];//fake; so it's invisible
     [self.logInView.passwordForgottenButton setTitle:@"Forgot Password?" forState:UIControlStateNormal];
     [self.logInView.passwordForgottenButton setTitle:@"Forgot Password?" forState:UIControlStateHighlighted];
     
-    [self.logInView.signUpButton setBackgroundImage:[UIImage imageNamed:@"signUpButtonUp.png"] forState:UIControlStateNormal];
-    [self.logInView.signUpButton setBackgroundImage:[UIImage imageNamed:@"signUpButtonDown.png"] forState:UIControlStateHighlighted];
+    [self.logInView.signUpButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonUp.png"] forState:UIControlStateNormal];
+    [self.logInView.signUpButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonDown.png"] forState:UIControlStateHighlighted];
     [self.logInView.signUpButton setTitle:@"Sign Up" forState:UIControlStateNormal];
     [self.logInView.signUpButton setTitle:@"Sign Up" forState:UIControlStateHighlighted];
     
-    [self.logInView.logInButton setBackgroundImage:[UIImage imageNamed:@"loginButtonUp.png"] forState:UIControlStateNormal];
-    [self.logInView.logInButton setBackgroundImage:[UIImage imageNamed:@"loginButtonDown.png"] forState:UIControlStateHighlighted];
+    [self.logInView.logInButton setBackgroundImage:[UIImage imageNamed:@"kkLoginButtonUp.png"] forState:UIControlStateNormal];
+    [self.logInView.logInButton setBackgroundImage:[UIImage imageNamed:@"kkLoginButtonDown.png"] forState:UIControlStateHighlighted];
     [self.logInView.logInButton setTitle:@"Log in" forState:UIControlStateNormal];
     [self.logInView.logInButton setTitle:@"Log in" forState:UIControlStateHighlighted];
     
     // Add login field background
-    self.fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loginFieldBG.png"]];
+    self.fieldsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkLoginFieldBG.png"]];
     [self.logInView addSubview:self.fieldsBackground];
     [self.logInView sendSubviewToBack:self.fieldsBackground];
     [self.logInView sendSubviewToBack:self.logInView.passwordForgottenButton];
     
     // Add nav bar background
-    self.navBarBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"backgroundNavBar.png"]]; 
+    self.navBarBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkBackgroundNavBar.png"]]; 
     [self.logInView addSubview:self.navBarBackground];
     [self.logInView sendSubviewToBack:self.navBarBackground];
     
     // Add header bar background
-    self.headerBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"headerBackground.png"]];
+    self.headerBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkHeaderBackground.png"]];
     [self.logInView addSubview:self.headerBackground];
     [self.logInView sendSubviewToBack:self.headerBackground];
     
@@ -109,7 +108,8 @@
     
     //use attributed strings to set color of placeholder text to darker
     UIColor *color = [UIColor colorWithRed:101.0f/255.0f green:101.0f/255.0f blue:101.0f/255.0f alpha:1.0];
-    self.logInView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Username" attributes:@{NSForegroundColorAttributeName: color}];
+    //username == email address for logging in
+    self.logInView.usernameField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Email Address" attributes:@{NSForegroundColorAttributeName: color}];
     self.logInView.passwordField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Password" attributes:@{NSForegroundColorAttributeName: color}];
     self.logInView.passwordForgottenButton.titleLabel.textColor = [UIColor darkGrayColor];
     self.logInView.passwordForgottenButton.titleLabel.textAlignment = UITextAlignmentRight;

@@ -28,17 +28,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-
-    self.navigationItem.rightBarButtonItem = [[KKSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
+//    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+//
+//    self.navigationItem.rightBarButtonItem = [[KKSettingsButtonItem alloc] initWithTarget:self action:@selector(settingsButtonAction:)];
+//    
+//    self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
+//    
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//    button.frame = CGRectMake( 33.0f, 96.0f, 253.0f, 173.0f);
+//    [button setBackgroundImage:[UIImage imageNamed:@"HomeTimelineBlank.png"] forState:UIControlStateNormal];
+//    [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+//    [self.blankTimelineView addSubview:button];
     
-    self.blankTimelineView = [[UIView alloc] initWithFrame:self.tableView.bounds];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake( 33.0f, 96.0f, 253.0f, 173.0f);
-    [button setBackgroundImage:[UIImage imageNamed:@"HomeTimelineBlank.png"] forState:UIControlStateNormal];
-    [button addTarget:self action:@selector(inviteFriendsButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.blankTimelineView addSubview:button];
+    UIView *whiteBG = [[UIView alloc] initWithFrame:self.view.bounds];
+    whiteBG.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:whiteBG];
 }
 
 

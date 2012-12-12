@@ -117,7 +117,7 @@
     // Create the sign up view controller
     PFSignUpViewController *signUpViewController = [[KKSignUpViewController alloc] init];
     [signUpViewController setDelegate:self]; // Set ourselves as the delegate
-    [signUpViewController setFields:PFSignUpFieldsDefault/* | PFSignUpFieldsAdditional*/];
+    [signUpViewController setFields:PFSignUpFieldsDefault | PFSignUpFieldsAdditional];
     
     // Assign our sign up controller to be displayed from the login controller
     [logInViewController setSignUpController:signUpViewController];
@@ -146,9 +146,17 @@
         [self.hud setDimBackground:YES];
     }
     
-    PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture"];
-    [request setDelegate:self];
-    [request startWithCompletionHandler:NULL];
+    //check what type of login we have
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //we're logged in with Facebook so request the user's name and pic data
+        PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture"];
+        [request setDelegate:self];
+        [request startWithCompletionHandler:NULL];
+    } else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
+        //we're logged in with Twitter //UPDATE
+    } else {
+        //we're logged with via a Parse account
+    }
     
     // Subscribe to private push channel
     if (user) {
@@ -167,14 +175,14 @@
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
     
     NSLog(@"Failed to log in with error: %@", error);
-    //    alertMessage(@"Uh oh. Something happened and logging in failed with error: %@. Please try again.", [error localizedDescription]);
+    alertMessage(@"Uh oh. Something happened and logging in failed with error: %@. Please try again.", [error localizedDescription]);
 }
 
 #pragma mark - PFSignUpViewControllerDelegate
 
 // Sent to the delegate to determine whether the sign up request should be submitted to the server.
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
-    //    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     BOOL informationComplete = YES;
     for (id key in info) {
         NSString *field = [info objectForKey:key];
@@ -195,6 +203,15 @@
         if ([key isEqualToString:@"password"] && [field rangeOfCharacterFromSet:set].location == NSNotFound) {
             //no numbers found
             alertMessage(@"Password must contain at least one number");
+            informationComplete = NO;
+            return informationComplete;
+        }
+        
+        //ensure our display name doesn't include any special characters so we don't get lots of dicks and stuff for names 8======D 
+        set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789"] invertedSet];
+        if ([key isEqualToString:@"password"] && [field rangeOfCharacterFromSet:set].location != NSNotFound) {
+            //special characters found
+            alertMessage(@"Display names can only contain letters and numbers.");
             informationComplete = NO;
             return informationComplete;
         }
@@ -225,10 +242,10 @@
     NSLog(@"User dismissed the signUpViewController");
 }
 
+#pragma mark - Tab Bar Controller
 - (void)presentTabBarController {
     //    NSLog(@"%s", __FUNCTION__);
     self.tabBarController = [[KKTabBarController alloc] init];
-    
     self.homeViewController = [[KKHomeViewController alloc] init];
     self.searchViewController = [[KKSearchViewController alloc] init];
     self.activityViewController = [[KKActivityFeedViewController alloc] init];
@@ -256,48 +273,28 @@
     //SET UP THE TAB BAR BUTTON GRAPHICS
     UITabBarItem *homeTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Feed" image:nil tag:0];
     [homeTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"42-photosW.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"42-photos.png"]];
-    [homeTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                            [UIColor darkGrayColor], UITextAttributeTextColor,
-                                            nil] forState:UIControlStateNormal];
-    [homeTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                            [UIColor whiteColor], UITextAttributeTextColor,
-                                            nil] forState:UIControlStateSelected];
+    [homeTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor darkGrayColor], UITextAttributeTextColor, nil] forState:UIControlStateNormal];
+    [homeTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
     
-    UITabBarItem *searchTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Search" image:nil tag:0];
+    UITabBarItem *searchTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Search" image:nil tag:1];
     [searchTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"06-magnifyW.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"06-magnify.png"]];
-    [searchTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                              [UIColor darkGrayColor], UITextAttributeTextColor,
-                                              nil] forState:UIControlStateNormal];
-    [searchTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                              [UIColor whiteColor], UITextAttributeTextColor,
-                                              nil] forState:UIControlStateSelected];
+    [searchTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor darkGrayColor], UITextAttributeTextColor, nil] forState:UIControlStateNormal];
+    [searchTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
     
-    UITabBarItem *cameraTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Camera" image:nil tag:0];
+    UITabBarItem *cameraTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Camera" image:nil tag:2];
     [cameraTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"86-cameraW.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"86-camera.png"]];
-    [cameraTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                              [UIColor darkGrayColor], UITextAttributeTextColor,
-                                              nil] forState:UIControlStateNormal];
-    [cameraTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                              [UIColor whiteColor], UITextAttributeTextColor,
-                                              nil] forState:UIControlStateSelected];
+    [cameraTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor darkGrayColor], UITextAttributeTextColor, nil] forState:UIControlStateNormal];
+    [cameraTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
     
-    UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Activity" image:nil tag:0];
-    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"166-newsKKerW.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"166-newsKKer.png"]];
-    [activityFeedTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    [UIColor darkGrayColor], UITextAttributeTextColor,
-                                                    nil] forState:UIControlStateNormal];
-    [activityFeedTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                    [UIColor whiteColor], UITextAttributeTextColor,
-                                                    nil] forState:UIControlStateSelected];
+    UITabBarItem *activityFeedTabBarItem = [[UITabBarItem alloc] initWithTitle:@"Activity" image:nil tag:3];
+    [activityFeedTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"166-newspaperW.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"166-newspaper.png"]];
+    [activityFeedTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor darkGrayColor], UITextAttributeTextColor, nil] forState:UIControlStateNormal];
+    [activityFeedTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
     
-    UITabBarItem *myProfileTabBarItem = [[UITabBarItem alloc] initWithTitle:@"My Profile" image:nil tag:0];
+    UITabBarItem *myProfileTabBarItem = [[UITabBarItem alloc] initWithTitle:@"My Profile" image:nil tag:4];
     [myProfileTabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"111-userW.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"111-user.png"]];
-    [myProfileTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                 [UIColor darkGrayColor], UITextAttributeTextColor,
-                                                 nil] forState:UIControlStateNormal];
-    [myProfileTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                 [UIColor whiteColor], UITextAttributeTextColor,
-                                                 nil] forState:UIControlStateSelected];
+    [myProfileTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor darkGrayColor], UITextAttributeTextColor, nil] forState:UIControlStateNormal];
+    [myProfileTabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor whiteColor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
     
     [homeNavigationController setTabBarItem:homeTabBarItem];
     [searchNavigationController setTabBarItem:searchTabBarItem];
@@ -306,19 +303,26 @@
     [myProfileNavigationController setTabBarItem:myProfileTabBarItem];
     
     [self.tabBarController setDelegate:self];
-    [self.tabBarController setViewControllers:[NSArray arrayWithObjects:homeNavigationController, /*searchNavigationController,*/emptyNavigationController, activityFeedNavigationController, myProfileNavigationController, nil]];
+    [self.tabBarController setViewControllers:[NSArray arrayWithObjects:homeNavigationController, searchNavigationController, emptyNavigationController, activityFeedNavigationController, myProfileNavigationController, nil]];
     
     [self.navController setViewControllers:[NSArray arrayWithObjects:self.welcomeViewController, self.tabBarController, nil] animated:NO];
     
     
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge| UIRemoteNotificationTypeAlert| UIRemoteNotificationTypeSound];
     
-    
-    //    NSLog(@"Downloading user's profile picture");
-    //    // Download user's profile picture
-    //    NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kKKUserFacebookIDKey]]];
-    //    NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
-    //    [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
+    //check what type of login we have
+    if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //we're logged in with Facebook so request the user's name and pic data
+        NSLog(@"Downloading user's profile picture");
+        // Download user's profile picture
+        NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kKKUserFacebookIDKey]]];
+        NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
+        [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
+    } else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
+        //we're logged in with Twitter //UPDATE
+    } else {
+        //we're logged with via a Parse account
+    }
 }
 
 
@@ -369,24 +373,24 @@
             PFQuery *facebookFriendsQuery = [PFUser query];
             [facebookFriendsQuery whereKey:kKKUserFacebookIDKey containedIn:facebookIds];
             
-            //            // auto-follow Parse employees
-            //            PFQuery *parseEmployeesQuery = [PFUser query];
-            //            [parseEmployeesQuery whereKey:kKKUserFacebookIDKey containedIn:kKKParseEmployeeAccounts];
+//            // auto-follow Parse employees
+//            PFQuery *parseEmployeesQuery = [PFUser query];
+//            [parseEmployeesQuery whereKey:kKKUserFacebookIDKey containedIn:kKKParseEmployeeAccounts];
             
             // combined query
             PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:/*parseEmployeesQuery,*/facebookFriendsQuery, nil]];
             
             
             //backgrounded version of query
-            //            __block NSArray *kollectionFiends = [NSArray array];
-            //            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            //                if (error) {
-            //                   // There was an error
-            //                } else {
-            //                    // objects has all the Posts the current user liked.
-            //                    kollectionFiends = [NSArray arrayWithArray:objects];
-            //                }
-            //            }];
+            __block NSArray *kollectionFiends = [NSArray array];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (error) {
+                    // There was an error
+                } else {
+                    // objects has all the Posts the current user liked.
+                    kollectionFiends = [NSArray arrayWithArray:objects];
+                }
+            }];
             
             NSArray *kollectionsFriends = [query findObjects:&error];
             
@@ -622,17 +626,17 @@
                                                           [UIColor colorWithWhite:0.0f alpha:0.750f],UITextAttributeTextShadowColor,
                                                           [NSValue valueWithCGSize:CGSizeMake(0.0f, 1.0f)],UITextAttributeTextShadowOffset,
                                                           nil]];
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"backgroundNavigationBar.png"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"kkBackgroundNavBar.png"] forBarMetrics:UIBarMetricsDefault];
     
-    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"regularNavBarButton.png"] forState:UIControlStateNormal];
-    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"regularNavBarButtonSelected.png"] forState:UIControlStateHighlighted];
+    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"kkRegularNavBarButton.png"] forState:UIControlStateNormal];
+    [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setBackgroundImage:[UIImage imageNamed:@"kkRegularNavBarButtonSelected.png"] forState:UIControlStateHighlighted];
     [[UIButton appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleColor:[UIColor colorWithRed:214.0f/255.0f green:210.0f/255.0f blue:197.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
     
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"backButtonNavBar.png"]
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"kkBackButtonNavBar.png"]
                                                       forState:UIControlStateNormal
                                                     barMetrics:UIBarMetricsDefault];
     
-    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"backButtonNavBarSelected.png"]
+    [[UIBarButtonItem appearance] setBackButtonBackgroundImage:[UIImage imageNamed:@"kkBackButtonNavBarSelected.png"]
                                                       forState:UIControlStateSelected
                                                     barMetrics:UIBarMetricsDefault];
     
@@ -666,11 +670,11 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:KKAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:remoteNotificationPayload];
         
         if ([PFUser currentUser]) {
-            //            if the push notification payload references a photo, we will attempt to push this view controller into view
+//            if the push notification payload references a photo, we will attempt to push this view controller into view
             NSString *photoObjectId = [remoteNotificationPayload objectForKey:kKKPushPayloadPhotoObjectIdKey];
             NSString *fromObjectId = [remoteNotificationPayload objectForKey:kKKPushPayloadFromUserObjectIdKey];
             if (photoObjectId && photoObjectId.length > 0) {
-                //                check if this photo is already available locally.
+//                check if this photo is already available locally.
                 
                 PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:kKKPhotoClassKey objectId:photoObjectId];
                 for (PFObject *photo in self.homeViewController.objects) {
@@ -681,7 +685,7 @@
                     }
                 }
                 
-                //                if we have a local copy of this photo, this won't result in a network fetch
+//                if we have a local copy of this photo, this won't result in a network fetch
                 [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                     if (!error) {
                         UINavigationController *homeNavigationController = [[self.tabBarController viewControllers] objectAtIndex:KKHomeTabBarItemIndex];
@@ -692,7 +696,7 @@
                     }
                 }];
             } else if (fromObjectId && fromObjectId.length > 0) {
-                //                load fromUser's profile
+//                load fromUser's profile
                 
                 PFQuery *query = [PFUser query];
                 query.cachePolicy = kPFCachePolicyCacheElseNetwork;

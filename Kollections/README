@@ -11,7 +11,7 @@ DEVELOPER NOTES
 
 
 __________________________________________________________________
-TO DO
+TO DO APP
 ------------------------------------------------------------------
 - Add KKCache/KKUtility methods for kollection objects
 - Add pertinant constants for kollection object tracking
@@ -20,7 +20,14 @@ TO DO
 - Add ability to post to Facebook: https://www.parse.com/docs/ios_guide#fbusers-signup/iOS
 - Add icon to FB URL scheme in Target --> Info "icon@2x.png"
 - Add app store ID to FB app settings page once added to iTunes for direct linking to it in app store
+- Upload avatar for parse registrations
+- Attributed strings in SignUpViewController linking to UIWebView of TOS and Privacy policy on www.startakollection.com
 
+
+__________________________________________________________________
+TO DO CLOUD CODE
+------------------------------------------------------------------
+- Cloud code added to prevent the same Display Name from being signed up with as other users
 
 
 
@@ -29,6 +36,14 @@ COMPLETED
 ------------------------------------------------------------------
 
 
+
+
+
+
+__________________________________________________________________
+TIPS
+------------------------------------------------------------------
+- Swipe up on camera button to go straight to taking a photo
 
 
 

@@ -8,7 +8,7 @@
 
 #import "KKActivityCell.h"
 
-@interface KKActivityFeedViewController : PFQueryTableViewController <KKActivityCellDelegate>
+@interface KKActivityFeedViewController : UIViewController //PFQueryTableViewController <KKActivityCellDelegate>
 
 + (NSString *)stringForActivityType:(NSString *)activityType;
 

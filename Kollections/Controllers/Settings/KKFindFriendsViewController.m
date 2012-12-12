@@ -329,9 +329,18 @@ static NSUInteger const kKKCellPhotoNumLabelTag = 5;
 
     if (property == kABPersonEmailProperty) {
 
+        //original Anypic code commented out 12Dec2012
+//        ABMultiValueRef emailProperty = ABRecordCopyValue(person,property);
+//        NSString *email = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(emailProperty,identifier);
+//        self.selectedEmailAddress = email;
+        
+        //***** fix proposed by user Orlando on Parse forum as replacement for above commented out code - 12Dec2012 - https://www.parse.com/questions/bug-anypic
         ABMultiValueRef emailProperty = ABRecordCopyValue(person,property);
-        NSString *email = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(emailProperty,identifier);
+        CFIndex index = ABMultiValueGetIndexForIdentifier(emailProperty, identifier);
+        NSString *email = (__bridge_transfer NSString *)ABMultiValueCopyValueAtIndex(emailProperty, index);
         self.selectedEmailAddress = email;
+        CFRelease(emailProperty);
+        //***** fix *****//
 
         if ([MFMailComposeViewController canSendMail] && [MFMessageComposeViewController canSendText]) {
             // ask user
