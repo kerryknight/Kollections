@@ -19,9 +19,11 @@ TO DO APP
 - Allow for a user created using Parse to link themselves with FB and/or Twitter via Settings page: https://www.parse.com/docs/ios_guide#fbusers-link/iOS
 - Add ability to post to Facebook: https://www.parse.com/docs/ios_guide#fbusers-signup/iOS
 - Add icon to FB URL scheme in Target --> Info "icon@2x.png"
+- Add icon to Twitter app page
 - Add app store ID to FB app settings page once added to iTunes for direct linking to it in app store
 - Upload avatar for parse registrations
 - Attributed strings in SignUpViewController linking to UIWebView of TOS and Privacy policy on www.startakollection.com
+- Redo Log in button in another color? Top two corners are pixelated
 
 
 __________________________________________________________________
@@ -53,3 +55,4 @@ __________________________________________________________________
 FUTURE
 ------------------------------------------------------------------
 - Add Viddy support with 15-second video clips
+- Add Twitter login integration

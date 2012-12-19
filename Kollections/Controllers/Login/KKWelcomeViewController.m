@@ -42,6 +42,7 @@
     
     // If not logged in, present login view controller
     if (![PFUser currentUser]) {
+        NSLog(@"no current user welcome");
         [(KKAppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
         return;
     }
@@ -82,22 +83,22 @@
             [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
             [request startWithCompletionHandler:nil];
         }
-    } else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
-        //we're logged in with Twitter //UPDATE
-    } else {
-        //we're logged with via a Parse account so set the displayName
-        [self setDisplayNameEqualToAdditionalField];
-    }
+    } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
+       //we're logged in with Twitter //UPDATE
+       } */else {
+           //we're logged with via a Parse account so set the displayName
+           [self setDisplayNameEqualToAdditionalField];
+       }
 }
 
 -(void)setDisplayNameEqualToAdditionalField {
-//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"%s", __FUNCTION__);
     //check if it's a parse signee; if so, set their displayName field to the additional field from signup
     //check what type of login we have
-    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]] && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]) {
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]/* && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]*/) {
         //the user signed up via Parse so set their displayName field which we don't set otherwise
         PFUser *user = [PFUser currentUser];
-        PFQuery *query = [PFQuery queryWithClassName:@"_User"];//use the table name in Parse
+        PFQuery *query = [PFQuery queryWithClassName:@"User"];//use the table name in Parse
         [query whereKey:@"objectId" equalTo:user.objectId];
         query.limit = 1;
         

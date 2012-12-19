@@ -29,6 +29,7 @@
 	// Do any additional setup after loading the view.
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
     UIView *whiteBG = [[UIView alloc] initWithFrame:self.view.bounds];
     whiteBG.backgroundColor = [UIColor whiteColor];

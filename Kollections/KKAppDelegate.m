@@ -66,7 +66,7 @@
     [PFFacebookUtils initializeWithApplicationId:kKKFacebookAppID];
     //
     // Set the Twitter connection parameters
-    [PFTwitterUtils initializeWithConsumerKey:kKKTwitterConsumerKey consumerSecret:kKKTwitterConsumerSecret];
+    //[PFTwitterUtils initializeWithConsumerKey:kKKTwitterConsumerKey consumerSecret:kKKTwitterConsumerSecret];
     // ****************************************************************************
     //    [PFUser enableAutomaticUser];
     
@@ -106,11 +106,11 @@
 
 #pragma mark - PFLogInViewControllerDelegate
 - (void)presentLoginViewControllerAnimated:(BOOL)animated {
-    //    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     // Create the log in view controller
     PFLogInViewController *logInViewController = [[KKLogInViewController alloc] init];
     [logInViewController setDelegate:self]; // Set ourselves as the delegate
-    [logInViewController setFields:PFLogInFieldsUsernameAndPassword | PFLogInFieldsTwitter | PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton /*| PFLogInFieldsDismissButton*/ | PFLogInFieldsPasswordForgotten];
+    [logInViewController setFields:PFLogInFieldsUsernameAndPassword | /*PFLogInFieldsTwitter |*/ PFLogInFieldsFacebook | PFLogInFieldsSignUpButton | PFLogInFieldsLogInButton /*| PFLogInFieldsDismissButton*/ | PFLogInFieldsPasswordForgotten];
     
     [logInViewController setFacebookPermissions:[NSArray arrayWithObjects:@"user_about_me", @"friends_about_me", nil]];
     
@@ -125,7 +125,7 @@
     //main queue
     dispatch_async(dispatch_get_main_queue(), ^{
         // Present the log in view controller
-        [self.welcomeViewController presentViewController:logInViewController animated:YES completion:NULL];
+        [self.welcomeViewController presentViewController:logInViewController animated:NO completion:NULL];
     });
 }
 
@@ -138,7 +138,7 @@
 // Called on successful login. This is likely to be the place where we register
 // the user to the "user_xxxxxxxx" channel
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     // user has logged in - we need to fetch all of their Facebook data before we let them in
     if (![self shouldProceedToMainInterface:user]) {
         self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
@@ -152,14 +152,16 @@
         PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture"];
         [request setDelegate:self];
         [request startWithCompletionHandler:NULL];
-    } else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
-        //we're logged in with Twitter //UPDATE
-    } else {
-        //we're logged with via a Parse account
-    }
+    } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
+       //we're logged in with Twitter //UPDATE
+       NSLog(@"logged into twitter, now retrieve twitter name and picture");
+       } */else {
+           //we're logged with via a Parse account
+       }
     
     // Subscribe to private push channel
     if (user) {
+        NSLog(@"subscribe to private push channel");
         NSString *privateChannelName = [NSString stringWithFormat:@"user_%@", [user objectId]];
         // Add the user to the installation so we can track the owner of the device
         [[PFInstallation currentInstallation] setObject:[PFUser currentUser] forKey:kKKInstallationUserKey];
@@ -182,7 +184,7 @@
 
 // Sent to the delegate to determine whether the sign up request should be submitted to the server.
 - (BOOL)signUpViewController:(PFSignUpViewController *)signUpController shouldBeginSignUp:(NSDictionary *)info {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     BOOL informationComplete = YES;
     for (id key in info) {
         NSString *field = [info objectForKey:key];
@@ -207,7 +209,7 @@
             return informationComplete;
         }
         
-        //ensure our display name doesn't include any special characters so we don't get lots of dicks and stuff for names 8======D 
+        //ensure our display name doesn't include any special characters so we don't get lots of dicks and stuff for names 8======D
         set = [[NSCharacterSet characterSetWithCharactersInString:@"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLKMNOPQRSTUVWXYZ0123456789"] invertedSet];
         if ([key isEqualToString:@"password"] && [field rangeOfCharacterFromSet:set].location != NSNotFound) {
             //special characters found
@@ -244,7 +246,7 @@
 
 #pragma mark - Tab Bar Controller
 - (void)presentTabBarController {
-    //    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     self.tabBarController = [[KKTabBarController alloc] init];
     self.homeViewController = [[KKHomeViewController alloc] init];
     self.searchViewController = [[KKSearchViewController alloc] init];
@@ -318,19 +320,18 @@
         NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kKKUserFacebookIDKey]]];
         NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
         [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
-    } else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
-        //we're logged in with Twitter //UPDATE
-    } else {
-        //we're logged with via a Parse account
-    }
+    } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
+       //we're logged in with Twitter //UPDATE
+       }*/ else {
+           //we're logged with via a Parse account
+       }
 }
 
 
 #pragma mark - Facebook
 //Facebook OAuth - one of these URL methods will be used (based on target iOS version) to enable Facebook's Single-Sign On feature
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    NSLog(@"%s", __FUNCTION__);
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     BOOL handledActionURL = [self handleActionURL:url];
     
     if (handledActionURL) {
@@ -347,7 +348,7 @@
 
 #pragma mark - PF_FBRequestDelegate
 - (void)request:(PF_FBRequest *)request didLoad:(id)result {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     // This method is called twice - once for the user's /me profile, and a second time when obtaining their friends. We will try and handle both scenarios in a single method.
     
     NSArray *data = [result objectForKey:@"data"];
@@ -373,29 +374,27 @@
             PFQuery *facebookFriendsQuery = [PFUser query];
             [facebookFriendsQuery whereKey:kKKUserFacebookIDKey containedIn:facebookIds];
             
-//            // auto-follow Parse employees
-//            PFQuery *parseEmployeesQuery = [PFUser query];
-//            [parseEmployeesQuery whereKey:kKKUserFacebookIDKey containedIn:kKKParseEmployeeAccounts];
+            //            // auto-follow Parse employees
+            //            PFQuery *parseEmployeesQuery = [PFUser query];
+            //            [parseEmployeesQuery whereKey:kKKUserFacebookIDKey containedIn:kKKParseEmployeeAccounts];
             
             // combined query
             PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:/*parseEmployeesQuery,*/facebookFriendsQuery, nil]];
             
             
             //backgrounded version of query
-            __block NSArray *kollectionFiends = [NSArray array];
+            __block NSArray *kollectionFriends = [NSArray array];
             [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if (error) {
                     // There was an error
                 } else {
                     // objects has all the Posts the current user liked.
-                    kollectionFiends = [NSArray arrayWithArray:objects];
+                    kollectionFriends = [NSArray arrayWithArray:objects];
                 }
             }];
             
-            NSArray *kollectionsFriends = [query findObjects:&error];
-            
             if (!error) {
-                [kollectionsFriends enumerateObjectsUsingBlock:^(PFUser *newFriend, NSUInteger idx, BOOL *stop) {
+                [kollectionFriends enumerateObjectsUsingBlock:^(PFUser *newFriend, NSUInteger idx, BOOL *stop) {
                     PFObject *joinActivity = [PFObject objectWithClassName:kKKActivityClassKey];
                     [joinActivity setObject:[PFUser currentUser] forKey:kKKActivityFromUserKey];
                     [joinActivity setObject:newFriend forKey:kKKActivityToUserKey];
@@ -428,7 +427,7 @@
             
             if (!error) {
                 [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:NO];
-                if (kollectionsFriends.count > 0) {
+                if (kollectionFriends.count > 0) {
                     self.hud = [MBProgressHUD showHUDAddedTo:self.homeViewController.view animated:NO];
                     [self.hud setDimBackground:YES];
                     [self.hud setLabelText:@"Following Friends"];
@@ -440,7 +439,7 @@
         
         [[PFUser currentUser] saveEventually];
     } else {
-        [self.hud setLabelText:@"Creating Profile"];
+        [self.hud setLabelText:@"Creating Account"];
         NSString *facebookId = [result objectForKey:@"id"];
         NSString *facebookName = [result objectForKey:@"name"];
         
@@ -452,14 +451,14 @@
             [[PFUser currentUser] setObject:facebookId forKey:kKKUserFacebookIDKey];
         }
         
-        PF_FBRequest *request = [PF_FBRequest requestForMyFriends];
-        [request setDelegate:self];
-        [request startWithCompletionHandler:nil];
+        PF_FBRequest *request2 = [PF_FBRequest requestForMyFriends];
+        [request2 setDelegate:self];
+        [request2 startWithCompletionHandler:nil];
     }
 }
 
 - (void)request:(PF_FBRequest *)request didFailWithError:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     NSLog(@"Facebook error: %@", error);
     
     if ([PFUser currentUser]) {
@@ -585,7 +584,7 @@
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     if (application.applicationIconBadgeNumber != 0) {
         application.applicationIconBadgeNumber = 0;
         [[PFInstallation currentInstallation] saveEventually];
@@ -600,7 +599,7 @@
 #pragma mark - NSURLConnectionDataDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     _data = [[NSMutableData alloc] init];
 }
 
@@ -617,7 +616,7 @@
 #pragma mark - ()
 
 - (void)setupAppearance {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleBlackOpaque];
     
     [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:0.498f green:0.388f blue:0.329f alpha:1.0f]];
@@ -670,11 +669,11 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:KKAppDelegateApplicationDidReceiveRemoteNotification object:nil userInfo:remoteNotificationPayload];
         
         if ([PFUser currentUser]) {
-//            if the push notification payload references a photo, we will attempt to push this view controller into view
+            //            if the push notification payload references a photo, we will attempt to push this view controller into view
             NSString *photoObjectId = [remoteNotificationPayload objectForKey:kKKPushPayloadPhotoObjectIdKey];
             NSString *fromObjectId = [remoteNotificationPayload objectForKey:kKKPushPayloadFromUserObjectIdKey];
             if (photoObjectId && photoObjectId.length > 0) {
-//                check if this photo is already available locally.
+                //                check if this photo is already available locally.
                 
                 PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:kKKPhotoClassKey objectId:photoObjectId];
                 for (PFObject *photo in self.homeViewController.objects) {
@@ -685,7 +684,7 @@
                     }
                 }
                 
-//                if we have a local copy of this photo, this won't result in a network fetch
+                //                if we have a local copy of this photo, this won't result in a network fetch
                 [targetPhoto fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
                     if (!error) {
                         UINavigationController *homeNavigationController = [[self.tabBarController viewControllers] objectAtIndex:KKHomeTabBarItemIndex];
@@ -696,7 +695,7 @@
                     }
                 }];
             } else if (fromObjectId && fromObjectId.length > 0) {
-//                load fromUser's profile
+                //                load fromUser's profile
                 
                 PFQuery *query = [PFUser query];
                 query.cachePolicy = kPFCachePolicyCacheElseNetwork;

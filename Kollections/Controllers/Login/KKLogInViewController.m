@@ -141,14 +141,19 @@
                                                self.fieldsBackground.frame.size.width - 2, 26.0f)];
     self.headerLabel.frame = self.headerBackground.frame;
     [self.navBarBackground setFrame:CGRectMake(0.0f, 0.0f, 320.0f, 44.0f)];
+    
+    //position the "Kollections" logo above brown nav bar graphic
     [self.logInView.logo setFrame:CGRectMake(self.navBarBackground.frame.size.width/2 - self.logInView.logo.frame.size.width/2,
                                              self.navBarBackground.frame.size.height/2 - self.logInView.logo.frame.size.height/2, 102.0f, 36.0f)];
     
+    //position Log in button
     CGRect loginButtonFrame = self.logInView.logInButton.frame;
     [self.logInView.logInButton setFrame:CGRectMake(loginButtonFrame.origin.x,
                                                     self.fieldsBackground.frame.origin.y + self.fieldsBackground.frame.size.height + 3,
-                                                    self.logInView.signUpButton.frame.size.width,
+                                                    loginButtonFrame.size.width,
                                                     loginButtonFrame.size.height)];
+    
+    //position forgot password button just below Log in button
     [self.logInView.passwordForgottenButton setFrame:CGRectMake(self.logInView.logInButton.frame.origin.x + self.logInView.logInButton.frame.size.width - 120.0f,
                                                                 self.logInView.logInButton.frame.origin.y + self.logInView.logInButton.frame.size.height,
                                                                 120.0f,
@@ -188,7 +193,6 @@
                                                       twitterButtonFrame.origin.y + 10.0f,
                                                       twitterButtonFrame.size.width,
                                                       twitterButtonFrame.size.height)];
-    
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

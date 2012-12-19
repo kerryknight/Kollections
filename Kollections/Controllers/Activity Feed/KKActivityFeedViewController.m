@@ -68,6 +68,7 @@ static NSString *const kKKActivityTypeJoinedString = @"joined Kollections";
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
     UIView *whiteBG = [[UIView alloc] initWithFrame:self.view.bounds];
     whiteBG.backgroundColor = [UIColor whiteColor];

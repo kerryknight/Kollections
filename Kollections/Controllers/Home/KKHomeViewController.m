@@ -41,10 +41,11 @@
 //    [self.blankTimelineView addSubview:button];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
-    UIView *whiteBG = [[UIView alloc] initWithFrame:self.view.bounds];
-    whiteBG.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:whiteBG];
+//    UIView *whiteBG = [[UIView alloc] initWithFrame:self.view.bounds];
+//    whiteBG.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:whiteBG];
 }
 
 

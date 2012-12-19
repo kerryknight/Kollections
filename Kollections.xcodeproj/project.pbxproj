@@ -19,7 +19,6 @@
 		C7B1CF1516783C8500BA628A /* KKLogInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD5B16783C8500BA628A /* KKLogInViewController.m */; };
 		C7B1CF1616783C8500BA628A /* KKSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD5D16783C8500BA628A /* KKSignUpViewController.m */; };
 		C7B1CF1716783C8500BA628A /* KKWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD5F16783C8500BA628A /* KKWelcomeViewController.m */; };
-		C7B1CF1816783C8500BA628A /* KKWelcomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CD6016783C8500BA628A /* KKWelcomeViewController.xib */; };
 		C7B1CF1916783C8500BA628A /* KKAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6316783C8500BA628A /* KKAccountViewController.m */; };
 		C7B1CF1A16783C8500BA628A /* KKPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6616783C8500BA628A /* KKPhotoDetailsViewController.m */; };
 		C7B1CF1B16783C8500BA628A /* KKSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6916783C8500BA628A /* KKSearchViewController.m */; };
@@ -388,6 +387,21 @@
 		C7B1D0B416783E6000BA628A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */; };
 		C7B1D0B616783E6B00BA628A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B516783E6B00BA628A /* CFNetwork.framework */; };
 		C7B1D37216783F4D00BA628A /* README in Resources */ = {isa = PBXBuildFile; fileRef = C7B1D37116783F4D00BA628A /* README */; };
+		C7BFB93F168252A700FF3DE9 /* KKMyAccountHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */; };
+		C7BFB940168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */; };
+		C7BFB945168252BA00FF3DE9 /* KKTwoLabelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BFB944168252BA00FF3DE9 /* KKTwoLabelButton.m */; };
+		C7BFB954168252E500FF3DE9 /* kkHeaderBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */; };
+		C7BFB955168252E500FF3DE9 /* kkHeaderBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB949168252E500FF3DE9 /* kkHeaderBG@2x.png */; };
+		C7BFB956168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94A168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png */; };
+		C7BFB957168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94B168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown@2x.png */; };
+		C7BFB958168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94C168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp.png */; };
+		C7BFB959168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94D168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp@2x.png */; };
+		C7BFB95A168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94E168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder.png */; };
+		C7BFB95B168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94F168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder@2x.png */; };
+		C7BFB95C168252E500FF3DE9 /* kkSlidingToolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB950168252E500FF3DE9 /* kkSlidingToolbar.png */; };
+		C7BFB95D168252E500FF3DE9 /* kkSlidingToolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB951168252E500FF3DE9 /* kkSlidingToolbar@2x.png */; };
+		C7BFB95E168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB952168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png */; };
+		C7BFB95F168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB953168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png */; };
 		C7DC3ED21679188F00FCC60C /* NICommonMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DC3EA81679188E00FCC60C /* NICommonMetrics.m */; };
 		C7DC3ED31679188F00FCC60C /* NIDataStructures.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DC3EAA1679188E00FCC60C /* NIDataStructures.m */; };
 		C7DC3ED41679188F00FCC60C /* NIDebuggingTools.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DC3EAC1679188E00FCC60C /* NIDebuggingTools.m */; };
@@ -458,7 +472,6 @@
 		C7B1CD5D16783C8500BA628A /* KKSignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSignUpViewController.m; sourceTree = "<group>"; };
 		C7B1CD5E16783C8500BA628A /* KKWelcomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKWelcomeViewController.h; sourceTree = "<group>"; };
 		C7B1CD5F16783C8500BA628A /* KKWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKWelcomeViewController.m; sourceTree = "<group>"; };
-		C7B1CD6016783C8500BA628A /* KKWelcomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKWelcomeViewController.xib; sourceTree = "<group>"; };
 		C7B1CD6216783C8500BA628A /* KKAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKAccountViewController.h; sourceTree = "<group>"; };
 		C7B1CD6316783C8500BA628A /* KKAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKAccountViewController.m; sourceTree = "<group>"; };
 		C7B1CD6516783C8500BA628A /* KKPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPhotoDetailsViewController.h; sourceTree = "<group>"; };
@@ -851,6 +864,23 @@
 		C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C7B1D0B516783E6B00BA628A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C7B1D37116783F4D00BA628A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		C7BFB93C168252A700FF3DE9 /* KKMyAccountHeaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountHeaderViewController.h; sourceTree = "<group>"; };
+		C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountHeaderViewController.m; sourceTree = "<group>"; };
+		C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKMyAccountHeaderViewController.xib; sourceTree = "<group>"; };
+		C7BFB943168252BA00FF3DE9 /* KKTwoLabelButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKTwoLabelButton.h; sourceTree = "<group>"; };
+		C7BFB944168252BA00FF3DE9 /* KKTwoLabelButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKTwoLabelButton.m; sourceTree = "<group>"; };
+		C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderBG.png; sourceTree = "<group>"; };
+		C7BFB949168252E500FF3DE9 /* kkHeaderBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderBG@2x.png"; sourceTree = "<group>"; };
+		C7BFB94A168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderKoinCountsButtonDown.png; sourceTree = "<group>"; };
+		C7BFB94B168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderKoinCountsButtonDown@2x.png"; sourceTree = "<group>"; };
+		C7BFB94C168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderKoinCountsButtonUp.png; sourceTree = "<group>"; };
+		C7BFB94D168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderKoinCountsButtonUp@2x.png"; sourceTree = "<group>"; };
+		C7BFB94E168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderUserPhotoPlaceholder.png; sourceTree = "<group>"; };
+		C7BFB94F168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderUserPhotoPlaceholder@2x.png"; sourceTree = "<group>"; };
+		C7BFB950168252E500FF3DE9 /* kkSlidingToolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkSlidingToolbar.png; sourceTree = "<group>"; };
+		C7BFB951168252E500FF3DE9 /* kkSlidingToolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkSlidingToolbar@2x.png"; sourceTree = "<group>"; };
+		C7BFB952168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkSlidingToolMenuButtonDown.png; sourceTree = "<group>"; };
+		C7BFB953168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkSlidingToolMenuButtonDown@2x.png"; sourceTree = "<group>"; };
 		C7DC3EA71679188E00FCC60C /* NICommonMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NICommonMetrics.h; path = "nimbus-master/src/core/src/NICommonMetrics.h"; sourceTree = "<group>"; };
 		C7DC3EA81679188E00FCC60C /* NICommonMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NICommonMetrics.m; path = "nimbus-master/src/core/src/NICommonMetrics.m"; sourceTree = "<group>"; };
 		C7DC3EA91679188E00FCC60C /* NIDataStructures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIDataStructures.h; path = "nimbus-master/src/core/src/NIDataStructures.h"; sourceTree = "<group>"; };
@@ -1021,7 +1051,6 @@
 				C7B1CD5D16783C8500BA628A /* KKSignUpViewController.m */,
 				C7B1CD5E16783C8500BA628A /* KKWelcomeViewController.h */,
 				C7B1CD5F16783C8500BA628A /* KKWelcomeViewController.m */,
-				C7B1CD6016783C8500BA628A /* KKWelcomeViewController.xib */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1029,6 +1058,9 @@
 		C7B1CD6116783C8500BA628A /* My Account */ = {
 			isa = PBXGroup;
 			children = (
+				C7BFB93C168252A700FF3DE9 /* KKMyAccountHeaderViewController.h */,
+				C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */,
+				C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */,
 				C7B1CD6216783C8500BA628A /* KKAccountViewController.h */,
 				C7B1CD6316783C8500BA628A /* KKAccountViewController.m */,
 			);
@@ -1128,6 +1160,7 @@
 		C7B1CD9016783C8500BA628A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C7BFB946168252E500FF3DE9 /* my account */,
 				C7B1D0B716783EC700BA628A /* App Store Stuff */,
 				C7B1CD9216783C8500BA628A /* Assets */,
 				C7B1CE7E16783C8500BA628A /* main feed tableview */,
@@ -1524,6 +1557,7 @@
 		C7B1CEF016783C8500BA628A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C7BFB942168252BA00FF3DE9 /* Buttons */,
 				C7B1CEF116783C8500BA628A /* KKImageView.h */,
 				C7B1CEF216783C8500BA628A /* KKImageView.m */,
 				C7B1CEF316783C8500BA628A /* KKProfileImageView.h */,
@@ -1590,6 +1624,42 @@
 				C7B1CE6F16783C8500BA628A /* Default@2x.png */,
 			);
 			name = "App Store Stuff";
+			sourceTree = "<group>";
+		};
+		C7BFB942168252BA00FF3DE9 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				C7BFB943168252BA00FF3DE9 /* KKTwoLabelButton.h */,
+				C7BFB944168252BA00FF3DE9 /* KKTwoLabelButton.m */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		C7BFB946168252E500FF3DE9 /* my account */ = {
+			isa = PBXGroup;
+			children = (
+				C7BFB947168252E500FF3DE9 /* header */,
+			);
+			path = "my account";
+			sourceTree = "<group>";
+		};
+		C7BFB947168252E500FF3DE9 /* header */ = {
+			isa = PBXGroup;
+			children = (
+				C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */,
+				C7BFB949168252E500FF3DE9 /* kkHeaderBG@2x.png */,
+				C7BFB94A168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png */,
+				C7BFB94B168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown@2x.png */,
+				C7BFB94C168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp.png */,
+				C7BFB94D168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp@2x.png */,
+				C7BFB94E168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder.png */,
+				C7BFB94F168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder@2x.png */,
+				C7BFB950168252E500FF3DE9 /* kkSlidingToolbar.png */,
+				C7BFB951168252E500FF3DE9 /* kkSlidingToolbar@2x.png */,
+				C7BFB952168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png */,
+				C7BFB953168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png */,
+			);
+			path = header;
 			sourceTree = "<group>";
 		};
 		C7DC3E1516790BA000FCC60C /* Nimbus */ = {
@@ -1831,7 +1901,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7EBEBD7167839C100106E25 /* InfoPlist.strings in Resources */,
-				C7B1CF1816783C8500BA628A /* KKWelcomeViewController.xib in Resources */,
 				C7B1CF3316783C8500BA628A /* 29-29_pic_shadows.png in Resources */,
 				C7B1CF3416783C8500BA628A /* 29-29_pic_shadows@2x.png in Resources */,
 				C7B1CF3516783C8500BA628A /* 35-35_pic_shadows.png in Resources */,
@@ -2162,6 +2231,19 @@
 				C7B1D08716783C8500BA628A /* kkTabBarDown.png in Resources */,
 				C7B1D08816783C8500BA628A /* kkTabBarDown@2x.png in Resources */,
 				C7B1D37216783F4D00BA628A /* README in Resources */,
+				C7BFB940168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib in Resources */,
+				C7BFB954168252E500FF3DE9 /* kkHeaderBG.png in Resources */,
+				C7BFB955168252E500FF3DE9 /* kkHeaderBG@2x.png in Resources */,
+				C7BFB956168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png in Resources */,
+				C7BFB957168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown@2x.png in Resources */,
+				C7BFB958168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp.png in Resources */,
+				C7BFB959168252E500FF3DE9 /* kkHeaderKoinCountsButtonUp@2x.png in Resources */,
+				C7BFB95A168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder.png in Resources */,
+				C7BFB95B168252E500FF3DE9 /* kkHeaderUserPhotoPlaceholder@2x.png in Resources */,
+				C7BFB95C168252E500FF3DE9 /* kkSlidingToolbar.png in Resources */,
+				C7BFB95D168252E500FF3DE9 /* kkSlidingToolbar@2x.png in Resources */,
+				C7BFB95E168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png in Resources */,
+				C7BFB95F168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2254,6 +2336,8 @@
 				C7DC3EE41679188F00FCC60C /* NSString+NimbusCore.m in Sources */,
 				C7DC3EEB167918A900FCC60C /* NIAttributedLabel.m in Sources */,
 				C7DC3EEC167918A900FCC60C /* NSMutableAttributedString+NimbusAttributedLabel.m in Sources */,
+				C7BFB93F168252A700FF3DE9 /* KKMyAccountHeaderViewController.m in Sources */,
+				C7BFB945168252BA00FF3DE9 /* KKTwoLabelButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
