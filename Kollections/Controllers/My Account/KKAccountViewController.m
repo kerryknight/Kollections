@@ -11,8 +11,13 @@
 #import "TTTTimeIntervalFormatter.h"
 #import "KKLoadMoreCell.h"
 #import "KKMyAccountHeaderViewController.h"
+#import <QuartzCore/QuartzCore.h>
+#import "SRSlimeView.h"
 
-@interface KKAccountViewController()
+@interface KKAccountViewController() {
+    SRRefreshView *slimeRefreshView;
+}
+
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) KKMyAccountHeaderViewController *headerViewController;
 @end
@@ -23,20 +28,38 @@
 #pragma mark - Initialization
 
 #pragma mark - UIViewController
+- (id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        // The className to query on
+//        self.className = kKKActivityClassKey;
+        
+        // Whether the built-in pull-to-refresh is enabled
+        self.pullToRefreshEnabled = NO;
+        
+//        // Whether the built-in pagination is enabled
+//        self.paginationEnabled = YES;
+//        
+//        // The number of objects to show per page
+//        self.objectsPerPage = 15;
+        
+    }
+    return self;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
-//    if (!self.user) {
-//        [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
-//    }
+    if (![PFUser currentUser]) {
+        [NSException raise:NSInvalidArgumentException format:@"user cannot be nil"];
+    }
     
+    self.user = [PFUser currentUser];
     
-
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 222.0f)];
     [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
     
@@ -44,45 +67,38 @@
     [self addChildViewController:self.headerViewController];
     [self.headerView addSubview:self.headerViewController.view];
     [self.headerViewController didMoveToParentViewController:self];
+    self.headerViewController.toolBarViewController.delegate = self;
 
-//    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-//    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];
-//    self.tableView.backgroundView = texturedBackgroundView;
-//
-//    UIView *profilePictureBackgroundView = [[UIView alloc] initWithFrame:CGRectMake( 94.0f, 38.0f, 132.0f, 132.0f)];
-//    [profilePictureBackgroundView setBackgroundColor:[UIColor darkGrayColor]];
-//    profilePictureBackgroundView.alpha = 0.0f;
-//    CALayer *layer = [profilePictureBackgroundView layer];
-//    layer.cornerRadius = 10.0f;
-//    layer.masksToBounds = YES;
-//    [self.headerView addSubview:profilePictureBackgroundView];
-
-//    PFImageView *profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake( 94.0f, 38.0f, 132.0f, 132.0f)];
-//    [self.headerView addSubview:profilePictureImageView];
-//    [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
-//    layer = [profilePictureImageView layer];
-//    layer.cornerRadius = 10.0f;
-//    layer.masksToBounds = YES;
-//    profilePictureImageView.alpha = 0.0f;
-//    UIImageView *profilePictureStrokeImageView = [[UIImageView alloc] initWithFrame:CGRectMake( 88.0f, 34.0f, 143.0f, 143.0f)];
-//    profilePictureStrokeImageView.alpha = 0.0f;
-//    [profilePictureStrokeImageView setImage:[UIImage imageNamed:@"ProfilePictureStroke.png"]];
-//    [self.headerView addSubview:profilePictureStrokeImageView];
-//
-//
-//    PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
-//    if (imageFile) {
-//        [profilePictureImageView setFile:imageFile];
-//        [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
-//            if (!error) {
-//                [UIView animateWithDuration:0.200f animations:^{
-//                    profilePictureBackgroundView.alpha = 1.0f;
-//                    profilePictureStrokeImageView.alpha = 1.0f;
-//                    profilePictureImageView.alpha = 1.0f;
-//                }];
-//            }
-//        }];
-//    }
+    //insert pull to refresh slime view
+    slimeRefreshView = [[SRRefreshView alloc] init];
+    slimeRefreshView.delegate = self;
+    slimeRefreshView.upInset = 0;
+    slimeRefreshView.slimeMissWhenGoingBack = YES;
+    slimeRefreshView.slime.bodyColor = [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0];
+//    slimeRefreshView.slime.skinColor = [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0];
+    [self.tableView addSubview:slimeRefreshView];
+    
+    PFImageView *profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake(17.0f, 15.0f, 66.0f, 65.0f)];
+    [self.headerViewController.view addSubview:profilePictureImageView];
+    [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
+    CALayer *layer = [profilePictureImageView layer];
+    layer.masksToBounds = YES;
+    profilePictureImageView.alpha = 0.0f;
+    
+    PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
+    if (imageFile) {
+        [profilePictureImageView setFile:imageFile];
+        [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.200f animations:^{
+                    profilePictureImageView.alpha = 1.0f;
+                }];
+            }
+        }];
+    }
+    
+    //set the label values appropriately for the user
+    self.headerViewController.displayNameLabel.text = [self.user objectForKey:kKKUserDisplayNameKey];
 //
 //    UIImageView *photoCountIconImageView = [[UIImageView alloc] initWithImage:nil];
 //    [photoCountIconImageView setImage:[UIImage imageNamed:@"IconPics.png"]];
@@ -195,6 +211,57 @@
 //            }
 //        }];
 //    }
+}
+
+#pragma mark - Slime Refresh delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView scrollViewDidScroll];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView scrollViewDidEndDraging];
+}
+
+- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView {
+    //    NSLog(@"%s", __FUNCTION__);
+    
+    [self refreshTable:nil];
+    
+}
+
+- (void)refreshTable:(id)sender {
+//    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView performSelector:@selector(endRefresh)
+                           withObject:nil afterDelay:0.0
+                              inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
+}
+
+#pragma mark - KKSideScrollToolBarViewControllerDelegate methods
+-(void)didTouchToolbarItemAtIndex:(NSInteger)index {
+//    NSLog(@"%s", __FUNCTION__);
+    switch (index) {
+        case KKMyAccountHeaderToolItemKollections:
+            NSLog(@"Kollections touched");
+            break;
+        case KKMyAccountHeaderToolItemSubmissions:
+            NSLog(@"Submissions touched");
+            break;
+        case KKMyAccountHeaderToolItemFavorites:
+            NSLog(@"Favorites touched");
+            break;
+        case KKMyAccountHeaderToolItemAchievements:
+            NSLog(@"Achievements touched");
+            break;
+        case KKMyAccountHeaderToolItemStore:
+            NSLog(@"Store touched");
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - PFQueryTableViewController

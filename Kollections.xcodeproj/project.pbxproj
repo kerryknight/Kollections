@@ -7,6 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703B168265AB00C1B560 /* kkVerticalSeparator.png */; };
+		C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */; };
+		C71270461682666A00C1B560 /* 112-group.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270421682666A00C1B560 /* 112-group.png */; };
+		C71270471682666A00C1B560 /* 112-group@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270431682666A00C1B560 /* 112-group@2x.png */; };
+		C712704A168266A000C1B560 /* 256-box2.png in Resources */ = {isa = PBXBuildFile; fileRef = C7127048168266A000C1B560 /* 256-box2.png */; };
+		C712704B168266A000C1B560 /* 256-box2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7127049168266A000C1B560 /* 256-box2@2x.png */; };
+		C712704E168266E400C1B560 /* 168-upload-photo-2.png in Resources */ = {isa = PBXBuildFile; fileRef = C712704C168266E300C1B560 /* 168-upload-photo-2.png */; };
+		C712704F168266E400C1B560 /* 168-upload-photo-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712704D168266E400C1B560 /* 168-upload-photo-2@2x.png */; };
+		C7127080168283E700C1B560 /* sr_refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = C7127079168283E700C1B560 /* sr_refresh.png */; };
+		C7127081168283E700C1B560 /* sr_refresh@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = C712707A168283E700C1B560 /* sr_refresh@2X.png */; };
+		C7127082168283E700C1B560 /* SRRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = C712707D168283E700C1B560 /* SRRefreshView.m */; };
+		C7127083168283E700C1B560 /* SRSlimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C712707F168283E700C1B560 /* SRSlimeView.m */; };
+		C71270861684C1C600C1B560 /* 111-userGray.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270841684C1C500C1B560 /* 111-userGray.png */; };
+		C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270851684C1C600C1B560 /* 111-userGray@2x.png */; };
 		C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4316783C8500BA628A /* KKCache.m */; };
 		C7B1CF0C16783C8500BA628A /* KKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4516783C8500BA628A /* KKConstants.m */; };
 		C7B1CF0D16783C8500BA628A /* KKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4716783C8500BA628A /* KKFunctions.m */; };
@@ -389,7 +403,6 @@
 		C7B1D37216783F4D00BA628A /* README in Resources */ = {isa = PBXBuildFile; fileRef = C7B1D37116783F4D00BA628A /* README */; };
 		C7BFB93F168252A700FF3DE9 /* KKMyAccountHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */; };
 		C7BFB940168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */; };
-		C7BFB945168252BA00FF3DE9 /* KKTwoLabelButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BFB944168252BA00FF3DE9 /* KKTwoLabelButton.m */; };
 		C7BFB954168252E500FF3DE9 /* kkHeaderBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */; };
 		C7BFB955168252E500FF3DE9 /* kkHeaderBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB949168252E500FF3DE9 /* kkHeaderBG@2x.png */; };
 		C7BFB956168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB94A168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png */; };
@@ -402,6 +415,9 @@
 		C7BFB95D168252E500FF3DE9 /* kkSlidingToolbar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB951168252E500FF3DE9 /* kkSlidingToolbar@2x.png */; };
 		C7BFB95E168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB952168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png */; };
 		C7BFB95F168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB953168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png */; };
+		C7C642971695FA040013CDB5 /* KKSideScrollToolBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7C642951695FA040013CDB5 /* KKSideScrollToolBarViewController.m */; };
+		C7C642981695FA040013CDB5 /* KKSideScrollToolBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7C642961695FA040013CDB5 /* KKSideScrollToolBarViewController.xib */; };
+		C7C642A316960C350013CDB5 /* KKToolbarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7C642A216960C350013CDB5 /* KKToolbarCell.xib */; };
 		C7DC3ED21679188F00FCC60C /* NICommonMetrics.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DC3EA81679188E00FCC60C /* NICommonMetrics.m */; };
 		C7DC3ED31679188F00FCC60C /* NIDataStructures.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DC3EAA1679188E00FCC60C /* NIDataStructures.m */; };
 		C7DC3ED41679188F00FCC60C /* NIDebuggingTools.m in Sources */ = {isa = PBXBuildFile; fileRef = C7DC3EAC1679188E00FCC60C /* NIDebuggingTools.m */; };
@@ -448,6 +464,23 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C712703B168265AB00C1B560 /* kkVerticalSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkVerticalSeparator.png; sourceTree = "<group>"; };
+		C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkVerticalSeparator@2x.png"; sourceTree = "<group>"; };
+		C71270421682666A00C1B560 /* 112-group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group.png"; sourceTree = "<group>"; };
+		C71270431682666A00C1B560 /* 112-group@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group@2x.png"; sourceTree = "<group>"; };
+		C7127048168266A000C1B560 /* 256-box2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "256-box2.png"; sourceTree = "<group>"; };
+		C7127049168266A000C1B560 /* 256-box2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "256-box2@2x.png"; sourceTree = "<group>"; };
+		C712704C168266E300C1B560 /* 168-upload-photo-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "168-upload-photo-2.png"; sourceTree = "<group>"; };
+		C712704D168266E400C1B560 /* 168-upload-photo-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "168-upload-photo-2@2x.png"; sourceTree = "<group>"; };
+		C7127079168283E700C1B560 /* sr_refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sr_refresh.png; sourceTree = "<group>"; };
+		C712707A168283E700C1B560 /* sr_refresh@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sr_refresh@2X.png"; sourceTree = "<group>"; };
+		C712707B168283E700C1B560 /* SRDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRDefine.h; sourceTree = "<group>"; };
+		C712707C168283E700C1B560 /* SRRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRRefreshView.h; sourceTree = "<group>"; };
+		C712707D168283E700C1B560 /* SRRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRRefreshView.m; sourceTree = "<group>"; };
+		C712707E168283E700C1B560 /* SRSlimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRSlimeView.h; sourceTree = "<group>"; };
+		C712707F168283E700C1B560 /* SRSlimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSlimeView.m; sourceTree = "<group>"; };
+		C71270841684C1C500C1B560 /* 111-userGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray.png"; sourceTree = "<group>"; };
+		C71270851684C1C600C1B560 /* 111-userGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray@2x.png"; sourceTree = "<group>"; };
 		C7B1CD4216783C8500BA628A /* KKCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKCache.h; sourceTree = "<group>"; };
 		C7B1CD4316783C8500BA628A /* KKCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCache.m; sourceTree = "<group>"; };
 		C7B1CD4416783C8500BA628A /* KKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKConstants.h; sourceTree = "<group>"; };
@@ -867,8 +900,6 @@
 		C7BFB93C168252A700FF3DE9 /* KKMyAccountHeaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountHeaderViewController.h; sourceTree = "<group>"; };
 		C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountHeaderViewController.m; sourceTree = "<group>"; };
 		C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKMyAccountHeaderViewController.xib; sourceTree = "<group>"; };
-		C7BFB943168252BA00FF3DE9 /* KKTwoLabelButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKTwoLabelButton.h; sourceTree = "<group>"; };
-		C7BFB944168252BA00FF3DE9 /* KKTwoLabelButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKTwoLabelButton.m; sourceTree = "<group>"; };
 		C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderBG.png; sourceTree = "<group>"; };
 		C7BFB949168252E500FF3DE9 /* kkHeaderBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderBG@2x.png"; sourceTree = "<group>"; };
 		C7BFB94A168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderKoinCountsButtonDown.png; sourceTree = "<group>"; };
@@ -881,6 +912,10 @@
 		C7BFB951168252E500FF3DE9 /* kkSlidingToolbar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkSlidingToolbar@2x.png"; sourceTree = "<group>"; };
 		C7BFB952168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkSlidingToolMenuButtonDown.png; sourceTree = "<group>"; };
 		C7BFB953168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkSlidingToolMenuButtonDown@2x.png"; sourceTree = "<group>"; };
+		C7C642941695FA030013CDB5 /* KKSideScrollToolBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKSideScrollToolBarViewController.h; path = Kollections/Controllers/KKSideScrollToolBar/KKSideScrollToolBarViewController.h; sourceTree = SOURCE_ROOT; };
+		C7C642951695FA040013CDB5 /* KKSideScrollToolBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKSideScrollToolBarViewController.m; path = Kollections/Controllers/KKSideScrollToolBar/KKSideScrollToolBarViewController.m; sourceTree = SOURCE_ROOT; };
+		C7C642961695FA040013CDB5 /* KKSideScrollToolBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKSideScrollToolBarViewController.xib; path = Kollections/Controllers/KKSideScrollToolBar/KKSideScrollToolBarViewController.xib; sourceTree = SOURCE_ROOT; };
+		C7C642A216960C350013CDB5 /* KKToolbarCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKToolbarCell.xib; sourceTree = "<group>"; };
 		C7DC3EA71679188E00FCC60C /* NICommonMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NICommonMetrics.h; path = "nimbus-master/src/core/src/NICommonMetrics.h"; sourceTree = "<group>"; };
 		C7DC3EA81679188E00FCC60C /* NICommonMetrics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NICommonMetrics.m; path = "nimbus-master/src/core/src/NICommonMetrics.m"; sourceTree = "<group>"; };
 		C7DC3EA91679188E00FCC60C /* NIDataStructures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NIDataStructures.h; path = "nimbus-master/src/core/src/NIDataStructures.h"; sourceTree = "<group>"; };
@@ -988,6 +1023,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C7127078168283E700C1B560 /* SlimeRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				C7127079168283E700C1B560 /* sr_refresh.png */,
+				C712707A168283E700C1B560 /* sr_refresh@2X.png */,
+				C712707B168283E700C1B560 /* SRDefine.h */,
+				C712707C168283E700C1B560 /* SRRefreshView.h */,
+				C712707D168283E700C1B560 /* SRRefreshView.m */,
+				C712707E168283E700C1B560 /* SRSlimeView.h */,
+				C712707F168283E700C1B560 /* SRSlimeView.m */,
+			);
+			path = SlimeRefresh;
+			sourceTree = "<group>";
+		};
 		C7B1CD4116783C8500BA628A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1015,6 +1064,7 @@
 				C7B1CD4D16783C8500BA628A /* Activity Feed */,
 				C7B1CD6116783C8500BA628A /* My Account */,
 				C7B1CD6416783C8500BA628A /* Photo Details */,
+				C7C6429A1695FA160013CDB5 /* Toolbar */,
 				C7B1CD6A16783C8500BA628A /* Settings */,
 				C7B1CD5716783C8500BA628A /* KKTabBarController.h */,
 				C7B1CD5816783C8500BA628A /* KKTabBarController.m */,
@@ -1108,6 +1158,7 @@
 		C7B1CD7216783C8500BA628A /* External */ = {
 			isa = PBXGroup;
 			children = (
+				C7127078168283E700C1B560 /* SlimeRefresh */,
 				C7DC3E1516790BA000FCC60C /* Nimbus */,
 				C7B1CD7316783C8500BA628A /* MBProgressHUD */,
 				C7B1CD7716783C8500BA628A /* Reachability */,
@@ -1557,7 +1608,6 @@
 		C7B1CEF016783C8500BA628A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				C7BFB942168252BA00FF3DE9 /* Buttons */,
 				C7B1CEF116783C8500BA628A /* KKImageView.h */,
 				C7B1CEF216783C8500BA628A /* KKImageView.m */,
 				C7B1CEF316783C8500BA628A /* KKProfileImageView.h */,
@@ -1626,15 +1676,6 @@
 			name = "App Store Stuff";
 			sourceTree = "<group>";
 		};
-		C7BFB942168252BA00FF3DE9 /* Buttons */ = {
-			isa = PBXGroup;
-			children = (
-				C7BFB943168252BA00FF3DE9 /* KKTwoLabelButton.h */,
-				C7BFB944168252BA00FF3DE9 /* KKTwoLabelButton.m */,
-			);
-			path = Buttons;
-			sourceTree = "<group>";
-		};
 		C7BFB946168252E500FF3DE9 /* my account */ = {
 			isa = PBXGroup;
 			children = (
@@ -1646,6 +1687,16 @@
 		C7BFB947168252E500FF3DE9 /* header */ = {
 			isa = PBXGroup;
 			children = (
+				C71270841684C1C500C1B560 /* 111-userGray.png */,
+				C71270851684C1C600C1B560 /* 111-userGray@2x.png */,
+				C712704C168266E300C1B560 /* 168-upload-photo-2.png */,
+				C712704D168266E400C1B560 /* 168-upload-photo-2@2x.png */,
+				C7127048168266A000C1B560 /* 256-box2.png */,
+				C7127049168266A000C1B560 /* 256-box2@2x.png */,
+				C71270421682666A00C1B560 /* 112-group.png */,
+				C71270431682666A00C1B560 /* 112-group@2x.png */,
+				C712703B168265AB00C1B560 /* kkVerticalSeparator.png */,
+				C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */,
 				C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */,
 				C7BFB949168252E500FF3DE9 /* kkHeaderBG@2x.png */,
 				C7BFB94A168252E500FF3DE9 /* kkHeaderKoinCountsButtonDown.png */,
@@ -1660,6 +1711,17 @@
 				C7BFB953168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png */,
 			);
 			path = header;
+			sourceTree = "<group>";
+		};
+		C7C6429A1695FA160013CDB5 /* Toolbar */ = {
+			isa = PBXGroup;
+			children = (
+				C7C642A216960C350013CDB5 /* KKToolbarCell.xib */,
+				C7C642941695FA030013CDB5 /* KKSideScrollToolBarViewController.h */,
+				C7C642951695FA040013CDB5 /* KKSideScrollToolBarViewController.m */,
+				C7C642961695FA040013CDB5 /* KKSideScrollToolBarViewController.xib */,
+			);
+			name = Toolbar;
 			sourceTree = "<group>";
 		};
 		C7DC3E1516790BA000FCC60C /* Nimbus */ = {
@@ -2244,6 +2306,20 @@
 				C7BFB95D168252E500FF3DE9 /* kkSlidingToolbar@2x.png in Resources */,
 				C7BFB95E168252E500FF3DE9 /* kkSlidingToolMenuButtonDown.png in Resources */,
 				C7BFB95F168252E500FF3DE9 /* kkSlidingToolMenuButtonDown@2x.png in Resources */,
+				C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */,
+				C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */,
+				C71270461682666A00C1B560 /* 112-group.png in Resources */,
+				C71270471682666A00C1B560 /* 112-group@2x.png in Resources */,
+				C712704A168266A000C1B560 /* 256-box2.png in Resources */,
+				C712704B168266A000C1B560 /* 256-box2@2x.png in Resources */,
+				C712704E168266E400C1B560 /* 168-upload-photo-2.png in Resources */,
+				C712704F168266E400C1B560 /* 168-upload-photo-2@2x.png in Resources */,
+				C7127080168283E700C1B560 /* sr_refresh.png in Resources */,
+				C7127081168283E700C1B560 /* sr_refresh@2X.png in Resources */,
+				C71270861684C1C600C1B560 /* 111-userGray.png in Resources */,
+				C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */,
+				C7C642981695FA040013CDB5 /* KKSideScrollToolBarViewController.xib in Resources */,
+				C7C642A316960C350013CDB5 /* KKToolbarCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2337,7 +2413,9 @@
 				C7DC3EEB167918A900FCC60C /* NIAttributedLabel.m in Sources */,
 				C7DC3EEC167918A900FCC60C /* NSMutableAttributedString+NimbusAttributedLabel.m in Sources */,
 				C7BFB93F168252A700FF3DE9 /* KKMyAccountHeaderViewController.m in Sources */,
-				C7BFB945168252BA00FF3DE9 /* KKTwoLabelButton.m in Sources */,
+				C7127082168283E700C1B560 /* SRRefreshView.m in Sources */,
+				C7127083168283E700C1B560 /* SRSlimeView.m in Sources */,
+				C7C642971695FA040013CDB5 /* KKSideScrollToolBarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

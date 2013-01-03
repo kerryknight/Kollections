@@ -85,10 +85,11 @@
         }
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
        //we're logged in with Twitter //UPDATE
-       } */else {
-           //we're logged with via a Parse account so set the displayName
-           [self setDisplayNameEqualToAdditionalField];
-       }
+    } */
+    else {
+        //we're logged with via a Parse account so set the displayName
+        [self setDisplayNameEqualToAdditionalField];
+    }
 }
 
 -(void)setDisplayNameEqualToAdditionalField {

@@ -4,12 +4,6 @@ __________________________________________________________________
 DEVELOPER NOTES
 ------------------------------------------------------------------
 
-
-
-
-
-
-
 __________________________________________________________________
 TO DO APP
 ------------------------------------------------------------------
@@ -24,31 +18,23 @@ TO DO APP
 - Upload avatar for parse registrations
 - Attributed strings in SignUpViewController linking to UIWebView of TOS and Privacy policy on www.startakollection.com
 - Redo Log in button in another color? Top two corners are pixelated
+- Make the collectionview toolbar size dynamically based on length of string titles, instead of constant width for each item
 
 
 __________________________________________________________________
 TO DO CLOUD CODE
 ------------------------------------------------------------------
 - Cloud code added to prevent the same Display Name from being signed up with as other users
-
-
+- Look into the real-time Crowdflower photo moderation module included in Parse now
 
 __________________________________________________________________
 COMPLETED
 ------------------------------------------------------------------
 
-
-
-
-
-
 __________________________________________________________________
 TIPS
 ------------------------------------------------------------------
 - Swipe up on camera button to go straight to taking a photo
-
-
-
 
 
 __________________________________________________________________

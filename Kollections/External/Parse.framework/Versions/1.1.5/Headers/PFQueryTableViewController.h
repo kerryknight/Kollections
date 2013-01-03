@@ -10,6 +10,7 @@
 #import "PFQuery.h"
 #import "PFTableViewCell.h"
 #import "PF_EGORefreshTableHeaderView.h"
+#import "SRRefreshView.h"
 
 @interface PFQueryTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, PF_EGORefreshTableHeaderDelegate>
 

@@ -138,7 +138,7 @@
 // Called on successful login. This is likely to be the place where we register
 // the user to the "user_xxxxxxxx" channel
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     // user has logged in - we need to fetch all of their Facebook data before we let them in
     if (![self shouldProceedToMainInterface:user]) {
         self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
@@ -255,9 +255,10 @@
     
     //I'LL NEED TO USE THESE COMMENTED OUT PARTS TO INITIALIZE MY TABLE STYLES ONCE I GET THAT FAR
     //INSTEAD OF USING THE ABOVE INITS LIKE I AM TO JUST GET THINGS UP AND RUNNING  //UPDATE
-    //    self.homeViewController = [[KKHomeFeedViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.homeViewController = [[KKHomeViewController alloc] initWithStyle:UITableViewStylePlain];
     //    [self.homeViewController setFirstLaunch:firstLaunch];
-    //    self.activityViewController = [[KKActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
+//    self.activityViewController = [[KKActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
+    self.myProfileViewController = [[KKAccountViewController alloc] initWithStyle:UITableViewStylePlain];
     
     //set up all the individual navigation controllers
     UINavigationController *homeNavigationController = [[UINavigationController alloc] initWithRootViewController:self.homeViewController];
