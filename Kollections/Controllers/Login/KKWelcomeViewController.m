@@ -20,14 +20,14 @@
 
 #pragma mark - UIViewController
 - (void)loadView {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     UIImageView *backgroundImageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     [backgroundImageView setImage:[UIImage imageNamed:@"Default.png"]];
     self.view = backgroundImageView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     
     /**************************************************************************************************/
@@ -58,7 +58,7 @@
 #pragma mark - ()
 
 - (void)refreshCurrentUserCallbackWithResult:(PFObject *)refreshedObject error:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     // A kPFErrorObjectNotFound error on currentUser refresh signals a deleted user
     if (error && error.code == kPFErrorObjectNotFound) {
         NSLog(@"User does not exist.");
@@ -93,13 +93,13 @@
 }
 
 -(void)setDisplayNameEqualToAdditionalField {
-    //    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     //check if it's a parse signee; if so, set their displayName field to the additional field from signup
     //check what type of login we have
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]/* && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]*/) {
         //the user signed up via Parse so set their displayName field which we don't set otherwise
         PFUser *user = [PFUser currentUser];
-        PFQuery *query = [PFQuery queryWithClassName:@"User"];//use the table name in Parse
+        PFQuery *query = [PFQuery queryWithClassName:@"_User"];//use the _User table name in Parse
         [query whereKey:@"objectId" equalTo:user.objectId];
         query.limit = 1;
         
@@ -112,6 +112,8 @@
                         if (!error) {
                             //success so can update UI appropriately now
                             NSLog(@"saved displayName successfully");
+                            //in lieu of making an ADDITIONAL query to Parse for what we just set, go ahead and set it locally to display name
+                            [[PFUser currentUser] setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
                         } else {
                             //error saving displayName back to Parse
                         }

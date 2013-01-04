@@ -23,6 +23,24 @@ extern NSString *const kKKTwitterConsumerSecret;
 
 #define kKKParseEmployeeAccounts [NSArray array]
 
+#define mark - UI Element Positions
+#define kKKBarButtonItemLeftFrame CGRectMake(10.0f, 5.0f, 63.0f, 33.0f) 
+#define kKKBarButtonItemRightFrame CGRectMake(247.0f, 5.0f, 63.0f, 33.0f) 
+
+#pragma mark - Colors
+#define kBlack [UIColor colorWithRed:7.0f/255.0f green:6.0f/255.0f blue:6.0f/255.0f alpha:1.0f] //#070606
+#define kCreme [UIColor colorWithRed:234.0f/255.0f green:232.0f/255.0f blue:229.0f/255.0f alpha:1.0f] //#eae8e5
+#define kGray1 [UIColor colorWithRed:210.0f/255.0f green:209.0f/255.0f blue:206.0f/255.0f alpha:1.0f] //#d2d1ce
+#define kGray2 [UIColor colorWithRed:190.0f/255.0f green:197.0f/255.0f blue:192.0f/255.0f alpha:1.0f] //#bec5c0
+#define kGray3 [UIColor colorWithRed:173.0f/255.0f green:169.0f/255.0f blue:164.0f/255.0f alpha:1.0f] //#ada9a4
+#define kGray4 [UIColor colorWithRed:129.0f/255.0f green:128.0f/255.0f blue:126.0f/255.0f alpha:1.0f] //#81807e
+#define kGray5 [UIColor colorWithRed:101.0f/255.0f green:101.0f/255.0f blue:101.0f/255.0f alpha:1.0f] //#656565
+#define kGray6 [UIColor colorWithRed:63.0f/255.0f green:63.0f/255.0f blue:64.0f/255.0f alpha:1.0f] //#3f3f40
+#define kMint1 [UIColor colorWithRed:190.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f] //#beeeee
+#define kMint2 [UIColor colorWithRed:163.0f/255.0f green:209.0f/255.0f blue:205.0f/255.0f alpha:1.0f] //#a3d1cd
+#define kMint3 [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0f] //#95dbda
+#define kMint4 [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0f] //#4aa5a4
+
 #pragma mark - NSUserDefaults
 extern NSString *const kKKUserDefaultsActivityFeedViewControllerLastRefreshKey;
 extern NSString *const kKKUserDefaultsCacheFacebookFriendsKey;

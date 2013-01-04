@@ -9,6 +9,7 @@
 #import "KKEditPhotoViewController.h"
 #import "KKPhotoDetailsFooterView.h"
 #import "UIImage+ResizeAdditions.h"
+#import "KKToolbarButton.h"
 
 @interface KKEditPhotoViewController ()
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -62,10 +63,10 @@
 - (void)loadView {
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
-    self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundLeather.png"]];
+    self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]];
     self.view = self.scrollView;
     
-    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 42.0f, 280.0f, 280.0f)];
+    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 25.0f, 280.0f, 280.0f)];
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -78,16 +79,24 @@
     layer.shouldRasterize = YES;
     
     [self.scrollView addSubview:photoImageView];
-    
-    CGRect footerRect = [KKPhotoDetailsFooterView rectForView];
-    footerRect.origin.y = photoImageView.frame.origin.y + photoImageView.frame.size.height;
 
-    KKPhotoDetailsFooterView *footerView = [[KKPhotoDetailsFooterView alloc] initWithFrame:footerRect];
-    self.commentTextField = footerView.commentField;
-    self.commentTextField.delegate = self;
-    [self.scrollView addSubview:footerView];
-
-    [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + footerView.frame.size.height)];
+    //check what type of photo we're dealing with; profile pics shouldn't allow comments or get posted like regular pics
+    if (!self.isProfilePhoto) {
+        CGRect footerRect = [KKPhotoDetailsFooterView rectForView];
+        footerRect.origin.y = photoImageView.frame.origin.y + photoImageView.frame.size.height;
+        
+        KKPhotoDetailsFooterView *footerView = [[KKPhotoDetailsFooterView alloc] initWithFrame:footerRect];
+        footerView.hideDropShadow = YES;
+        self.commentTextField = footerView.commentField;
+        self.commentTextField.delegate = self;
+        [self.scrollView addSubview:footerView];
+        
+        //allow room for comments in scrollview
+        [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + footerView.frame.size.height)];
+    } else {
+        //we're uploading a profile photo so don't allow comments
+        [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height)];
+    }
 }
 
 - (void)viewDidLoad {
@@ -96,8 +105,15 @@
     [self.navigationItem setHidesBackButton:YES];
 
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStyleBordered target:self action:@selector(cancelButtonAction:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Publish" style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonAction:)];
+    
+    //add custom toolbar buttons
+    KKToolbarButton *cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame andTitle:@"Cancel"];
+    [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:cancelButton];
+    
+    KKToolbarButton *publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame andTitle:@"Publish"];
+    [publishButton addTarget:self action:@selector(doneButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:publishButton];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
@@ -122,7 +138,8 @@
 
 #pragma mark - ()
 
-- (BOOL)shouldUploadImage:(UIImage *)anImage {    
+- (BOOL)shouldUploadImage:(UIImage *)anImage {
+    NSLog(@"%s", __FUNCTION__);
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
@@ -183,6 +200,7 @@
 }
 
 - (void)doneButtonAction:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {
@@ -265,6 +283,7 @@
 }
 
 - (void)cancelButtonAction:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
     [self.parentViewController dismissModalViewControllerAnimated:YES];
 }
 

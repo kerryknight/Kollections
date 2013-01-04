@@ -13,6 +13,8 @@ typedef enum {
     KKMyAccountHeaderToolItemKollections = 0,
     KKMyAccountHeaderToolItemSubmissions,
     KKMyAccountHeaderToolItemFavorites,
+    KKMyAccountHeaderToolItemFollowers,
+    KKMyAccountHeaderToolItemFollowing,
     KKMyAccountHeaderToolItemAchievements,
     KKMyAccountHeaderToolItemStore
 } KKMyAccountHeaderToolItem;
@@ -21,7 +23,7 @@ typedef enum {
     
 }
 
-@property (nonatomic, assign) KKMyAccountHeaderToolItem headerToolItem; //used in switch statement for determining what toolbar item was touched
+@property (nonatomic, assign) KKMyAccountHeaderToolItem headerToolItem; //typedef used in switch statement for determining what toolbar item was touched
 @property (nonatomic, strong) PFUser *user;
 
 @end

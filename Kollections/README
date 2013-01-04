@@ -19,6 +19,12 @@ TO DO APP
 - Attributed strings in SignUpViewController linking to UIWebView of TOS and Privacy policy on www.startakollection.com
 - Redo Log in button in another color? Top two corners are pixelated
 - Make the collectionview toolbar size dynamically based on length of string titles, instead of constant width for each item
+- load/add photo if logged in with Parse and not FB
+- differentiate on uploads based on type of photo (regular/profile) so that profile pics don't show up like regular photos would
+    - ensure photo shows up at re-sign-in/log-in
+    - ensure populates profilePictureMedium 280x280 and profilePictureSmall 64x64 into parse db
+- update the UI for adding comments below a photo
+- set email fields at sign-in for email keyboard type
 
 
 __________________________________________________________________
@@ -42,3 +48,4 @@ FUTURE
 ------------------------------------------------------------------
 - Add Viddy support with 15-second video clips
 - Add Twitter login integration
+- Add filters and photo manipulation to KKEditPhotoViewController

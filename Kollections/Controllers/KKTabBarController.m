@@ -8,7 +8,9 @@
 
 #import "KKTabBarController.h"
 
-@interface KKTabBarController ()
+@interface KKTabBarController () {
+    BOOL isProfilePhotoAction;//used to differentiate between regular photos for posting and simply adding a profile pic
+}
 @property (nonatomic,strong) UINavigationController *navController;
 @end
 
@@ -26,17 +28,23 @@
     
     self.navController = [[UINavigationController alloc] init];
     [KKUtility addBottomDropShadowToNavigationBarForNavigationController:self.navController];
+    
+    //add notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoCaptureButtonAction:) name:@"profilePhotoCaptureButtonAction" object:nil];
 }
 
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"profilePhotoCaptureButtonAction" object:nil];
+}
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
 }
 
 #pragma mark - UITabBarController
@@ -72,6 +80,10 @@
     KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:image];
     [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     
+    //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo
+    //uploads the same as regular uploads which could get added as submissions, etc.
+    viewController.isProfilePhoto = isProfilePhotoAction;
+    
     [self.navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self.navController pushViewController:viewController animated:NO];
     
@@ -104,6 +116,14 @@
 #pragma mark - ()
 
 - (void)photoCaptureButtonAction:(id)sender {
+    
+    //check who the sender is to make sure we don't upload a photo per usual if we're just trying to add a profile picture
+    if ([sender respondsToSelector:@selector(name)] && [[sender name] isEqualToString:@"profilePhotoCaptureButtonAction"]) {
+        isProfilePhotoAction = YES;
+    } else {
+        isProfilePhotoAction = NO; //this denotes a regular photo submission and not a profile photo
+    }
+    
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
     BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     

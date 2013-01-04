@@ -8,6 +8,8 @@
 
 @interface KKEditPhotoViewController : UIViewController <UITextFieldDelegate, UIScrollViewDelegate>
 
+@property (nonatomic, assign) BOOL isProfilePhoto;//we don't want to upload per usual if this is the case
+
 - (id)initWithImage:(UIImage *)aImage;
 
 @end

@@ -55,7 +55,13 @@
     [self addChildViewController:self.toolBarViewController];
     [self.toolbarView addSubview:self.toolBarViewController.view];
     [self.toolBarViewController didMoveToParentViewController:self];
-    self.toolBarViewController.segmentTitles = @[@"Kollections", @"Submissions", @"Favorites", @"Achievements", @"Store"];
+    self.toolBarViewController.segmentTitles = @[@"Kollections", @"Submissions", @"Favorites", @"Followers", @"Following", @"Achievements", @"Store"];
+    
+    //04Jan2013 not sure if I want these to actually be buttons or not so I'm disabling them for now
+    self.followersButton.enabled = NO;
+    self.followingButton.enabled = NO;
+    self.kollectionsButton.enabled = NO;
+    self.submissionsButton.enabled = NO;
 }
 
 - (void)didReceiveMemoryWarning {

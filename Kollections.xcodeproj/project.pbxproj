@@ -401,6 +401,9 @@
 		C7B1D0B416783E6000BA628A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */; };
 		C7B1D0B616783E6B00BA628A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B516783E6B00BA628A /* CFNetwork.framework */; };
 		C7B1D37216783F4D00BA628A /* README in Resources */ = {isa = PBXBuildFile; fileRef = C7B1D37116783F4D00BA628A /* README */; };
+		C7BC60C4169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BC60C2169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png */; };
+		C7BC60C5169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BC60C3169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png */; };
+		C7BC60C916977569003C223B /* KKToolbarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BC60C816977569003C223B /* KKToolbarButton.m */; };
 		C7BFB93F168252A700FF3DE9 /* KKMyAccountHeaderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */; };
 		C7BFB940168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */; };
 		C7BFB954168252E500FF3DE9 /* kkHeaderBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BFB948168252E500FF3DE9 /* kkHeaderBG.png */; };
@@ -897,6 +900,10 @@
 		C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C7B1D0B516783E6B00BA628A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C7B1D37116783F4D00BA628A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		C7BC60C2169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderUserPhotoPlaceholderDown.png; sourceTree = "<group>"; };
+		C7BC60C3169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderUserPhotoPlaceholderDown@2x.png"; sourceTree = "<group>"; };
+		C7BC60C716977569003C223B /* KKToolbarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKToolbarButton.h; path = Kollections/Views/Buttons/KKToolbarButton.h; sourceTree = SOURCE_ROOT; };
+		C7BC60C816977569003C223B /* KKToolbarButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKToolbarButton.m; path = Kollections/Views/Buttons/KKToolbarButton.m; sourceTree = SOURCE_ROOT; };
 		C7BFB93C168252A700FF3DE9 /* KKMyAccountHeaderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountHeaderViewController.h; sourceTree = "<group>"; };
 		C7BFB93D168252A700FF3DE9 /* KKMyAccountHeaderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountHeaderViewController.m; sourceTree = "<group>"; };
 		C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKMyAccountHeaderViewController.xib; sourceTree = "<group>"; };
@@ -1608,6 +1615,7 @@
 		C7B1CEF016783C8500BA628A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C7BC60CA169775B1003C223B /* Buttons */,
 				C7B1CEF116783C8500BA628A /* KKImageView.h */,
 				C7B1CEF216783C8500BA628A /* KKImageView.m */,
 				C7B1CEF316783C8500BA628A /* KKProfileImageView.h */,
@@ -1676,6 +1684,15 @@
 			name = "App Store Stuff";
 			sourceTree = "<group>";
 		};
+		C7BC60CA169775B1003C223B /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				C7BC60C716977569003C223B /* KKToolbarButton.h */,
+				C7BC60C816977569003C223B /* KKToolbarButton.m */,
+			);
+			name = Buttons;
+			sourceTree = "<group>";
+		};
 		C7BFB946168252E500FF3DE9 /* my account */ = {
 			isa = PBXGroup;
 			children = (
@@ -1687,6 +1704,8 @@
 		C7BFB947168252E500FF3DE9 /* header */ = {
 			isa = PBXGroup;
 			children = (
+				C7BC60C2169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png */,
+				C7BC60C3169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png */,
 				C71270841684C1C500C1B560 /* 111-userGray.png */,
 				C71270851684C1C600C1B560 /* 111-userGray@2x.png */,
 				C712704C168266E300C1B560 /* 168-upload-photo-2.png */,
@@ -2320,6 +2339,8 @@
 				C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */,
 				C7C642981695FA040013CDB5 /* KKSideScrollToolBarViewController.xib in Resources */,
 				C7C642A316960C350013CDB5 /* KKToolbarCell.xib in Resources */,
+				C7BC60C4169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png in Resources */,
+				C7BC60C5169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2416,6 +2437,7 @@
 				C7127082168283E700C1B560 /* SRRefreshView.m in Sources */,
 				C7127083168283E700C1B560 /* SRSlimeView.m in Sources */,
 				C7C642971695FA040013CDB5 /* KKSideScrollToolBarViewController.m in Sources */,
+				C7BC60C916977569003C223B /* KKToolbarButton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

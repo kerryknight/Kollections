@@ -36,8 +36,8 @@
     // Change button apperance
     [self.signUpView.dismissButton setBackgroundImage:[UIImage imageNamed:@"kkRegularNavBarButton.png"] forState:UIControlStateNormal];
     [self.signUpView.dismissButton setBackgroundImage:[UIImage imageNamed:@"kkRegularNavigationBarSelected.png"] forState:UIControlStateHighlighted];
-    [self.signUpView.dismissButton setImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateNormal];//so it's invisible
-    [self.signUpView.dismissButton setImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateHighlighted];//so it's invisible
+    [self.signUpView.dismissButton setImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateNormal];//fake png so it's invisible
+    [self.signUpView.dismissButton setImage:[UIImage imageNamed:@"xxx.png"] forState:UIControlStateHighlighted];//fake png so it's invisible
     [self.signUpView.signUpButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [self.signUpView.signUpButton setTitle:@"Cancel" forState:UIControlStateHighlighted];
     

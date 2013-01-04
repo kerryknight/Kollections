@@ -13,6 +13,8 @@
 #import "KKMyAccountHeaderViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SRSlimeView.h"
+#import "KKAppDelegate.h"
+#import "KKToolbarButton.h"
 
 @interface KKAccountViewController() {
     SRRefreshView *slimeRefreshView;
@@ -20,6 +22,8 @@
 
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) KKMyAccountHeaderViewController *headerViewController;
+@property (nonatomic, strong) KKToolbarButton *logoutButton;
+@property (nonatomic, strong) UILabel *logoutLabel;
 @end
 
 @implementation KKAccountViewController
@@ -47,8 +51,13 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+//    NSLog(@"%s", __FUNCTION__);
+}
 
 - (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
@@ -78,6 +87,7 @@
 //    slimeRefreshView.slime.skinColor = [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0];
     [self.tableView addSubview:slimeRefreshView];
     
+    //add image view to hold the user's profile pic
     PFImageView *profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake(17.0f, 15.0f, 66.0f, 65.0f)];
     [self.headerViewController.view addSubview:profilePictureImageView];
     [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -85,6 +95,7 @@
     layer.masksToBounds = YES;
     profilePictureImageView.alpha = 0.0f;
     
+    //retrieve the user's profile pic to insert
     PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
     if (imageFile) {
         [profilePictureImageView setFile:imageFile];
@@ -95,6 +106,16 @@
                 }];
             }
         }];
+    } else {
+        //if no image file, make sure we're not logged in with facebook and add a button to allow upload
+        if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+            //no profile photo available so add a button to allow the user to add one on their own
+            UIButton *profileButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            profileButton.frame = [self.headerViewController.view viewWithTag:100].frame;//tag of the placeholder imageview
+            [profileButton setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoPlaceholderDown.png"] forState:UIControlEventTouchDown];
+            [profileButton addTarget:self action:@selector(profilePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.headerViewController.view addSubview:profileButton];
+        }
     }
     
     //set the label values appropriately for the user
@@ -211,17 +232,17 @@
 //            }
 //        }];
 //    }
+    
+    [self configureLogoutButton];
 }
 
 #pragma mark - Slime Refresh delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     //    NSLog(@"%s", __FUNCTION__);
     [slimeRefreshView scrollViewDidScroll];
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     //    NSLog(@"%s", __FUNCTION__);
     [slimeRefreshView scrollViewDidEndDraging];
 }
@@ -252,6 +273,12 @@
             break;
         case KKMyAccountHeaderToolItemFavorites:
             NSLog(@"Favorites touched");
+            break;
+        case KKMyAccountHeaderToolItemFollowers:
+            NSLog(@"Followers touched");
+            break;
+        case KKMyAccountHeaderToolItemFollowing:
+            NSLog(@"Following touched");
             break;
         case KKMyAccountHeaderToolItemAchievements:
             NSLog(@"Achievements touched");
@@ -307,6 +334,9 @@
 
 
 #pragma mark - ()
+- (void)profilePhotoButtonAction:(id)sender {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePhotoCaptureButtonAction" object:sender];
+}
 
 - (void)followButtonAction:(id)sender {
 //    UIActivityIndicatorView *loadingActivityIndicatorView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -332,8 +362,12 @@
 //    [KKUtility unfollowUserEventually:self.user];
 }
 
+- (void)logoutButtonAction:(id)sender {
+    [(KKAppDelegate*)[[UIApplication sharedApplication] delegate] logOut];
+}
+
 - (void)backButtonAction:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+//    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)configureFollowButton {
@@ -344,6 +378,16 @@
 - (void)configureUnfollowButton {
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Unfollow" style:UIBarButtonItemStyleBordered target:self action:@selector(unfollowButtonAction:)];
 //    [[KKCache sharedCache] setFollowStatus:YES user:self.user];
+}
+
+//the logout button may/may not be kept in this position; temporarily set here for testing purposes 04Jan2013
+- (void)configureLogoutButton {
+    //add button to view
+    self.logoutButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame andTitle:@"Logout"];
+    [self.logoutButton addTarget:self action:@selector(logoutButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.logoutButton];
+    
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Logout" style:UIBarButtonItemStyleBordered target:self action:@selector(logoutButtonAction:)];
 }
 
 @end

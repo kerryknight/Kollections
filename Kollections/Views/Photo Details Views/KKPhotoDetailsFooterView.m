@@ -29,7 +29,7 @@
         // Initialization code
         self.backgroundColor = [UIColor clearColor];
         
-        mainView = [[UIView alloc] initWithFrame:CGRectMake( 20.0f, 0.0f, 280.0f, 51.0f)];
+        mainView = [[UIView alloc] initWithFrame:CGRectMake(20.0f, 0.0f, 280.0f, 51.0f)];
         mainView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundComments.png"]];
         [self addSubview:mainView];
         
@@ -43,26 +43,26 @@
         
         commentField = [[UITextField alloc] initWithFrame:CGRectMake( 40.0f, 10.0f, 227.0f, 31.0f)];
         commentField.font = [UIFont systemFontOfSize:14.0f];
-        commentField.placeholder = @"Add a comment";
+        commentField.placeholder = @"Add a comment/caption";
         commentField.returnKeyType = UIReturnKeySend;
-        commentField.textColor = [UIColor colorWithRed:73.0f/255.0f green:55.0f/255.0f blue:35.0f/255.0f alpha:1.0f];
+        commentField.textColor = kBlack;
         commentField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [commentField setValue:[UIColor colorWithRed:154.0f/255.0f green:146.0f/255.0f blue:138.0f/255.0f alpha:1.0f] forKeyPath:@"_placeholderLabel.textColor"]; // Are we allowed to modify private properties like this? -Héctor
+        [commentField setValue:kGray4 forKeyPath:@"_placeholderLabel.textColor"]; // Are we allowed to modify private properties like this? -Héctor
         [mainView addSubview:commentField];
     }
     return self;
 }
 
 
-#pragma mark - UIView
-
-- (void)drawRect:(CGRect)rect {
-    [super drawRect:rect];
-    
-    if (!hideDropShadow) {
-        [KKUtility drawSideAndBottomDropShadowForRect:mainView.frame inContext:UIGraphicsGetCurrentContext()];
-    }
-}
+//#pragma mark - UIView
+//
+//- (void)drawRect:(CGRect)rect {
+//    [super drawRect:rect];
+//    
+//    if (!hideDropShadow) {
+//        [KKUtility drawSideAndBottomDropShadowForRect:mainView.frame inContext:UIGraphicsGetCurrentContext()];
+//    }
+//}
 
 
 #pragma mark - KKPhotoDetailsFooterView

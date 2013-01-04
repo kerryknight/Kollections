@@ -139,15 +139,15 @@
 // the user to the "user_xxxxxxxx" channel
 - (void)logInViewController:(PFLogInViewController *)logInController didLogInUser:(PFUser *)user {
     NSLog(@"%s", __FUNCTION__);
-    // user has logged in - we need to fetch all of their Facebook data before we let them in
-    if (![self shouldProceedToMainInterface:user]) {
-        self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
-        [self.hud setLabelText:@"Loading"];
-        [self.hud setDimBackground:YES];
-    }
     
     //check what type of login we have
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        // user has logged in - we need to fetch all of their Facebook data before we let them in if they logged in with FB
+        if (![self shouldProceedToMainInterface:user]) {
+            self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
+            [self.hud setLabelText:@"Loading"];
+            [self.hud setDimBackground:YES];
+        }
         //we're logged in with Facebook so request the user's name and pic data
         PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture"];
         [request setDelegate:self];
@@ -155,16 +155,19 @@
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
        //we're logged in with Twitter //UPDATE
        NSLog(@"logged into twitter, now retrieve twitter name and picture");
-       } */else {
-           //we're logged with via a Parse account
-       }
+    } */else {
+        //we're logged with via a Parse account so dismiss the overlay
+        [self presentTabBarController];
+        [self.navController dismissModalViewControllerAnimated:YES];
+    }
     
     // Subscribe to private push channel
     if (user) {
         NSLog(@"subscribe to private push channel");
         NSString *privateChannelName = [NSString stringWithFormat:@"user_%@", [user objectId]];
         // Add the user to the installation so we can track the owner of the device
-        [[PFInstallation currentInstallation] setObject:[PFUser currentUser] forKey:kKKInstallationUserKey];
+        [[PFInstallation currentInstallation] setObject:user forKey:kKKInstallationUserKey];
+//        [[PFInstallation currentInstallation] setObject:[PFUser currentUser] forKey:kKKInstallationUserKey];
         // Subscribe user to private channel
         [[PFInstallation currentInstallation] addUniqueObject:privateChannelName forKey:kKKInstallationChannelsKey];
         // Save installation object
@@ -323,9 +326,9 @@
         [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
        //we're logged in with Twitter //UPDATE
-       }*/ else {
+    }*/ else {
            //we're logged with via a Parse account
-       }
+    }
 }
 
 
@@ -341,11 +344,6 @@
     
     return [PFFacebookUtils handleOpenURL:url];
 }
-
-//- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-//    NSLog(@"%s", __FUNCTION__);
-//    return [PFFacebookUtils handleOpenURL:url];
-//}
 
 #pragma mark - PF_FBRequestDelegate
 - (void)request:(PF_FBRequest *)request didLoad:(id)result {
