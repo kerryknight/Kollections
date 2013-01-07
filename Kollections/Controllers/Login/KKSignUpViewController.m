@@ -116,6 +116,9 @@
     [self.signUpView.emailField setTextColor:[UIColor colorWithRed:63.0f/255.0f green:63.0f/255.0f blue:64.0f/255.0f alpha:1.0]];
     [self.signUpView.additionalField setTextColor:[UIColor colorWithRed:63.0f/255.0f green:63.0f/255.0f blue:64.0f/255.0f alpha:1.0]];
     
+    //set keyboard type for username/email field
+    [self.signUpView.usernameField setKeyboardType:UIKeyboardTypeEmailAddress];
+    
     //use attributed strings to set color of placeholder text to darker
     UIColor *color = [UIColor colorWithRed:101.0f/255.0f green:101.0f/255.0f blue:101.0f/255.0f alpha:1.0];
     //we'll use the username field for collecting the email address (and we'll just set the email address from this value at login)

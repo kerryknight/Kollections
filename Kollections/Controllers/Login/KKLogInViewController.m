@@ -102,6 +102,9 @@
     [self.logInView.usernameField setTextColor:[UIColor colorWithRed:63.0f/255.0f green:63.0f/255.0f blue:64.0f/255.0f alpha:1.0]];
     [self.logInView.passwordField setTextColor:[UIColor colorWithRed:63.0f/255.0f green:63.0f/255.0f blue:64.0f/255.0f alpha:1.0]];
     
+    //set keyboard type for username/email field
+    [self.logInView.usernameField setKeyboardType:UIKeyboardTypeEmailAddress];
+    
     //hide pre-defined labels
     self.logInView.externalLogInLabel.hidden = YES;
     self.logInView.signUpLabel.hidden = YES;
