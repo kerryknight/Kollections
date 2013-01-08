@@ -11,8 +11,11 @@
 #import "KKSettingsButtonItem.h"
 #import "KKFindFriendsViewController.h"
 #import "MBProgressHUD.h"
+#import "SRSlimeView.h"
 
-@interface KKHomeViewController ()
+@interface KKHomeViewController () {
+    SRRefreshView *slimeRefreshView;
+}
 @property (nonatomic, strong) KKSettingsActionSheetDelegate *settingsActionSheetDelegate;
 @property (nonatomic, strong) UIView *blankTimelineView;
 @end
@@ -46,6 +49,15 @@
 //    UIView *whiteBG = [[UIView alloc] initWithFrame:self.view.bounds];
 //    whiteBG.backgroundColor = [UIColor whiteColor];
 //    [self.view addSubview:whiteBG];
+    
+    //insert pull to refresh slime view
+    slimeRefreshView = [[SRRefreshView alloc] init];
+    slimeRefreshView.delegate = self;
+    slimeRefreshView.upInset = 0;
+    slimeRefreshView.slimeMissWhenGoingBack = YES;
+    slimeRefreshView.slime.bodyColor = [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0];
+    //    slimeRefreshView.slime.skinColor = [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0];
+    [self.tableView addSubview:slimeRefreshView];
 }
 
 
@@ -71,6 +83,30 @@
     }    
 }
 
+#pragma mark - Slime Refresh delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView scrollViewDidScroll];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView scrollViewDidEndDraging];
+}
+
+- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView {
+    //    NSLog(@"%s", __FUNCTION__);
+    
+    [self refreshTable:nil];
+    
+}
+
+- (void)refreshTable:(id)sender {
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView performSelector:@selector(endRefresh)
+                           withObject:nil afterDelay:0.0
+                              inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
+}
 
 #pragma mark - ()
 

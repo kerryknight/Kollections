@@ -21,6 +21,9 @@
 		C7127083168283E700C1B560 /* SRSlimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C712707F168283E700C1B560 /* SRSlimeView.m */; };
 		C71270861684C1C600C1B560 /* 111-userGray.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270841684C1C500C1B560 /* 111-userGray.png */; };
 		C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270851684C1C600C1B560 /* 111-userGray@2x.png */; };
+		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
+		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
+		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
 		C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4316783C8500BA628A /* KKCache.m */; };
 		C7B1CF0C16783C8500BA628A /* KKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4516783C8500BA628A /* KKConstants.m */; };
 		C7B1CF0D16783C8500BA628A /* KKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4716783C8500BA628A /* KKFunctions.m */; };
@@ -279,8 +282,8 @@
 		C7B1D02516783C8500BA628A /* kkUserPlaceholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8816783C8500BA628A /* kkUserPlaceholder@2x.png */; };
 		C7B1D02616783C8500BA628A /* kkTableBodyBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8916783C8500BA628A /* kkTableBodyBG.png */; };
 		C7B1D02716783C8500BA628A /* kkTableBodyBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8A16783C8500BA628A /* kkTableBodyBG@2x.png */; };
-		C7B1D02816783C8500BA628A /* footerBG.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8C16783C8500BA628A /* footerBG.png */; };
-		C7B1D02916783C8500BA628A /* footerBG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8D16783C8500BA628A /* footerBG@2x.png */; };
+		C7B1D02816783C8500BA628A /* footerBGwithActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8C16783C8500BA628A /* footerBGwithActions.png */; };
+		C7B1D02916783C8500BA628A /* footerBGwithActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8D16783C8500BA628A /* footerBGwithActions@2x.png */; };
 		C7B1D02A16783C8500BA628A /* kkCommentsButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8E16783C8500BA628A /* kkCommentsButtonDown.png */; };
 		C7B1D02B16783C8500BA628A /* kkCommentsButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE8F16783C8500BA628A /* kkCommentsButtonDown@2x.png */; };
 		C7B1D02C16783C8500BA628A /* kkCommentsButtonUp.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B1CE9016783C8500BA628A /* kkCommentsButtonUp.png */; };
@@ -484,6 +487,10 @@
 		C712707F168283E700C1B560 /* SRSlimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSlimeView.m; sourceTree = "<group>"; };
 		C71270841684C1C500C1B560 /* 111-userGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray.png"; sourceTree = "<group>"; };
 		C71270851684C1C600C1B560 /* 111-userGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray@2x.png"; sourceTree = "<group>"; };
+		C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountSummaryTableViewController.h; sourceTree = "<group>"; };
+		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
+		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
+		C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "footerBGNoActions@2x.png"; sourceTree = "<group>"; };
 		C7B1CD4216783C8500BA628A /* KKCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKCache.h; sourceTree = "<group>"; };
 		C7B1CD4316783C8500BA628A /* KKCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCache.m; sourceTree = "<group>"; };
 		C7B1CD4416783C8500BA628A /* KKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKConstants.h; sourceTree = "<group>"; };
@@ -766,8 +773,8 @@
 		C7B1CE8816783C8500BA628A /* kkUserPlaceholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkUserPlaceholder@2x.png"; sourceTree = "<group>"; };
 		C7B1CE8916783C8500BA628A /* kkTableBodyBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkTableBodyBG.png; sourceTree = "<group>"; };
 		C7B1CE8A16783C8500BA628A /* kkTableBodyBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkTableBodyBG@2x.png"; sourceTree = "<group>"; };
-		C7B1CE8C16783C8500BA628A /* footerBG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBG.png; sourceTree = "<group>"; };
-		C7B1CE8D16783C8500BA628A /* footerBG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "footerBG@2x.png"; sourceTree = "<group>"; };
+		C7B1CE8C16783C8500BA628A /* footerBGwithActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGwithActions.png; sourceTree = "<group>"; };
+		C7B1CE8D16783C8500BA628A /* footerBGwithActions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "footerBGwithActions@2x.png"; sourceTree = "<group>"; };
 		C7B1CE8E16783C8500BA628A /* kkCommentsButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkCommentsButtonDown.png; sourceTree = "<group>"; };
 		C7B1CE8F16783C8500BA628A /* kkCommentsButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkCommentsButtonDown@2x.png"; sourceTree = "<group>"; };
 		C7B1CE9016783C8500BA628A /* kkCommentsButtonUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkCommentsButtonUp.png; sourceTree = "<group>"; };
@@ -1120,6 +1127,8 @@
 				C7BFB93E168252A700FF3DE9 /* KKMyAccountHeaderViewController.xib */,
 				C7B1CD6216783C8500BA628A /* KKAccountViewController.h */,
 				C7B1CD6316783C8500BA628A /* KKAccountViewController.m */,
+				C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */,
+				C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */,
 			);
 			path = "My Account";
 			sourceTree = "<group>";
@@ -1221,7 +1230,7 @@
 				C7BFB946168252E500FF3DE9 /* my account */,
 				C7B1D0B716783EC700BA628A /* App Store Stuff */,
 				C7B1CD9216783C8500BA628A /* Assets */,
-				C7B1CE7E16783C8500BA628A /* main feed tableview */,
+				C7B1CE7E16783C8500BA628A /* table view */,
 				C7B1CEA916783C8500BA628A /* main ui */,
 				C7B1CECF16783C8500BA628A /* tab bar */,
 			);
@@ -1453,13 +1462,14 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
-		C7B1CE7E16783C8500BA628A /* main feed tableview */ = {
+		C7B1CE7E16783C8500BA628A /* table view */ = {
 			isa = PBXGroup;
 			children = (
 				C7B1CE7F16783C8500BA628A /* body */,
 				C7B1CE8B16783C8500BA628A /* footer */,
 				C7B1CE9E16783C8500BA628A /* header */,
 			);
+			name = "table view";
 			path = "main feed tableview";
 			sourceTree = "<group>";
 		};
@@ -1491,8 +1501,10 @@
 		C7B1CE8B16783C8500BA628A /* footer */ = {
 			isa = PBXGroup;
 			children = (
-				C7B1CE8C16783C8500BA628A /* footerBG.png */,
-				C7B1CE8D16783C8500BA628A /* footerBG@2x.png */,
+				C75413DE169B7A0C0006853C /* footerBGNoActions.png */,
+				C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */,
+				C7B1CE8C16783C8500BA628A /* footerBGwithActions.png */,
+				C7B1CE8D16783C8500BA628A /* footerBGwithActions@2x.png */,
 				C7B1CE8E16783C8500BA628A /* kkCommentsButtonDown.png */,
 				C7B1CE8F16783C8500BA628A /* kkCommentsButtonDown@2x.png */,
 				C7B1CE9016783C8500BA628A /* kkCommentsButtonUp.png */,
@@ -2215,8 +2227,8 @@
 				C7B1D02516783C8500BA628A /* kkUserPlaceholder@2x.png in Resources */,
 				C7B1D02616783C8500BA628A /* kkTableBodyBG.png in Resources */,
 				C7B1D02716783C8500BA628A /* kkTableBodyBG@2x.png in Resources */,
-				C7B1D02816783C8500BA628A /* footerBG.png in Resources */,
-				C7B1D02916783C8500BA628A /* footerBG@2x.png in Resources */,
+				C7B1D02816783C8500BA628A /* footerBGwithActions.png in Resources */,
+				C7B1D02916783C8500BA628A /* footerBGwithActions@2x.png in Resources */,
 				C7B1D02A16783C8500BA628A /* kkCommentsButtonDown.png in Resources */,
 				C7B1D02B16783C8500BA628A /* kkCommentsButtonDown@2x.png in Resources */,
 				C7B1D02C16783C8500BA628A /* kkCommentsButtonUp.png in Resources */,
@@ -2341,6 +2353,8 @@
 				C7C642A316960C350013CDB5 /* KKToolbarCell.xib in Resources */,
 				C7BC60C4169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png in Resources */,
 				C7BC60C5169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png in Resources */,
+				C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */,
+				C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2438,6 +2452,7 @@
 				C7127083168283E700C1B560 /* SRSlimeView.m in Sources */,
 				C7C642971695FA040013CDB5 /* KKSideScrollToolBarViewController.m in Sources */,
 				C7BC60C916977569003C223B /* KKToolbarButton.m in Sources */,
+				C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

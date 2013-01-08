@@ -9,6 +9,12 @@
 #import "KKUtility.h"
 #import "UIImage+ResizeAdditions.h"
 
+@interface KKUtility () {
+    
+}
++ (BOOL)saveProfileImageToParse:(UIImage*)profileImage;
+@end
+
 @implementation KKUtility
 
 #pragma mark Like Photos
@@ -159,8 +165,55 @@
     }];
 }
 
+#pragma mark - Parse Account signup
++ (BOOL)processLocalProfilePicture:(UIImage *)profileImage {
+    return [self saveProfileImageToParse:profileImage];
+}
 
-#pragma mark Facebook
++ (BOOL)saveProfileImageToParse:(UIImage*)profileImage {
+    NSLog(@"%s", __FUNCTION__);
+    
+    UIImage *image = profileImage;
+    UIImage *mediumImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
+    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
+    
+    NSData *mediumImageData = UIImageJPEGRepresentation(mediumImage, 0.5); // using JPEG for larger pictures
+    NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
+    
+    //check to ensure we have proper image data to upload
+    //we're doing this as a check to make sure we can alert the user if uploading a profile pic fails
+    if (!mediumImageData || !smallRoundedImageData) {
+        return NO;
+    }
+    
+    if (mediumImageData.length > 0) {
+        NSLog(@"Uploading Medium Profile Picture");
+        PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
+        [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                NSLog(@"Uploaded Medium Profile Picture");
+                [[PFUser currentUser] setObject:fileMediumImage forKey:kKKUserProfilePicMediumKey];
+                [[PFUser currentUser] saveEventually];
+            }
+        }];
+    }
+    
+    if (smallRoundedImageData.length > 0) {
+        NSLog(@"Uploading Profile Picture Thumbnail");
+        PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
+        [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                NSLog(@"Uploaded Profile Picture Thumbnail");
+                [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kKKUserProfilePicSmallKey];
+                [[PFUser currentUser] saveEventually];
+            }
+        }];
+    }
+    
+    return YES;
+}
+
+#pragma mark - Facebook
 
 + (void)processFacebookProfilePictureData:(NSData *)newProfilePictureData {
     if (newProfilePictureData.length == 0) {
@@ -190,35 +243,36 @@
     
     UIImage *image = [UIImage imageWithData:newProfilePictureData];
     
-    UIImage *mediumImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
-    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
-    
-    NSData *mediumImageData = UIImageJPEGRepresentation(mediumImage, 0.5); // using JPEG for larger pictures
-    NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
-    
-    if (mediumImageData.length > 0) {
-        NSLog(@"Uploading Medium Profile Picture");
-        PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
-        [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!error) {
-                NSLog(@"Uploaded Medium Profile Picture");
-                [[PFUser currentUser] setObject:fileMediumImage forKey:kKKUserProfilePicMediumKey];
-                [[PFUser currentUser] saveEventually];
-            }
-        }];
-    }
-    
-    if (smallRoundedImageData.length > 0) {
-        NSLog(@"Uploading Profile Picture Thumbnail");
-        PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
-        [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!error) {
-                NSLog(@"Uploaded Profile Picture Thumbnail");
-                [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kKKUserProfilePicSmallKey];
-                [[PFUser currentUser] saveEventually];
-            }
-        }];
-    }
+    [self saveProfileImageToParse:image];
+//    UIImage *mediumImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
+//    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
+//    
+//    NSData *mediumImageData = UIImageJPEGRepresentation(mediumImage, 0.5); // using JPEG for larger pictures
+//    NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
+//    
+//    if (mediumImageData.length > 0) {
+//        NSLog(@"Uploading Medium Profile Picture");
+//        PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
+//        [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//            if (!error) {
+//                NSLog(@"Uploaded Medium Profile Picture");
+//                [[PFUser currentUser] setObject:fileMediumImage forKey:kKKUserProfilePicMediumKey];
+//                [[PFUser currentUser] saveEventually];
+//            }
+//        }];
+//    }
+//    
+//    if (smallRoundedImageData.length > 0) {
+//        NSLog(@"Uploading Profile Picture Thumbnail");
+//        PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
+//        [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//            if (!error) {
+//                NSLog(@"Uploaded Profile Picture Thumbnail");
+//                [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kKKUserProfilePicSmallKey];
+//                [[PFUser currentUser] saveEventually];
+//            }
+//        }];
+//    }
 }
 
 + (BOOL)userHasValidFacebookData:(PFUser *)user {
@@ -227,6 +281,7 @@
 }
 
 + (BOOL)userHasProfilePictures:(PFUser *)user {
+    NSLog(@"%s", __FUNCTION__);
     PFFile *profilePictureMedium = [user objectForKey:kKKUserProfilePicMediumKey];
     PFFile *profilePictureSmall = [user objectForKey:kKKUserProfilePicSmallKey];
     

@@ -8,7 +8,9 @@
 
 #import "KKPhotoTimelineViewController.h"
 
-@interface KKHomeViewController : KKPhotoTimelineViewController
+@interface KKHomeViewController : KKPhotoTimelineViewController <SRRefreshDelegate> {
+    
+}
 
 @property (nonatomic, assign, getter = isFirstLaunch) BOOL firstLaunch;
 

@@ -55,6 +55,7 @@
     NSIndexPath *myIndexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     [self.collectionView selectItemAtIndexPath:myIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionLeft];
     selectedIndex = 0; //set the initial selected index to 0
+    [self.delegate didTouchToolbarItemAtIndex:selectedIndex];//we'll initially load the Kollections table sections
 }
 
 - (void)didReceiveMemoryWarning {

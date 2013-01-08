@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Parse. All rights reserved.
 //
 
-#import "KKPhotoTimelineViewController.h"
+#import "KKMyAccountSummaryTableViewController.h"
 #import "KKSideScrollToolBarViewController.h"
 
 typedef enum {
@@ -19,11 +19,13 @@ typedef enum {
     KKMyAccountHeaderToolItemStore
 } KKMyAccountHeaderToolItem;
 
-@interface KKAccountViewController : KKPhotoTimelineViewController <SRRefreshDelegate, KKSideScrollToolBarViewControllerDelegate> {
+@interface KKAccountViewController : KKMyAccountSummaryTableViewController <SRRefreshDelegate, KKSideScrollToolBarViewControllerDelegate> {
     
 }
 
 @property (nonatomic, assign) KKMyAccountHeaderToolItem headerToolItem; //typedef used in switch statement for determining what toolbar item was touched
 @property (nonatomic, strong) PFUser *user;
+
+- (void)loadProfilePhoto:(id)sender;
 
 @end

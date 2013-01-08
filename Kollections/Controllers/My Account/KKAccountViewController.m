@@ -32,24 +32,6 @@
 #pragma mark - Initialization
 
 #pragma mark - UIViewController
-- (id)initWithStyle:(UITableViewStyle)style {
-    self = [super initWithStyle:style];
-    if (self) {
-        // The className to query on
-//        self.className = kKKActivityClassKey;
-        
-        // Whether the built-in pull-to-refresh is enabled
-        self.pullToRefreshEnabled = NO;
-        
-//        // Whether the built-in pagination is enabled
-//        self.paginationEnabled = YES;
-//        
-//        // The number of objects to show per page
-//        self.objectsPerPage = 15;
-        
-    }
-    return self;
-}
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -69,7 +51,7 @@
     
     self.user = [PFUser currentUser];
     
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 222.0f)];
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 180.0f)];
     [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
     
     self.headerViewController = [[KKMyAccountHeaderViewController alloc] init];
@@ -89,33 +71,23 @@
     
     //add image view to hold the user's profile pic
     PFImageView *profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake(17.0f, 15.0f, 66.0f, 65.0f)];
+    profilePictureImageView.tag = 101;
     [self.headerViewController.view addSubview:profilePictureImageView];
     [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
     CALayer *layer = [profilePictureImageView layer];
     layer.masksToBounds = YES;
     profilePictureImageView.alpha = 0.0f;
     
-    //retrieve the user's profile pic to insert
-    PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
-    if (imageFile) {
-        [profilePictureImageView setFile:imageFile];
-        [profilePictureImageView loadInBackground:^(UIImage *image, NSError *error) {
-            if (!error) {
-                [UIView animateWithDuration:0.200f animations:^{
-                    profilePictureImageView.alpha = 1.0f;
-                }];
-            }
-        }];
-    } else {
-        //if no image file, make sure we're not logged in with facebook and add a button to allow upload
-        if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
-            //no profile photo available so add a button to allow the user to add one on their own
-            UIButton *profileButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            profileButton.frame = [self.headerViewController.view viewWithTag:100].frame;//tag of the placeholder imageview
-            [profileButton setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoPlaceholderDown.png"] forState:UIControlEventTouchDown];
-            [profileButton addTarget:self action:@selector(profilePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.headerViewController.view addSubview:profileButton];
-        }
+    [self loadProfilePhoto:self];
+    
+    //check if we're logged in with facebook; add a button to allow changing profile picture if we're not
+    if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
+        //no profile photo available so add a button to allow the user to add one on their own
+        UIButton *profileButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        profileButton.frame = [self.headerViewController.view viewWithTag:100].frame;//tag of the placeholder imageview
+        [profileButton setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoPlaceholderDown.png"] forState:UIControlEventTouchDown];
+        [profileButton addTarget:self action:@selector(profilePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.headerViewController.view addSubview:profileButton];
     }
     
     //set the label values appropriately for the user
@@ -234,6 +206,13 @@
 //    }
     
     [self configureLogoutButton];
+    
+    //add notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadProfilePhoto:) name:@"MyAccountViewLoadProfilePhoto" object:nil];
+}
+
+- (void) dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewLoadProfilePhoto" object:nil];
 }
 
 #pragma mark - Slime Refresh delegate
@@ -264,35 +243,55 @@
 #pragma mark - KKSideScrollToolBarViewControllerDelegate methods
 -(void)didTouchToolbarItemAtIndex:(NSInteger)index {
 //    NSLog(@"%s", __FUNCTION__);
-    switch (index) {
+    self.sectionTitles = [self determineSectionTitles:index];
+    
+    [self.tableView reloadData];
+}
+
+- (NSArray*)determineSectionTitles:(NSInteger)selectedIndex {
+    
+    NSArray *sections = [NSArray array];
+    
+    switch (selectedIndex) {
         case KKMyAccountHeaderToolItemKollections:
             NSLog(@"Kollections touched");
+            sections = @[@"My Public Kollections",
+                         @"My Private Kollections",
+                         @"Subscribed Public Kollections",
+                         @"Subscribed Private Kollections"];
             break;
         case KKMyAccountHeaderToolItemSubmissions:
             NSLog(@"Submissions touched");
+            sections = @[@"My Submissions"];
             break;
         case KKMyAccountHeaderToolItemFavorites:
             NSLog(@"Favorites touched");
+            sections = @[@"Favorites"];
             break;
         case KKMyAccountHeaderToolItemFollowers:
             NSLog(@"Followers touched");
+            sections = @[@"Followers"];
             break;
         case KKMyAccountHeaderToolItemFollowing:
             NSLog(@"Following touched");
+            sections = @[@"Following"];
             break;
         case KKMyAccountHeaderToolItemAchievements:
             NSLog(@"Achievements touched");
+            sections = @[@"Achievements"];
             break;
         case KKMyAccountHeaderToolItemStore:
             NSLog(@"Store touched");
+            sections = @[@"Kollections Store"];
             break;
         default:
             break;
     }
+    
+    return sections;
 }
 
 #pragma mark - PFQueryTableViewController
-
 - (void)objectsDidLoad:(NSError *)error {
     [super objectsDidLoad:error];
     
@@ -300,21 +299,27 @@
 }
 
 - (PFQuery *)queryForTable {
-    if (!self.user) {
-        PFQuery *query = [PFQuery queryWithClassName:self.className];
-        [query setLimit:0];
-        return query;
-    }
+    NSLog(@"%s", __FUNCTION__);
+//    if (!self.user) {
+//        PFQuery *query = [PFQuery queryWithClassName:self.className];
+//        [query setLimit:0];
+//        return query;
+//    }
+//    
+//    PFQuery *query = [PFQuery queryWithClassName:self.className];
+//    query.cachePolicy = kPFCachePolicyNetworkOnly;
+//    if (self.objects.count == 0) {
+//        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
+//    }
+//    [query whereKey:kKKPhotoUserKey equalTo:self.user];
+//    [query orderByDescending:@"createdAt"];
+//    [query includeKey:kKKPhotoUserKey];
+//    
+//    return query;
     
+    //KAK remove this below once i get the table set up to work with my graphics and uncomment lines above to properly query
     PFQuery *query = [PFQuery queryWithClassName:self.className];
-    query.cachePolicy = kPFCachePolicyNetworkOnly;
-    if (self.objects.count == 0) {
-        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-    }
-    [query whereKey:kKKPhotoUserKey equalTo:self.user];
-    [query orderByDescending:@"createdAt"];
-    [query includeKey:kKKPhotoUserKey];
-    
+    [query setLimit:0];
     return query;
 }
 
@@ -333,7 +338,24 @@
 }
 
 
-#pragma mark - ()
+#pragma mark - Custom Methods
+- (void)loadProfilePhoto:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
+    self.user = [PFUser currentUser];//reset the self.user since we should've updated the currentUser with the new profile pic
+    //retrieve the user's profile pic to insert
+    PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
+    if (imageFile) {
+        [(PFImageView*)[self.headerViewController.view viewWithTag:101] setFile:imageFile];
+        [(PFImageView*)[self.headerViewController.view viewWithTag:101] loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.200f animations:^{
+                    [self.headerViewController.view viewWithTag:101].alpha = 1.0f;
+                }];
+            }
+        }];
+    }
+}
+
 - (void)profilePhotoButtonAction:(id)sender {
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePhotoCaptureButtonAction" object:sender];
 }

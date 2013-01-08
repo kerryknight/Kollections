@@ -19,6 +19,7 @@
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
+@property (nonatomic, assign) BOOL profilePhotoUploadedSuccessfully;
 @end
 
 @implementation KKEditPhotoViewController
@@ -140,6 +141,18 @@
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
     NSLog(@"%s", __FUNCTION__);
+    
+    //first, check to see if it's a regular photo for submission or a profile photo we're trying to upload
+    //if it's a profile photo, since we'll be resizing and processing a bit differently, pass it off to KKUtility instead of uploading here
+    if (self.isProfilePhoto) {
+        NSLog(@"is a profile photo");
+        //it's a profile photo, so pass the data off, mark if successful and exit here
+        self.profilePhotoUploadedSuccessfully = [KKUtility processLocalProfilePicture:anImage];
+        return NO;//return NO here since we'll upload from KKUtility instead
+    } else {
+        NSLog(@"is a regular non-profile photo");
+    }
+    
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
@@ -200,7 +213,7 @@
 }
 
 - (void)doneButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {
@@ -209,9 +222,18 @@
                                   nil];
     }
     
-    if (!self.photoFile || !self.thumbnailFile) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+    //if we don't have image data and it's not a profile pic, show upload error
+    if ((!self.photoFile || !self.thumbnailFile) && !self.profilePhotoUploadedSuccessfully) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
         [alert show];
+        return;
+    }
+    
+    //if it was a profile pic upload, dismiss the view, tell the my account view to update the current profile photo
+    //and then exit without further processing
+    if (self.profilePhotoUploadedSuccessfully) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
+        [self.parentViewController dismissModalViewControllerAnimated:YES];
         return;
     }
     

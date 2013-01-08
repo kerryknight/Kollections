@@ -45,7 +45,7 @@
         self.className = kKKPhotoClassKey;
         
         // Whether the built-in pull-to-refresh is enabled
-        self.pullToRefreshEnabled = YES;
+        self.pullToRefreshEnabled = NO; //i don't like their default style; manually adding slime refresh
         
         // Whether the built-in pagination is enabled
         self.paginationEnabled = YES;
