@@ -26,6 +26,8 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define mark - UI Element Positions
 #define kKKBarButtonItemLeftFrame CGRectMake(10.0f, 5.0f, 63.0f, 33.0f) 
 #define kKKBarButtonItemRightFrame CGRectMake(247.0f, 5.0f, 63.0f, 33.0f) 
+#define kDisplayTableCellContentWidth 289.0f
+#define kDisplayTableCellContentX 16.0f
 
 #pragma mark - Colors
 #define kBlack [UIColor colorWithRed:7.0f/255.0f green:6.0f/255.0f blue:6.0f/255.0f alpha:1.0f] //#070606

@@ -13,7 +13,9 @@
 #import "KKLoadMoreCell.h"
 #import "KKKollectionsBarViewController.h"
 
-@interface KKMyAccountSummaryTableViewController ()
+@interface KKMyAccountSummaryTableViewController () {
+    BOOL objectsAreLoaded;
+}
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
 //@property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
 //@property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
@@ -75,71 +77,50 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 //    NSLog(@"%s", __FUNCTION__);
-    NSInteger sections = [self.sectionTitles count];
     
+    //don't show anything until objects are loaded
+    if (!objectsAreLoaded) {
+        return 0;
+    }
+    
+    NSInteger sections = [self.sectionTitles count];
     return sections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //    NSLog(@"%s", __FUNCTION__);
-    return 3;//1 for top row, 1 for repeating bg and 1 for bottom row graphic
+    return 3;//1 for top row header w/label, 1 for main content view and 1 for bottom row graphic
 }
 
 
 #pragma mark - UITableViewDelegate
 
-//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-//
-//    KKPlainHeaderView *headerView = [self dequeueReusableSectionHeaderView];
-//    
-//    if (!headerView) {
-//        headerView = [[KKPlainHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.view.bounds.size.width, 40.0f)];
-//        [self.reusableSectionHeaderViews addObject:headerView];
-//    }
-//    
-//    //set the header's title label
-//    headerView.headerLabel.text = self.sectionTitles[section];
-//    
-//    return headerView;
-//}
-//
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-//    NSLog(@"%s", __FUNCTION__);
-    return 0.0f;
-}
-
-//- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-//    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 12.0f)];
-//    [footerView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]]];
-//    return footerView;
-//}
-//
-//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-//
-//    return 12.0f;
-//}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    NSLog(@"%s\n", __FUNCTION__);
     
-    NSInteger sectionRows = 3;
-    NSInteger row = [indexPath row];
-    
-    if (row == 0 && row == sectionRows - 1) {
-        //single row; will this ever happen?
-        return 0;
-    }
-    else if (row == 0) {
-        //top row
-        return 40.0f;
-    }
-    else if (row == sectionRows - 1) {
-        //bottom row
-        return 10.0f;
-    }
-    else {
-        //middle row
-        return 100.0f;
+    //don't show anything until objects are loaded
+    if (!objectsAreLoaded) {
+        return 0.0f;
+    } else {
+        NSInteger sectionRows = 3;
+        NSInteger row = [indexPath row];
+        
+        if (row == 0 && row == sectionRows - 1) {
+            //single row; will this ever happen?
+            return 0;
+        }
+        else if (row == 0) {
+            //top row
+            return 40.0f;
+        }
+        else if (row == sectionRows - 1) {
+            //bottom row
+            return 10.0f;
+        }
+        else {
+            //middle row
+            return 100.0f;
+        }
     }
 }
 
@@ -157,7 +138,29 @@
 
 
 #pragma mark - PFQueryTableViewController
-// *this method is not overridden in the KKHomeViewController
+- (void)objectsDidLoad:(NSError *)error {
+    NSLog(@"%s", __FUNCTION__);
+    [super objectsDidLoad:error];
+    
+    if (!error) {
+        //load table rows
+        objectsAreLoaded = YES;
+        [self.tableView reloadData];
+        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
+    } else {
+        //error loading items
+        UILabel *errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, self.tableView.frame.size.width, 45)];
+        errorLabel.textAlignment = UITextAlignmentCenter;
+        errorLabel.textColor = kGray6;
+        errorLabel.backgroundColor = [UIColor clearColor];
+        errorLabel.tag = 999;
+        errorLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        errorLabel.numberOfLines = 2;
+        errorLabel.text = @"An error occurred loading your\nprofile details. Please try again.";
+        [self.view addSubview:errorLabel];
+    }
+}
+
 - (PFQuery *)queryForTable {
     NSLog(@"%s", __FUNCTION__);
 //    if (![PFUser currentUser]) {
@@ -242,13 +245,41 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-//    NSLog(@"%s", __FUNCTION__);
-    static NSString *CellIdentifier = @"Cell";
+    NSString *CellIdentifier = [[NSString alloc] init];
+    
+    if (indexPath.row == 1) {
+        //middle row where our kollections bar is housed
+        //switch statement to set different cell identifiers
+        //i had to do this roundabout hackish way b/c i couldn't figure out a good way to
+        //differentiate the kollection bars from one another without having different collectionView
+        //subclasses for each section, i.e. when I click on a collection
+        //view item, i could tell what index it was, but not what type of kollection;
+        //i'll also use this to help splitting up PFQueries, since i plan to use 1 query for the
+        //kollections I own and 1 query for the kollections i'm subscribed to
+        //this gets set to one of the kollectionBar's properties
+        switch (indexPath.section) {
+            case 0:
+                CellIdentifier = @"0";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
+                break;
+            case 1:
+                CellIdentifier = @"1";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
+                break;
+            case 2:
+                CellIdentifier = @"2";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
+                break;
+            case 3:
+                CellIdentifier = @"3";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
+                break;
+            default:
+                CellIdentifier = @"Cell";
+                break;
+        }
+    }
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
 	if (cell == nil) {
-		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier forIndexPath:(NSIndexPath *)indexPath];
 	}
 	
 	// configureCell:cell forIndexPath: sets the text and image for the cell -- the method is factored out as it's also called during minuted-based updates.
@@ -261,11 +292,7 @@
 #define kADDNEWBUTTONTAG    1001
 #define kKOLLECTIONSBARTAG  1002
 
-//sizing
-#define kKOLLECTION_X       18.0f
-#define kKOLLECTION_WIDTH   284.0f
-
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
 //	NSLog(@"%s", __FUNCTION__);
 	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     
@@ -287,6 +314,7 @@
     self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
     self.kollectionsBar.delegate = self;
     self.kollectionsBar.kollections = [self.objects mutableCopy];
+    self.kollectionsBar.identifier = identifier;//cell's identifier used to determine kollection's type
     [self addChildViewController:self.kollectionsBar];
     self.kollectionsBar.view.tag = kKOLLECTIONSBARTAG;
     [cell.contentView addSubview:self.kollectionsBar.view];
@@ -297,7 +325,7 @@
 }
 
 - (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s %@", __FUNCTION__, indexPath);
     UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
     UIView *kollectionView = (UIView*)[cell.contentView viewWithTag:kKOLLECTIONSBARTAG];
     kollectionView.hidden = YES;//default
@@ -329,29 +357,12 @@
         
         //set the kollection view size to match the cell and unhide it
         kollectionView.hidden = NO;
-        kollectionView.frame = CGRectMake(kKOLLECTION_X, cell.contentView.frame.origin.y, kKOLLECTION_WIDTH, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
+        kollectionView.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
         [kollectionView setNeedsDisplay];
         
-//        //this is kinda hackish but I don't wanna redo the entire collection view at this point as a single one instead of multiple instances of the same class
-//        //attach a helper method to the cell here that will run when we tap the kollection so that we'll know what table row we touched in order to load correct kollection
-//        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(kollectionItemTapped:)];
-//        [kollectionView addGestureRecognizer:tapGesture];
     }
     
     [cell.contentView setBackgroundColor:rowBackground];
-}
-
-- (void)kollectionItemTapped:(UITapGestureRecognizer *)gesture {
-//    NSLog(@"%s", __FUNCTION__);
-    // only when gesture was recognized, not when ended
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        // get affected cell
-        UITableViewCell *cell = (UITableViewCell *)[gesture view];
-        
-        // get indexPath of cell
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-        NSLog(@"UIGestureRecognizerStateEnded index path = %@", indexPath);
-    }
 }
 
 //- (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {

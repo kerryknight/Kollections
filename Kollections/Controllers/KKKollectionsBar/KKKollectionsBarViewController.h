@@ -18,5 +18,5 @@
 
 @property (nonatomic, strong) id<KKKollectionsBarViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *kollections;
-
+@property (nonatomic, strong) NSString *identifier;
 @end

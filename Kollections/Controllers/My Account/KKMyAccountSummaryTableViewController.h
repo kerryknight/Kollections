@@ -8,11 +8,20 @@
 
 #import "KKKollectionsBarViewController.h"
 
+//use this enum to differentiate among table rows and the kollections they hold
+typedef enum {
+    KKMyAccountKollectionsBarTypeMyPublic = 10000,
+    KKMyAccountKollectionsBarTypeMyPrivate,
+    KKMyAccountKollectionsBarTypeSubscribedPublic,
+    KKMyAccountKollectionsBarTypeSubscribedPrivate
+} KKMyAccountKollectionsBarType;
+
 @interface KKMyAccountSummaryTableViewController : PFQueryTableViewController <KKKollectionsBarViewControllerDelegate> {
     
 }
 
 @property (nonatomic, strong) NSArray *sectionTitles;
 @property (nonatomic, strong) KKKollectionsBarViewController *kollectionsBar;
+@property (nonatomic, assign) KKMyAccountKollectionsBarType kollectionType;
 
 @end

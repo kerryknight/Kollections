@@ -1101,6 +1101,13 @@
 			name = Kollectionbar;
 			sourceTree = "<group>";
 		};
+		C79DA180169E2787009C1CE7 /* Kollection */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Kollection;
+			sourceTree = "<group>";
+		};
 		C7B1CD4116783C8500BA628A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1121,6 +1128,7 @@
 		C7B1CD4C16783C8500BA628A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C79DA180169E2787009C1CE7 /* Kollection */,
 				C79DA145169C9FDD009C1CE7 /* Custom Controls */,
 				C7B1CD5916783C8500BA628A /* Login */,
 				C7B1CD5016783C8500BA628A /* Home */,

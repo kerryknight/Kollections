@@ -8,6 +8,13 @@
 
 #import "KKKollectionsBarViewController.h"
 
+typedef enum {
+    KKKollectionTypeMyPublic = 0,
+    KKKollectionTypeMyPrivate,
+    KKKollectionTypeSubscribedPublic,
+    KKKollectionTypeSubscribedPrivate
+} KKKollectionType;
+
 @interface KKKollectionsBarViewController () {
     //need to track the index of the tool we've selected so that we don't allow selecting the same tool
     //twice in a row; i.e., if it's already selected, do nothing further on additional touches
@@ -15,6 +22,7 @@
 }
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (nonatomic, assign) KKKollectionType kollectionType;
 @end
 
 @implementation KKKollectionsBarViewController
@@ -41,6 +49,25 @@
     //the add new cell
     UINib *cellNib = [UINib nibWithNibName:KK_ADD_CELL bundle:nil];
     [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:KK_ADD_CELL];
+    
+    
+    //set the kollection type based on the identifier we passed in
+    switch ([self.identifier intValue]) {
+        case KKKollectionTypeMyPublic:
+            self.kollectionType = KKKollectionTypeMyPublic;
+            break;
+        case KKKollectionTypeMyPrivate:
+            self.kollectionType = KKKollectionTypeMyPrivate;
+            break;
+        case KKKollectionTypeSubscribedPublic:
+            self.kollectionType = KKKollectionTypeSubscribedPublic;
+            break;
+        case KKKollectionTypeSubscribedPrivate:
+            self.kollectionType = KKKollectionTypeSubscribedPrivate;
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -52,14 +79,13 @@
 - (NSInteger)collectionView:(UICollectionView *)view numberOfItemsInSection:(NSInteger)section {
     
     if ([self.kollections count] > 0) {
-        return [self.kollections count];
+        return [self.kollections count] + 1; //+1 to show the add/find buttons at the end of the list
     }
     
     return 1;//just show the add button if no kollections to display
 }
 
 - (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
-    
     return 1;
 }
 
@@ -69,10 +95,8 @@
     
     if (!self.kollections || [self.kollections count] == 0) {
         //only show the Add button if there are no kollections to display
-//        NSLog(@"no kollection objects");
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
     } else {
-//        NSLog(@"we have kollection objects");
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_NORMAL_CELL forIndexPath:indexPath];
         
         UILabel *titleLabel = (UILabel *)[cell viewWithTag:100];//we just added a tag to the nib, no property necessary
@@ -106,12 +130,21 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //set the selectedIndex to the newly selected item
     selectedIndex = indexPath.row;
     
-    //pass it to KKAccountViewController (the delegate) for further processing
-    [self.delegate didTouchKollectionItemAtIndex:selectedIndex];
+//    NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
+//    NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
+    
+    //load the appropriate view now that we've selected an item
+    
+//    HorizontalTablesAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//    
+//    ArticleDetailViewController *articleDetailViewController = [[ArticleDetailViewController alloc] initWithNibName:@"ArticleDetailViewController" bundle:[NSBundle mainBundle]];
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    [appDelegate.navigationController pushViewController:articleDetailViewController animated:YES];
+
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

@@ -298,6 +298,7 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
+    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     self.tableView.tableHeaderView = self.headerView;
