@@ -41,6 +41,7 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define kMint3 [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0f] //#95dbda
 #define kMint4 [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0f] //#4aa5a4
 
+
 #pragma mark - NSUserDefaults
 extern NSString *const kKKUserDefaultsActivityFeedViewControllerLastRefreshKey;
 extern NSString *const kKKUserDefaultsCacheFacebookFriendsKey;

@@ -6,14 +6,13 @@
 //  Copyright (c) 2012 Parse. All rights reserved.
 //
 
-//#import "KKPlainHeaderView.h"
+#import "KKKollectionsBarViewController.h"
 
-@interface KKMyAccountSummaryTableViewController : PFQueryTableViewController {
+@interface KKMyAccountSummaryTableViewController : PFQueryTableViewController <KKKollectionsBarViewControllerDelegate> {
     
 }
 
 @property (nonatomic, strong) NSArray *sectionTitles;
-
-//- (KKPlainHeaderView *)dequeueReusableSectionHeaderView;
+@property (nonatomic, strong) KKKollectionsBarViewController *kollectionsBar;
 
 @end

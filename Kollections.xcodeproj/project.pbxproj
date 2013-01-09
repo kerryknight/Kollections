@@ -24,6 +24,15 @@
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
+		C79DA139169C8004009C1CE7 /* kkHeaderUserPhotoDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */; };
+		C79DA13A169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */; };
+		C79DA141169C9AAF009C1CE7 /* kkAddButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */; };
+		C79DA142169C9AAF009C1CE7 /* kkAddButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA13E169C9AAF009C1CE7 /* kkAddButtonDown@2x.png */; };
+		C79DA143169C9AAF009C1CE7 /* kkAddButtonUp.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA13F169C9AAF009C1CE7 /* kkAddButtonUp.png */; };
+		C79DA144169C9AAF009C1CE7 /* kkAddButtonUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA140169C9AAF009C1CE7 /* kkAddButtonUp@2x.png */; };
+		C79DA14B169CA0AB009C1CE7 /* KKKollectionsAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C79DA147169CA0AB009C1CE7 /* KKKollectionsAddCell.xib */; };
+		C79DA14C169CA0AB009C1CE7 /* KKKollectionsBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C79DA149169CA0AB009C1CE7 /* KKKollectionsBarViewController.m */; };
+		C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C79DA14A169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib */; };
 		C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4316783C8500BA628A /* KKCache.m */; };
 		C7B1CF0C16783C8500BA628A /* KKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4516783C8500BA628A /* KKConstants.m */; };
 		C7B1CF0D16783C8500BA628A /* KKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4716783C8500BA628A /* KKFunctions.m */; };
@@ -491,6 +500,16 @@
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
 		C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "footerBGNoActions@2x.png"; sourceTree = "<group>"; };
+		C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderUserPhotoDown.png; sourceTree = "<group>"; };
+		C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderUserPhotoDown@2x.png"; sourceTree = "<group>"; };
+		C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkAddButtonDown.png; sourceTree = "<group>"; };
+		C79DA13E169C9AAF009C1CE7 /* kkAddButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkAddButtonDown@2x.png"; sourceTree = "<group>"; };
+		C79DA13F169C9AAF009C1CE7 /* kkAddButtonUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkAddButtonUp.png; sourceTree = "<group>"; };
+		C79DA140169C9AAF009C1CE7 /* kkAddButtonUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkAddButtonUp@2x.png"; sourceTree = "<group>"; };
+		C79DA147169CA0AB009C1CE7 /* KKKollectionsAddCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKKollectionsAddCell.xib; path = KKKollectionsBar/KKKollectionsAddCell.xib; sourceTree = "<group>"; };
+		C79DA148169CA0AB009C1CE7 /* KKKollectionsBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionsBarViewController.h; path = KKKollectionsBar/KKKollectionsBarViewController.h; sourceTree = "<group>"; };
+		C79DA149169CA0AB009C1CE7 /* KKKollectionsBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionsBarViewController.m; path = KKKollectionsBar/KKKollectionsBarViewController.m; sourceTree = "<group>"; };
+		C79DA14A169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKKollectionsBarViewController.xib; path = KKKollectionsBar/KKKollectionsBarViewController.xib; sourceTree = "<group>"; };
 		C7B1CD4216783C8500BA628A /* KKCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKCache.h; sourceTree = "<group>"; };
 		C7B1CD4316783C8500BA628A /* KKCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCache.m; sourceTree = "<group>"; };
 		C7B1CD4416783C8500BA628A /* KKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKConstants.h; sourceTree = "<group>"; };
@@ -1051,6 +1070,37 @@
 			path = SlimeRefresh;
 			sourceTree = "<group>";
 		};
+		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
+			isa = PBXGroup;
+			children = (
+				C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */,
+				C79DA13E169C9AAF009C1CE7 /* kkAddButtonDown@2x.png */,
+				C79DA13F169C9AAF009C1CE7 /* kkAddButtonUp.png */,
+				C79DA140169C9AAF009C1CE7 /* kkAddButtonUp@2x.png */,
+			);
+			path = buttons;
+			sourceTree = "<group>";
+		};
+		C79DA145169C9FDD009C1CE7 /* Custom Controls */ = {
+			isa = PBXGroup;
+			children = (
+				C79DA146169C9FFE009C1CE7 /* Kollectionbar */,
+				C7C6429A1695FA160013CDB5 /* Toolbar */,
+			);
+			name = "Custom Controls";
+			sourceTree = "<group>";
+		};
+		C79DA146169C9FFE009C1CE7 /* Kollectionbar */ = {
+			isa = PBXGroup;
+			children = (
+				C79DA147169CA0AB009C1CE7 /* KKKollectionsAddCell.xib */,
+				C79DA148169CA0AB009C1CE7 /* KKKollectionsBarViewController.h */,
+				C79DA149169CA0AB009C1CE7 /* KKKollectionsBarViewController.m */,
+				C79DA14A169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib */,
+			);
+			name = Kollectionbar;
+			sourceTree = "<group>";
+		};
 		C7B1CD4116783C8500BA628A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1071,6 +1121,7 @@
 		C7B1CD4C16783C8500BA628A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				C79DA145169C9FDD009C1CE7 /* Custom Controls */,
 				C7B1CD5916783C8500BA628A /* Login */,
 				C7B1CD5016783C8500BA628A /* Home */,
 				C7B1CD6716783C8500BA628A /* Search */,
@@ -1078,7 +1129,6 @@
 				C7B1CD4D16783C8500BA628A /* Activity Feed */,
 				C7B1CD6116783C8500BA628A /* My Account */,
 				C7B1CD6416783C8500BA628A /* Photo Details */,
-				C7C6429A1695FA160013CDB5 /* Toolbar */,
 				C7B1CD6A16783C8500BA628A /* Settings */,
 				C7B1CD5716783C8500BA628A /* KKTabBarController.h */,
 				C7B1CD5816783C8500BA628A /* KKTabBarController.m */,
@@ -1227,6 +1277,7 @@
 		C7B1CD9016783C8500BA628A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C79DA13C169C9AAF009C1CE7 /* buttons */,
 				C7BFB946168252E500FF3DE9 /* my account */,
 				C7B1D0B716783EC700BA628A /* App Store Stuff */,
 				C7B1CD9216783C8500BA628A /* Assets */,
@@ -1716,6 +1767,8 @@
 		C7BFB947168252E500FF3DE9 /* header */ = {
 			isa = PBXGroup;
 			children = (
+				C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */,
+				C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */,
 				C7BC60C2169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png */,
 				C7BC60C3169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png */,
 				C71270841684C1C500C1B560 /* 111-userGray.png */,
@@ -2355,6 +2408,14 @@
 				C7BC60C5169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png in Resources */,
 				C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */,
 				C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */,
+				C79DA139169C8004009C1CE7 /* kkHeaderUserPhotoDown.png in Resources */,
+				C79DA13A169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png in Resources */,
+				C79DA141169C9AAF009C1CE7 /* kkAddButtonDown.png in Resources */,
+				C79DA142169C9AAF009C1CE7 /* kkAddButtonDown@2x.png in Resources */,
+				C79DA143169C9AAF009C1CE7 /* kkAddButtonUp.png in Resources */,
+				C79DA144169C9AAF009C1CE7 /* kkAddButtonUp@2x.png in Resources */,
+				C79DA14B169CA0AB009C1CE7 /* KKKollectionsAddCell.xib in Resources */,
+				C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2453,6 +2514,7 @@
 				C7C642971695FA040013CDB5 /* KKSideScrollToolBarViewController.m in Sources */,
 				C7BC60C916977569003C223B /* KKToolbarButton.m in Sources */,
 				C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */,
+				C79DA14C169CA0AB009C1CE7 /* KKKollectionsBarViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -38,6 +38,10 @@
 //    NSLog(@"%s", __FUNCTION__);
 }
 
+#define kPlaceholderPictureImageViewTag 100
+#define kProfilePictureImageViewTag     101
+#define kProfilePictureButtonTag        102
+
 - (void)viewDidLoad {
 //    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
@@ -51,7 +55,7 @@
     
     self.user = [PFUser currentUser];
     
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 180.0f)];
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake( 0.0f, 0.0f, self.tableView.bounds.size.width, 175.0f)];
     [self.headerView setBackgroundColor:[UIColor clearColor]]; // should be clear, this will be the container for our avatar, photo count, follower count, following count, and so on
     
     self.headerViewController = [[KKMyAccountHeaderViewController alloc] init];
@@ -65,13 +69,13 @@
     slimeRefreshView.delegate = self;
     slimeRefreshView.upInset = 0;
     slimeRefreshView.slimeMissWhenGoingBack = YES;
-    slimeRefreshView.slime.bodyColor = [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0];
+    slimeRefreshView.slime.bodyColor = kMint3;
 //    slimeRefreshView.slime.skinColor = [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0];
     [self.tableView addSubview:slimeRefreshView];
     
     //add image view to hold the user's profile pic
     PFImageView *profilePictureImageView = [[PFImageView alloc] initWithFrame:CGRectMake(17.0f, 15.0f, 66.0f, 65.0f)];
-    profilePictureImageView.tag = 101;
+    profilePictureImageView.tag = kProfilePictureImageViewTag;
     [self.headerViewController.view addSubview:profilePictureImageView];
     [profilePictureImageView setContentMode:UIViewContentModeScaleAspectFill];
     CALayer *layer = [profilePictureImageView layer];
@@ -84,7 +88,8 @@
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         //no profile photo available so add a button to allow the user to add one on their own
         UIButton *profileButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        profileButton.frame = [self.headerViewController.view viewWithTag:100].frame;//tag of the placeholder imageview
+        profileButton.tag = kProfilePictureButtonTag;//tag it so we can reference it if we need to change the down button image
+        profileButton.frame = [self.headerViewController.view viewWithTag:kPlaceholderPictureImageViewTag].frame;//tag of the placeholder imageview
         [profileButton setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoPlaceholderDown.png"] forState:UIControlEventTouchDown];
         [profileButton addTarget:self action:@selector(profilePhotoButtonAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.headerViewController.view addSubview:profileButton];
@@ -241,7 +246,7 @@
 }
 
 #pragma mark - KKSideScrollToolBarViewControllerDelegate methods
--(void)didTouchToolbarItemAtIndex:(NSInteger)index {
+- (void)didTouchToolbarItemAtIndex:(NSInteger)index {
 //    NSLog(@"%s", __FUNCTION__);
     self.sectionTitles = [self determineSectionTitles:index];
     
@@ -340,7 +345,7 @@
 
 #pragma mark - Custom Methods
 - (void)loadProfilePhoto:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     self.user = [PFUser currentUser];//reset the self.user since we should've updated the currentUser with the new profile pic
     //retrieve the user's profile pic to insert
     PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
@@ -349,7 +354,9 @@
         [(PFImageView*)[self.headerViewController.view viewWithTag:101] loadInBackground:^(UIImage *image, NSError *error) {
             if (!error) {
                 [UIView animateWithDuration:0.200f animations:^{
-                    [self.headerViewController.view viewWithTag:101].alpha = 1.0f;
+                    [self.headerViewController.view viewWithTag:101].alpha = 1.0f;//load the photo into the imageview
+                    //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
+                    [(UIButton*)[self.headerViewController.view viewWithTag:kProfilePictureButtonTag] setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoDown.png"] forState:UIControlEventTouchDown];
                 }];
             }
         }];

@@ -11,6 +11,7 @@
 #import "KKPhotoDetailsViewController.h"
 #import "KKUtility.h"
 #import "KKLoadMoreCell.h"
+#import "KKKollectionsBarViewController.h"
 
 @interface KKMyAccountSummaryTableViewController ()
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
@@ -73,20 +74,15 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    NSLog(@"%s", __FUNCTION__);
-//    NSInteger sections = self.objects.count;
-//    if (self.paginationEnabled && sections != 0)
-//        sections++;
+//    NSLog(@"%s", __FUNCTION__);
     NSInteger sections = [self.sectionTitles count];
-    
-    NSLog(@"total sections = %i", sections);
     
     return sections;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"%s", __FUNCTION__);
-    return 3;//1 for repeating bg and 1 for bottom graphic
+//    NSLog(@"%s", __FUNCTION__);
+    return 3;//1 for top row, 1 for repeating bg and 1 for bottom row graphic
 }
 
 
@@ -108,7 +104,7 @@
 //}
 //
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     return 0.0f;
 }
 
@@ -143,11 +139,12 @@
     }
     else {
         //middle row
-        return 60.0f;
+        return 100.0f;
     }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    NSLog(@"%s", __FUNCTION__);
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -250,7 +247,6 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
-    //kak 07Mar2012 table cells generation redone to fix allocation issues
 	if (cell == nil) {
 		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
 	}
@@ -260,17 +256,24 @@
 	return cell;
 }
 
-#define kHEADERLABELTAG 1000
+//tags
+#define kHEADERLABELTAG     1000
+#define kADDNEWBUTTONTAG    1001
+#define kKOLLECTIONSBARTAG  1002
+
+//sizing
+#define kKOLLECTION_X       18.0f
+#define kKOLLECTION_WIDTH   284.0f
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
 //	NSLog(@"%s", __FUNCTION__);
-	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:identifier];
+	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     
     //make the cell highlight gray instead of blue
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.accessoryType = UITableViewCellAccessoryNone;
     
-    //add a label to it
+    //add a header label to it
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
     [cell.contentView addSubview:headerLabel];
     [headerLabel setTextColor:kGray6];
@@ -280,12 +283,24 @@
     [headerLabel setBackgroundColor:[UIColor clearColor]];
     headerLabel.tag = kHEADERLABELTAG;
     
+    //add the kollection uicollectionview
+    self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
+    self.kollectionsBar.delegate = self;
+    self.kollectionsBar.kollections = [self.objects mutableCopy];
+    [self addChildViewController:self.kollectionsBar];
+    self.kollectionsBar.view.tag = kKOLLECTIONSBARTAG;
+    [cell.contentView addSubview:self.kollectionsBar.view];
+    [self.kollectionsBar didMoveToParentViewController:self];
+    self.kollectionsBar.view.hidden = YES;
+    
 	return cell;
 }
 
 - (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
 //    NSLog(@"%s", __FUNCTION__);
     UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
+    UIView *kollectionView = (UIView*)[cell.contentView viewWithTag:kKOLLECTIONSBARTAG];
+    kollectionView.hidden = YES;//default
     UIColor *rowBackground;
     
     NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
@@ -310,9 +325,33 @@
         //middle row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
         headerLabel.text = @"";
+        //check if we have objects to display in the collection; if not, show the add button
+        
+        //set the kollection view size to match the cell and unhide it
+        kollectionView.hidden = NO;
+        kollectionView.frame = CGRectMake(kKOLLECTION_X, cell.contentView.frame.origin.y, kKOLLECTION_WIDTH, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
+        [kollectionView setNeedsDisplay];
+        
+//        //this is kinda hackish but I don't wanna redo the entire collection view at this point as a single one instead of multiple instances of the same class
+//        //attach a helper method to the cell here that will run when we tap the kollection so that we'll know what table row we touched in order to load correct kollection
+//        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(kollectionItemTapped:)];
+//        [kollectionView addGestureRecognizer:tapGesture];
     }
     
     [cell.contentView setBackgroundColor:rowBackground];
+}
+
+- (void)kollectionItemTapped:(UITapGestureRecognizer *)gesture {
+//    NSLog(@"%s", __FUNCTION__);
+    // only when gesture was recognized, not when ended
+    if (gesture.state == UIGestureRecognizerStateEnded) {
+        // get affected cell
+        UITableViewCell *cell = (UITableViewCell *)[gesture view];
+        
+        // get indexPath of cell
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        NSLog(@"UIGestureRecognizerStateEnded index path = %@", indexPath);
+    }
 }
 
 //- (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
@@ -329,20 +368,11 @@
 //    return cell;
 //}
 
-
-#pragma mark - KKMyAccountSummaryTableViewController
-
-//- (KKPlainHeaderView *)dequeueReusableSectionHeaderView {
-//    NSLog(@"%s", __FUNCTION__);
-//    for (KKPlainHeaderView *sectionHeaderView in self.reusableSectionHeaderViews) {
-//        if (!sectionHeaderView.superview) {
-//            // we found a section header that is no longer visible
-//            return sectionHeaderView;
-//        }
-//    }
-//    
-//    return nil;
-//}
+#pragma mark - KKKollectionsBarViewController delegate methods
+- (void)didTouchKollectionItemAtIndex:(NSInteger)index {
+    //    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"index touched = %i", index);
+}
 
 #pragma mark - ()
 

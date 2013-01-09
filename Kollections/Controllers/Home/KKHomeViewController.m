@@ -55,7 +55,7 @@
     slimeRefreshView.delegate = self;
     slimeRefreshView.upInset = 0;
     slimeRefreshView.slimeMissWhenGoingBack = YES;
-    slimeRefreshView.slime.bodyColor = [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0];
+    slimeRefreshView.slime.bodyColor = kMint3;
     //    slimeRefreshView.slime.skinColor = [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0];
     [self.tableView addSubview:slimeRefreshView];
 }

@@ -171,7 +171,7 @@
 }
 
 + (BOOL)saveProfileImageToParse:(UIImage*)profileImage {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     UIImage *image = profileImage;
     UIImage *mediumImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
@@ -187,19 +187,21 @@
     }
     
     if (mediumImageData.length > 0) {
-        NSLog(@"Uploading Medium Profile Picture");
+//        NSLog(@"Uploading Medium Profile Picture");
         PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
         [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 NSLog(@"Uploaded Medium Profile Picture");
                 [[PFUser currentUser] setObject:fileMediumImage forKey:kKKUserProfilePicMediumKey];
+                //ensure the UI updates itself even if we haven't officially saved the photo to parse yet since we've set it to the currentUser's photov
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
                 [[PFUser currentUser] saveEventually];
             }
         }];
     }
     
     if (smallRoundedImageData.length > 0) {
-        NSLog(@"Uploading Profile Picture Thumbnail");
+//        NSLog(@"Uploading Profile Picture Thumbnail");
         PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
         [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
@@ -244,35 +246,6 @@
     UIImage *image = [UIImage imageWithData:newProfilePictureData];
     
     [self saveProfileImageToParse:image];
-//    UIImage *mediumImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
-//    UIImage *smallRoundedImage = [image thumbnailImage:64 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow];
-//    
-//    NSData *mediumImageData = UIImageJPEGRepresentation(mediumImage, 0.5); // using JPEG for larger pictures
-//    NSData *smallRoundedImageData = UIImagePNGRepresentation(smallRoundedImage);
-//    
-//    if (mediumImageData.length > 0) {
-//        NSLog(@"Uploading Medium Profile Picture");
-//        PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
-//        [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//            if (!error) {
-//                NSLog(@"Uploaded Medium Profile Picture");
-//                [[PFUser currentUser] setObject:fileMediumImage forKey:kKKUserProfilePicMediumKey];
-//                [[PFUser currentUser] saveEventually];
-//            }
-//        }];
-//    }
-//    
-//    if (smallRoundedImageData.length > 0) {
-//        NSLog(@"Uploading Profile Picture Thumbnail");
-//        PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
-//        [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//            if (!error) {
-//                NSLog(@"Uploaded Profile Picture Thumbnail");
-//                [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kKKUserProfilePicSmallKey];
-//                [[PFUser currentUser] saveEventually];
-//            }
-//        }];
-//    }
 }
 
 + (BOOL)userHasValidFacebookData:(PFUser *)user {
