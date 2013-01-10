@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+    KKKollectionTypeMyPublic = 0,
+    KKKollectionTypeMyPrivate,
+    KKKollectionTypeSubscribedPublic,
+    KKKollectionTypeSubscribedPrivate
+} KKKollectionType;
+
 @protocol KKKollectionsBarViewControllerDelegate <NSObject>
-- (void)didTouchKollectionItemAtIndex:(NSInteger)index;
+- (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type;
 @end
 
 @interface KKKollectionsBarViewController : UIViewController <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout> {

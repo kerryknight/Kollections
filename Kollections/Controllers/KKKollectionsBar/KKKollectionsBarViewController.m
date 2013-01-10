@@ -8,13 +8,6 @@
 
 #import "KKKollectionsBarViewController.h"
 
-typedef enum {
-    KKKollectionTypeMyPublic = 0,
-    KKKollectionTypeMyPrivate,
-    KKKollectionTypeSubscribedPublic,
-    KKKollectionTypeSubscribedPrivate
-} KKKollectionType;
-
 @interface KKKollectionsBarViewController () {
     //need to track the index of the tool we've selected so that we don't allow selecting the same tool
     //twice in a row; i.e., if it's already selected, do nothing further on additional touches
@@ -134,17 +127,14 @@ typedef enum {
     //set the selectedIndex to the newly selected item
     selectedIndex = indexPath.row;
     
-//    NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
-//    NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
+    NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
+    NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
     
-    //load the appropriate view now that we've selected an item
+    //deselect the selected item
+    [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-//    HorizontalTablesAppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-//    
-//    ArticleDetailViewController *articleDetailViewController = [[ArticleDetailViewController alloc] initWithNibName:@"ArticleDetailViewController" bundle:[NSBundle mainBundle]];
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    [appDelegate.navigationController pushViewController:articleDetailViewController animated:YES];
-
+    //tell the delegate what item was touched on what row so i can load the proper follow-up view
+    [self.delegate didSelectKollectionBarItemAtIndex:selectedIndex ofKollectionType:self.kollectionType];
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

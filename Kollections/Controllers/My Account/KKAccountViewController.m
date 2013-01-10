@@ -15,6 +15,7 @@
 #import "SRSlimeView.h"
 #import "KKAppDelegate.h"
 #import "KKToolbarButton.h"
+#import "KKCreateKollectionViewController.h"
 
 @interface KKAccountViewController() {
     SRRefreshView *slimeRefreshView;
@@ -62,7 +63,10 @@
     [self addChildViewController:self.headerViewController];
     [self.headerView addSubview:self.headerViewController.view];
     [self.headerViewController didMoveToParentViewController:self];
+    
+    //add the delegates
     self.headerViewController.toolBarViewController.delegate = self;
+    self.kollectionsBar.delegate = self;
 
     //insert pull to refresh slime view
     slimeRefreshView = [[SRRefreshView alloc] init];
@@ -343,6 +347,13 @@
     return cell;
 }
 
+#pragma mark - KKKollectionsBarViewControllerDelegate methods
+- (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type {
+    //load the appropriate view now that we've selected an item
+    
+    KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
+    [self.navigationController pushViewController:createKollectionViewController animated:YES];
+}
 
 #pragma mark - Custom Methods
 - (void)loadProfilePhoto:(id)sender {

@@ -21,6 +21,8 @@
 		C7127083168283E700C1B560 /* SRSlimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C712707F168283E700C1B560 /* SRSlimeView.m */; };
 		C71270861684C1C600C1B560 /* 111-userGray.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270841684C1C500C1B560 /* 111-userGray.png */; };
 		C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270851684C1C600C1B560 /* 111-userGray@2x.png */; };
+		C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */; };
+		C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */; };
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
@@ -496,6 +498,10 @@
 		C712707F168283E700C1B560 /* SRSlimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSlimeView.m; sourceTree = "<group>"; };
 		C71270841684C1C500C1B560 /* 111-userGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray.png"; sourceTree = "<group>"; };
 		C71270851684C1C600C1B560 /* 111-userGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray@2x.png"; sourceTree = "<group>"; };
+		C72E42CB169E426100D0C182 /* KKCreateKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKCreateKollectionViewController.h; sourceTree = "<group>"; };
+		C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCreateKollectionViewController.m; sourceTree = "<group>"; };
+		C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSetupTableViewController.h; sourceTree = "<group>"; };
+		C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSetupTableViewController.m; sourceTree = "<group>"; };
 		C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountSummaryTableViewController.h; sourceTree = "<group>"; };
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
@@ -1104,6 +1110,10 @@
 		C79DA180169E2787009C1CE7 /* Kollection */ = {
 			isa = PBXGroup;
 			children = (
+				C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */,
+				C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */,
+				C72E42CB169E426100D0C182 /* KKCreateKollectionViewController.h */,
+				C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */,
 			);
 			name = Kollection;
 			sourceTree = "<group>";
@@ -2523,6 +2533,8 @@
 				C7BC60C916977569003C223B /* KKToolbarButton.m in Sources */,
 				C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */,
 				C79DA14C169CA0AB009C1CE7 /* KKKollectionsBarViewController.m in Sources */,
+				C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */,
+				C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

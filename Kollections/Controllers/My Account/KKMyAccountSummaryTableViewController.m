@@ -111,15 +111,15 @@
         }
         else if (row == 0) {
             //top row
-            return 40.0f;
+            return kDisplayTableHeaderHeight;
         }
         else if (row == sectionRows - 1) {
             //bottom row
-            return 10.0f;
+            return kDisplayTableFooterHeight;
         }
         else {
             //middle row
-            return 100.0f;
+            return kDisplayTableContentRowHeight;
         }
     }
 }
@@ -378,12 +378,6 @@
 //    }
 //    return cell;
 //}
-
-#pragma mark - KKKollectionsBarViewController delegate methods
-- (void)didTouchKollectionItemAtIndex:(NSInteger)index {
-    //    NSLog(@"%s", __FUNCTION__);
-    NSLog(@"index touched = %i", index);
-}
 
 #pragma mark - ()
 
