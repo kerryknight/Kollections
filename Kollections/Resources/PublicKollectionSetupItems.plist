@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>question</key>
+		<string>Title</string>
+		<key>datatype</key>
+		<integer>2</integer>
+		<key>hint</key>
+		<string>Give your kollection a name</string>
+		<key>required</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Cover photo</string>
+		<key>datatype</key>
+		<integer>5</integer>
+		<key>hint</key>
+		<string>OPTIONAL: Add a cover photo to you kollection</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Description</string>
+		<key>datatype</key>
+		<integer>6</integer>
+		<key>hint</key>
+		<string>Optional: Describe what you&apos;re looking for in this kollection</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Enter additional subjects</string>
+		<key>datatype</key>
+		<integer>8</integer>
+		<key>hint</key>
+		<string>Optional: Think of subjects as kollection sub-headings; Example: Maybe you want your kollection to be used as a scavenger hunt; each subject can be used as a clue </string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Payout</string>
+		<key>datatype</key>
+		<integer>0</integer>
+		<key>hint</key>
+		<string>How many koins are you willing to award contributors for accepted submissions? Remember, users are more likely to contribute if they receive something in return!</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Public or Private?</string>
+		<key>datatype</key>
+		<integer>7</integer>
+		<key>hint</key>
+		<string>Is this a public or private kollection?</string>
+		<key>required</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Keywords</string>
+		<key>datatype</key>
+		<integer>4</integer>
+		<key>hint</key>
+		<string>OPTIONAL: Enter keywords separated by commas (&apos;,&apos;) to make your kollection easier to search for</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Share to Facebook?</string>
+		<key>datatype</key>
+		<integer>3</integer>
+		<key>hint</key>
+		<string>OPTIONAL: Once your kollection has been created, your friends will be alerted on Facebook.</string>
+		<key>required</key>
+		<false/>
+	</dict>
+</array>
+</plist>

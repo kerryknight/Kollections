@@ -127,6 +127,15 @@
     //set the selectedIndex to the newly selected item
     selectedIndex = indexPath.row;
     
+    BOOL createNew = NO;
+    
+    if (([self.kollections count] == 0) || [self.kollections count] == selectedIndex) {
+        //we clicked the Add New item
+        createNew = YES;
+    } else {
+        createNew = NO;
+    }
+    
     NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
     NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
     
@@ -134,7 +143,7 @@
     [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     //tell the delegate what item was touched on what row so i can load the proper follow-up view
-    [self.delegate didSelectKollectionBarItemAtIndex:selectedIndex ofKollectionType:self.kollectionType];
+    [self.delegate didSelectKollectionBarItemAtIndex:selectedIndex ofKollectionType:self.kollectionType shouldCreateNew:createNew];
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

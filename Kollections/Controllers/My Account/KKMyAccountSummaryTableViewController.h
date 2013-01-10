@@ -16,7 +16,7 @@ typedef enum {
     KKMyAccountKollectionsBarTypeSubscribedPrivate
 } KKMyAccountKollectionsBarType;
 
-@interface KKMyAccountSummaryTableViewController : PFQueryTableViewController {
+@interface KKMyAccountSummaryTableViewController : PFQueryTableViewController <KKKollectionsBarViewControllerDelegate> {
     
 }
 

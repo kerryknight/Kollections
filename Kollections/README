@@ -48,3 +48,5 @@ FUTURE
 - Add Viddy support with 15-second video clips
 - Add Twitter login integration
 - Add filters and photo manipulation to KKEditPhotoViewController
+- Add ability to make Kollections location-based and only accept submissions from within a certain radius of
+  a certain map coordinate

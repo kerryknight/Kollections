@@ -78,6 +78,7 @@
 
 //tags
 #define kHEADERLABELTAG     1000
+#define KDUMMYTAG           1001
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
     //	NSLog(@"%s", __FUNCTION__);
@@ -97,21 +98,34 @@
     [headerLabel setBackgroundColor:[UIColor clearColor]];
     headerLabel.tag = kHEADERLABELTAG;
     
+    
+    UILabel *dummyLabel = [[UILabel alloc] initWithFrame:CGRectMake(30.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
+    [cell.contentView addSubview:dummyLabel];
+    [dummyLabel setTextColor:kGray6];
+    [dummyLabel setShadowColor:kCreme];
+    [dummyLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+    [dummyLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
+    [dummyLabel setBackgroundColor:[UIColor clearColor]];
+    dummyLabel.tag = KDUMMYTAG;
+    
 	return cell;
 }
 
 - (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
     //    NSLog(@"%s %@", __FUNCTION__, indexPath);
     UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
+    UILabel *dummyLabel = (UILabel *)[cell.contentView viewWithTag:KDUMMYTAG];
     UIColor *rowBackground;
     
     NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
     NSInteger row = [indexPath row];
     
+    headerLabel.text = @"";
+    dummyLabel.text = @"";
+    
     if (row == 0 && row == sectionRows - 1) {
         //single row; will this ever happen?
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-        headerLabel.text = @"";
     } else if (row == 0) {
         //top row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
@@ -121,17 +135,15 @@
         } else if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
             headerLabel.text = @"Edit Kollection";
         } else {
-            headerLabel.text = @"";
         }
         
     } else if (row == sectionRows - 1) {
         //bottom row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
-        headerLabel.text = @"";
     } else {
         //middle row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-        headerLabel.text = @"";
+        dummyLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
     }
     
     [cell.contentView setBackgroundColor:rowBackground];

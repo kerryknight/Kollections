@@ -34,7 +34,9 @@
     
     self.tableView = [[KKKollectionSetupTableViewController alloc] initWithStyle:UITableViewStylePlain];
     self.tableView.delegate = self;
-    self.tableView.tableObjects = [@[@"one", @"two", @"three", @"four", @"five", @"six", @"seven"] mutableCopy];
+    
+    self.tableView.tableObjects = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"PublicKollectionSetupItems" ofType:@"plist"]];
+    
     [self.view addSubview:self.tableView.view];
 }
 

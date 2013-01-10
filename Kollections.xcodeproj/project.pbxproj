@@ -23,6 +23,7 @@
 		C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270851684C1C600C1B560 /* 111-userGray@2x.png */; };
 		C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */; };
 		C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */; };
+		C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */; };
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
@@ -502,6 +503,7 @@
 		C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCreateKollectionViewController.m; sourceTree = "<group>"; };
 		C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSetupTableViewController.h; sourceTree = "<group>"; };
 		C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSetupTableViewController.m; sourceTree = "<group>"; };
+		C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PublicKollectionSetupItems.plist; sourceTree = "<group>"; };
 		C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountSummaryTableViewController.h; sourceTree = "<group>"; };
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
@@ -1076,6 +1078,14 @@
 			path = SlimeRefresh;
 			sourceTree = "<group>";
 		};
+		C72E42E1169E5F4500D0C182 /* plists */ = {
+			isa = PBXGroup;
+			children = (
+				C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */,
+			);
+			name = plists;
+			sourceTree = "<group>";
+		};
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
@@ -1295,6 +1305,7 @@
 		C7B1CD9016783C8500BA628A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C72E42E1169E5F4500D0C182 /* plists */,
 				C79DA13C169C9AAF009C1CE7 /* buttons */,
 				C7BFB946168252E500FF3DE9 /* my account */,
 				C7B1D0B716783EC700BA628A /* App Store Stuff */,
@@ -2434,6 +2445,7 @@
 				C79DA144169C9AAF009C1CE7 /* kkAddButtonUp@2x.png in Resources */,
 				C79DA14B169CA0AB009C1CE7 /* KKKollectionsAddCell.xib in Resources */,
 				C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */,
+				C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

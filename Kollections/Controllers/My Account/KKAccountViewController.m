@@ -302,7 +302,7 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     self.tableView.tableHeaderView = self.headerView;
@@ -348,11 +348,18 @@
 }
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
-- (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type {
-    //load the appropriate view now that we've selected an item
+- (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type shouldCreateNew:(BOOL)yesOrNo {
+    NSLog(@"%s", __FUNCTION__);
     
-    KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
-    [self.navigationController pushViewController:createKollectionViewController animated:YES];
+    //UPDATE need to check if we need to load the create new kollection view or navigate to selected kollection
+    if (yesOrNo == YES) {
+        //we should be a creating or subscribing to a new kollection
+        KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
+        [self.navigationController pushViewController:createKollectionViewController animated:YES];
+    } else {
+        //we want to view an existing kollection
+    }
+    
 }
 
 #pragma mark - Custom Methods

@@ -13,6 +13,20 @@ typedef enum {
     KKKollectionSetupTypeEdit
 } KKKollectionSetupType;
 
+typedef enum {
+    KKKollectionSetupCellDataTypeNumber = 0,
+    KKKollectionSetupCellDataTypeToggle,
+    KKKollectionSetupCellDataTypeString,
+    KKKollectionSetupCellDataTypeShare,
+    KKKollectionSetupCellDataTypeKeywords,
+    KKKollectionSetupCellDataTypePhoto,
+    KKKollectionSetupCellDataTypeLongString,
+    KKKollectionSetupCellDataTypePicker,
+    KKKollectionSetupCellDataTypeNavigate
+}KKKollectionSetupCellDataType;
+//like http://www.lovelyui.com/post/5160477107/compose-on-dapsem
+
+
 @protocol KKKollectionSetupTableViewControllerDelegate <NSObject>
 @optional
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath;
@@ -24,5 +38,6 @@ typedef enum {
 
 @property (nonatomic, strong) id<KKKollectionSetupTableViewControllerDelegate> delegate;
 @property (nonatomic, assign) KKKollectionSetupType kollectionSetupType;//used to set table based on new/existing kollection
+@property (nonatomic, assign) KKKollectionSetupCellDataType cellDataType;//used to dynamically load cells based on input values
 @property (nonatomic, strong) NSMutableArray *tableObjects;
 @end
