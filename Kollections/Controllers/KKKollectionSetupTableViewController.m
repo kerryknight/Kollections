@@ -7,6 +7,7 @@
 //
 
 #import "KKKollectionSetupTableViewController.h"
+#import "KKSetupTableBaseCell.h"
 
 @interface KKKollectionSetupTableViewController () {
     
@@ -39,7 +40,7 @@
     UIWindow *window = [appDelegate window];
     float height = window.frame.size.height -
                    self.navigationController.navigationBar.frame.size.height -
-                   self.tabBarController.tabBar.frame.size.height - 15;
+                   self.tabBarController.tabBar.frame.size.height - 20;
     
     self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
 }
@@ -60,75 +61,49 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.tableObjects count] + 2; //inner content rows + a header and footer row
+    return [self.tableObjects count] + 3; //inner content rows + submit button row + a header and footer row
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	if (cell == nil) {
-		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
-	}
-	
-	[self configureCell:cell forIndexPath:indexPath];
-	return cell;
-}
-
-//tags
-#define kHEADERLABELTAG     1000
-#define KDUMMYTAG           1001
-
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
-    //	NSLog(@"%s", __FUNCTION__);
-	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    
-    //make the cell highlight gray instead of blue
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    
-    //add a header label to it
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
-    [cell.contentView addSubview:headerLabel];
-    [headerLabel setTextColor:kGray6];
-    [headerLabel setShadowColor:kCreme];
-    [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-    [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
-    [headerLabel setBackgroundColor:[UIColor clearColor]];
-    headerLabel.tag = kHEADERLABELTAG;
-    
-    
-    UILabel *dummyLabel = [[UILabel alloc] initWithFrame:CGRectMake(30.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
-    [cell.contentView addSubview:dummyLabel];
-    [dummyLabel setTextColor:kGray6];
-    [dummyLabel setShadowColor:kCreme];
-    [dummyLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-    [dummyLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
-    [dummyLabel setBackgroundColor:[UIColor clearColor]];
-    dummyLabel.tag = KDUMMYTAG;
-    
-	return cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-    //    NSLog(@"%s %@", __FUNCTION__, indexPath);
-    UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
-    UILabel *dummyLabel = (UILabel *)[cell.contentView viewWithTag:KDUMMYTAG];
+    //set up background image of cell as well as determine when to show/hide label and disclosure
     UIColor *rowBackground;
-    
-    NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
+    NSInteger sectionRows = [tableView numberOfRowsInSection:[indexPath section]];
     NSInteger row = [indexPath row];
-    
-    headerLabel.text = @"";
-    dummyLabel.text = @"";
     
     if (row == 0 && row == sectionRows - 1) {
         //single row; will this ever happen?
+        static NSString *CellIdentifier = @"CellA";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
+        
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-    } else if (row == 0) {
+        [cell.contentView setBackgroundColor:rowBackground];
+        
+        return cell;
+    }
+    else if (row == 0) {
         //top row
-        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
+        static NSString *CellIdentifier = @"CellB";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
+        
+        //add a header label to it
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
+        [cell.contentView addSubview:headerLabel];
+        [headerLabel setTextColor:kGray6];
+        [headerLabel setShadowColor:kCreme];
+        [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
+        [headerLabel setBackgroundColor:[UIColor clearColor]];
+        
         //set the header title text based on the type of kollection we're modifying
         if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
             headerLabel.text = @"Create New Kollection";
@@ -137,64 +112,109 @@
         } else {
         }
         
-    } else if (row == sectionRows - 1) {
-        //bottom row
-        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
-    } else {
-        //middle row
+        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
+        [cell.contentView setBackgroundColor:rowBackground];
+        
+        return cell;
+    } else if (row == sectionRows - 2) {
+        //it's the next to last row, so add a submit button
+        static NSString *CellIdentifier = @"CellD";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
+        
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-        dummyLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
+        [cell.contentView setBackgroundColor:rowBackground];
+        UIButton *submitButton = [[UIButton alloc] init];
+        [submitButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonUp.png"] forState:UIControlStateNormal];
+        [submitButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonDown.png"] forState:UIControlStateHighlighted];
+        [submitButton setTitle:@"Submit" forState:UIControlStateNormal];
+        [submitButton setTitle:@"Submit" forState:UIControlStateHighlighted];
+        CGSize buttonSize = CGSizeMake(245, 44);
+        [submitButton setFrame:CGRectMake((cell.contentView.frame.size.width/2 - buttonSize.width/2),
+                                          cell.contentView.frame.origin.y + 4,
+                                          buttonSize.width,
+                                          buttonSize.height)];
+        [cell.contentView addSubview:submitButton];
+        
+        return cell;
     }
+    else if (row == sectionRows - 1) {
+        //bottom row
+        static NSString *CellIdentifier = @"CellC";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
+        
+        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
+        [cell.contentView setBackgroundColor:rowBackground];
+        
+        return cell;
+    }
+    else {
+        //middle row cell
+        //determine what type of cell we need to show
+        static NSString *CustomCellIdentifier = @"KKSetupTableBaseCell";
+        
+        KKSetupTableBaseCell *cell = (KKSetupTableBaseCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+        
+        if (cell == nil) {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"KKSetupTableBaseCell" owner:self options:nil];
+            for (id oneObject in nib)
+                if ([oneObject isKindOfClass:[KKSetupTableBaseCell class]])
+                    cell = (KKSetupTableBaseCell *)oneObject;
+            [cell formatCell];//tell it to format itself
+            cell.headerLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
+            cell.entryField.delegate = self;
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        return cell;
+    }
+}
+        
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
+    //	NSLog(@"%s", __FUNCTION__);
+	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     
-    [cell.contentView setBackgroundColor:rowBackground];
+    //make the cell highlight gray instead of blue
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    
+    //blank out generic stuff
+    cell.textLabel.text = @"";
+    cell.detailTextLabel.text = @"";
+    
+	return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 #pragma mark - Table view delegate
-#pragma mark - UITableViewDelegate
+- (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
+    
+    UITextField *textField = sender;
+    CGPoint correctedPoint = [textField convertPoint:textField.bounds.origin toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, bottomInset, 0.0f);
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
+
+- (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath {
+    NSIndexPath *pathToUpdateTo = indexPath;    
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
+    [self.tableView scrollToRowAtIndexPath:pathToUpdateTo atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     //    NSLog(@"%s\n", __FUNCTION__);
     
-    NSInteger sectionRows = [self.tableObjects count] + 2;//inner content rows + a header and footer row
+    NSInteger sectionRows = [self.tableObjects count] + 3;//inner content rows + a header and footer row + submit button row
     NSInteger row = [indexPath row];
     
     if (row == 0 && row == sectionRows - 1) {
@@ -204,6 +224,9 @@
     else if (row == 0) {
         //top row
         return kDisplayTableHeaderHeight;
+    } else if (row == sectionRows - 2) {
+        //submit button row
+        return 52;
     }
     else if (row == sectionRows - 1) {
         //bottom row
@@ -211,8 +234,13 @@
     }
     else {
         //middle row
-        return kDisplayTableContentRowHeight;
+        return [self determineTableRowHeight];
     }
+}
+
+- (CGFloat)determineTableRowHeight {
+    //determine row height based on the cell's datatype and length of text entries
+    return 87;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -225,6 +253,35 @@
 //     */
     
     [self.delegate setupTableViewDidSelectRowAtIndexPath:indexPath];
+}
+
+#pragma mark -
+#pragma mark UITextFieldDelegate methods
+- (BOOL)textFieldShouldBeginEditing:(SlightIndentTextField *)textField {
+//    NSLog(@"%s", __FUNCTION__);
+    
+    [textField setReturnKeyType:UIReturnKeyDone];
+    
+    [self scrollTableFromSender:textField withInset:240.0f];
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(SlightIndentTextField *)textField {
+    //    NSLog(@"%s", __FUNCTION__);
+    
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(SlightIndentTextField *)textField {
+    //    NSLog(@"%s", __FUNCTION__);
+}
+
+- (BOOL)textFieldShouldReturn:(SlightIndentTextField *)textField {
+    //    NSLog(@"%s", __FUNCTION__);
+    [self scrollTableFromSender:textField withInset:0.0f];
+    [textField resignFirstResponder];
+    return YES;
 }
 
 @end

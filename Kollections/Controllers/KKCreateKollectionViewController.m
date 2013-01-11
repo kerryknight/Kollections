@@ -47,7 +47,12 @@
 
 #pragma mark - KKKollectionSetupTableViewController delegate
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    NSLog(@"%s %@", __FUNCTION__, indexPath);
+//    NSLog(@"%s %@", __FUNCTION__, indexPath);
+    
+    [self.view endEditing:YES];
+    
+    //tell the superclass table to set the insets back to default 0 and scroll
+    [self.tableView resetTableContentInsetsWithIndexPath:indexPath];
 }
 
 @end

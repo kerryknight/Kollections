@@ -16,6 +16,7 @@ typedef enum {
 } KKKollectionType;
 
 @protocol KKKollectionsBarViewControllerDelegate <NSObject>
+@optional
 - (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type shouldCreateNew:(BOOL)yesOrNo;
 @end
 

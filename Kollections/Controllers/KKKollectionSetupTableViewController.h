@@ -30,9 +30,10 @@ typedef enum {
 @protocol KKKollectionSetupTableViewControllerDelegate <NSObject>
 @optional
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath;
+- (void)setupTableViewDismissAnyKeyboard;
 @end
 
-@interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate> {
+@interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate> {
     
 }
 
@@ -40,4 +41,6 @@ typedef enum {
 @property (nonatomic, assign) KKKollectionSetupType kollectionSetupType;//used to set table based on new/existing kollection
 @property (nonatomic, assign) KKKollectionSetupCellDataType cellDataType;//used to dynamically load cells based on input values
 @property (nonatomic, strong) NSMutableArray *tableObjects;
+
+- (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
 @end

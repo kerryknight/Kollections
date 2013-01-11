@@ -24,6 +24,10 @@
 		C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */; };
 		C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */; };
 		C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */; };
+		C734812F16A0789E004AD6EB /* KKSetupTableBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */; };
+		C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */; };
+		C734813916A07C20004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
+		C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
@@ -504,6 +508,11 @@
 		C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSetupTableViewController.h; sourceTree = "<group>"; };
 		C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSetupTableViewController.m; sourceTree = "<group>"; };
 		C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PublicKollectionSetupItems.plist; sourceTree = "<group>"; };
+		C734812D16A0789E004AD6EB /* KKSetupTableBaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableBaseCell.h; sourceTree = "<group>"; };
+		C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableBaseCell.m; sourceTree = "<group>"; };
+		C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableBaseCell.xib; sourceTree = "<group>"; };
+		C734813716A07C20004AD6EB /* SlightIndentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlightIndentTextField.h; sourceTree = "<group>"; };
+		C734813816A07C20004AD6EB /* SlightIndentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlightIndentTextField.m; sourceTree = "<group>"; };
 		C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountSummaryTableViewController.h; sourceTree = "<group>"; };
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
@@ -1086,6 +1095,25 @@
 			name = plists;
 			sourceTree = "<group>";
 		};
+		C734812B16A07818004AD6EB /* Data Entry Cells */ = {
+			isa = PBXGroup;
+			children = (
+				C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */,
+				C734812D16A0789E004AD6EB /* KKSetupTableBaseCell.h */,
+				C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */,
+			);
+			name = "Data Entry Cells";
+			sourceTree = "<group>";
+		};
+		C734813616A07C0C004AD6EB /* UI Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C734813716A07C20004AD6EB /* SlightIndentTextField.h */,
+				C734813816A07C20004AD6EB /* SlightIndentTextField.m */,
+			);
+			name = "UI Classes";
+			sourceTree = "<group>";
+		};
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
@@ -1131,6 +1159,7 @@
 		C7B1CD4116783C8500BA628A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C734813616A07C0C004AD6EB /* UI Classes */,
 				C7B1CD4216783C8500BA628A /* KKCache.h */,
 				C7B1CD4316783C8500BA628A /* KKCache.m */,
 				C7B1CD4416783C8500BA628A /* KKConstants.h */,
@@ -1744,6 +1773,7 @@
 		C7B1CEFF16783C8500BA628A /* UITableViewCells */ = {
 			isa = PBXGroup;
 			children = (
+				C734812B16A07818004AD6EB /* Data Entry Cells */,
 				C7B1CF0016783C8500BA628A /* KKBaseTextCell */,
 				C7B1CF0716783C8500BA628A /* KKLoadMoreCell.h */,
 				C7B1CF0816783C8500BA628A /* KKLoadMoreCell.m */,
@@ -2446,6 +2476,7 @@
 				C79DA14B169CA0AB009C1CE7 /* KKKollectionsAddCell.xib in Resources */,
 				C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */,
 				C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */,
+				C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2480,6 +2511,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */,
 				C7EBEBD9167839C100106E25 /* main.m in Sources */,
 				C7EBEBDD167839C100106E25 /* KKAppDelegate.m in Sources */,
 				C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */,
@@ -2547,6 +2579,7 @@
 				C79DA14C169CA0AB009C1CE7 /* KKKollectionsBarViewController.m in Sources */,
 				C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */,
 				C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */,
+				C734812F16A0789E004AD6EB /* KKSetupTableBaseCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2555,6 +2588,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7EBEBF8167839C100106E25 /* KollectionsTests.m in Sources */,
+				C734813916A07C20004AD6EB /* SlightIndentTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
