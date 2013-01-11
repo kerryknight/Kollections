@@ -16,10 +16,10 @@
 }
 
 @property (weak, nonatomic) IBOutlet UILabel *headerLabel;
-@property (weak, nonatomic) IBOutlet UITextView *footnoteTextView;
+@property (weak, nonatomic) IBOutlet UILabel *footnoteLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *divider;
-@property (weak, nonatomic) IBOutlet SlightIndentTextField *entryField;
+@property (weak, nonatomic) IBOutlet UITextView *entryField;
 
--(void)formatCell;
+- (void)formatCell;
 
 @end

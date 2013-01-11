@@ -172,13 +172,26 @@
             [cell formatCell];//tell it to format itself
             cell.headerLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
             cell.entryField.delegate = self;
+            cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
         }
         
+        
+        
+        //Get label height
+        NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
+        NSString *entryLength = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];//UPDATE; this doesn't exist yet until pulled from parse
+        
+        CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
+        CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+        CGSize entrySize = [entryLength sizeWithFont:kSetupEntryFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+        
+        CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
+        [cell.footnoteLabel setFrame:CGRectMake(0, cell.entryField.frame.origin.y + cell.entryField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
 }
-        
+                                           
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
     //	NSLog(@"%s", __FUNCTION__);
 	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
@@ -197,8 +210,8 @@
 #pragma mark - Table view delegate
 - (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
     
-    UITextField *textField = sender;
-    CGPoint correctedPoint = [textField convertPoint:textField.bounds.origin toView:self.tableView];
+    UITextView *textView = sender;
+    CGPoint correctedPoint = [textView convertPoint:textView.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
     
     self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, bottomInset, 0.0f);
@@ -234,13 +247,23 @@
     }
     else {
         //middle row
-        return [self determineTableRowHeight];
+        return [self determineTableRowHeightForIndexPath:indexPath];
     }
 }
 
-- (CGFloat)determineTableRowHeight {
+- (CGFloat)determineTableRowHeightForIndexPath:(NSIndexPath*)indexPath {
     //determine row height based on the cell's datatype and length of text entries
-    return 87;
+    //Get label height
+    NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
+    NSString *entryLength = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];//UPDATE; this doesn't exist yet until pulled from parse
+    
+    CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
+    CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGSize entrySize = [entryLength sizeWithFont:kSetupEntryFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    
+    CGFloat height = MAX(labelSize.height + entrySize.height + 67, 87.0f); //67 is the size of the cell minus the label
+//    NSLog(@"height = %0.0f", height);
+    return height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -257,30 +280,40 @@
 
 #pragma mark -
 #pragma mark UITextFieldDelegate methods
-- (BOOL)textFieldShouldBeginEditing:(SlightIndentTextField *)textField {
-//    NSLog(@"%s", __FUNCTION__);
+- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+    [textView setReturnKeyType:UIReturnKeyDone];
+    [self scrollTableFromSender:textView withInset:240.0f];
     
-    [textField setReturnKeyType:UIReturnKeyDone];
+    textView.textColor = kMint4;
     
-    [self scrollTableFromSender:textField withInset:240.0f];
-    
-    return YES;
-}
-
-- (BOOL)textFieldShouldEndEditing:(SlightIndentTextField *)textField {
-    //    NSLog(@"%s", __FUNCTION__);
+    if ([textView.text isEqualToString:@"30-character limit"]) {
+        //clear the placeholder
+        textView.text = @"";
+    }
     
     return YES;
 }
 
-- (void)textFieldDidEndEditing:(SlightIndentTextField *)textField {
-    //    NSLog(@"%s", __FUNCTION__);
+- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+    
+    NSString *trimmedValue = textView.text;
+    trimmedValue = [trimmedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([trimmedValue isEqualToString:@""] || [trimmedValue isEqualToString:@"30-character limit"]) {
+        //reset the placeholder if we didn't enter anything
+        textView.text = @"30-character limit";
+        textView.textColor = kGray3;
+    }
+    
+    [self scrollTableFromSender:textView withInset:0.0f];
+    [textView resignFirstResponder];
+    return YES;
 }
 
-- (BOOL)textFieldShouldReturn:(SlightIndentTextField *)textField {
-    //    NSLog(@"%s", __FUNCTION__);
-    [self scrollTableFromSender:textField withInset:0.0f];
-    [textField resignFirstResponder];
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    
+    
+    //check how long we can make the fields here based on the cell datatype
     return YES;
 }
 

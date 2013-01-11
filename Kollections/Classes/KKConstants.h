@@ -31,6 +31,9 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define kDisplayTableHeaderHeight 40.0f
 #define kDisplayTableFooterHeight 10.0f
 #define kDisplayTableContentRowHeight 100.0f
+#define kSETUP_TEXT_OBJECT_WIDTH 280
+#define kSETUP_MAX_FOOTNOTE_LINE_LENGTH  40
+#define kSETUP_ADDITIONAL_LINE_HEIGHT 20
 
 #pragma mark - Colors
 #define kBlack [UIColor colorWithRed:7.0f/255.0f green:6.0f/255.0f blue:6.0f/255.0f alpha:1.0f] //#070606
@@ -46,6 +49,9 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define kMint3 [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0f] //#95dbda
 #define kMint4 [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0f] //#4aa5a4
 
+#pragma mark - Fonts
+#define kSetupEntryFont [UIFont fontWithName:@"Helvetica-Light" size:14]
+#define kSetupFooterFont [UIFont fontWithName:@"Helvetica-LightOblique" size:12]
 
 #pragma mark - NSUserDefaults
 extern NSString *const kKKUserDefaultsActivityFeedViewControllerLastRefreshKey;

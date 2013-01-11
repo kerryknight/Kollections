@@ -22,9 +22,9 @@
 -(void)formatCell {
     self.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
     self.headerLabel.textColor = kGray5;
-    self.footnoteTextView.textColor = kGray3;
+    self.footnoteLabel.textColor = kGray5;
     self.entryField.backgroundColor = [UIColor colorWithRed:251 green:251 blue:250 alpha:1.0];//almost white
-    self.entryField.textColor = kMint4;
+    self.entryField.textColor = kGray3;
     
     //put border on entry field
     self.entryField.layer.borderColor = kGray3.CGColor;

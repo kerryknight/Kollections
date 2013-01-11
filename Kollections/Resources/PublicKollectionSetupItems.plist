@@ -5,6 +5,8 @@
 	<dict>
 		<key>question</key>
 		<string>Title</string>
+		<key>objectColumn</key>
+		<string>title</string>
 		<key>datatype</key>
 		<integer>2</integer>
 		<key>hint</key>
@@ -15,36 +17,44 @@
 	<dict>
 		<key>question</key>
 		<string>Cover photo</string>
+		<key>objectColumn</key>
+		<string>coverPhotoMedium</string>
 		<key>datatype</key>
 		<integer>5</integer>
 		<key>hint</key>
-		<string>OPTIONAL: Add a cover photo to you kollection</string>
+		<string>OPTIONAL; Add a cover photo to you kollection</string>
 		<key>required</key>
 		<false/>
 	</dict>
 	<dict>
 		<key>question</key>
 		<string>Description</string>
+		<key>objectColumn</key>
+		<string>description</string>
 		<key>datatype</key>
 		<integer>6</integer>
 		<key>hint</key>
-		<string>Optional: Describe what you&apos;re looking for in this kollection</string>
+		<string>OPTIONAL; Describe what you&apos;re looking for in this kollection</string>
 		<key>required</key>
 		<false/>
 	</dict>
 	<dict>
 		<key>question</key>
 		<string>Enter additional subjects</string>
+		<key>objectColumn</key>
+		<string>subjects</string>
 		<key>datatype</key>
 		<integer>8</integer>
 		<key>hint</key>
-		<string>Optional: Think of subjects as kollection sub-headings; Example: Maybe you want your kollection to be used as a scavenger hunt; each subject can be used as a clue </string>
+		<string>OPTIONAL; Think of subjects as kollection sub-headings; Example: Maybe you want your kollection to be used as a scavenger hunt; each subject can be used as a clue </string>
 		<key>required</key>
 		<false/>
 	</dict>
 	<dict>
 		<key>question</key>
 		<string>Payout</string>
+		<key>objectColumn</key>
+		<string>payout</string>
 		<key>datatype</key>
 		<integer>0</integer>
 		<key>hint</key>
@@ -55,6 +65,8 @@
 	<dict>
 		<key>question</key>
 		<string>Public or Private?</string>
+		<key>objectColumn</key>
+		<string>isPrivate</string>
 		<key>datatype</key>
 		<integer>7</integer>
 		<key>hint</key>
@@ -65,10 +77,12 @@
 	<dict>
 		<key>question</key>
 		<string>Keywords</string>
+		<key>objectColumn</key>
+		<string>keywords</string>
 		<key>datatype</key>
 		<integer>4</integer>
 		<key>hint</key>
-		<string>OPTIONAL: Enter keywords separated by commas (&apos;,&apos;) to make your kollection easier to search for</string>
+		<string>OPTIONAL; Enter keywords separated by commas (&apos;,&apos;) to make your kollection easier to search for</string>
 		<key>required</key>
 		<false/>
 	</dict>
@@ -78,7 +92,7 @@
 		<key>datatype</key>
 		<integer>3</integer>
 		<key>hint</key>
-		<string>OPTIONAL: Once your kollection has been created, your friends will be alerted on Facebook.</string>
+		<string>OPTIONAL; Once your kollection has been created, your friends will be alerted on Facebook.</string>
 		<key>required</key>
 		<false/>
 	</dict>

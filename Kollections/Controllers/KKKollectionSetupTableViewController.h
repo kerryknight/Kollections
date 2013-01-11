@@ -33,7 +33,7 @@ typedef enum {
 - (void)setupTableViewDismissAnyKeyboard;
 @end
 
-@interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate> {
+@interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate> {
     
 }
 
