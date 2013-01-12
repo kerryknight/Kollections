@@ -349,7 +349,7 @@
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type shouldCreateNew:(BOOL)yesOrNo {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     //UPDATE need to check if we need to load the create new kollection view or navigate to selected kollection
     if (yesOrNo == YES) {

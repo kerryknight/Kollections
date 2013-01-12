@@ -43,4 +43,5 @@ typedef enum {
 @property (nonatomic, strong) NSMutableArray *tableObjects;
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
+- (void)dismissView;
 @end

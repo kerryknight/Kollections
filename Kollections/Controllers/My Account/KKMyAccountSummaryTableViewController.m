@@ -139,7 +139,7 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     if (!error) {
@@ -162,7 +162,7 @@
 }
 
 - (PFQuery *)queryForTable {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
 //    if (![PFUser currentUser]) {
 //        PFQuery *query = [PFQuery queryWithClassName:self.className];
 //        [query setLimit:0];

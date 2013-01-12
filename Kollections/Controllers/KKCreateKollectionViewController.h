@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "KKKollectionSetupTableViewController.h"
 
-@interface KKCreateKollectionViewController : UIViewController <KKKollectionSetupTableViewControllerDelegate> {
+@interface KKCreateKollectionViewController : UIViewController <KKKollectionSetupTableViewControllerDelegate, UITextViewDelegate> {
     
 }
 

@@ -28,6 +28,8 @@
 		C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */; };
 		C734813916A07C20004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
 		C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
+		C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */; };
+		C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */; };
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
@@ -513,6 +515,9 @@
 		C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableBaseCell.xib; sourceTree = "<group>"; };
 		C734813716A07C20004AD6EB /* SlightIndentTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlightIndentTextField.h; sourceTree = "<group>"; };
 		C734813816A07C20004AD6EB /* SlightIndentTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlightIndentTextField.m; sourceTree = "<group>"; };
+		C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableLongStringCell.h; sourceTree = "<group>"; };
+		C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableLongStringCell.m; sourceTree = "<group>"; };
+		C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableLongStringCell.xib; sourceTree = "<group>"; };
 		C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountSummaryTableViewController.h; sourceTree = "<group>"; };
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
@@ -1098,6 +1103,9 @@
 		C734812B16A07818004AD6EB /* Data Entry Cells */ = {
 			isa = PBXGroup;
 			children = (
+				C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */,
+				C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */,
+				C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */,
 				C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */,
 				C734812D16A0789E004AD6EB /* KKSetupTableBaseCell.h */,
 				C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */,
@@ -2477,6 +2485,7 @@
 				C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */,
 				C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */,
 				C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */,
+				C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2580,6 +2589,7 @@
 				C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */,
 				C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */,
 				C734812F16A0789E004AD6EB /* KKSetupTableBaseCell.m in Sources */,
+				C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

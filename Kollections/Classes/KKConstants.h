@@ -52,6 +52,9 @@ extern NSString *const kKKTwitterConsumerSecret;
 #pragma mark - Fonts
 #define kSetupEntryFont [UIFont fontWithName:@"Helvetica-Light" size:14]
 #define kSetupFooterFont [UIFont fontWithName:@"Helvetica-LightOblique" size:12]
+#define kSetupStringCharacterLimit  30
+#define kSetupLongStringCharacterLimit  100
+
 
 #pragma mark - NSUserDefaults
 extern NSString *const kKKUserDefaultsActivityFeedViewControllerLastRefreshKey;
@@ -75,6 +78,8 @@ extern NSString *const KKPhotoDetailsViewControllerUserDeletedPhotoNotification;
 extern NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification;
 extern NSString *const KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification;
 
+extern NSString *const KKKollectionSetupTableDidCreateKollectionNotification;
+
 
 #pragma mark - User Info Keys
 extern NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey;
@@ -86,6 +91,17 @@ extern NSString *const kKKEditPhotoViewControllerUserInfoCommentKey;
 // Field keys
 extern NSString *const kKKInstallationUserKey;
 extern NSString *const kKKInstallationChannelsKey;
+
+#pragma mark - PFObject Kollection Class
+// Class key
+extern NSString *const kKKKollectionClassKey;
+
+// Field keys
+extern NSString *const kKKKollectionTitleKey;
+extern NSString *const kKKKollectionUserKey;
+extern NSString *const kKKKollectionPayoutKey;
+
+// Type values
 
 
 #pragma mark - PFObject Activity Class

@@ -1,5 +1,5 @@
 //
-//  KKSetupTableBaseCell.h
+//  KKSetupTableLongStringCell.h
 //  Kollections
 //
 //  Created by Kerry Knight on 1/11/13.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface KKSetupTableBaseCell : UITableViewCell {
+@interface KKSetupTableLongStringCell : UITableViewCell {
     
 }
 

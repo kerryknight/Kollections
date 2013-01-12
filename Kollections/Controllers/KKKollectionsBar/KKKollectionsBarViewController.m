@@ -136,8 +136,8 @@
         createNew = NO;
     }
     
-    NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
-    NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
+//    NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
+//    NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
     
     //deselect the selected item
     [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];

@@ -93,7 +93,7 @@
 }
 
 -(void)setDisplayNameEqualToAdditionalField {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //check if it's a parse signee; if so, set their displayName field to the additional field from signup
     //check what type of login we have
     if (![PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]/* && ![PFTwitterUtils isLinkedWithUser:[PFUser currentUser]]*/) {
@@ -107,17 +107,26 @@
             if (!error) {
                 if (objects.count > 0) {
                     PFObject *_user = [objects objectAtIndex:0];
-                    [_user setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
-                    [_user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                        if (!error) {
-                            //success so can update UI appropriately now
-                            NSLog(@"saved displayName successfully");
-                            //in lieu of making an ADDITIONAL query to Parse for what we just set, go ahead and set it locally to display name
-                            [[PFUser currentUser] setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
-                        } else {
-                            //error saving displayName back to Parse
-                        }
-                    }];
+                    
+                    //check if display name is equal to the additional field; if not, save it that way
+                    if ([[_user objectForKey:kKKUserAdditionalKey] isEqualToString:[_user objectForKey:kKKUserDisplayNameKey]]) {
+                        //names are equal
+                        NSLog(@"display names are equal");
+                    } else {
+                        //names not equal
+                        NSLog(@"display names are not equal, so attempt to save");
+                        [_user setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
+                        [_user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            if (!error) {
+                                //success so can update UI appropriately now
+                                NSLog(@"saved displayName successfully");
+                                //in lieu of making an ADDITIONAL query to Parse for what we just set, go ahead and set it locally to display name
+                                [[PFUser currentUser] setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
+                            } else {
+                                //error saving displayName back to Parse
+                            }
+                        }];
+                    }
                 }
             }
         }];

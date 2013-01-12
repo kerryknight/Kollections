@@ -39,6 +39,9 @@ NSString *const KKPhotoDetailsViewControllerUserDeletedPhotoNotification       =
 NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification  = @"com.kerryknight.Kollections.photoDetailsViewController.userLikedUnlikedPhotoInDetailsViewNotification";
 NSString *const KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification   = @"com.kerryknight.Kollections.photoDetailsViewController.userCommentedOnPhotoInDetailsViewNotification";
 
+NSString *const KKKollectionSetupTableDidCreateKollectionNotification          =
+    @"com.kerryknight.Kollections.setupTableViewController.createdKollectionNotification";
+
 
 #pragma mark - User Info Keys
 NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey = @"liked";
@@ -49,6 +52,17 @@ NSString *const kKKEditPhotoViewControllerUserInfoCommentKey = @"comment";
 // Field keys
 NSString *const kKKInstallationUserKey = @"user";
 NSString *const kKKInstallationChannelsKey = @"channels";
+
+#pragma mark - Kollection Class
+// Class key
+NSString *const kKKKollectionClassKey = @"Kollection";
+
+// Field keys
+NSString *const kKKKollectionUserKey = @"user";
+NSString *const kKKKollectionTitleKey = @"title";
+NSString *const kKKKollectionPayoutKey = @"payout";
+
+// Type values
 
 #pragma mark - Activity Class
 // Class key
