@@ -10,6 +10,7 @@
 #import "KKSetupTableBaseCell.h"
 #import "KKSetupTableLongStringCell.h"
 #import "KKSetupTableSegmentCell.h"
+#import "KKSetupTableNumberCell.h"
 #import "MBProgressHUD.h"
 #import "KKConstants.h"
 
@@ -113,7 +114,7 @@
 }
 
 - (IBAction)segmentedControlSegmentChosen:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //get the cell that was touched
     UISegmentedControl *segmentBar = sender;
     KKSetupTableSegmentCell *cell = (KKSetupTableSegmentCell*)[[segmentBar superview] superview];
@@ -137,10 +138,17 @@
 #pragma mark - Table view delegate
 - (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
 //    NSLog(@"%s %0.0f", __FUNCTION__, bottomInset);
-    UITextView *textView = sender;
-    CGPoint correctedPoint = [textView convertPoint:textView.bounds.origin toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
+    CGPoint correctedPoint;
     
+    if ([sender isKindOfClass:[UITextField class]]) {
+        UITextField *textField = sender;
+        correctedPoint = [textField convertPoint:textField.bounds.origin toView:self.tableView];
+    } else {
+        UITextView *textView = sender;
+        correctedPoint = [textView convertPoint:textView.bounds.origin toView:self.tableView];
+    }
+    
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
     self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, bottomInset, 0.0f);
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
@@ -186,6 +194,7 @@
     NSUInteger defaultRowHeight = 87.0f;
     if (datatype == KKKollectionSetupCellDataTypeNumber) {
         //number picker
+        defaultRowHeight = 64.0f;
     } else if (datatype == KKKollectionSetupCellDataTypeToggle) {
         //toggle on/off
     } else if (datatype == KKKollectionSetupCellDataTypeString) {
@@ -218,7 +227,7 @@
     CGFloat height;
     
     //check if it's a cell type without an entry label, like one with the segmented control cell
-    if (datatype == KKKollectionSetupCellDataTypeSegment || datatype == KKKollectionSetupCellDataTypeToggle) {
+    if (datatype == KKKollectionSetupCellDataTypeSegment || datatype == KKKollectionSetupCellDataTypeToggle || datatype == KKKollectionSetupCellDataTypeNumber) {
         //no entry field to worry about
         height = MAX(labelSize.height + 46, defaultRowHeight); //38 for top single row (with segmented control or toggle switch) is 30 + (8 * 2) for padding
     } else {
@@ -347,6 +356,41 @@
         
         if (datatype == KKKollectionSetupCellDataTypeNumber) {
             //number picker
+            static NSString *CustomCellIdentifier = @"KKSetupTableNumberCell";
+            
+            KKSetupTableNumberCell *cell = (KKSetupTableNumberCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+            
+            if (cell == nil) {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"KKSetupTableNumberCell" owner:self options:nil];
+                for (id oneObject in nib)
+                    if ([oneObject isKindOfClass:[KKSetupTableNumberCell class]])
+                        cell = (KKSetupTableNumberCell *)oneObject;
+                [cell formatCell];//tell it to format itself
+                cell.headerLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
+                cell.numberField.delegate = self;
+                cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
+            }
+            
+            cell.numberField.textColor = kMint4;//set to mint color
+            
+            //fill in entry label text from kollection property if available, if not, check for historical response
+            NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
+            if ([self.kollection objectForKey:columnName]) {
+                cell.numberField.text = [self.kollection objectForKey:columnName];
+            } else if([(NSString*)self.tableObjects[indexPath.row - 1][@"response"] length] > 0){
+                cell.numberField.text = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];
+            }
+            
+            //Get label height
+            NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
+            
+            CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
+            CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+            
+            CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
+            [cell.footnoteLabel setFrame:CGRectMake(0, cell.numberField.frame.origin.y + cell.numberField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
         } else if (datatype == KKKollectionSetupCellDataTypeToggle) {
             //toggle on/off
         } else if (datatype == KKKollectionSetupCellDataTypeString) {
@@ -526,8 +570,63 @@
     [self.delegate setupTableViewDidSelectRowAtIndexPath:indexPath];
 }
 
-#pragma mark -
-#pragma mark UITextFieldDelegate methods
+#pragma mark - UITextFieldDelegate methods
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if ([[[textField superview] superview] isKindOfClass:[KKSetupTableNumberCell class]]) {
+        NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+        if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
+            alertMessage(@"Please use only whole numbers.");
+            return NO;
+        }
+        return YES;
+    } else {
+        return YES;
+    }
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+  
+    [self scrollTableFromSender:textField withInset:240.0f];
+    return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+    if ([[[textField superview] superview] isKindOfClass:[KKSetupTableNumberCell class]]) {
+        NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+        if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
+            alertMessage(@"Please use only whole numbers.");
+            return NO;
+        }
+        return YES;
+    } else {
+        return YES;
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    if ([[[textField superview] superview] isKindOfClass:[KKSetupTableNumberCell class]]) {
+        //set what the placeholder string should be
+        NSString *stringPlaceholder = @"";
+        
+        if ([textField.text isEqualToString:stringPlaceholder]) {
+            //reset the placeholder if we didn't enter anything
+            return;//exit without saving anything
+        }
+        
+        NSString *textFieldtext = textField.text;
+        CGPoint correctedPoint = [textField convertPoint:textField.bounds.origin toView:self.tableView];
+        NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
+        //once we have that, we can determine which column we need to update with the data's value on our PFObject
+        NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
+        [self.kollection setObject:[NSNumber numberWithInt:[textFieldtext intValue]] forKey:columnName]; //convert text to object
+    } else {
+    }
+    
+    
+}
+
+#pragma mark - UITextViewDelegate methods
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
 //    NSLog(@"%s", __FUNCTION__);
     NSUInteger stringLimit;
@@ -652,18 +751,10 @@
         textViewtext = [textViewtext substringWithRange:range];
     }
     
-    //determine which textview we finished editing
-    NSLog(@"textView.frame.origin.x = %0.0f", textView.frame.origin.x);
-    NSLog(@"textView.frame.origin.y = %0.0f", textView.frame.origin.y);
-    
-//    CGPoint textViewPoint = CGPointMake(textView.frame.origin.x, textView.frame.origin.y + 20);
     CGPoint correctedPoint = [textView convertPoint:textView.bounds.origin toView:self.tableView];
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
-    NSLog(@"self.tableObjects[indexPath.row - 1] = %@", self.tableObjects[indexPath.row - 1]);
     //once we have that, we can determine which column we need to update with the data's value on our PFObject
     NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
-    
-    NSLog(@"set %@ for kollection column = %@", textViewtext, columnName);
     [self.kollection setObject:textViewtext forKey:columnName];
 }
 

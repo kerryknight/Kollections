@@ -9,20 +9,14 @@ TO DO APP
 ------------------------------------------------------------------
 - Add KKCache/KKUtility methods for kollection objects
 - Add pertinant constants for kollection object tracking
-- Add log out call to My Profile screen
 - Allow for a user created using Parse to link themselves with FB and/or Twitter via Settings page: https://www.parse.com/docs/ios_guide#fbusers-link/iOS
 - Add ability to post to Facebook: https://www.parse.com/docs/ios_guide#fbusers-signup/iOS
 - Add icon to FB URL scheme in Target --> Info "icon@2x.png"
-- Add icon to Twitter app page
 - Add app store ID to FB app settings page once added to iTunes for direct linking to it in app store
-- Upload avatar for parse registrations
 - Attributed strings in SignUpViewController linking to UIWebView of TOS and Privacy policy on www.startakollection.com
 - Redo Log in button in another color? Top two corners are pixelated
 - Make the collectionview side-scrolling toolbar size dynamically based on length of string titles, instead of constant width for each item
 - load/add photo if logged in with Parse and not FB
-- differentiate on uploads based on type of photo (regular/profile) so that profile pics don't show up like regular photos would
-    - ensure photo shows up at re-sign-in/log-in
-    - ensure populates profilePictureMedium 280x280 and profilePictureSmall 64x64 into parse db
 - update the UI for adding comments below a photo
 
 
@@ -46,7 +40,7 @@ __________________________________________________________________
 FUTURE
 ------------------------------------------------------------------
 - Add Viddy support with 15-second video clips
-- Add Twitter login integration
+- Add Twitter login integration; add icon to Twitter app page
 - Add filters and photo manipulation to KKEditPhotoViewController
 - Add ability to make Kollections location-based and only accept submissions from within a certain radius of
   a certain map coordinate

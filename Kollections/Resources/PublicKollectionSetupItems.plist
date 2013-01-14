@@ -52,13 +52,13 @@
 	</dict>
 	<dict>
 		<key>question</key>
-		<string>Payout</string>
+		<string>Koin Payout</string>
 		<key>objectColumn</key>
 		<string>payout</string>
 		<key>datatype</key>
 		<integer>0</integer>
 		<key>hint</key>
-		<string>How many koins are you willing to award contributors for accepted submissions? Remember, users are more likely to contribute if they receive something in return!</string>
+		<string>How many koins are you willing to award contributors for accepted submissions? Remember, users are more likely to contribute if they receive something in return for their efforts but you can&apos;t pay out more than you have.</string>
 		<key>required</key>
 		<false/>
 	</dict>

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		C70054BF16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054BD16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m */; };
 		C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */; };
+		C70054C816A488690018F7F7 /* KKSetupTableNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054C616A488680018F7F7 /* KKSetupTableNumberCell.m */; };
+		C70054C916A488690018F7F7 /* KKSetupTableNumberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054C716A488680018F7F7 /* KKSetupTableNumberCell.xib */; };
 		C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703B168265AB00C1B560 /* kkVerticalSeparator.png */; };
 		C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */; };
 		C71270461682666A00C1B560 /* 112-group.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270421682666A00C1B560 /* 112-group.png */; };
@@ -47,7 +49,6 @@
 		C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4316783C8500BA628A /* KKCache.m */; };
 		C7B1CF0C16783C8500BA628A /* KKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4516783C8500BA628A /* KKConstants.m */; };
 		C7B1CF0D16783C8500BA628A /* KKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4716783C8500BA628A /* KKFunctions.m */; };
-		C7B1CF0E16783C8500BA628A /* KKManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4916783C8500BA628A /* KKManager.m */; };
 		C7B1CF0F16783C8500BA628A /* KKUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4B16783C8500BA628A /* KKUtility.m */; };
 		C7B1CF1016783C8500BA628A /* KKActivityFeedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4F16783C8500BA628A /* KKActivityFeedViewController.m */; };
 		C7B1CF1116783C8500BA628A /* KKHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD5216783C8500BA628A /* KKHomeViewController.m */; };
@@ -493,6 +494,9 @@
 		C70054BC16A46C8A0018F7F7 /* KKSetupTableSegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableSegmentCell.h; sourceTree = "<group>"; };
 		C70054BD16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableSegmentCell.m; sourceTree = "<group>"; };
 		C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableSegmentCell.xib; sourceTree = "<group>"; };
+		C70054C516A488680018F7F7 /* KKSetupTableNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableNumberCell.h; sourceTree = "<group>"; };
+		C70054C616A488680018F7F7 /* KKSetupTableNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableNumberCell.m; sourceTree = "<group>"; };
+		C70054C716A488680018F7F7 /* KKSetupTableNumberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableNumberCell.xib; sourceTree = "<group>"; };
 		C712703B168265AB00C1B560 /* kkVerticalSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkVerticalSeparator.png; sourceTree = "<group>"; };
 		C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkVerticalSeparator@2x.png"; sourceTree = "<group>"; };
 		C71270421682666A00C1B560 /* 112-group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group.png"; sourceTree = "<group>"; };
@@ -543,8 +547,6 @@
 		C7B1CD4516783C8500BA628A /* KKConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKConstants.m; sourceTree = "<group>"; };
 		C7B1CD4616783C8500BA628A /* KKFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKFunctions.h; sourceTree = "<group>"; };
 		C7B1CD4716783C8500BA628A /* KKFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKFunctions.m; sourceTree = "<group>"; };
-		C7B1CD4816783C8500BA628A /* KKManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKManager.h; sourceTree = "<group>"; };
-		C7B1CD4916783C8500BA628A /* KKManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKManager.m; sourceTree = "<group>"; };
 		C7B1CD4A16783C8500BA628A /* KKUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKUtility.h; sourceTree = "<group>"; };
 		C7B1CD4B16783C8500BA628A /* KKUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKUtility.m; sourceTree = "<group>"; };
 		C7B1CD4E16783C8500BA628A /* KKActivityFeedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKActivityFeedViewController.h; sourceTree = "<group>"; };
@@ -1108,6 +1110,9 @@
 		C734812B16A07818004AD6EB /* Data Entry Cells */ = {
 			isa = PBXGroup;
 			children = (
+				C70054C516A488680018F7F7 /* KKSetupTableNumberCell.h */,
+				C70054C616A488680018F7F7 /* KKSetupTableNumberCell.m */,
+				C70054C716A488680018F7F7 /* KKSetupTableNumberCell.xib */,
 				C70054BC16A46C8A0018F7F7 /* KKSetupTableSegmentCell.h */,
 				C70054BD16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m */,
 				C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */,
@@ -1182,8 +1187,6 @@
 				C7B1CD4516783C8500BA628A /* KKConstants.m */,
 				C7B1CD4616783C8500BA628A /* KKFunctions.h */,
 				C7B1CD4716783C8500BA628A /* KKFunctions.m */,
-				C7B1CD4816783C8500BA628A /* KKManager.h */,
-				C7B1CD4916783C8500BA628A /* KKManager.m */,
 				C7B1CD4A16783C8500BA628A /* KKUtility.h */,
 				C7B1CD4B16783C8500BA628A /* KKUtility.m */,
 			);
@@ -2495,6 +2498,7 @@
 				C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */,
 				C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */,
 				C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */,
+				C70054C916A488690018F7F7 /* KKSetupTableNumberCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2535,7 +2539,6 @@
 				C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */,
 				C7B1CF0C16783C8500BA628A /* KKConstants.m in Sources */,
 				C7B1CF0D16783C8500BA628A /* KKFunctions.m in Sources */,
-				C7B1CF0E16783C8500BA628A /* KKManager.m in Sources */,
 				C7B1CF0F16783C8500BA628A /* KKUtility.m in Sources */,
 				C7B1CF1016783C8500BA628A /* KKActivityFeedViewController.m in Sources */,
 				C7B1CF1116783C8500BA628A /* KKHomeViewController.m in Sources */,
@@ -2600,6 +2603,7 @@
 				C734812F16A0789E004AD6EB /* KKSetupTableBaseCell.m in Sources */,
 				C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */,
 				C70054BF16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m in Sources */,
+				C70054C816A488690018F7F7 /* KKSetupTableNumberCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
