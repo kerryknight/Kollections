@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C70054BF16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054BD16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m */; };
+		C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */; };
 		C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703B168265AB00C1B560 /* kkVerticalSeparator.png */; };
 		C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */; };
 		C71270461682666A00C1B560 /* 112-group.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270421682666A00C1B560 /* 112-group.png */; };
@@ -488,6 +490,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C70054BC16A46C8A0018F7F7 /* KKSetupTableSegmentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableSegmentCell.h; sourceTree = "<group>"; };
+		C70054BD16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableSegmentCell.m; sourceTree = "<group>"; };
+		C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableSegmentCell.xib; sourceTree = "<group>"; };
 		C712703B168265AB00C1B560 /* kkVerticalSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkVerticalSeparator.png; sourceTree = "<group>"; };
 		C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkVerticalSeparator@2x.png"; sourceTree = "<group>"; };
 		C71270421682666A00C1B560 /* 112-group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group.png"; sourceTree = "<group>"; };
@@ -1103,12 +1108,15 @@
 		C734812B16A07818004AD6EB /* Data Entry Cells */ = {
 			isa = PBXGroup;
 			children = (
+				C70054BC16A46C8A0018F7F7 /* KKSetupTableSegmentCell.h */,
+				C70054BD16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m */,
+				C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */,
 				C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */,
 				C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */,
 				C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */,
-				C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */,
 				C734812D16A0789E004AD6EB /* KKSetupTableBaseCell.h */,
 				C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */,
+				C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */,
 			);
 			name = "Data Entry Cells";
 			sourceTree = "<group>";
@@ -2486,6 +2494,7 @@
 				C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */,
 				C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */,
 				C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */,
+				C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2590,6 +2599,7 @@
 				C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */,
 				C734812F16A0789E004AD6EB /* KKSetupTableBaseCell.m in Sources */,
 				C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */,
+				C70054BF16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -70,7 +70,7 @@
 		<key>datatype</key>
 		<integer>7</integer>
 		<key>hint</key>
-		<string>Is this a public or private kollection?</string>
+		<string>Is this a public or private kollection? Other users can only access your private kollection(s) using the kollection&apos;s Access ID.</string>
 		<key>required</key>
 		<true/>
 	</dict>

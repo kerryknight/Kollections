@@ -9,6 +9,7 @@
 #import "KKKollectionSetupTableViewController.h"
 #import "KKSetupTableBaseCell.h"
 #import "KKSetupTableLongStringCell.h"
+#import "KKSetupTableSegmentCell.h"
 #import "MBProgressHUD.h"
 #import "KKConstants.h"
 
@@ -111,6 +112,28 @@
     NSLog(@"%s", __FUNCTION__);
 }
 
+- (IBAction)segmentedControlSegmentChosen:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
+    //get the cell that was touched
+    UISegmentedControl *segmentBar = sender;
+    KKSetupTableSegmentCell *cell = (KKSetupTableSegmentCell*)[[segmentBar superview] superview];
+    
+    //get the indexpath of the cell that was touched and store in our table items array the response so we can keep track throughout the question process or our answers
+    NSIndexPath *pathOfSelectedCellRow = [self.tableView indexPathForCell:cell];
+    //fill in entry label text from kollection property if available, if not, check for historical response
+    NSString *columnName = (NSString*)self.tableObjects[pathOfSelectedCellRow.row - 1][@"objectColumn"];
+    BOOL isPrivateValue = NO;
+    //set our isPrivate property based on what we've just set the selected segment index to
+    if ([cell.segmentedControl selectedSegmentIndex] == 1) {
+        isPrivateValue = YES;
+    } else {
+        isPrivateValue = NO;
+    }
+    
+    //key-value coding only accepts objects so wrap the bool in an nsnumber
+    [self.kollection setObject:[NSNumber numberWithBool:isPrivateValue] forKey:columnName];
+}
+
 #pragma mark - Table view delegate
 - (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
 //    NSLog(@"%s %0.0f", __FUNCTION__, bottomInset);
@@ -166,7 +189,6 @@
     } else if (datatype == KKKollectionSetupCellDataTypeToggle) {
         //toggle on/off
     } else if (datatype == KKKollectionSetupCellDataTypeString) {
-        NSLog(@"short string height");
         //short string
     } else if (datatype == KKKollectionSetupCellDataTypeShare) {
         //share with friends
@@ -175,11 +197,11 @@
     } else if (datatype == KKKollectionSetupCellDataTypePhoto) {
         //choose photo
     } else if (datatype == KKKollectionSetupCellDataTypeLongString) {
-        NSLog(@"long string height");
         //enter long string
         defaultRowHeight = 128.0f;
-    } else if (datatype == KKKollectionSetupCellDataTypePicker) {
+    } else if (datatype == KKKollectionSetupCellDataTypeSegment) {
         //segmented control or picker
+        defaultRowHeight = 59.0f;//no need to dynamically size row
     } else if (datatype == KKKollectionSetupCellDataTypeNavigate) {
         //drill down in table
     } else {
@@ -193,8 +215,17 @@
     CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
     CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
     CGSize entrySize = [entryLength sizeWithFont:kSetupEntryFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    CGFloat height;
     
-    CGFloat height = MAX(labelSize.height + entrySize.height + 67, defaultRowHeight); //67 is the size of the cell minus the label
+    //check if it's a cell type without an entry label, like one with the segmented control cell
+    if (datatype == KKKollectionSetupCellDataTypeSegment || datatype == KKKollectionSetupCellDataTypeToggle) {
+        //no entry field to worry about
+        height = MAX(labelSize.height + 46, defaultRowHeight); //38 for top single row (with segmented control or toggle switch) is 30 + (8 * 2) for padding
+    } else {
+        //we have an entry field to account for
+        height = MAX(labelSize.height + entrySize.height + 67, defaultRowHeight); //67 is the size of the base cell minus the label
+    }
+    
     return height;
 }
 
@@ -319,8 +350,8 @@
         } else if (datatype == KKKollectionSetupCellDataTypeToggle) {
             //toggle on/off
         } else if (datatype == KKKollectionSetupCellDataTypeString) {
-            //short string
-            NSLog(@"short string cell");
+           //short string
+//            NSLog(@"short string cell");
             static NSString *CustomCellIdentifier = @"KKSetupTableBaseCell";
             
             KKSetupTableBaseCell *cell = (KKSetupTableBaseCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
@@ -338,7 +369,7 @@
             
             //fill in entry label text from kollection property if available, if not, check for historical response
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
-            NSLog(@"[self.kollection objectForKey:columnName] = %@ = %@", columnName, [self.kollection objectForKey:columnName]);
+//            NSLog(@"[self.kollection objectForKey:columnName] = %@ = %@", columnName, [self.kollection objectForKey:columnName]);
             if ([self.kollection objectForKey:columnName]) {
                 cell.entryField.text = [self.kollection objectForKey:columnName];
                 cell.entryField.textColor = kMint4;//set to mint color text if we have a pre-entered response
@@ -356,7 +387,7 @@
             CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
             [cell.footnoteLabel setFrame:CGRectMake(0, cell.entryField.frame.origin.y + cell.entryField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            return cell;
+            return cell; 
         } else if (datatype == KKKollectionSetupCellDataTypeShare) {
             //share with friends
         } else if (datatype == KKKollectionSetupCellDataTypeKeywords) {
@@ -365,7 +396,7 @@
             //choose photo
         } else if (datatype == KKKollectionSetupCellDataTypeLongString) {
             //enter long string
-            NSLog(@"long string cell");
+//            NSLog(@"long string cell");
             static NSString *CustomCellIdentifier = @"KKSetupTableLongStringCell";
             
             KKSetupTableLongStringCell *cell = (KKSetupTableLongStringCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
@@ -383,7 +414,6 @@
             
             //fill in entry label text from kollection property if available, if not, check for historical response
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
-            NSLog(@"[self.kollection objectForKey:columnName] = %@ = %@", columnName, [self.kollection objectForKey:columnName]);
             if ([self.kollection objectForKey:columnName]) {
                 cell.entryField.text = [self.kollection objectForKey:columnName];
                 cell.entryField.textColor = kMint4;//set to mint color text if we have a pre-entered response
@@ -404,8 +434,54 @@
             [cell.footnoteLabel setFrame:CGRectMake(0, cell.entryField.frame.origin.y + cell.entryField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
-        } else if (datatype == KKKollectionSetupCellDataTypePicker) {
+        } else if (datatype == KKKollectionSetupCellDataTypeSegment) {
+//            NSLog(@"segment cell");
             //segmented control or picker
+            static NSString *CustomCellIdentifier = @"KKSetupTableSegmentCell";
+            
+            KKSetupTableSegmentCell *cell = (KKSetupTableSegmentCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+            
+            if (cell == nil) {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"KKSetupTableSegmentCell" owner:self options:nil];
+                for (id oneObject in nib)
+                    if ([oneObject isKindOfClass:[KKSetupTableSegmentCell class]])
+                        cell = (KKSetupTableSegmentCell *)oneObject;
+                [cell formatCell];//tell it to format itself
+                cell.headerLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
+                cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
+            }
+            
+            //add selectors here to each of the buttons as necessary
+            [cell.segmentedControl addTarget:self action:@selector(segmentedControlSegmentChosen:) forControlEvents:UIControlEventValueChanged];
+            
+            //fill in entry label text from kollection property if available, if not, check for historical response
+            NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
+            BOOL isPrivateValue = NO;
+            if ([self.kollection objectForKey:columnName]) {
+                //check if we've set the isPrivate property to YES; if not, default to Public segment selected
+                [[self.kollection objectForKey:columnName] boolValue] != YES ? [cell.segmentedControl setSelectedSegmentIndex:0] : [cell.segmentedControl setSelectedSegmentIndex:1];
+            }
+            
+            //set our isPrivate property based on what we've just set the selected segment index to
+            if ([cell.segmentedControl selectedSegmentIndex] == 1) {
+                isPrivateValue = YES;
+            } else {
+                isPrivateValue = NO;
+            }
+            
+            //key-value coding only accepts objects so wrap the bool in an nsnumber
+            [self.kollection setObject:[NSNumber numberWithBool:isPrivateValue] forKey:columnName];
+            
+            //Get footer label height
+            NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
+            
+            CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
+            CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+            
+            CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
+            [cell.footnoteLabel setFrame:CGRectMake(cell.headerLabel.frame.origin.x, cell.segmentedControl.frame.origin.y + cell.segmentedControl.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
         } else if (datatype == KKKollectionSetupCellDataTypeNavigate) {
             //drill down in table
         } else {

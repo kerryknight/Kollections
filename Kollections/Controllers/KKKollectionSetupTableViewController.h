@@ -21,7 +21,7 @@ typedef enum {
     KKKollectionSetupCellDataTypeKeywords,
     KKKollectionSetupCellDataTypePhoto,
     KKKollectionSetupCellDataTypeLongString,
-    KKKollectionSetupCellDataTypePicker,
+    KKKollectionSetupCellDataTypeSegment,
     KKKollectionSetupCellDataTypeNavigate
 }KKKollectionSetupCellDataType;
 //like http://www.lovelyui.com/post/5160477107/compose-on-dapsem
