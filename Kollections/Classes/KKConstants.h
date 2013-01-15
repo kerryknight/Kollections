@@ -99,7 +99,11 @@ extern NSString *const kKKKollectionClassKey;
 // Field keys
 extern NSString *const kKKKollectionTitleKey;
 extern NSString *const kKKKollectionUserKey;
+extern NSString *const kKKKollectionSubjectsKey;
 extern NSString *const kKKKollectionPayoutKey;
+extern NSString *const kKKKollectionSubjectTitleKey;
+extern NSString *const kKKKollectionSubjectDescriptionKey;
+extern NSString *const kKKKollectionSubjectPayoutKey;
 
 // Type values
 

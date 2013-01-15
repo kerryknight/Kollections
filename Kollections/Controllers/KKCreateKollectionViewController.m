@@ -7,6 +7,7 @@
 //
 
 #import "KKCreateKollectionViewController.h"
+#import "KKKollectionSubjectsTableViewController.h"
 
 @interface KKCreateKollectionViewController () {
     
@@ -51,8 +52,21 @@
 }
 
 #pragma mark - KKKollectionSetupTableViewController delegate
+- (void)pushSubjectsViewControllerWithKollection:(PFObject *)kollection {
+    NSLog(@"%s", __FUNCTION__);
+    
+    KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
+    //extract subject list from the kollection and set it as a property
+    if (kollection[kKKKollectionSubjectsKey]) {
+        NSArray *subjects = kollection[kKKKollectionSubjectsKey];
+        subjectsTableVC.subjects = [NSMutableArray arrayWithArray:subjects];
+    }
+    
+    [self.navigationController pushViewController:subjectsTableVC animated:YES];
+}
+
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
+    NSLog(@"%s %@", __FUNCTION__, indexPath);
     
     [self.view endEditing:YES];
     

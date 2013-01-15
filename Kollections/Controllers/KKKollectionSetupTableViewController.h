@@ -31,6 +31,7 @@ typedef enum {
 @optional
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)setupTableViewDismissAnyKeyboard;
+- (void)pushSubjectsViewControllerWithKollection:(PFObject*)kollection;
 @end
 
 @interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate> {

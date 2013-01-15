@@ -60,7 +60,11 @@ NSString *const kKKKollectionClassKey = @"Kollection";
 // Field keys
 NSString *const kKKKollectionUserKey = @"user";
 NSString *const kKKKollectionTitleKey = @"title";
+NSString *const kKKKollectionSubjectsKey = @"subjects";
 NSString *const kKKKollectionPayoutKey = @"payout";
+NSString *const kKKKollectionSubjectTitleKey = @"title";
+NSString *const kKKKollectionSubjectDescriptionKey = @"description";
+NSString *const kKKKollectionSubjectPayoutKey = @"payout";
 
 // Type values
 

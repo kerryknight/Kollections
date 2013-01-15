@@ -11,6 +11,7 @@
 #import "KKSetupTableLongStringCell.h"
 #import "KKSetupTableSegmentCell.h"
 #import "KKSetupTableNumberCell.h"
+#import "KKSetupTableNavigateCell.h"
 #import "MBProgressHUD.h"
 #import "KKConstants.h"
 
@@ -210,9 +211,10 @@
         defaultRowHeight = 128.0f;
     } else if (datatype == KKKollectionSetupCellDataTypeSegment) {
         //segmented control or picker
-        defaultRowHeight = 59.0f;//no need to dynamically size row
+        defaultRowHeight = 59.0f;
     } else if (datatype == KKKollectionSetupCellDataTypeNavigate) {
         //drill down in table
+        defaultRowHeight = 88.0f;
     } else {
         //do nothing
     }
@@ -388,7 +390,7 @@
             CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
             
             CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
-            [cell.footnoteLabel setFrame:CGRectMake(0, cell.numberField.frame.origin.y + cell.numberField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
+            [cell.footnoteLabel setFrame:CGRectMake(cell.headerLabel.frame.origin.x, cell.numberField.frame.origin.y + cell.numberField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         } else if (datatype == KKKollectionSetupCellDataTypeToggle) {
@@ -528,6 +530,49 @@
             return cell;
         } else if (datatype == KKKollectionSetupCellDataTypeNavigate) {
             //drill down in table
+            static NSString *CustomCellIdentifier = @"KKSetupTableNavigateCell";
+            
+            KKSetupTableNavigateCell *cell = (KKSetupTableNavigateCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+            
+            if (cell == nil) {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"KKSetupTableNavigateCell" owner:self options:nil];
+                for (id oneObject in nib)
+                    if ([oneObject isKindOfClass:[KKSetupTableNavigateCell class]])
+                        cell = (KKSetupTableNavigateCell *)oneObject;
+                [cell formatCell];//tell it to format itself
+                cell.headerLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
+                cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
+                [cell.rowButton addTarget:self action:@selector(goToSubjectsList:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            
+            //fill in entry label text from kollection property if available, if not, check for historical response
+            NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
+            NSLog(@"[self.kollection objectForKey:columnName] = %@ = %@", columnName, [self.kollection objectForKey:columnName]);
+            NSArray *kollectionSubjects;
+            if ([self.kollection objectForKey:columnName]) {
+                kollectionSubjects = (NSArray*)[self.kollection objectForKey:columnName];
+                NSString *subjectList = [kollectionSubjects componentsJoinedByString:@", "];
+                cell.entryField.text = subjectList;
+            } else if([(NSString*)self.tableObjects[indexPath.row - 1][@"response"] length] > 0){
+                cell.entryField.text = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];
+            }
+            
+            //Get label height
+            NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
+            CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
+            CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+            
+            CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
+            if ([cell.entryField.text length] == 0) {
+                cell.entryField.text = @"--";
+            } else {
+                cell.entryField.textColor = kMint4;
+            }
+            
+            [cell.footnoteLabel setFrame:CGRectMake(cell.headerLabel.frame.origin.x, cell.entryField.frame.origin.y + cell.entryField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
         } else {
             //do nothing
         }
@@ -547,7 +592,12 @@
         return cell;
     }
 }
-                                           
+
+- (void)goToSubjectsList:(id)sender {
+    //tell the delegate to navigate to the subjects list so we can edit it
+    [self.delegate pushSubjectsViewControllerWithKollection:self.kollection];
+}
+
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
     //	NSLog(@"%s", __FUNCTION__);
 	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];

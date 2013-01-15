@@ -11,6 +11,16 @@
 		C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054BE16A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib */; };
 		C70054C816A488690018F7F7 /* KKSetupTableNumberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054C616A488680018F7F7 /* KKSetupTableNumberCell.m */; };
 		C70054C916A488690018F7F7 /* KKSetupTableNumberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054C716A488680018F7F7 /* KKSetupTableNumberCell.xib */; };
+		C70054D316A4992F0018F7F7 /* KKSetupTableNavigateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054D116A4992E0018F7F7 /* KKSetupTableNavigateCell.m */; };
+		C70054D416A4992F0018F7F7 /* KKSetupTableNavigateCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054D216A4992F0018F7F7 /* KKSetupTableNavigateCell.xib */; };
+		C70054D716A4A9980018F7F7 /* kkRowButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C70054D516A4A9980018F7F7 /* kkRowButtonDown.png */; };
+		C70054D816A4A9980018F7F7 /* kkRowButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C70054D616A4A9980018F7F7 /* kkRowButtonDown@2x.png */; };
+		C70054DB16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054DA16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m */; };
+		C70054DF16A4BA8E0018F7F7 /* KKSubjectEntryTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054DD16A4BA8D0018F7F7 /* KKSubjectEntryTableCell.m */; };
+		C70054E016A4BA8E0018F7F7 /* KKSubjectEntryTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054DE16A4BA8E0018F7F7 /* KKSubjectEntryTableCell.xib */; };
+		C70054E516A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054E316A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m */; };
+		C70054E616A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */; };
+		C70054ED16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.m */; };
 		C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703B168265AB00C1B560 /* kkVerticalSeparator.png */; };
 		C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */; };
 		C71270461682666A00C1B560 /* 112-group.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270421682666A00C1B560 /* 112-group.png */; };
@@ -497,6 +507,21 @@
 		C70054C516A488680018F7F7 /* KKSetupTableNumberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableNumberCell.h; sourceTree = "<group>"; };
 		C70054C616A488680018F7F7 /* KKSetupTableNumberCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableNumberCell.m; sourceTree = "<group>"; };
 		C70054C716A488680018F7F7 /* KKSetupTableNumberCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableNumberCell.xib; sourceTree = "<group>"; };
+		C70054D016A4992E0018F7F7 /* KKSetupTableNavigateCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableNavigateCell.h; sourceTree = "<group>"; };
+		C70054D116A4992E0018F7F7 /* KKSetupTableNavigateCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableNavigateCell.m; sourceTree = "<group>"; };
+		C70054D216A4992F0018F7F7 /* KKSetupTableNavigateCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableNavigateCell.xib; sourceTree = "<group>"; };
+		C70054D516A4A9980018F7F7 /* kkRowButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkRowButtonDown.png; sourceTree = "<group>"; };
+		C70054D616A4A9980018F7F7 /* kkRowButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkRowButtonDown@2x.png"; sourceTree = "<group>"; };
+		C70054D916A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSubjectsTableViewController.h; sourceTree = "<group>"; };
+		C70054DA16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSubjectsTableViewController.m; sourceTree = "<group>"; };
+		C70054DC16A4BA8D0018F7F7 /* KKSubjectEntryTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSubjectEntryTableCell.h; sourceTree = "<group>"; };
+		C70054DD16A4BA8D0018F7F7 /* KKSubjectEntryTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSubjectEntryTableCell.m; sourceTree = "<group>"; };
+		C70054DE16A4BA8E0018F7F7 /* KKSubjectEntryTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSubjectEntryTableCell.xib; sourceTree = "<group>"; };
+		C70054E216A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSubjectsTableCell.h; sourceTree = "<group>"; };
+		C70054E316A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSubjectsTableCell.m; sourceTree = "<group>"; };
+		C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKKollectionSubjectsTableCell.xib; sourceTree = "<group>"; };
+		C70054EB16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSubjectsEditTableViewController.h; sourceTree = "<group>"; };
+		C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSubjectsEditTableViewController.m; sourceTree = "<group>"; };
 		C712703B168265AB00C1B560 /* kkVerticalSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkVerticalSeparator.png; sourceTree = "<group>"; };
 		C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkVerticalSeparator@2x.png"; sourceTree = "<group>"; };
 		C71270421682666A00C1B560 /* 112-group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group.png"; sourceTree = "<group>"; };
@@ -1085,6 +1110,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C70054E116A4C2040018F7F7 /* Subjects Table */ = {
+			isa = PBXGroup;
+			children = (
+				C70054E216A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.h */,
+				C70054E316A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m */,
+				C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */,
+				C70054DC16A4BA8D0018F7F7 /* KKSubjectEntryTableCell.h */,
+				C70054DD16A4BA8D0018F7F7 /* KKSubjectEntryTableCell.m */,
+				C70054DE16A4BA8E0018F7F7 /* KKSubjectEntryTableCell.xib */,
+			);
+			name = "Subjects Table";
+			sourceTree = "<group>";
+		};
 		C7127078168283E700C1B560 /* SlimeRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -1110,6 +1148,10 @@
 		C734812B16A07818004AD6EB /* Data Entry Cells */ = {
 			isa = PBXGroup;
 			children = (
+				C70054E116A4C2040018F7F7 /* Subjects Table */,
+				C70054D016A4992E0018F7F7 /* KKSetupTableNavigateCell.h */,
+				C70054D116A4992E0018F7F7 /* KKSetupTableNavigateCell.m */,
+				C70054D216A4992F0018F7F7 /* KKSetupTableNavigateCell.xib */,
 				C70054C516A488680018F7F7 /* KKSetupTableNumberCell.h */,
 				C70054C616A488680018F7F7 /* KKSetupTableNumberCell.m */,
 				C70054C716A488680018F7F7 /* KKSetupTableNumberCell.xib */,
@@ -1138,6 +1180,8 @@
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
+				C70054D516A4A9980018F7F7 /* kkRowButtonDown.png */,
+				C70054D616A4A9980018F7F7 /* kkRowButtonDown@2x.png */,
 				C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */,
 				C79DA13E169C9AAF009C1CE7 /* kkAddButtonDown@2x.png */,
 				C79DA13F169C9AAF009C1CE7 /* kkAddButtonUp.png */,
@@ -1169,6 +1213,10 @@
 		C79DA180169E2787009C1CE7 /* Kollection */ = {
 			isa = PBXGroup;
 			children = (
+				C70054EB16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.h */,
+				C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.m */,
+				C70054D916A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.h */,
+				C70054DA16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m */,
 				C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */,
 				C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */,
 				C72E42CB169E426100D0C182 /* KKCreateKollectionViewController.h */,
@@ -2499,6 +2547,11 @@
 				C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */,
 				C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */,
 				C70054C916A488690018F7F7 /* KKSetupTableNumberCell.xib in Resources */,
+				C70054D416A4992F0018F7F7 /* KKSetupTableNavigateCell.xib in Resources */,
+				C70054D716A4A9980018F7F7 /* kkRowButtonDown.png in Resources */,
+				C70054D816A4A9980018F7F7 /* kkRowButtonDown@2x.png in Resources */,
+				C70054E016A4BA8E0018F7F7 /* KKSubjectEntryTableCell.xib in Resources */,
+				C70054E616A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2604,6 +2657,11 @@
 				C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */,
 				C70054BF16A46C8A0018F7F7 /* KKSetupTableSegmentCell.m in Sources */,
 				C70054C816A488690018F7F7 /* KKSetupTableNumberCell.m in Sources */,
+				C70054D316A4992F0018F7F7 /* KKSetupTableNavigateCell.m in Sources */,
+				C70054DB16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m in Sources */,
+				C70054DF16A4BA8E0018F7F7 /* KKSubjectEntryTableCell.m in Sources */,
+				C70054E516A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m in Sources */,
+				C70054ED16A4D27A0018F7F7 /* KKKollectionSubjectsEditTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
