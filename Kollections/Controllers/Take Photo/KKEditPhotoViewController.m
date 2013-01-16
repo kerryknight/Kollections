@@ -108,11 +108,11 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
     
     //add custom toolbar buttons
-    KKToolbarButton *cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame andTitle:@"Cancel"];
+    KKToolbarButton *cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:NO andTitle:@"Cancel"];
     [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:cancelButton];
     
-    KKToolbarButton *publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame andTitle:@"Publish"];
+    KKToolbarButton *publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Publish"];
     [publishButton addTarget:self action:@selector(doneButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:publishButton];
     

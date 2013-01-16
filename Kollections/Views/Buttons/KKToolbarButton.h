@@ -12,6 +12,6 @@
     
 }
 
-- (id)initWithFrame:(CGRect)frame andTitle:(NSString*)title;
+- (id)initWithFrame:(CGRect)frame isBackButton:(BOOL)isBackButton andTitle:(NSString*)title;
 
 @end

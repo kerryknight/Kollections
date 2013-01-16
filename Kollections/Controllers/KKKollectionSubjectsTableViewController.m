@@ -9,15 +9,17 @@
 #import "KKKollectionSubjectsTableViewController.h"
 #import "KKKollectionSubjectsTableCell.h"
 #import "KKConstants.h"
+#import "KKToolbarButton.h"
 
 @interface KKKollectionSubjectsTableViewController () {
-    
+    NSUInteger selectedSubjectIndex;
 }
 
 @property (nonatomic, strong) UITextField *titleField;
 @property (nonatomic, strong) UITextView  *descriptionView;
 @property (nonatomic, strong) UITextField *payoutField;
-
+@property (nonatomic, strong) KKToolbarButton *doneButton;
+@property (nonatomic, strong) KKToolbarButton *cancelButton;
 @end
 
 @implementation KKKollectionSubjectsTableViewController
@@ -31,8 +33,8 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
@@ -46,12 +48,17 @@
     id appDelegate = [[UIApplication sharedApplication] delegate];
     UIWindow *window = [appDelegate window];
     float height = window.frame.size.height -
-                   self.navigationController.navigationBar.frame.size.height -
-                   self.tabBarController.tabBar.frame.size.height + 160;
+    self.navigationController.navigationBar.frame.size.height -
+    self.tabBarController.tabBar.frame.size.height;
     
     self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
     
-    NSLog(@"self.subjects at load = %@", self.subjects);
+    //init the subject array if we haven't created any so far
+    if([self.subjects count] == 0)self.subjects = [[NSMutableArray alloc] initWithCapacity:10];
+    
+    //add toolbar buttons
+    self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
+    [self configureToolbarButtons];//add the done button to upper right
 }
 
 - (void)didReceiveMemoryWarning
@@ -60,47 +67,97 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+//    NSLog(@"%s", __FUNCTION__);
+    self.doneButton.hidden = NO;//this is hidden if we navigate away
+    self.cancelButton.hidden = NO;
+    [self.tableView reloadData];//in case we updated anything
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+//    NSLog(@"%s", __FUNCTION__);
+    [super viewWillDisappear:animated];
+    self.doneButton.hidden = YES;
+    self.cancelButton.hidden = YES;
+}
+
 #pragma mark - Custom Methods
 - (void)addSubject:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    KKKollectionSubjectsEditTableViewController *subjectsEditTableVC = [[KKKollectionSubjectsEditTableViewController alloc] init];
+    KKKollectionSubjectEditViewController *subjectsEditTableVC = [[KKKollectionSubjectEditViewController alloc] init];
     subjectsEditTableVC.delegate = self;
+    selectedSubjectIndex = [self.subjects count]; //we'll use this index to update the array later
     [self.navigationController pushViewController:subjectsEditTableVC animated:YES];
 }
 
-- (void)dismissView {
+- (void)editSubject:(id)sender {
     NSLog(@"%s", __FUNCTION__);
+    
+    //first, get the index path of the cell whose row button we touched
+    UIButton *button = sender;
+    CGPoint correctedPoint = [button convertPoint:button.bounds.origin toView:self.tableView];
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
+
+    KKKollectionSubjectEditViewController *subjectsEditTableVC = [[KKKollectionSubjectEditViewController alloc] init];
+    subjectsEditTableVC.delegate = self;
+    subjectsEditTableVC.subject = (NSMutableDictionary*)self.subjects[indexPath.row - 1];
+    selectedSubjectIndex = indexPath.row - 1; //we'll use this index to update the array later
+    
+    [self.navigationController pushViewController:subjectsEditTableVC animated:YES];
 }
 
-#pragma mark - Table view delegate
-- (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
-//    NSLog(@"%s %0.0f", __FUNCTION__, bottomInset);
-    CGPoint correctedPoint;
+- (void)configureToolbarButtons {
+//    NSLog(@"%s", __FUNCTION__);
+    //add save button to view
+    self.doneButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Save"];
+    [self.doneButton addTarget:self action:@selector(doneButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.doneButton];
     
-    if ([sender isKindOfClass:[UITextField class]]) {
-        UITextField *textField = sender;
-        correctedPoint = [textField convertPoint:textField.bounds.origin toView:self.tableView];
+    //add cancel button
+    self.cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Cancel"];
+    [self.cancelButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.cancelButton];
+}
+
+- (void)doneButtonAction:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
+    NSDictionary *userData = @{kKKKollectionSubjectsKey : self.subjects};
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupTableViewControllerSubjectListUpdated" object:nil userInfo:userData];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)backButtonAction:(id)sender {
+//    NSLog(@"%s", __FUNCTION__);
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - KKKollectionSubjectEditViewController delegate
+- (void)subjectEditViewControllerDidSubmitSubject:(NSMutableDictionary*)subject {
+    
+    if (selectedSubjectIndex < [self.subjects count]) {
+        //we were editing an existing subject so replace the existing object with our updated one
+        [self.subjects replaceObjectAtIndex:selectedSubjectIndex withObject:subject];
     } else {
-        UITextView *textView = sender;
-        correctedPoint = [textView convertPoint:textView.bounds.origin toView:self.tableView];
+        //we added a new subject so just append the end of the array
+        [self.subjects addObject:subject];
     }
     
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, bottomInset, 0.0f);
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    //add additional scrollable area
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, ([self.subjects count] * 88), 0);
+    [self.tableView reloadData];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
-    NSIndexPath *pathToUpdateTo = indexPath;
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
-    [self.tableView scrollToRowAtIndexPath:pathToUpdateTo atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-}
+#define kSUBJECTS_FOOTER_HEIGHT 180.0f
 
+#pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     //    NSLog(@"%s\n", __FUNCTION__);
     
-    NSInteger sectionRows = [self.subjects count] + 3;//inner content rows + a header and footer row + submit button row
+    NSInteger sectionRows = [self.subjects count] + 4;//inner content rows + a header and footer row + submit button row + pseudo footer
     NSInteger row = [indexPath row];
     
     if (row == 0 && row == sectionRows - 1) {
@@ -110,41 +167,21 @@
     else if (row == 0) {
         //top row
         return kDisplayTableHeaderHeight;
-    } else if (row == sectionRows - 2) {
+    } else if (row == sectionRows - 3) {
         //Add new subject button row
         return 52;
-    }
-    else if (row == sectionRows - 1) {
+    } else if (row == sectionRows - 2) {
         //bottom row
         return kDisplayTableFooterHeight;
+    }
+    else if (row == sectionRows - 1) {
+        //psuedo footer row; didn't add as actual footer b/c i need it to scroll off screen
+        return kSUBJECTS_FOOTER_HEIGHT;
     }
     else {
         //middle row
         return 88;
     }
-}
-
-#define kSUBJECTS_FOOTER_HEIGHT 180.0f
-
-#pragma mark - Table view footer
-- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    
-    UIView *theView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, kSUBJECTS_FOOTER_HEIGHT)];
-    [theView setBackgroundColor:[UIColor clearColor]];
-    
-    UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 300, kSUBJECTS_FOOTER_HEIGHT)];
-    footerLabel.numberOfLines = 10;
-    footerLabel.text = @"Think of subjects as kollection sub-headings to narrow the scope of your kollection. Contributors can then submit items for these specific subjects and not just the kollection as a whole.\n\nExample subject uses might be:\n- Clues in a scavenger hunt kollection\n- Wedding shot requests for a wedding event kollection\n- Specific location requests for a travel kollection";
-    [footerLabel setTextColor:kGray5];
-    [footerLabel setFont:[UIFont fontWithName:@"HelveticaNeue-LightItalic" size:14]];
-    [footerLabel setBackgroundColor:[UIColor clearColor]];
-    [theView addSubview:footerLabel];
-    
-    return theView;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    return kSUBJECTS_FOOTER_HEIGHT;
 }
 
 #pragma mark - Table view data source
@@ -157,7 +194,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [self.subjects count] + 3; //inner content rows + add new subject button row + a header and footer row
+    
+    return [self.subjects count] + 4; //inner content rows + add new subject button row + a header and footer row + pseudo footer
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -206,9 +244,9 @@
         [cell.contentView setBackgroundColor:rowBackground];
         
         return cell;
-    } else if (row == sectionRows - 2) {
+    } else if (row == sectionRows - 3) {
         //it's the next to last row, so add a submit button
-        static NSString *CellIdentifier = @"CellD";
+        static NSString *CellIdentifier = @"CellC";
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
@@ -233,9 +271,9 @@
         
         return cell;
     }
-    else if (row == sectionRows - 1) {
+    else if (row == sectionRows - 2) {
         //bottom row
-        static NSString *CellIdentifier = @"CellC";
+        static NSString *CellIdentifier = @"CellD";
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
@@ -245,6 +283,29 @@
         
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
         [cell.contentView setBackgroundColor:rowBackground];
+        
+        return cell;
+    }
+    else if (row == sectionRows - 1) {
+        //pseudo footer row
+        static NSString *CellIdentifier = @"CellE";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
+        
+        //add a pseudo footer row; do this because adding as an actual footer causes the footer to not scroll with the rest of the table
+        UILabel *footerLabel = [[UILabel alloc] initWithFrame:CGRectMake(12, 0, 300, kSUBJECTS_FOOTER_HEIGHT)];
+        footerLabel.numberOfLines = 10;
+        footerLabel.text = @"Think of subjects as kollection sub-headings to narrow the scope of your kollection. Contributors can then submit items for these specific subjects and not just the kollection as a whole.\n\nExample subject uses might be:\n- Clues in a scavenger hunt kollection\n- Wedding shot requests for a wedding event kollection\n- Specific location requests for a travel kollection";
+        [footerLabel setTextColor:kGray5];
+        [footerLabel setFont:[UIFont fontWithName:@"HelveticaNeue-LightItalic" size:14]];
+        [footerLabel setBackgroundColor:[UIColor clearColor]];
+        [cell.contentView addSubview:footerLabel];
+        
+        [cell.contentView setBackgroundColor:[UIColor clearColor]];
         
         return cell;
     }
@@ -260,9 +321,25 @@
                 if ([oneObject isKindOfClass:[KKKollectionSubjectsTableCell class]])
                     cell = (KKKollectionSubjectsTableCell *)oneObject;
             [cell formatCell];//tell it to format itself
-            cell.headerLabel.text = self.subjects[indexPath.row - 1][kKKKollectionSubjectTitleKey]; //subtract 1 to account for header row
+            [cell.rowButton addTarget:self action:@selector(editSubject:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        cell.headerLabel.text = self.subjects[indexPath.row - 1][kKKKollectionSubjectTitleKey]; //subtract 1 to account for header row
+        //determine if we have a description to display
+        if ([self.subjects[indexPath.row - 1][kKKKollectionSubjectDescriptionKey] length]) {
             cell.descriptionLabel.text = self.subjects[indexPath.row - 1][kKKKollectionSubjectDescriptionKey]; //subtract 1 to account for header row
-            cell.headerLabel.text = [NSString stringWithFormat:@"K: %@", self.subjects[indexPath.row - 1][kKKKollectionSubjectPayoutKey]]; //subtract 1 to account for header row
+        } else {
+            //nothing to show
+            cell.descriptionLabel.text = @"No description entered";
+        }
+        
+        //determine what the payout is; first, check if we have an individual payout for a subject. if not, default to overall kollection's payout
+        if ([self.subjects[indexPath.row - 1][kKKKollectionSubjectPayoutKey] length]) {
+            //we have an individual payout
+            cell.koinsLabel.text = [NSString stringWithFormat:@"K: %@", self.subjects[indexPath.row - 1][kKKKollectionSubjectPayoutKey]]; //subtract 1 to account for header row
+        } else {
+            //set to 0
+            cell.koinsLabel.text = @"K: Default";
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -286,205 +363,37 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    KKKollectionSubjectsEditTableViewController *subjectsEditTableVC = [[KKKollectionSubjectsEditTableViewController alloc] init];
-    subjectsEditTableVC.delegate = self;
-    subjectsEditTableVC.subject = (NSMutableDictionary*)self.subjects[indexPath.row - 1];
-    
-    [self.navigationController pushViewController:subjectsEditTableVC animated:YES];
+    //this functionality is performed by the editSubject: or addSubject: methods attached directly to the cell buttons
 }
 
-#pragma mark - UITextFieldDelegate methods
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+#pragma mark - table editing methods
+- (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (textField == self.titleField) {
-        NSString *trimmedValue = textField.text;
-        trimmedValue = [trimmedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSUInteger stringLimit = kSetupStringCharacterLimit;
-        NSString *stringPlaceholder;
-        
-        //set the message with text limit
-        stringPlaceholder = [NSString stringWithFormat:@"%i-character limit", stringLimit];
-        
-        //reset the placeholder if we didn't put in anything or it's the same as before
-        if ([trimmedValue isEqualToString:@""] || [trimmedValue isEqualToString:stringPlaceholder]) {
-            //reset the placeholder if we didn't enter anything
-            textField.text = stringPlaceholder;
-        } else if (textField.text.length > stringLimit) {
-            NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-            UIAlertView *alertView = [[UIAlertView alloc]
-                                      initWithTitle:@"Character limit"
-                                      message:message delegate:nil
-                                      cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            
-            [alertView show];
-            return NO; // return NO to not exit field
-        }
-    } else if (textField == self.payoutField) {
-        NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
-        if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
-            alertMessage(@"Please use only whole numbers.");
-            return NO;
-        }
-    }
-    return YES;
-}
-
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
-  
-    [self scrollTableFromSender:textField withInset:240.0f];
-    return YES;
-}
-
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
-    if (textField == self.titleField) {
-        NSString *trimmedValue = textField.text;
-        trimmedValue = [trimmedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-        NSUInteger stringLimit = kSetupStringCharacterLimit;
-        NSString *stringPlaceholder;
-        
-        //set the message with text limit
-        stringPlaceholder = [NSString stringWithFormat:@"%i-character limit", stringLimit];
-        
-        //reset the placeholder if we didn't put in anything or it's the same as before
-        if ([trimmedValue isEqualToString:@""] || [trimmedValue isEqualToString:stringPlaceholder]) {
-            //reset the placeholder if we didn't enter anything
-            textField.text = stringPlaceholder;
-        } else if (textField.text.length > stringLimit) {
-            NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-            UIAlertView *alertView = [[UIAlertView alloc]
-                                      initWithTitle:@"Character limit"
-                                      message:message delegate:nil
-                                      cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            
-            [alertView show];
-            return NO; // return NO to not exit field
-        }
-    } else if (textField == self.payoutField) {
-        NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
-        if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
-            alertMessage(@"Please use only whole numbers.");
-            return NO;
-        }
-    }
-    
-    [textField resignFirstResponder];
-    return YES;
-}
-
-- (void)textFieldDidEndEditing:(UITextField *)textField {
-    NSString *textFieldtext = textField.text;
-    CGPoint correctedPoint = [textField convertPoint:textField.bounds.origin toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
-    
-    if (textField == self.titleField) {
-        [self.subjects[indexPath.row - 1] setObject:textFieldtext forKey:kKKKollectionSubjectTitleKey];
-    } else if (textField == self.payoutField) {
-        [self.subjects[indexPath.row - 1] setObject:textFieldtext forKey:kKKKollectionSubjectPayoutKey];
-    }
-}
-
-#pragma mark - UITextViewDelegate methods
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
-//    NSLog(@"%s", __FUNCTION__);
-    NSUInteger stringLimit = kSetupLongStringCharacterLimit;
-    
-    if ([textView.text isEqualToString:[NSString stringWithFormat:@"%i-character limit", stringLimit]]) {
-        //clear the placeholder
-        textView.text = @"";
-    }
-    
-    [textView setReturnKeyType:UIReturnKeyDone];
-    [self scrollTableFromSender:textView withInset:240.0f];
-    
-    textView.textColor = kMint4;
-    
-    return YES;
-}
-
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
-//    NSLog(@"%s", __FUNCTION__);
-    
-    NSString *trimmedValue = textView.text;
-    trimmedValue = [trimmedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSUInteger stringLimit = kSetupLongStringCharacterLimit;
-    NSString *stringPlaceholder;
-    
-    //set the message with text limit
-    stringPlaceholder = [NSString stringWithFormat:@"%i-character limit", stringLimit];
-    
-    //reset the placeholder if we didn't put in anything or it's the same as before
-    if ([trimmedValue isEqualToString:@""] || [trimmedValue isEqualToString:stringPlaceholder]) {
-        //reset the placeholder if we didn't enter anything
-        textView.text = stringPlaceholder;
-    } else if (textView.text.length > stringLimit) {
-        NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"Character limit"
-                                  message:message delegate:nil
-                                  cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        
-        [alertView show];
-        return NO; // return NO to not exit field
-    }
-    
-    [textView resignFirstResponder];
-    return YES;
-}
-
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-//    NSLog(@"textView super view class = %@", [[[textView superview] superview]class]);
-    //check our cell type to determine our character limits
-    NSUInteger stringLimit = kSetupLongStringCharacterLimit;
-    
-    if (textView.text.length > stringLimit && range.length == 0) {
-        NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"Character limit"
-                                  message:message delegate:nil
-                                  cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        
-        [alertView show];
-        return NO; // return NO to not change text
-    }
-    else {
-        //dismiss if we've hit the enter key
-        if([text isEqualToString:@"\n"]) {
-            [textView resignFirstResponder];
-            return NO;
-        }
-        
+    if ((indexPath.row < [self.subjects count] + 1) && indexPath.row > 0) { //add 1 to account for first row header
         return YES;
+    } else {
+        return  NO;
     }
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
-//    NSLog(@"%s", __FUNCTION__);
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    //first, determine what type of cell (short string/long string) we're dealing with and trim down the text
-    //to prevent any problems where a user might have copy and pasted into the textview instead of typing directly
-    NSUInteger stringLimit  = kSetupLongStringCharacterLimit;
-    
-    //set what the placeholder string should be
-    NSString *stringPlaceholder = [NSString stringWithFormat:@"%i-character limit", stringLimit];
-    
-    if ([textView.text isEqualToString:stringPlaceholder]) {
-        //reset the placeholder if we didn't enter anything
-        textView.textColor = kGray3;
-        return;//exit without saving anything
+    if ((indexPath.row < [self.subjects count] + 1) && indexPath.row > 0) { //add 1 to account for first row header
+        return UITableViewCellEditingStyleDelete;
+    } else {
+        return  UITableViewCellEditingStyleNone;
     }
-    
-    //set the text and then the range to trim out
-    NSString *textViewtext = textView.text;
-    NSRange range = NSMakeRange(0, stringLimit);
-    if ([textViewtext length] > stringLimit) {
-        textViewtext = [textViewtext substringWithRange:range];
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    //delete the selected row and refresh the table
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //delete object from array
+        [self.subjects removeObjectAtIndex:(indexPath.row - 1)];
+        //delete row from table
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadData];
     }
-    
-    CGPoint correctedPoint = [textView convertPoint:textView.bounds.origin toView:self.tableView];
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
-    
-    [self.subjects[indexPath.row - 1] setObject:textViewtext forKey:kKKKollectionSubjectDescriptionKey];
 }
 
 @end

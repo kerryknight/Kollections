@@ -16,6 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *divider;
 @property (weak, nonatomic) IBOutlet UILabel *koinsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionLabel;
+@property (weak, nonatomic) IBOutlet UIButton *rowButton;
 
 - (void)formatCell;
 

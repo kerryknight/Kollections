@@ -24,7 +24,6 @@
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) KKMyAccountHeaderViewController *headerViewController;
 @property (nonatomic, strong) KKToolbarButton *logoutButton;
-@property (nonatomic, strong) UILabel *logoutLabel;
 @end
 
 @implementation KKAccountViewController
@@ -35,8 +34,14 @@
 #pragma mark - UIViewController
 
 - (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
 //    NSLog(@"%s", __FUNCTION__);
+    [super viewWillAppear:animated];
+    self.logoutButton.hidden = NO;//this is hidden if we navigate away
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.logoutButton.hidden = YES;
 }
 
 #define kPlaceholderPictureImageViewTag 100
@@ -309,7 +314,7 @@
 }
 
 - (PFQuery *)queryForTable {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
 //    if (!self.user) {
 //        PFQuery *query = [PFQuery queryWithClassName:self.className];
 //        [query setLimit:0];
@@ -431,7 +436,7 @@
 //the logout button may/may not be kept in this position; temporarily set here for testing purposes 04Jan2013
 - (void)configureLogoutButton {
     //add button to view
-    self.logoutButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame andTitle:@"Logout"];
+    self.logoutButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Logout"];
     [self.logoutButton addTarget:self action:@selector(logoutButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:self.logoutButton];
     

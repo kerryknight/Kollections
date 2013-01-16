@@ -10,7 +10,7 @@
 
 @implementation KKToolbarButton
 
-- (id)initWithFrame:(CGRect)frame andTitle:(NSString*)title {
+- (id)initWithFrame:(CGRect)frame isBackButton:(BOOL)isBackButton andTitle:(NSString*)title {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
@@ -18,9 +18,16 @@
         self = [UIButton buttonWithType:UIButtonTypeCustom];
         self.frame = frame;
         
-        // Change button apperance
-        [self setBackgroundImage:[UIImage imageNamed:@"kkRegularNavBarButton.png"] forState:UIControlStateNormal];
-        [self setBackgroundImage:[UIImage imageNamed:@"kkRegularNavigationBarSelected.png"] forState:UIControlStateHighlighted];
+        // Change button appearance based on button type
+        if (isBackButton) {
+            //it should be use back button images
+            [self setBackgroundImage:[UIImage imageNamed:@"kkBackButtonNavBar.png"] forState:UIControlStateNormal];
+            [self setBackgroundImage:[UIImage imageNamed:@"kkBackButtonNavBarSelected.png"] forState:UIControlStateHighlighted];
+        } else {
+            //it's a regular bar button
+            [self setBackgroundImage:[UIImage imageNamed:@"kkRegularNavBarButton.png"] forState:UIControlStateNormal];
+            [self setBackgroundImage:[UIImage imageNamed:@"kkRegularNavigationBarSelected.png"] forState:UIControlStateHighlighted];
+        }
         
         //customize the title label
         self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];

@@ -33,8 +33,8 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 
     // Uncomment the following line to preserve selection between presentations.
@@ -55,7 +55,9 @@
     //initialize kollections
     self.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
     
-//    NSLog(@"self.tableObjects at load = %@", self.tableObjects);
+    //add notifications
+    //this notification is called whenever a user edits a kollection and then adds/updates the subjects array for that kollection
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectListUpdated:) name:@"SetupTableViewControllerSubjectListUpdated" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,14 +66,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc {
+//    NSLog(@"%s", __FUNCTION__);
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SetupTableViewControllerSubjectListUpdated" object:nil];
+}
+
+#define kSETUP_SAVE_NEW_KOLLECTION @"Save Kollection"
+
 #pragma mark - Custom Methods
 - (void)submit:(id)sender {
-    
+    NSLog(@"%s", __FUNCTION__);
     //dismiss any keyboard
     [self.view endEditing:YES];
     
     UIButton *button = (UIButton*)sender;
-    if ([button.titleLabel.text isEqualToString:@"Submit"]) {
+    if ([button.titleLabel.text isEqualToString:kSETUP_SAVE_NEW_KOLLECTION]) {
         
         // Show HUD view
         [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
@@ -134,6 +143,16 @@
     
     //key-value coding only accepts objects so wrap the bool in an nsnumber
     [self.kollection setObject:[NSNumber numberWithBool:isPrivateValue] forKey:columnName];
+}
+
+- (void)subjectListUpdated:(NSNotification*)notification {
+    
+    NSDictionary *notificationInfo = [notification userInfo];
+    self.kollection[kKKKollectionSubjectsKey] = notificationInfo[kKKKollectionSubjectsKey];
+    
+    NSLog(@"%s %@", __FUNCTION__, self.kollection);
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view delegate
@@ -321,8 +340,8 @@
         UIButton *submitButton = [[UIButton alloc] init];
         [submitButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonUp.png"] forState:UIControlStateNormal];
         [submitButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonDown.png"] forState:UIControlStateHighlighted];
-        [submitButton setTitle:@"Submit" forState:UIControlStateNormal];
-        [submitButton setTitle:@"Submit" forState:UIControlStateHighlighted];
+        [submitButton setTitle:kSETUP_SAVE_NEW_KOLLECTION forState:UIControlStateNormal];
+        [submitButton setTitle:kSETUP_SAVE_NEW_KOLLECTION forState:UIControlStateHighlighted];
         [submitButton addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
         CGSize buttonSize = CGSizeMake(245, 44);
         [submitButton setFrame:CGRectMake((cell.contentView.frame.size.width/2 - buttonSize.width/2),
@@ -547,10 +566,14 @@
             
             //fill in entry label text from kollection property if available, if not, check for historical response
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
-            NSLog(@"[self.kollection objectForKey:columnName] = %@ = %@", columnName, [self.kollection objectForKey:columnName]);
-            NSArray *kollectionSubjects;
             if ([self.kollection objectForKey:columnName]) {
-                kollectionSubjects = (NSArray*)[self.kollection objectForKey:columnName];
+                NSMutableArray *kollectionSubjects = [NSMutableArray new];
+                //enumerate over all dict objects to extract the subject titles into a single array to the comma separate them
+                for (NSDictionary *subject in (NSArray*)[self.kollection objectForKey:columnName]) {
+                    NSString *titleString = (NSString*)[subject objectForKey:kKKKollectionTitleKey];
+                    [kollectionSubjects addObject:titleString];
+                }
+                
                 NSString *subjectList = [kollectionSubjects componentsJoinedByString:@", "];
                 cell.entryField.text = subjectList;
             } else if([(NSString*)self.tableObjects[indexPath.row - 1][@"response"] length] > 0){
@@ -594,6 +617,7 @@
 }
 
 - (void)goToSubjectsList:(id)sender {
+    NSLog(@"%s %@", __FUNCTION__, self.kollection);
     //tell the delegate to navigate to the subjects list so we can edit it
     [self.delegate pushSubjectsViewControllerWithKollection:self.kollection];
 }
@@ -723,6 +747,7 @@
         //reset the placeholder if we didn't enter anything
         textView.text = stringPlaceholder;
     } else if (textView.text.length > stringLimit) {
+        textView.text = [textView.text substringToIndex:stringLimit - 1];
         NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
         UIAlertView *alertView = [[UIAlertView alloc]
                                   initWithTitle:@"Character limit"

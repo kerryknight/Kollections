@@ -8,6 +8,7 @@
 
 #import "KKCreateKollectionViewController.h"
 #import "KKKollectionSubjectsTableViewController.h"
+#import "KKToolbarButton.h"
 
 @interface KKCreateKollectionViewController () {
     
@@ -15,6 +16,7 @@
 @property (nonatomic, strong) KKKollectionSetupTableViewController *tableView;
 /// The kollection displayed in the view; redeclare so we can edit locally
 @property (nonatomic, strong, readwrite) PFObject *kollection;
+@property (nonatomic, strong) KKToolbarButton *backButton;
 @end
 
 @implementation KKCreateKollectionViewController
@@ -44,6 +46,10 @@
     
     //attach notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissView) name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
+    
+    //add toolbar buttons
+    self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
+    [self configureBackButton];//add our custom back button
 }
 
 - (void)didReceiveMemoryWarning {
@@ -51,9 +57,38 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - UIViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+//    NSLog(@"%s", __FUNCTION__);
+    [super viewWillAppear:animated];
+    self.backButton.hidden = NO;//this is hidden if we navigate away
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+//    NSLog(@"%s", __FUNCTION__);
+    [super viewWillDisappear:animated];
+    self.backButton.hidden = YES;
+}
+
+#pragma mark - Custom Methods
+//our custom back button
+- (void)configureBackButton {
+//    NSLog(@"%s", __FUNCTION__);
+    //add button to view
+    self.backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Cancel"];
+    [self.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.backButton];
+}
+
+- (void)backButtonAction:(id)sender {
+//    NSLog(@"%s", __FUNCTION__);
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 #pragma mark - KKKollectionSetupTableViewController delegate
 - (void)pushSubjectsViewControllerWithKollection:(PFObject *)kollection {
-    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s %@", __FUNCTION__, kollection);
     
     KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
     //extract subject list from the kollection and set it as a property
@@ -66,7 +101,7 @@
 }
 
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-    NSLog(@"%s %@", __FUNCTION__, indexPath);
+//    NSLog(@"%s %@", __FUNCTION__, indexPath);
     
     [self.view endEditing:YES];
     
@@ -80,6 +115,7 @@
 }
 
 - (void)viewDidUnload {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidUnload];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
 }

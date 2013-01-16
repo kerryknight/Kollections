@@ -7,21 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "KKKollectionSubjectsEditTableViewController.h"
+#import "KKKollectionSubjectEditViewController.h"
 
-
-@protocol KKKollectionSubjectsTableViewControllerDelegate <NSObject>
-@optional
-- (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath;
-@end
-
-@interface KKKollectionSubjectsTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate, KKKollectionSubjectsEditTableViewControllerDelegate> {
+@interface KKKollectionSubjectsTableViewController : UITableViewController <UITableViewDataSource, KKKollectionSubjectEditViewControllerDelegate> {
     
 }
 
-@property (nonatomic, strong) id<KKKollectionSubjectsTableViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *subjects;
 
-- (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
-- (void)dismissView;
 @end
