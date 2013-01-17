@@ -76,13 +76,13 @@
 	</dict>
 	<dict>
 		<key>question</key>
-		<string>Keywords</string>
+		<string>Category</string>
 		<key>objectColumn</key>
-		<string>keywords</string>
+		<string>category</string>
 		<key>datatype</key>
 		<integer>4</integer>
 		<key>hint</key>
-		<string>OPTIONAL; Enter keywords separated by commas (&apos;,&apos;) to make your kollection easier to search for</string>
+		<string>Please choose a category for your kollection.</string>
 		<key>required</key>
 		<false/>
 	</dict>
@@ -92,9 +92,9 @@
 		<key>datatype</key>
 		<integer>3</integer>
 		<key>hint</key>
-		<string>OPTIONAL; Once your kollection has been created, your friends will be alerted on Facebook.</string>
+		<string>OPTIONAL; Once your kollection has been created, your friends will be alerted on Facebook.Touch the facebook icon to toggle sharing ON/OFF.</string>
 		<key>required</key>
-		<false/>
+		<true/>
 	</dict>
 </array>
 </plist>

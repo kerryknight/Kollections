@@ -43,6 +43,43 @@
 		C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
 		C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */; };
 		C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */; };
+		C74C9E7F16A6F86600207EF1 /* kkFacebookIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */; };
+		C74C9E8016A6F86600207EF1 /* kkFacebookIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */; };
+		C74C9E8116A6F86600207EF1 /* kkFacebookIconSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */; };
+		C74C9E8216A6F86600207EF1 /* kkFacebookIconSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7E16A6F86600207EF1 /* kkFacebookIconSelected@2x.png */; };
+		C74C9E8616A6F91800207EF1 /* KKSetupTableShareCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9E8416A6F91800207EF1 /* KKSetupTableShareCell.m */; };
+		C74C9E8716A6F91800207EF1 /* KKSetupTableShareCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E8516A6F91800207EF1 /* KKSetupTableShareCell.xib */; };
+		C74C9E9D16A71D7600207EF1 /* BlockActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9E9616A71D7600207EF1 /* BlockActionSheet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C74C9E9E16A71D7600207EF1 /* BlockAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9E9816A71D7600207EF1 /* BlockAlertView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C74C9E9F16A71D7600207EF1 /* BlockBackground.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9E9A16A71D7600207EF1 /* BlockBackground.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C74C9EA016A71D7600207EF1 /* BlockTextPromptAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9E9C16A71D7600207EF1 /* BlockTextPromptAlertView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C74C9EC016A71E5E00207EF1 /* action-black-button-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA316A71E5E00207EF1 /* action-black-button-selected.png */; };
+		C74C9EC116A71E5E00207EF1 /* action-black-button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA416A71E5E00207EF1 /* action-black-button-selected@2x.png */; };
+		C74C9EC216A71E5E00207EF1 /* action-black-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA516A71E5E00207EF1 /* action-black-button.png */; };
+		C74C9EC316A71E5E00207EF1 /* action-black-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA616A71E5E00207EF1 /* action-black-button@2x.png */; };
+		C74C9EC416A71E5E00207EF1 /* action-gray-button-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA716A71E5E00207EF1 /* action-gray-button-selected.png */; };
+		C74C9EC516A71E5E00207EF1 /* action-gray-button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA816A71E5E00207EF1 /* action-gray-button-selected@2x.png */; };
+		C74C9EC616A71E5E00207EF1 /* action-gray-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EA916A71E5E00207EF1 /* action-gray-button.png */; };
+		C74C9EC716A71E5E00207EF1 /* action-gray-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EAA16A71E5E00207EF1 /* action-gray-button@2x.png */; };
+		C74C9EC816A71E5E00207EF1 /* action-red-button-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EAB16A71E5E00207EF1 /* action-red-button-selected.png */; };
+		C74C9EC916A71E5E00207EF1 /* action-red-button-selected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EAC16A71E5E00207EF1 /* action-red-button-selected@2x.png */; };
+		C74C9ECA16A71E5E00207EF1 /* action-red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EAD16A71E5E00207EF1 /* action-red-button.png */; };
+		C74C9ECB16A71E5E00207EF1 /* action-red-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EAE16A71E5E00207EF1 /* action-red-button@2x.png */; };
+		C74C9ECC16A71E5E00207EF1 /* action-sheet-panel.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EAF16A71E5E00207EF1 /* action-sheet-panel.png */; };
+		C74C9ECD16A71E5E00207EF1 /* action-sheet-panel@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB016A71E5E00207EF1 /* action-sheet-panel@2x.png */; };
+		C74C9ECE16A71E5E00207EF1 /* alert-black-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB216A71E5E00207EF1 /* alert-black-button.png */; };
+		C74C9ECF16A71E5E00207EF1 /* alert-black-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB316A71E5E00207EF1 /* alert-black-button@2x.png */; };
+		C74C9ED016A71E5E00207EF1 /* alert-gray-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB416A71E5E00207EF1 /* alert-gray-button.png */; };
+		C74C9ED116A71E5E00207EF1 /* alert-gray-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB516A71E5E00207EF1 /* alert-gray-button@2x.png */; };
+		C74C9ED216A71E5E00207EF1 /* alert-red-button.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB616A71E5E00207EF1 /* alert-red-button.png */; };
+		C74C9ED316A71E5E00207EF1 /* alert-red-button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB716A71E5E00207EF1 /* alert-red-button@2x.png */; };
+		C74C9ED416A71E5E00207EF1 /* alert-window.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB816A71E5E00207EF1 /* alert-window.png */; };
+		C74C9ED516A71E5E00207EF1 /* alert-window@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EB916A71E5E00207EF1 /* alert-window@2x.png */; };
+		C74C9EEA16A7216100207EF1 /* KKSetupTableCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9EE816A7216100207EF1 /* KKSetupTableCategoryCell.m */; };
+		C74C9EEB16A7216100207EF1 /* KKSetupTableCategoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C74C9EE916A7216100207EF1 /* KKSetupTableCategoryCell.xib */; };
+		C74C9EF016A72A5600207EF1 /* BlockPickerActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = C74C9EEF16A72A5500207EF1 /* BlockPickerActionSheet.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C74C9F1716A78A0F00207EF1 /* actionSheet-picker-overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9F1516A78A0E00207EF1 /* actionSheet-picker-overlay.png */; };
+		C74C9F1816A78A0F00207EF1 /* actionSheet-picker-overlay@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9F1616A78A0F00207EF1 /* actionSheet-picker-overlay@2x.png */; };
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
@@ -549,6 +586,51 @@
 		C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableLongStringCell.h; sourceTree = "<group>"; };
 		C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableLongStringCell.m; sourceTree = "<group>"; };
 		C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableLongStringCell.xib; sourceTree = "<group>"; };
+		C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkFacebookIcon.png; sourceTree = "<group>"; };
+		C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkFacebookIcon@2x.png"; sourceTree = "<group>"; };
+		C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkFacebookIconSelected.png; sourceTree = "<group>"; };
+		C74C9E7E16A6F86600207EF1 /* kkFacebookIconSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkFacebookIconSelected@2x.png"; sourceTree = "<group>"; };
+		C74C9E8316A6F91800207EF1 /* KKSetupTableShareCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableShareCell.h; sourceTree = "<group>"; };
+		C74C9E8416A6F91800207EF1 /* KKSetupTableShareCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableShareCell.m; sourceTree = "<group>"; };
+		C74C9E8516A6F91800207EF1 /* KKSetupTableShareCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableShareCell.xib; sourceTree = "<group>"; };
+		C74C9E9516A71D7600207EF1 /* BlockActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockActionSheet.h; path = Alerts/BlockActionSheet.h; sourceTree = "<group>"; };
+		C74C9E9616A71D7600207EF1 /* BlockActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockActionSheet.m; path = Alerts/BlockActionSheet.m; sourceTree = "<group>"; };
+		C74C9E9716A71D7600207EF1 /* BlockAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockAlertView.h; path = Alerts/BlockAlertView.h; sourceTree = "<group>"; };
+		C74C9E9816A71D7600207EF1 /* BlockAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockAlertView.m; path = Alerts/BlockAlertView.m; sourceTree = "<group>"; };
+		C74C9E9916A71D7600207EF1 /* BlockBackground.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockBackground.h; path = Alerts/BlockBackground.h; sourceTree = "<group>"; };
+		C74C9E9A16A71D7600207EF1 /* BlockBackground.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockBackground.m; path = Alerts/BlockBackground.m; sourceTree = "<group>"; };
+		C74C9E9B16A71D7600207EF1 /* BlockTextPromptAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockTextPromptAlertView.h; path = Alerts/BlockTextPromptAlertView.h; sourceTree = "<group>"; };
+		C74C9E9C16A71D7600207EF1 /* BlockTextPromptAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockTextPromptAlertView.m; path = Alerts/BlockTextPromptAlertView.m; sourceTree = "<group>"; };
+		C74C9EA316A71E5E00207EF1 /* action-black-button-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-black-button-selected.png"; sourceTree = "<group>"; };
+		C74C9EA416A71E5E00207EF1 /* action-black-button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-black-button-selected@2x.png"; sourceTree = "<group>"; };
+		C74C9EA516A71E5E00207EF1 /* action-black-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-black-button.png"; sourceTree = "<group>"; };
+		C74C9EA616A71E5E00207EF1 /* action-black-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-black-button@2x.png"; sourceTree = "<group>"; };
+		C74C9EA716A71E5E00207EF1 /* action-gray-button-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-gray-button-selected.png"; sourceTree = "<group>"; };
+		C74C9EA816A71E5E00207EF1 /* action-gray-button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-gray-button-selected@2x.png"; sourceTree = "<group>"; };
+		C74C9EA916A71E5E00207EF1 /* action-gray-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-gray-button.png"; sourceTree = "<group>"; };
+		C74C9EAA16A71E5E00207EF1 /* action-gray-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-gray-button@2x.png"; sourceTree = "<group>"; };
+		C74C9EAB16A71E5E00207EF1 /* action-red-button-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-red-button-selected.png"; sourceTree = "<group>"; };
+		C74C9EAC16A71E5E00207EF1 /* action-red-button-selected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-red-button-selected@2x.png"; sourceTree = "<group>"; };
+		C74C9EAD16A71E5E00207EF1 /* action-red-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-red-button.png"; sourceTree = "<group>"; };
+		C74C9EAE16A71E5E00207EF1 /* action-red-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-red-button@2x.png"; sourceTree = "<group>"; };
+		C74C9EAF16A71E5E00207EF1 /* action-sheet-panel.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-sheet-panel.png"; sourceTree = "<group>"; };
+		C74C9EB016A71E5E00207EF1 /* action-sheet-panel@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "action-sheet-panel@2x.png"; sourceTree = "<group>"; };
+		C74C9EB216A71E5E00207EF1 /* alert-black-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-black-button.png"; sourceTree = "<group>"; };
+		C74C9EB316A71E5E00207EF1 /* alert-black-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-black-button@2x.png"; sourceTree = "<group>"; };
+		C74C9EB416A71E5E00207EF1 /* alert-gray-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-gray-button.png"; sourceTree = "<group>"; };
+		C74C9EB516A71E5E00207EF1 /* alert-gray-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-gray-button@2x.png"; sourceTree = "<group>"; };
+		C74C9EB616A71E5E00207EF1 /* alert-red-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red-button.png"; sourceTree = "<group>"; };
+		C74C9EB716A71E5E00207EF1 /* alert-red-button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-red-button@2x.png"; sourceTree = "<group>"; };
+		C74C9EB816A71E5E00207EF1 /* alert-window.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-window.png"; sourceTree = "<group>"; };
+		C74C9EB916A71E5E00207EF1 /* alert-window@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alert-window@2x.png"; sourceTree = "<group>"; };
+		C74C9EE116A71F9F00207EF1 /* BlockUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlockUI.h; sourceTree = "<group>"; };
+		C74C9EE716A7216100207EF1 /* KKSetupTableCategoryCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableCategoryCell.h; sourceTree = "<group>"; };
+		C74C9EE816A7216100207EF1 /* KKSetupTableCategoryCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableCategoryCell.m; sourceTree = "<group>"; };
+		C74C9EE916A7216100207EF1 /* KKSetupTableCategoryCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableCategoryCell.xib; sourceTree = "<group>"; };
+		C74C9EEE16A72A5500207EF1 /* BlockPickerActionSheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BlockPickerActionSheet.h; path = Alerts/BlockPickerActionSheet.h; sourceTree = "<group>"; };
+		C74C9EEF16A72A5500207EF1 /* BlockPickerActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BlockPickerActionSheet.m; path = Alerts/BlockPickerActionSheet.m; sourceTree = "<group>"; };
+		C74C9F1516A78A0E00207EF1 /* actionSheet-picker-overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "actionSheet-picker-overlay.png"; sourceTree = "<group>"; };
+		C74C9F1616A78A0F00207EF1 /* actionSheet-picker-overlay@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "actionSheet-picker-overlay@2x.png"; sourceTree = "<group>"; };
 		C75413D7169B4B650006853C /* KKMyAccountSummaryTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKMyAccountSummaryTableViewController.h; sourceTree = "<group>"; };
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
@@ -1143,6 +1225,9 @@
 			isa = PBXGroup;
 			children = (
 				C70054E116A4C2040018F7F7 /* Subjects Table */,
+				C74C9E8316A6F91800207EF1 /* KKSetupTableShareCell.h */,
+				C74C9E8416A6F91800207EF1 /* KKSetupTableShareCell.m */,
+				C74C9E8516A6F91800207EF1 /* KKSetupTableShareCell.xib */,
 				C70054D016A4992E0018F7F7 /* KKSetupTableNavigateCell.h */,
 				C70054D116A4992E0018F7F7 /* KKSetupTableNavigateCell.m */,
 				C70054D216A4992F0018F7F7 /* KKSetupTableNavigateCell.xib */,
@@ -1158,6 +1243,9 @@
 				C734812D16A0789E004AD6EB /* KKSetupTableBaseCell.h */,
 				C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */,
 				C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */,
+				C74C9EE716A7216100207EF1 /* KKSetupTableCategoryCell.h */,
+				C74C9EE816A7216100207EF1 /* KKSetupTableCategoryCell.m */,
+				C74C9EE916A7216100207EF1 /* KKSetupTableCategoryCell.xib */,
 			);
 			name = "Data Entry Cells";
 			sourceTree = "<group>";
@@ -1171,9 +1259,104 @@
 			name = "UI Classes";
 			sourceTree = "<group>";
 		};
+		C74C9E7916A6EFEE00207EF1 /* Subjects creation */ = {
+			isa = PBXGroup;
+			children = (
+				C70054EB16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.h */,
+				C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */,
+				C70054DE16A4BA8E0018F7F7 /* KKKollectionSubjectEditViewController.xib */,
+				C70054D916A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.h */,
+				C70054DA16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m */,
+			);
+			name = "Subjects creation";
+			sourceTree = "<group>";
+		};
+		C74C9E9316A71D4700207EF1 /* Alerts */ = {
+			isa = PBXGroup;
+			children = (
+				C74C9EE116A71F9F00207EF1 /* BlockUI.h */,
+				C74C9EA116A71E5E00207EF1 /* images */,
+				C74C9E9516A71D7600207EF1 /* BlockActionSheet.h */,
+				C74C9E9616A71D7600207EF1 /* BlockActionSheet.m */,
+				C74C9E9716A71D7600207EF1 /* BlockAlertView.h */,
+				C74C9E9816A71D7600207EF1 /* BlockAlertView.m */,
+				C74C9E9916A71D7600207EF1 /* BlockBackground.h */,
+				C74C9E9A16A71D7600207EF1 /* BlockBackground.m */,
+				C74C9E9B16A71D7600207EF1 /* BlockTextPromptAlertView.h */,
+				C74C9E9C16A71D7600207EF1 /* BlockTextPromptAlertView.m */,
+				C74C9EEE16A72A5500207EF1 /* BlockPickerActionSheet.h */,
+				C74C9EEF16A72A5500207EF1 /* BlockPickerActionSheet.m */,
+			);
+			name = Alerts;
+			sourceTree = "<group>";
+		};
+		C74C9E9416A71D5400207EF1 /* AnyPic views */ = {
+			isa = PBXGroup;
+			children = (
+				C7B1CEF116783C8500BA628A /* KKImageView.h */,
+				C7B1CEF216783C8500BA628A /* KKImageView.m */,
+				C7B1CEF316783C8500BA628A /* KKProfileImageView.h */,
+				C7B1CEF416783C8500BA628A /* KKProfileImageView.m */,
+				C7B1CEF516783C8500BA628A /* KKSettingsButtonItem.h */,
+				C7B1CEF616783C8500BA628A /* KKSettingsButtonItem.m */,
+			);
+			name = "AnyPic views";
+			sourceTree = "<group>";
+		};
+		C74C9EA116A71E5E00207EF1 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				C74C9EA216A71E5E00207EF1 /* ActionSheet */,
+				C74C9EB116A71E5E00207EF1 /* AlertView */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		C74C9EA216A71E5E00207EF1 /* ActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				C74C9F1516A78A0E00207EF1 /* actionSheet-picker-overlay.png */,
+				C74C9F1616A78A0F00207EF1 /* actionSheet-picker-overlay@2x.png */,
+				C74C9EA316A71E5E00207EF1 /* action-black-button-selected.png */,
+				C74C9EA416A71E5E00207EF1 /* action-black-button-selected@2x.png */,
+				C74C9EA516A71E5E00207EF1 /* action-black-button.png */,
+				C74C9EA616A71E5E00207EF1 /* action-black-button@2x.png */,
+				C74C9EA716A71E5E00207EF1 /* action-gray-button-selected.png */,
+				C74C9EA816A71E5E00207EF1 /* action-gray-button-selected@2x.png */,
+				C74C9EA916A71E5E00207EF1 /* action-gray-button.png */,
+				C74C9EAA16A71E5E00207EF1 /* action-gray-button@2x.png */,
+				C74C9EAB16A71E5E00207EF1 /* action-red-button-selected.png */,
+				C74C9EAC16A71E5E00207EF1 /* action-red-button-selected@2x.png */,
+				C74C9EAD16A71E5E00207EF1 /* action-red-button.png */,
+				C74C9EAE16A71E5E00207EF1 /* action-red-button@2x.png */,
+				C74C9EAF16A71E5E00207EF1 /* action-sheet-panel.png */,
+				C74C9EB016A71E5E00207EF1 /* action-sheet-panel@2x.png */,
+			);
+			path = ActionSheet;
+			sourceTree = "<group>";
+		};
+		C74C9EB116A71E5E00207EF1 /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				C74C9EB216A71E5E00207EF1 /* alert-black-button.png */,
+				C74C9EB316A71E5E00207EF1 /* alert-black-button@2x.png */,
+				C74C9EB416A71E5E00207EF1 /* alert-gray-button.png */,
+				C74C9EB516A71E5E00207EF1 /* alert-gray-button@2x.png */,
+				C74C9EB616A71E5E00207EF1 /* alert-red-button.png */,
+				C74C9EB716A71E5E00207EF1 /* alert-red-button@2x.png */,
+				C74C9EB816A71E5E00207EF1 /* alert-window.png */,
+				C74C9EB916A71E5E00207EF1 /* alert-window@2x.png */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
+				C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */,
+				C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */,
+				C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */,
+				C74C9E7E16A6F86600207EF1 /* kkFacebookIconSelected@2x.png */,
 				C70054D516A4A9980018F7F7 /* kkRowButtonDown.png */,
 				C70054D616A4A9980018F7F7 /* kkRowButtonDown@2x.png */,
 				C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */,
@@ -1204,20 +1387,16 @@
 			name = Kollectionbar;
 			sourceTree = "<group>";
 		};
-		C79DA180169E2787009C1CE7 /* Kollection */ = {
+		C79DA180169E2787009C1CE7 /* Kollection editing */ = {
 			isa = PBXGroup;
 			children = (
-				C70054EB16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.h */,
-				C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */,
-				C70054DE16A4BA8E0018F7F7 /* KKKollectionSubjectEditViewController.xib */,
-				C70054D916A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.h */,
-				C70054DA16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m */,
+				C74C9E7916A6EFEE00207EF1 /* Subjects creation */,
 				C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */,
 				C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */,
 				C72E42CB169E426100D0C182 /* KKCreateKollectionViewController.h */,
 				C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */,
 			);
-			name = Kollection;
+			name = "Kollection editing";
 			sourceTree = "<group>";
 		};
 		C7B1CD4116783C8500BA628A /* Classes */ = {
@@ -1239,7 +1418,7 @@
 		C7B1CD4C16783C8500BA628A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C79DA180169E2787009C1CE7 /* Kollection */,
+				C79DA180169E2787009C1CE7 /* Kollection editing */,
 				C79DA145169C9FDD009C1CE7 /* Custom Controls */,
 				C7B1CD5916783C8500BA628A /* Login */,
 				C7B1CD5016783C8500BA628A /* Home */,
@@ -1798,13 +1977,9 @@
 		C7B1CEF016783C8500BA628A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				C74C9E9416A71D5400207EF1 /* AnyPic views */,
+				C74C9E9316A71D4700207EF1 /* Alerts */,
 				C7BC60CA169775B1003C223B /* Buttons */,
-				C7B1CEF116783C8500BA628A /* KKImageView.h */,
-				C7B1CEF216783C8500BA628A /* KKImageView.m */,
-				C7B1CEF316783C8500BA628A /* KKProfileImageView.h */,
-				C7B1CEF416783C8500BA628A /* KKProfileImageView.m */,
-				C7B1CEF516783C8500BA628A /* KKSettingsButtonItem.h */,
-				C7B1CEF616783C8500BA628A /* KKSettingsButtonItem.m */,
 				C7B1CEF716783C8500BA628A /* Photo Details Views */,
 				C7B1CEFC16783C8500BA628A /* Timeline Views */,
 				C7B1CEFF16783C8500BA628A /* UITableViewCells */,
@@ -2547,6 +2722,36 @@
 				C70054D816A4A9980018F7F7 /* kkRowButtonDown@2x.png in Resources */,
 				C70054E016A4BA8E0018F7F7 /* KKKollectionSubjectEditViewController.xib in Resources */,
 				C70054E616A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib in Resources */,
+				C74C9E7F16A6F86600207EF1 /* kkFacebookIcon.png in Resources */,
+				C74C9E8016A6F86600207EF1 /* kkFacebookIcon@2x.png in Resources */,
+				C74C9E8116A6F86600207EF1 /* kkFacebookIconSelected.png in Resources */,
+				C74C9E8216A6F86600207EF1 /* kkFacebookIconSelected@2x.png in Resources */,
+				C74C9E8716A6F91800207EF1 /* KKSetupTableShareCell.xib in Resources */,
+				C74C9EC016A71E5E00207EF1 /* action-black-button-selected.png in Resources */,
+				C74C9EC116A71E5E00207EF1 /* action-black-button-selected@2x.png in Resources */,
+				C74C9EC216A71E5E00207EF1 /* action-black-button.png in Resources */,
+				C74C9EC316A71E5E00207EF1 /* action-black-button@2x.png in Resources */,
+				C74C9EC416A71E5E00207EF1 /* action-gray-button-selected.png in Resources */,
+				C74C9EC516A71E5E00207EF1 /* action-gray-button-selected@2x.png in Resources */,
+				C74C9EC616A71E5E00207EF1 /* action-gray-button.png in Resources */,
+				C74C9EC716A71E5E00207EF1 /* action-gray-button@2x.png in Resources */,
+				C74C9EC816A71E5E00207EF1 /* action-red-button-selected.png in Resources */,
+				C74C9EC916A71E5E00207EF1 /* action-red-button-selected@2x.png in Resources */,
+				C74C9ECA16A71E5E00207EF1 /* action-red-button.png in Resources */,
+				C74C9ECB16A71E5E00207EF1 /* action-red-button@2x.png in Resources */,
+				C74C9ECC16A71E5E00207EF1 /* action-sheet-panel.png in Resources */,
+				C74C9ECD16A71E5E00207EF1 /* action-sheet-panel@2x.png in Resources */,
+				C74C9ECE16A71E5E00207EF1 /* alert-black-button.png in Resources */,
+				C74C9ECF16A71E5E00207EF1 /* alert-black-button@2x.png in Resources */,
+				C74C9ED016A71E5E00207EF1 /* alert-gray-button.png in Resources */,
+				C74C9ED116A71E5E00207EF1 /* alert-gray-button@2x.png in Resources */,
+				C74C9ED216A71E5E00207EF1 /* alert-red-button.png in Resources */,
+				C74C9ED316A71E5E00207EF1 /* alert-red-button@2x.png in Resources */,
+				C74C9ED416A71E5E00207EF1 /* alert-window.png in Resources */,
+				C74C9ED516A71E5E00207EF1 /* alert-window@2x.png in Resources */,
+				C74C9EEB16A7216100207EF1 /* KKSetupTableCategoryCell.xib in Resources */,
+				C74C9F1716A78A0F00207EF1 /* actionSheet-picker-overlay.png in Resources */,
+				C74C9F1816A78A0F00207EF1 /* actionSheet-picker-overlay@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2656,6 +2861,13 @@
 				C70054DB16A4B3730018F7F7 /* KKKollectionSubjectsTableViewController.m in Sources */,
 				C70054E516A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m in Sources */,
 				C70054ED16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m in Sources */,
+				C74C9E8616A6F91800207EF1 /* KKSetupTableShareCell.m in Sources */,
+				C74C9E9D16A71D7600207EF1 /* BlockActionSheet.m in Sources */,
+				C74C9E9E16A71D7600207EF1 /* BlockAlertView.m in Sources */,
+				C74C9E9F16A71D7600207EF1 /* BlockBackground.m in Sources */,
+				C74C9EA016A71D7600207EF1 /* BlockTextPromptAlertView.m in Sources */,
+				C74C9EEA16A7216100207EF1 /* KKSetupTableCategoryCell.m in Sources */,
+				C74C9EF016A72A5600207EF1 /* BlockPickerActionSheet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

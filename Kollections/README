@@ -16,9 +16,9 @@ TO DO APP
 - Attributed strings in SignUpViewController linking to UIWebView of TOS and Privacy policy on www.startakollection.com
 - Redo Log in button in another color? Top two corners are pixelated
 - Make the collectionview side-scrolling toolbar size dynamically based on length of string titles, instead of constant width for each item
-- load/add photo if logged in with Parse and not FB
 - update the UI for adding comments below a photo
-
+- when creating a kollection, successfully share to FB if toggle turned on
+- create FB objects for sharing a new kollection
 
 __________________________________________________________________
 TO DO CLOUD CODE

@@ -88,7 +88,7 @@
 
 #pragma mark - KKKollectionSetupTableViewController delegate
 - (void)pushSubjectsViewControllerWithKollection:(PFObject *)kollection {
-    NSLog(@"%s %@", __FUNCTION__, kollection);
+//    NSLog(@"%s %@", __FUNCTION__, kollection);
     
     KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
     //extract subject list from the kollection and set it as a property

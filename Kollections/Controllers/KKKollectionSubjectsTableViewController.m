@@ -123,7 +123,7 @@
 }
 
 - (void)doneButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userData = @{kKKKollectionSubjectsKey : self.subjects};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupTableViewControllerSubjectListUpdated" object:nil userInfo:userData];
     [self.navigationController popViewControllerAnimated:YES];

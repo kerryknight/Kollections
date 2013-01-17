@@ -332,7 +332,7 @@
 //    
 //    return query;
     
-    //KAK remove this below once i get the table set up to work with my graphics and uncomment lines above to properly query
+    //UPDATE KAK remove this below once i get the table set up to work with my graphics and uncomment lines above to properly query
     PFQuery *query = [PFQuery queryWithClassName:self.className];
     [query setLimit:0];
     return query;

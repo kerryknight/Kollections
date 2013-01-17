@@ -18,7 +18,7 @@ typedef enum {
     KKKollectionSetupCellDataTypeToggle,
     KKKollectionSetupCellDataTypeString,
     KKKollectionSetupCellDataTypeShare,
-    KKKollectionSetupCellDataTypeKeywords,
+    KKKollectionSetupCellDataTypeCategory,
     KKKollectionSetupCellDataTypePhoto,
     KKKollectionSetupCellDataTypeLongString,
     KKKollectionSetupCellDataTypeSegment,
@@ -45,4 +45,9 @@ typedef enum {
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
 - (void)dismissView;
+
+//alert methods
+- (IBAction)showAlert:(id)sender;
+- (IBAction)showActionSheet:(id)sender;
+
 @end
