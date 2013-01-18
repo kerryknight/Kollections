@@ -365,6 +365,9 @@
         //we want to view an existing kollection
     }
     
+    //tell the super class of the table we just pushed in what type of kollection we're working with so it can format accordingly
+    NSDictionary *info = @{@"type" : [NSNumber numberWithBool:yesOrNo]};
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupTableViewControllerSetTypeOfKollection" object:nil userInfo:info];
 }
 
 #pragma mark - Custom Methods

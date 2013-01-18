@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    KKKollectionSetupTypeNew = 0,
-    KKKollectionSetupTypeEdit
+    KKKollectionSetupTypeEdit = 0,
+    KKKollectionSetupTypeNew
 } KKKollectionSetupType;
 
 typedef enum {
@@ -31,7 +31,7 @@ typedef enum {
 @optional
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)setupTableViewDismissAnyKeyboard;
-- (void)pushSubjectsViewControllerWithKollection:(PFObject*)kollection;
+- (void)pushSubjectsViewControllerWithKollection:(NSArray*)subjectList;
 @end
 
 @interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate> {
@@ -42,6 +42,7 @@ typedef enum {
 @property (nonatomic, assign) KKKollectionSetupType kollectionSetupType;//used to set table based on new/existing kollection
 @property (nonatomic, assign) KKKollectionSetupCellDataType cellDataType;//used to dynamically load cells based on input values
 @property (nonatomic, strong) NSMutableArray *tableObjects;
+@property (nonatomic, strong, readonly) PFObject *kollection; //it's readonly here but we make it read/write in .m for ourselves
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
 - (void)dismissView;

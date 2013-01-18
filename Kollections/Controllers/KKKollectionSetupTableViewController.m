@@ -19,12 +19,14 @@
 #import "KKSetupTableNumberCell.h"
 #import "KKSetupTableNavigateCell.h"
 #import "KKSetupTableCategoryCell.h"
+#import "KKSetupTablePhotoCell.h"
 
 @interface KKKollectionSetupTableViewController () {
     BOOL shouldShareNewKollectionToFacebook;
 }
 /// The kollection displayed in the view; redeclare so we can edit locally
 @property (nonatomic, strong, readwrite) PFObject *kollection;
+@property (nonatomic, strong) NSMutableArray *subjects;
 @end
 
 @implementation KKKollectionSetupTableViewController
@@ -37,6 +39,9 @@
     }
     return self;
 }
+
+#define kKollectionCoverPhotoImageViewTag   100
+#define kKollectionCoverPhotoButtonTag      101
 
 - (void)viewDidLoad {
 //    NSLog(@"%s", __FUNCTION__);
@@ -57,12 +62,12 @@
     
     self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
     
-    //initialize kollections
-    self.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
-    
     //add notifications
     //this notification is called whenever a user edits a kollection and then adds/updates the subjects array for that kollection
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectListUpdated:) name:@"SetupTableViewControllerSubjectListUpdated" object:nil];
+    
+    //this notification is used to set what type of kollection we're editing, new or existing
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTypeOfKollection:) name:@"SetupTableViewControllerSetTypeOfKollection" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -74,6 +79,7 @@
 - (void)dealloc {
 //    NSLog(@"%s", __FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SetupTableViewControllerSubjectListUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SetupTableViewControllerSetTypeOfKollection" object:nil];
 }
 
 #define kSETUP_SAVE_NEW_KOLLECTION @"Save Kollection"
@@ -97,6 +103,8 @@
         BOOL infoIsGood = [self isRequiredInfoFilledIn];
         
         if (!infoIsGood) {
+            // Remove hud
+            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
             return;//exit without continuing if we still need to fill stuff in
         }
         
@@ -112,8 +120,25 @@
         
         [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
-                //save succeeded
-                NSLog(@"save succeeded; dismiss view");
+                NSLog(@"kollection save succeeded; dismiss view");
+                //kollection save succeeded
+                
+                //now, check if we just created a new kollection or were editing and existing one
+                //if a new kollection, we'll need to save any subjects we created; if it's an existing kollection,
+                //we will have already saved our subjects from within the subjectListUpdated: method
+                if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
+                    //it's a new kollection so save any subjects we may have created
+                    //so now set our newly acquired kollection's id for each of our subjects
+                    for (PFObject *subject in self.subjects) {
+                        [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
+                    }
+                    
+                    //save all our subjects at once in the background
+                    if([self.subjects count])[PFObject saveAllInBackground:self.subjects];
+                } else {
+                    //existing kollection, subjects already saved
+                }
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
             } else {
                 NSString *message = [NSString stringWithFormat:@"%@", error];
@@ -128,20 +153,19 @@
             // Remove hud
             [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
         }];
-        
     }
 }
 
 - (BOOL)isRequiredInfoFilledIn {
     //check if we've set a category, exit if not
-    if (!self.kollection[kKKKollectionCategoryKey]) {
-        alertMessage(@"Please select a category for your kollection.");
+    if (!self.kollection[kKKKollectionTitleKey]) {
+        alertMessage(@"Please enter a title for your kollection.");
         return NO;
     }
     
     //check if we've set a category, exit if not
-    if (!self.kollection[kKKKollectionTitleKey]) {
-        alertMessage(@"Please enter a title for your kollection.");
+    if (!self.kollection[kKKKollectionCategoryKey]) {
+        alertMessage(@"Please select a category for your kollection.");
         return NO;
     }
     
@@ -188,8 +212,68 @@
 - (void)subjectListUpdated:(NSNotification*)notification {
 //    NSLog(@"%s\n", __FUNCTION__);
     NSDictionary *notificationInfo = [notification userInfo];
-    self.kollection[kKKKollectionSubjectsKey] = notificationInfo[kKKKollectionSubjectsKey];
+    self.subjects = notificationInfo[@"subjects"];
+    if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
+        NSLog(@"new kollection so don't save subjects till we save kollection");
+        //don't save our subjects until we save our new kollection so we'll have a kollection object to point to
+        
+    } else {
+        //we can go ahead and save our subjects in the background since we have a kollection id
+        NSLog(@"need to save subjects in the background here");
+        [PFObject saveAllInBackground:self.subjects block:^(BOOL succeeded, NSError *error) {
+            if (error) {
+                //our subjects failed to save
+                NSLog(@"error saving subjects in background");
+            }
+        }];
+    }
+    
     [self.tableView reloadData];
+}
+
+- (void)setTypeOfKollection:(NSNotification*)notification {
+    //    NSLog(@"%s\n", __FUNCTION__);
+    NSDictionary *notificationInfo = [notification userInfo];
+    self.kollectionSetupType = [notificationInfo[@"type"] boolValue];//kollectionSetupType used to differentiate certain table functions
+    [self.tableView reloadData];
+    NSLog(@"kollection type = %i", self.kollectionSetupType);
+    
+    if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
+        //UPDATE
+        //need to query for the kollection's subjects here to populate the subject's cell text field
+        NSLog(@"Need to query for the kollection's subjects and then set self.subjects = to the returned objects and reload data");
+    } else {
+        //initialize kollection
+        self.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
+    }
+}
+
+- (void)loadCoverPhoto:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
+    KKSetupTablePhotoCell *cell = (KKSetupTablePhotoCell*)sender;
+    
+    //retrieve the kollection's cover pic to insert into cell
+    PFFile *imageFile = [self.kollection objectForKey:kKKKollectionCoverPhotoKey];
+    if (imageFile) {
+        [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] setFile:imageFile];
+        [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] loadInBackground:^(UIImage *image, NSError *error) {
+            
+            if (!error) {
+                [UIView animateWithDuration:0.200f animations:^{
+                    [cell.contentView viewWithTag:101].alpha = 1.0f;//load the photo into the imageview
+                    //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
+//                    [(UIButton*)[cell.contentView viewWithTag:kKollectionCoverPhotoButtonTag] setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoDown.png"] forState:UIControlEventTouchDown];
+                    [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionCoverPhotoOverlayButtonDown.png"] forState:UIControlEventTouchDown];
+                }];
+            }
+        }];
+    } else {
+        NSLog(@"no image file for cover photo");
+    }
+}
+
+- (void)selectCoverPhoto:(id)sender{
+    NSLog(@"%s", __FUNCTION__);
 }
 
 #pragma mark - AlertView and ActionSheet methods
@@ -362,6 +446,7 @@
         //use default
     } else if (datatype == KKKollectionSetupCellDataTypePhoto) {
         //choose photo
+        defaultRowHeight = 110.0f;
     } else if (datatype == KKKollectionSetupCellDataTypeLongString) {
         //enter long string
         defaultRowHeight = 128.0f;
@@ -670,6 +755,41 @@
 #pragma mark Photo Cell
         } else if (datatype == KKKollectionSetupCellDataTypePhoto) {
             //choose photo
+            static NSString *CustomCellIdentifier = @"KKSetupTablePhotoCell";
+            
+            KKSetupTablePhotoCell *cell = (KKSetupTablePhotoCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
+            
+            if (cell == nil) {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"KKSetupTablePhotoCell" owner:self options:nil];
+                for (id oneObject in nib)
+                    if ([oneObject isKindOfClass:[KKSetupTablePhotoCell class]])
+                        cell = (KKSetupTablePhotoCell *)oneObject;
+                [cell formatCell];//tell it to format itself
+                cell.headerLabel.text = self.tableObjects[indexPath.row - 1][@"question"]; //subtract 1 to account for header row
+                cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
+                
+                
+                //add image view to hold the user's profile pic
+                PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(cell.photoButton.frame.origin.x,
+                                                                                                 cell.photoButton.frame.origin.y,
+                                                                                                 99.0f, 67.0f)];
+                coverPhotoImageView.tag = kKollectionCoverPhotoImageViewTag;
+                [cell.contentView addSubview:coverPhotoImageView];
+                [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
+                CALayer *layer = [coverPhotoImageView layer];
+                layer.masksToBounds = YES;
+                coverPhotoImageView.alpha = 0.0f;
+                
+                //load our cover photo if we have one
+                [self loadCoverPhoto:cell];
+                
+                cell.photoButton.tag = kKollectionCoverPhotoButtonTag;
+                [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionNoCoverPhotoButtonDown.png"] forState:UIControlEventTouchDown];
+                [cell.photoButton addTarget:self action:@selector(selectCoverPhoto:) forControlEvents:UIControlEventTouchUpInside];
+            }
+                        
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
 #pragma mark Long String Cell
         } else if (datatype == KKKollectionSetupCellDataTypeLongString) {
             //enter long string
@@ -778,22 +898,19 @@
                 [cell.rowButton addTarget:self action:@selector(goToSubjectsList:) forControlEvents:UIControlEventTouchUpInside];
             }
             
-            //fill in entry label text from kollection property if available, if not, check for historical response
-            NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
-            if ([self.kollection objectForKey:columnName]) {
-                NSMutableArray *kollectionSubjects = [NSMutableArray new];
-                //enumerate over all dict objects to extract the subject titles into a single array to the comma separate them
-                for (NSDictionary *subject in (NSArray*)[self.kollection objectForKey:columnName]) {
+            //fill in entry label text with a list of subjects
+            if (self.subjects) {
+                NSMutableArray *kollectionSubjectTitles = [NSMutableArray new];
+                //enumerate over all objects to extract the subject titles into a single array to then comma separate them
+                for (PFObject *subject in self.subjects) {
                     NSString *titleString = (NSString*)[subject objectForKey:kKKKollectionTitleKey];
-                    [kollectionSubjects addObject:titleString];
+                    [kollectionSubjectTitles addObject:titleString];
                 }
                 
-                NSString *subjectList = [kollectionSubjects componentsJoinedByString:@", "];
+                NSString *subjectList = [kollectionSubjectTitles componentsJoinedByString:@", "];
                 cell.entryField.text = subjectList;
-            } else if([(NSString*)self.tableObjects[indexPath.row - 1][@"response"] length] > 0){
-                cell.entryField.text = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];
             }
-            
+        
             //Get label height
             NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
             CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
@@ -833,7 +950,7 @@
 - (void)goToSubjectsList:(id)sender {
 //    NSLog(@"%s %@", __FUNCTION__, self.kollection);
     //tell the delegate to navigate to the subjects list so we can edit it
-    [self.delegate pushSubjectsViewControllerWithKollection:self.kollection];
+    [self.delegate pushSubjectsViewControllerWithKollection:self.subjects];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {

@@ -137,13 +137,13 @@
 
 - (void)fillInData {
     //make sure we have a subject to fill stuff in with
-    if ([self.subject count]) {
-        if (self.subject[kKKKollectionSubjectTitleKey])self.titleField.text = self.subject[kKKKollectionSubjectTitleKey];
-        if (self.subject[kKKKollectionSubjectDescriptionKey])self.descriptionField.text = self.subject[kKKKollectionSubjectDescriptionKey];
-        if (self.subject[kKKKollectionSubjectPayoutKey])self.payoutField.text = self.subject[kKKKollectionSubjectPayoutKey];
+    if (self.subject) {
+        if (self.subject[kKKKollectionTitleKey])self.titleField.text = self.subject[kKKKollectionTitleKey];
+        if (self.subject[kKKKollectionDescriptionKey])self.descriptionField.text = self.subject[kKKKollectionDescriptionKey];
+        if (self.subject[kKKKollectionPayoutKey])self.payoutField.text = [self.subject[kKKKollectionPayoutKey] stringValue];
     } else {
         //no subject set or it's a new subject
-        self.subject = [[NSMutableDictionary alloc] initWithCapacity:3];//there are 3 fields we're concerned with
+        self.subject = [PFObject objectWithClassName:kKKSubjectClassKey];//there are 3 fields we're concerned with
     }
     
     if ([self.descriptionField.text isEqualToString:@"100-character limit"]) {
@@ -160,12 +160,12 @@
     }
     
     //set all the subject values in it's dictionary
-    self.subject[kKKKollectionSubjectTitleKey] = self.titleField.text;
-    self.subject[kKKKollectionSubjectPayoutKey] = self.payoutField.text;
+    self.subject[kKKKollectionTitleKey] = self.titleField.text;
+    self.subject[kKKKollectionPayoutKey] = [NSNumber numberWithInt:[self.payoutField.text intValue]];
     if ([self.descriptionField.text isEqualToString:@"100-character limit"]) {
-        self.subject[kKKKollectionSubjectDescriptionKey] = @"";
+        self.subject[kKKKollectionDescriptionKey] = @"";
     } else {
-        self.subject[kKKKollectionSubjectDescriptionKey] = self.descriptionField.text;
+        self.subject[kKKKollectionDescriptionKey] = self.descriptionField.text;
     }
     
     return YES;
@@ -262,9 +262,9 @@
     NSString *textFieldtext = textField.text;
     
     if (textField == self.titleField) {
-        [self.subject setObject:textFieldtext forKey:kKKKollectionSubjectTitleKey];
+        [self.subject setObject:textFieldtext forKey:kKKSubjectTitleKey];
     } else if (textField == self.payoutField) {
-        [self.subject setObject:textFieldtext forKey:kKKKollectionSubjectPayoutKey];
+        [self.subject setObject:textFieldtext forKey:kKKSubjectPayoutKey];
     }
     
 }
@@ -371,7 +371,7 @@
         textViewtext = [textViewtext substringWithRange:range];
     }
     
-    [self.subject setObject:textViewtext forKey:kKKKollectionSubjectDescriptionKey];
+    [self.subject setObject:textViewtext forKey:kKKSubjectDescriptionKey];
     
 }
 

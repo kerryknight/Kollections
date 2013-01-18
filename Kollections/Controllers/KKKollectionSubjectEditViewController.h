@@ -12,14 +12,14 @@
 
 @protocol KKKollectionSubjectEditViewControllerDelegate <NSObject>
 @optional
-- (void)subjectEditViewControllerDidSubmitSubject:(NSMutableDictionary*)subject;
+- (void)subjectEditViewControllerDidSubmitSubject:(PFObject*)subject;
 @end
 
 @interface KKKollectionSubjectEditViewController : UIViewController <UIScrollViewDelegate, UITextViewDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate> {
 }
 
 @property (nonatomic, strong) id<KKKollectionSubjectEditViewControllerDelegate> delegate;
-@property (nonatomic, strong) NSMutableDictionary *subject;
+@property (nonatomic, strong) PFObject *subject;
 @property (weak, nonatomic) IBOutlet UIImageView *divider;
 @property (weak, nonatomic) IBOutlet SlightIndentTextField *titleField;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionField;

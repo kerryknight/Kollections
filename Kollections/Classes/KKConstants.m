@@ -61,11 +61,9 @@ NSString *const kKKKollectionClassKey = @"Kollection";
 NSString *const kKKKollectionUserKey = @"user";
 NSString *const kKKKollectionTitleKey = @"title";
 NSString *const kKKKollectionCategoryKey = @"category";
-NSString *const kKKKollectionSubjectsKey = @"subjects";
 NSString *const kKKKollectionPayoutKey = @"payout";
-NSString *const kKKKollectionSubjectTitleKey = @"title";
-NSString *const kKKKollectionSubjectDescriptionKey = @"description";
-NSString *const kKKKollectionSubjectPayoutKey = @"payout";
+NSString *const kKKKollectionDescriptionKey = @"description";
+NSString *const kKKKollectionCoverPhotoKey = @"coverPhotoMedium";
 
 // Type values
 
@@ -106,15 +104,24 @@ NSString *const kKKPhotoClassKey = @"Photo";
 NSString *const kKKPhotoPictureKey         = @"image";
 NSString *const kKKPhotoThumbnailKey       = @"thumbnail";
 NSString *const kKKPhotoUserKey            = @"user";
-NSString *const kKKPhotoOpenGraphIDKey    = @"fbOpenGraphID";
+NSString *const kKKPhotoOpenGraphIDKey     = @"fbOpenGraphID";
 
-#pragma mark - PFObject Category Class
+#pragma mark - Category Class
 // Class key
-NSString *const kKKCategoryClassKey         = @"Category";
+NSString *const kKKCategoryClassKey        = @"Category";
 
 // Field keys
-NSString *const kKKCategoryTitleKey         = @"title";
-NSString *const kKKCategoryObjectIdKey      = @"objectId";
+NSString *const kKKCategoryTitleKey        = @"title";
+
+#pragma mark - Subject Class
+// Class key
+NSString *const kKKSubjectClassKey         = @"Subject";
+
+// Field keys
+NSString *const kKKSubjectTitleKey         = @"title";
+NSString *const kKKSubjectDescriptionKey   = @"description";
+NSString *const kKKSubjectPayoutKey        = @"payout";
+NSString *const kKKSubjectKollectionKey    = @"kollection";
 
 #pragma mark - Cached Photo Attributes
 // keys

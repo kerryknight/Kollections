@@ -1,0 +1,292 @@
+*************************************** OBJECTS ***************************************
+----- General PFObject Save -----
+PFObject *gameScore = [PFObject objectWithClassName:@"GameScore"];
+[gameScore setObject:[NSNumber numberWithInt:1337] forKey:@"score"];
+[gameScore setObject:@"Sean Plott" forKey:@"playerName"];
+[gameScore setObject:[NSNumber numberWithBool:NO] forKey:@"cheatMode"];
+[gameScore save];  //or better yet: [gameScore saveInBackground];
+
+----- General Query for an Object -----
+PFQuery *query = [PFQuery queryWithClassName:@"GameScore"];
+PFObject *gameScore = [query getObjectWithId:@"xWMyZ4YEGZ"];
+
+----- Retrieve PFObject special properties -----
+NSString *objectId = gameScore.objectId;
+NSDate *updatedAt = gameScore.updatedAt;
+NSDate *createdAt = gameScore.createdAt;
+
+----- Refresh object you already have -----
+[myObject refresh]
+
+----- Atomically increment a field by 2 -----
+[gameScore incrementKey:@"score" byAmount:2];
+[gameScore saveInBackground];
+
+----- One-to-many relationship -----
+// Create the post
+PFObject *myPost = [PFObject objectWithClassName:@"Post"];
+[myPost setObject:@"I'm Hungry" forKey:@"title"];
+[myPost setObject:@"Where should we go for lunch?" forKey:@"content"];
+ 
+// Create the comment
+PFObject *myComment = [PFObject objectWithClassName:@"Comment"];
+[myComment setObject:@"Let's do Sushirrito." forKey:@"content"];
+ 
+// Add a relation between the Post and Comment
+[myComment setObject:myPost forKey:@"parent"];
+ 
+// This will save both myPost and myComment
+[myComment saveInBackground];
+
+----- Set ACL -----
+PFACL *subjectACL = [PFACL ACLWithUser:[PFUser currentUser]];
+[subjectACL setPublicReadAccess:YES];//only creator can modify
+[subject setACL:subjectACL];
+
+----- Query for multiple related objects, i.e. "WHERE this = that" -----
+PFQuery *subjectQuery = [PFQuery queryWithClassName:@"Subject"];
+[subjectQuery whereKey:@"kollection" equalTo:self.kollection];
+
+//run the query
+[subjectQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+    if(!error){
+       self.subjectArray = objects;
+       [self.tableView reloadData];
+    }
+}];
+
+----- Retrieve PFObject from array in tableview -----
+PFObject *subject = [self.subjectArray objectAtIndex:indexPath.row];
+[cell.textLabel.text = [subject objectForKey:@"title"];
+
+----- Fetch PFObject as needed -----
+PFObject *kollection = [subject objectForKey:@"kollection"];
+[kollection fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+  NSString *title = [kollection objectForKey:@"title"];
+}];
+
+----- Add a PFRelation -----
+PFUser *user = [PFUser currentUser];
+PFRelation *relation = [user relationforKey:@"likes"];
+[relation addObject:photo];
+[user saveInBackground];
+
+----- Remove object from PFRelation -----
+[relation removeObject:photo];
+
+----- Query for all objects in PFRelation -----
+[[relation query] findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+  if (error) {
+     // There was an error
+  } else {
+    // objects has all the Photos the current user liked.
+  }
+}];
+
+----- Add contstraints to PFRelation's PFQuery -----
+PFQuery *query = [relation query];
+// Add other query constraints.
+
+
+*************************************** QUERIES ***************************************
+----- Filter out specific value -----
+[query whereKey:@"playerName" notEqualTo:@"Michael Yabuti"];
+
+----- Multiple Constraints, like an 'AND' clause -----
+[query whereKey:@"playerName" notEqualTo:@"Michael Yabuti"];
+[query whereKey:@"playerAge" greaterThan:[NSNumber numberWithInt:18]];
+
+----- Query limit -----
+query.limit = 10;
+
+----- Exactly One Result (the first one) -----
+[query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+  if (!object) {
+    NSLog(@"The getFirstObject request failed.");
+  } else {
+    // The find succeeded.
+    NSLog(@"Successfully retrieved the object.");
+  }
+}];
+
+----- Skipping the first n results -----
+query.skip = 10; // skip the first 10 results
+
+----- Conditional queries -----
+// Restricts to wins < 50
+[query whereKey:@"wins" lessThan:[NSNumber numberWithInt:50]];
+ 
+// Restricts to wins <= 50
+[query whereKey:@"wins" lessThanOrEqualTo:[NSNumber numberWithInt:50]]; 
+ 
+// Restricts to wins > 50
+[query whereKey:@"wins" greaterThan:[NSNumber numberWithInt:50]];
+ 
+// Restricts to wins >= 50
+[query whereKey:@"wins" greaterThanOrEqualTo:[NSNumber numberWithInt:50]];
+
+----- Retrieve objects matching several values -----
+// Finds scores from any of Jonathan, Dario, or Shawn
+NSArray *names = [NSArray arrayWithObjects:@"Jonathan Walsh",
+                                           @"Dario Wunsch",
+                                           @"Shawn Simon",
+                                           nil];
+[query whereKey:@"playerName" containedIn:names];//use notContainedIn: to exlude the values from query
+
+----- Retrieve object with/without a particular key set -----
+// Finds objects that have the score set
+[query whereKeyExists:@"score"];
+ 
+// Finds objects that don't have the score set
+[query whereKeyDoesNotExist:@"score"];
+
+----- Use one query to match values in another query -----
+PFQuery *teamQuery = [PFQuery queryWithClassName:@"Team"];
+[teamQuery whereKey:@"winPct" greaterThan:[NSNumber withDouble:0.5]];
+PFQuery *userQuery = [PFQuery queryForUser];
+[userQuery whereKey:@"hometown" matchesKey:@"city" inQuery:teamQuery]; //use doesNotMatchKey: for exclusions
+[userQuery findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+    // results will contain users with a hometown team with a winning record
+}];
+
+----- Find objects with array objects containing a value -----
+// Find objects where the array in arrayKey contains 2.
+[query whereKey:@"arrayKey" equalTo:[NSNumber numberWithInt:2]];
+
+----- MySQL 'LIKE' queries or searches of string values -----
+// Finds barbecue sauces that start with "Big Daddy's".
+PFQuery *query = [PFQuery queryWithClassName:@"BarbecueSauce"];
+[query whereKey:@"name" hasPrefix:@"Big Daddy's"];
+
+----- Retrieve objects where a field contains an object that matches a different query -----
+PFQuery *innerQuery = [PFQuery queryWithClassName:@"Post"];
+[innerQuery whereKeyExists:@"image"];
+PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+[query whereKey:@"post" matchesQuery:innerQuery]; //use doesNotMatchQuery: for exclusions
+[query findObjectsInBackgroundWithBlock:^(NSArray *comments, NSError *error) {
+    // comments now contains the comments for posts with images
+}];
+
+----- Return multiple types of related objects in one query -----
+PFQuery *query = [PFQuery queryWithClassName:@"Comment"];
+ 
+// Retrieve the most recent ones
+[query orderByDescending:@"createdAt"];
+ 
+// Only retrieve the last ten
+query.limit = [NSNumber numberWithInt:10];
+ 
+// Include the post data with each comment
+[query includeKey:@"post"];
+ 
+[query findObjectsInBackgroundWithBlock:^(NSArray *comments, NSError *error) {
+    // Comments now contains the last ten comments, and the "post" field
+    // has been populated. For example:
+    for (PFObject *comment in comments) {
+         // This does not require a network access.
+         PFObject *post = [comment objectForKey:@"post"];
+         NSLog(@"retrieved related post: %@", post);
+    }
+}];
+
+----- Query caching: try network and then fall back to cached data -----
+PFQuery *query = [PFQuery queryWithClassName:@"GameScore"];
+query.cachePolicy = kPFCachePolicyNetworkElseCache;
+[query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+  if (!error) {
+    // Results were successfully found, looking first on the
+    // network and then on disk.
+  } else {
+    // The network was inaccessible and we have no cached data for
+    // this query.
+  }
+}];
+
+----- Check if cached result for a query -----
+BOOL isInCache = [query hasCachedResult];
+
+----- Count Objects (limited to 1000 objects or less) -----
+PFQuery *query = [PFQuery queryWithClassName:@"GameScore"];
+[query whereKey:@"playername" equalTo:@"Sean Plott"];
+[query countObjectsInBackgroundWithBlock:^(int count, NSError *error) {
+  if (!error) {
+    // The count request succeeded. Log the count
+    NSLog(@"Sean has played %d games", count);
+  } else {
+    // The request failed
+  }
+}];
+
+----- Compound Queries -----
+PFQuery *lotsOfWins = [PFQuery queryWithClassName:@"Player"];
+[lotsOfWins whereKey:@"wins" greaterThan:[NSNumber numberWithInt:150]];
+ 
+PFQuery *fewWins = [PFQuery queryWithClassName:@"Player"];
+[fewWins whereKey:@"wins" lessThan:[NSNumber numberWithInt:5]];
+PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:fewWins,lotsOfWins,nil]];
+[query findObjectsInBackgroundWithBlock:^(NSArray *results, NSError *error) {
+  // results contains players with lots of wins or only a few wins.
+  }];
+
+*************************************** FILES ***************************************
+----- Retrieve PFFile -----
+PFFile *applicantResume = [anotherApplication objectForKey:@"applicantResumeFile"];
+NSData *resumeData = [applicantResume getData];//this isn't the backgrounded version of the method
+
+----- Track Progress of Uploads/Downloads -----
+NSData *data = [@"Working at Parse is great!" dataUsingEncoding:NSUTF8StringEncoding];
+PFFile *file = [PFFile fileWithName:@"resume.txt" data:data];
+[file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+  // Handle success or failure here ...
+} progressBlock:^(int percentDone) {
+  // Update your progress spinner here. percentDone will be between 0 and 100.
+}];
+
+*************************************** ACLs (access control list) ***************************************
+----- Private object only accessible to creator -----
+PFObject *privateNote = [PFObject objectWithClassName:@"Note"];
+[privateNote setObject:@"This note is private!" forKey:@"content"];
+privateNote.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+[privateNote saveInBackground];
+
+----- Set read/write access to multiple users -----
+PFObject *groupMessage = [PFObject objectWithClassName:@"Message"];
+PFACL *groupACL = [PFACL ACL];
+     
+// userList is an NSArray with the users we are sending this message to.
+for (PFUser *user in userList) {
+    [groupACL setReadAccess:YES forUser:user];
+    [groupACL setWriteAccess:YES forUser:user];
+}
+ 
+groupMessage.ACL = groupACL;
+[groupMessage saveInBackground];
+
+----- Set Public Read but Private Write -----
+PFObject *publicPost = [PFObject objectWithClassName:@"Post"];
+PFACL *postACL = [PFACL ACLWithUser:[PFUser currentUser]];
+[postACL setPublicReadAccess:YES];
+publicPost.ACL = postACL;
+[publicPost saveInBackground];
+
+----- Set a default ACL for newly created objects -----
+//content is generally visible to the world like in twitter
+PFACL *defaultACL = [PFACL ACL];
+[defaultACL setPublicReadAccess:YES];
+[PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
+
+//content only accessible to user without explicit permission, like dropbox
+[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:YES];
+
+//content logged to parse but no user access at all
+[PFACL setDefaultACL:[PFACL ACL] withAccessForCurrentUser:NO];
+
+*************************************** USERS ***************************************
+----- Query for users (requires special user query) -----
+PFQuery *query = [PFUser query];
+[query whereKey:@"gender" equalTo:@"female"]; // find all the women
+NSArray *girls = [query findObjects];
+
+----- Snippet -----
+
+----- Snippet -----

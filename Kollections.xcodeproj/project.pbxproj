@@ -471,6 +471,14 @@
 		C7B1D0B416783E6000BA628A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */; };
 		C7B1D0B616783E6B00BA628A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B516783E6B00BA628A /* CFNetwork.framework */; };
 		C7B1D37216783F4D00BA628A /* README in Resources */ = {isa = PBXBuildFile; fileRef = C7B1D37116783F4D00BA628A /* README */; };
+		C7B4AE8016A8E70700C77C48 /* KKSetupTablePhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B4AE7E16A8E70700C77C48 /* KKSetupTablePhotoCell.m */; };
+		C7B4AE8116A8E70700C77C48 /* KKSetupTablePhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE7F16A8E70700C77C48 /* KKSetupTablePhotoCell.xib */; };
+		C7B4AE8816A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8216A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png */; };
+		C7B4AE8916A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8316A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown@2x.png */; };
+		C7B4AE8A16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8416A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown.png */; };
+		C7B4AE8B16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8516A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown@2x.png */; };
+		C7B4AE8C16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8616A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp.png */; };
+		C7B4AE8D16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8716A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp@2x.png */; };
 		C7BC60C4169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BC60C2169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png */; };
 		C7BC60C5169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C7BC60C3169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png */; };
 		C7BC60C916977569003C223B /* KKToolbarButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C7BC60C816977569003C223B /* KKToolbarButton.m */; };
@@ -1059,6 +1067,16 @@
 		C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C7B1D0B516783E6B00BA628A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C7B1D37116783F4D00BA628A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		C7B4AE7A16A8977600C77C48 /* Parse Snippets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Parse Snippets"; sourceTree = "<group>"; };
+		C7B4AE7D16A8E70700C77C48 /* KKSetupTablePhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTablePhotoCell.h; sourceTree = "<group>"; };
+		C7B4AE7E16A8E70700C77C48 /* KKSetupTablePhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTablePhotoCell.m; sourceTree = "<group>"; };
+		C7B4AE7F16A8E70700C77C48 /* KKSetupTablePhotoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTablePhotoCell.xib; sourceTree = "<group>"; };
+		C7B4AE8216A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkKollectionCoverPhotoOverlayButtonDown.png; sourceTree = "<group>"; };
+		C7B4AE8316A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkKollectionCoverPhotoOverlayButtonDown@2x.png"; sourceTree = "<group>"; };
+		C7B4AE8416A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkKollectionNoCoverPhotoButtonDown.png; sourceTree = "<group>"; };
+		C7B4AE8516A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkKollectionNoCoverPhotoButtonDown@2x.png"; sourceTree = "<group>"; };
+		C7B4AE8616A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkKollectionNoCoverPhotoButtonUp.png; sourceTree = "<group>"; };
+		C7B4AE8716A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkKollectionNoCoverPhotoButtonUp@2x.png"; sourceTree = "<group>"; };
 		C7BC60C2169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderUserPhotoPlaceholderDown.png; sourceTree = "<group>"; };
 		C7BC60C3169765C4003C223B /* kkHeaderUserPhotoPlaceholderDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderUserPhotoPlaceholderDown@2x.png"; sourceTree = "<group>"; };
 		C7BC60C716977569003C223B /* KKToolbarButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKToolbarButton.h; path = Kollections/Views/Buttons/KKToolbarButton.h; sourceTree = SOURCE_ROOT; };
@@ -1246,6 +1264,9 @@
 				C74C9EE716A7216100207EF1 /* KKSetupTableCategoryCell.h */,
 				C74C9EE816A7216100207EF1 /* KKSetupTableCategoryCell.m */,
 				C74C9EE916A7216100207EF1 /* KKSetupTableCategoryCell.xib */,
+				C7B4AE7D16A8E70700C77C48 /* KKSetupTablePhotoCell.h */,
+				C7B4AE7E16A8E70700C77C48 /* KKSetupTablePhotoCell.m */,
+				C7B4AE7F16A8E70700C77C48 /* KKSetupTablePhotoCell.xib */,
 			);
 			name = "Data Entry Cells";
 			sourceTree = "<group>";
@@ -1353,6 +1374,12 @@
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
+				C7B4AE8216A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png */,
+				C7B4AE8316A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown@2x.png */,
+				C7B4AE8416A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown.png */,
+				C7B4AE8516A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown@2x.png */,
+				C7B4AE8616A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp.png */,
+				C7B4AE8716A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp@2x.png */,
 				C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */,
 				C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */,
 				C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */,
@@ -2226,6 +2253,7 @@
 			isa = PBXGroup;
 			children = (
 				C7B1D37116783F4D00BA628A /* README */,
+				C7B4AE7A16A8977600C77C48 /* Parse Snippets */,
 				C7B1CD4116783C8500BA628A /* Classes */,
 				C7B1CEF016783C8500BA628A /* Views */,
 				C7B1CD4C16783C8500BA628A /* Controllers */,
@@ -2752,6 +2780,13 @@
 				C74C9EEB16A7216100207EF1 /* KKSetupTableCategoryCell.xib in Resources */,
 				C74C9F1716A78A0F00207EF1 /* actionSheet-picker-overlay.png in Resources */,
 				C74C9F1816A78A0F00207EF1 /* actionSheet-picker-overlay@2x.png in Resources */,
+				C7B4AE8116A8E70700C77C48 /* KKSetupTablePhotoCell.xib in Resources */,
+				C7B4AE8816A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png in Resources */,
+				C7B4AE8916A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown@2x.png in Resources */,
+				C7B4AE8A16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown.png in Resources */,
+				C7B4AE8B16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown@2x.png in Resources */,
+				C7B4AE8C16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp.png in Resources */,
+				C7B4AE8D16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2868,6 +2903,7 @@
 				C74C9EA016A71D7600207EF1 /* BlockTextPromptAlertView.m in Sources */,
 				C74C9EEA16A7216100207EF1 /* KKSetupTableCategoryCell.m in Sources */,
 				C74C9EF016A72A5600207EF1 /* BlockPickerActionSheet.m in Sources */,
+				C7B4AE8016A8E70700C77C48 /* KKSetupTablePhotoCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

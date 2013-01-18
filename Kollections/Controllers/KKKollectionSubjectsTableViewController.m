@@ -103,7 +103,7 @@
 
     KKKollectionSubjectEditViewController *subjectsEditTableVC = [[KKKollectionSubjectEditViewController alloc] init];
     subjectsEditTableVC.delegate = self;
-    subjectsEditTableVC.subject = (NSMutableDictionary*)self.subjects[indexPath.row - 1];
+    subjectsEditTableVC.subject = (PFObject*)self.subjects[indexPath.row - 1];
     selectedSubjectIndex = indexPath.row - 1; //we'll use this index to update the array later
     
     [self.navigationController pushViewController:subjectsEditTableVC animated:YES];
@@ -124,7 +124,7 @@
 
 - (void)doneButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    NSDictionary *userData = @{kKKKollectionSubjectsKey : self.subjects};
+    NSDictionary *userData = @{@"subjects" : self.subjects};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupTableViewControllerSubjectListUpdated" object:nil userInfo:userData];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -135,7 +135,7 @@
 }
 
 #pragma mark - KKKollectionSubjectEditViewController delegate
-- (void)subjectEditViewControllerDidSubmitSubject:(NSMutableDictionary*)subject {
+- (void)subjectEditViewControllerDidSubmitSubject:(PFObject*)subject {
     
     if (selectedSubjectIndex < [self.subjects count]) {
         //we were editing an existing subject so replace the existing object with our updated one
@@ -324,19 +324,19 @@
             [cell.rowButton addTarget:self action:@selector(editSubject:) forControlEvents:UIControlEventTouchUpInside];
         }
         
-        cell.headerLabel.text = self.subjects[indexPath.row - 1][kKKKollectionSubjectTitleKey]; //subtract 1 to account for header row
+        cell.headerLabel.text = self.subjects[indexPath.row - 1][kKKSubjectTitleKey]; //subtract 1 to account for header row
         //determine if we have a description to display
-        if ([self.subjects[indexPath.row - 1][kKKKollectionSubjectDescriptionKey] length]) {
-            cell.descriptionLabel.text = self.subjects[indexPath.row - 1][kKKKollectionSubjectDescriptionKey]; //subtract 1 to account for header row
+        if ([self.subjects[indexPath.row - 1][kKKSubjectDescriptionKey] length]) {
+            cell.descriptionLabel.text = self.subjects[indexPath.row - 1][kKKSubjectDescriptionKey]; //subtract 1 to account for header row
         } else {
             //nothing to show
             cell.descriptionLabel.text = @"No description entered";
         }
         
         //determine what the payout is; first, check if we have an individual payout for a subject. if not, default to overall kollection's payout
-        if ([self.subjects[indexPath.row - 1][kKKKollectionSubjectPayoutKey] length]) {
+        if (self.subjects[indexPath.row - 1][kKKSubjectPayoutKey] > 0) {
             //we have an individual payout
-            cell.koinsLabel.text = [NSString stringWithFormat:@"K: %@", self.subjects[indexPath.row - 1][kKKKollectionSubjectPayoutKey]]; //subtract 1 to account for header row
+            cell.koinsLabel.text = [NSString stringWithFormat:@"K: %i", [self.subjects[indexPath.row - 1][kKKSubjectPayoutKey] intValue]]; //subtract 1 to account for header row
         } else {
             //set to 0
             cell.koinsLabel.text = @"K: Default";

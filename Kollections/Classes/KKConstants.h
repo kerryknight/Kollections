@@ -100,11 +100,9 @@ extern NSString *const kKKKollectionClassKey;
 extern NSString *const kKKKollectionTitleKey;
 extern NSString *const kKKKollectionUserKey;
 extern NSString *const kKKKollectionCategoryKey;
-extern NSString *const kKKKollectionSubjectsKey;
 extern NSString *const kKKKollectionPayoutKey;
-extern NSString *const kKKKollectionSubjectTitleKey;
-extern NSString *const kKKKollectionSubjectDescriptionKey;
-extern NSString *const kKKKollectionSubjectPayoutKey;
+extern NSString *const kKKKollectionDescriptionKey;
+extern NSString *const kKKKollectionCoverPhotoKey;
 
 // Type values
 
@@ -157,6 +155,16 @@ extern NSString *const kKKCategoryClassKey;
 // Field keys
 extern NSString *const kKKCategoryTitleKey;
 extern NSString *const kKKCategoryObjectIdKey;
+
+#pragma mark - PFObject Subject Class
+// Class key
+extern NSString *const kKKSubjectClassKey;
+
+// Field keys
+extern NSString *const kKKSubjectTitleKey;
+extern NSString *const kKKSubjectDescriptionKey;
+extern NSString *const kKKSubjectPayoutKey;
+extern NSString *const kKKSubjectKollectionKey;
 
 
 #pragma mark - Cached Photo Attributes
