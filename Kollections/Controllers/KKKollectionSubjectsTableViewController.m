@@ -125,7 +125,7 @@
 - (void)doneButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userData = @{@"subjects" : self.subjects};
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupTableViewControllerSubjectListUpdated" object:nil userInfo:userData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil userInfo:userData];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

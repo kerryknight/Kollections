@@ -8,10 +8,17 @@
 
 #import "KKTabBarController.h"
 
+//used to differentiate between regular photos for posting and simply adding a profile pic
+typedef enum {
+    KKTabBarControllerPhotoTypeRegularPhoto = 0,
+    KKTabBarControllerPhotoTypeProfilePhoto,
+    KKTabBarControllerPhotoTypeKollectionPhoto
+} KKTabBarControllerPhotoType;
+
 @interface KKTabBarController () {
-    BOOL isProfilePhotoAction;//used to differentiate between regular photos for posting and simply adding a profile pic
 }
 @property (nonatomic,strong) UINavigationController *navController;
+@property (nonatomic, assign) KKTabBarControllerPhotoType photoType;//used to determine how to process the photo
 @end
 
 @implementation KKTabBarController
@@ -30,11 +37,14 @@
     [KKUtility addBottomDropShadowToNavigationBarForNavigationController:self.navController];
     
     //add notifications
+    //these are the same notification but with different names so we can process the photos slightly differently
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoCaptureButtonAction:) name:@"profilePhotoCaptureButtonAction" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoCaptureButtonAction:) name:@"kollectionPhotoCaptureButtonAction" object:nil];
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"profilePhotoCaptureButtonAction" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"kollectionPhotoCaptureButtonAction" object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -65,7 +75,6 @@
     [cameraButton addGestureRecognizer:swipeUpGestureRecognizer];
 }
 
-
 #pragma mark - UIImagePickerDelegate
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -73,6 +82,7 @@
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+//    NSLog(@"%s", __FUNCTION__);
     [self dismissModalViewControllerAnimated:NO];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
@@ -82,7 +92,7 @@
     
     //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo
     //uploads the same as regular uploads which could get added as submissions, etc.
-    viewController.isProfilePhoto = isProfilePhotoAction;
+    viewController.photoType = self.photoType;
     
     [self.navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self.navController pushViewController:viewController animated:NO];
@@ -116,12 +126,14 @@
 #pragma mark - ()
 
 - (void)photoCaptureButtonAction:(id)sender {
-    
+//    NSLog(@"%s", __FUNCTION__);
     //check who the sender is to make sure we don't upload a photo per usual if we're just trying to add a profile picture
     if ([sender respondsToSelector:@selector(name)] && [[sender name] isEqualToString:@"profilePhotoCaptureButtonAction"]) {
-        isProfilePhotoAction = YES;
+        self.photoType = KKTabBarControllerPhotoTypeProfilePhoto;
+    } else if ([sender respondsToSelector:@selector(name)] && [[sender name] isEqualToString:@"kollectionPhotoCaptureButtonAction"]) {
+        self.photoType = KKTabBarControllerPhotoTypeKollectionPhoto;
     } else {
-        isProfilePhotoAction = NO; //this denotes a regular photo submission and not a profile photo
+        self.photoType = KKTabBarControllerPhotoTypeRegularPhoto; //this denotes a regular photo submission and not a profile photo
     }
     
     BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];

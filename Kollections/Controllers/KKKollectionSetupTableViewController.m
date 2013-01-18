@@ -11,6 +11,7 @@
 #import "KKConstants.h"
 #import "BlockAlertView.h"
 #import "BlockPickerActionSheet.h"
+#import "UIImage+ResizeAdditions.h"
 //custom cells
 #import "KKSetupTableShareCell.h"
 #import "KKSetupTableBaseCell.h"
@@ -27,6 +28,9 @@
 /// The kollection displayed in the view; redeclare so we can edit locally
 @property (nonatomic, strong, readwrite) PFObject *kollection;
 @property (nonatomic, strong) NSMutableArray *subjects;
+@property (nonatomic, strong) PFFile *kollectionCoverPhotoMedium;
+@property (nonatomic, strong) PFFile *kollectionCoverPhotoThumbnail;
+@property (nonatomic, strong) NSIndexPath *coverPhotoCellIndexPath;
 @end
 
 @implementation KKKollectionSetupTableViewController
@@ -64,10 +68,14 @@
     
     //add notifications
     //this notification is called whenever a user edits a kollection and then adds/updates the subjects array for that kollection
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectListUpdated:) name:@"SetupTableViewControllerSubjectListUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectListUpdated:) name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
     
     //this notification is used to set what type of kollection we're editing, new or existing
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTypeOfKollection:) name:@"SetupTableViewControllerSetTypeOfKollection" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTypeOfKollection:) name:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil];
+    
+    //this notification is used to to process any new kollection cover photo we might have as we don't want to automatically upload any of these
+    //type of photos when we select them; only when we save the new kollection or have already saved it and are working on an existing kollection
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processCoverPhoto:) name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -78,8 +86,9 @@
 
 - (void)dealloc {
 //    NSLog(@"%s", __FUNCTION__);
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SetupTableViewControllerSubjectListUpdated" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"SetupTableViewControllerSetTypeOfKollection" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
 }
 
 #define kSETUP_SAVE_NEW_KOLLECTION @"Save Kollection"
@@ -88,7 +97,7 @@
 - (void)submit:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
     //dismiss any keyboard
-    [self.view endEditing:YES];
+    [self dismissKeyboardAndResetTableContentInset];
     
     UIButton *button = (UIButton*)sender;
     if ([button.titleLabel.text isEqualToString:kSETUP_SAVE_NEW_KOLLECTION]) {
@@ -177,7 +186,9 @@
 }
 
 - (IBAction)segmentedControlSegmentChosen:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
+    [self dismissKeyboardAndResetTableContentInset];//in case keyboard is still showing
+    
     //get the cell that was touched
     UISegmentedControl *segmentBar = sender;
     KKSetupTableSegmentCell *cell = (KKSetupTableSegmentCell*)[[segmentBar superview] superview];
@@ -214,12 +225,10 @@
     NSDictionary *notificationInfo = [notification userInfo];
     self.subjects = notificationInfo[@"subjects"];
     if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
-        NSLog(@"new kollection so don't save subjects till we save kollection");
         //don't save our subjects until we save our new kollection so we'll have a kollection object to point to
         
     } else {
         //we can go ahead and save our subjects in the background since we have a kollection id
-        NSLog(@"need to save subjects in the background here");
         [PFObject saveAllInBackground:self.subjects block:^(BOOL succeeded, NSError *error) {
             if (error) {
                 //our subjects failed to save
@@ -232,7 +241,7 @@
 }
 
 - (void)setTypeOfKollection:(NSNotification*)notification {
-    //    NSLog(@"%s\n", __FUNCTION__);
+    NSLog(@"%s\n", __FUNCTION__);
     NSDictionary *notificationInfo = [notification userInfo];
     self.kollectionSetupType = [notificationInfo[@"type"] boolValue];//kollectionSetupType used to differentiate certain table functions
     [self.tableView reloadData];
@@ -249,36 +258,114 @@
 }
 
 - (void)loadCoverPhoto:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
-    KKSetupTablePhotoCell *cell = (KKSetupTablePhotoCell*)sender;
+//    NSLog(@"%s", __FUNCTION__);
+    
+    KKSetupTablePhotoCell *cell;
+    if (sender) {
+        //we have a sender, meaning we already have a cover photo to load
+        cell = (KKSetupTablePhotoCell*)sender;
+    } else {
+        //we'll have to use out table's index path for the cell to get it; this happens when we don't already have a cover photo, perhaps like for a new kollection
+        cell = (KKSetupTablePhotoCell*)[self.tableView cellForRowAtIndexPath:self.coverPhotoCellIndexPath];
+    }
     
     //retrieve the kollection's cover pic to insert into cell
-    PFFile *imageFile = [self.kollection objectForKey:kKKKollectionCoverPhotoKey];
+    PFFile *imageFile = self.kollection[kKKKollectionCoverPhotoThumbnailKey];
     if (imageFile) {
-        [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] setFile:imageFile];
-        [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] loadInBackground:^(UIImage *image, NSError *error) {
-            
-            if (!error) {
-                [UIView animateWithDuration:0.200f animations:^{
-                    [cell.contentView viewWithTag:101].alpha = 1.0f;//load the photo into the imageview
-                    //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
-//                    [(UIButton*)[cell.contentView viewWithTag:kKollectionCoverPhotoButtonTag] setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoDown.png"] forState:UIControlEventTouchDown];
-                    [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionCoverPhotoOverlayButtonDown.png"] forState:UIControlEventTouchDown];
-                }];
-            }
-        }];
+        if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
+            [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] setFile:imageFile];
+            //wait till we load the photo from the server
+            [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] loadInBackground:^(UIImage *image, NSError *error) {
+                if (!error) {
+                    [UIView animateWithDuration:0.200f animations:^{
+                        [cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag].alpha = 1.0f;//load the photo into the imageview
+                        //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
+                        [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionCoverPhotoOverlayButtonDown.png"] forState:UIControlEventTouchDown];
+                    }];
+                } else {
+                    NSLog(@"error loading photo into image = %@", error);
+                }
+            }];
+        } else {
+            //it's a new kollection so assume we'll be able to save the photo appropriately when we save the kollection so just show it
+            [UIView animateWithDuration:0.200f animations:^{
+                NSData *imageData = [imageFile getData];
+                UIImage *photo = [UIImage imageWithData:imageData];
+                [(UIImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] setImage:photo];
+                [cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag].alpha = 1.0f;//load the photo into the imageview
+                [cell.contentView bringSubviewToFront:[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag]];
+                //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
+                [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionCoverPhotoOverlayButtonDown.png"] forState:UIControlEventTouchDown];
+            }];
+        }
     } else {
         NSLog(@"no image file for cover photo");
     }
 }
 
+- (void)processCoverPhoto:(NSNotification *)notification {
+//    NSLog(@"%s", __FUNCTION__);
+    NSDictionary *data = notification.userInfo;
+    
+    //get the image from the passed in user info dictionary
+    UIImage *coverImage = (UIImage*)data[kKKKollectionCoverPhotoKey];
+    
+    //create a regular size and thumbnail size version
+    UIImage *mediumImage = [coverImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(640.0f, 421.0f) interpolationQuality:kCGInterpolationHigh];//[coverImage thumbnailImage:640 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh]; //need 640 x 427
+    UIImage *smallImage = [coverImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(198.0f, 136.0f) interpolationQuality:kCGInterpolationDefault];//[coverImage thumbnailImage:198 transparentBorder:0 cornerRadius:9 interpolationQuality:kCGInterpolationLow]; //need 198 x 168
+    
+    //transform images to NSData so we can turn them into PFFiles
+    NSData *mediumImageData = UIImageJPEGRepresentation(mediumImage, 0.5); // using JPEG for larger pictures
+    NSData *smallImageData = UIImageJPEGRepresentation(smallImage, 0.5);// UIImagePNGRepresentation(smallRoundedImage);
+    
+    //check to ensure we have proper image data to upload
+    //we're doing this as a check to make sure we can alert the user if uploading a profile pic fails
+    if (!mediumImageData || !smallImageData) {
+        return;
+    }
+    
+    //we have data, so set our PFFile properties accordingly
+    if (mediumImageData.length > 0) self.kollectionCoverPhotoMedium = [PFFile fileWithData:mediumImageData];
+    if (smallImageData.length > 0) self.kollectionCoverPhotoThumbnail = [PFFile fileWithData:smallImageData];
+    
+    //set our photos in our kollection object
+    [self setKollectionObjectPhotoProperties];
+    
+    //check what type of kollection we're editing; if it's a pre-existing one, we can go ahead and save the photo; if it's a new kollection, we'll wait until we save the whole kollection
+    if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
+        //don't save our photos until we save our new kollection so we'll have a kollection object to point to
+        //go ahead and load the photo assuming it'll save properly later
+        [self loadCoverPhoto:nil];
+    } else {
+        //we can go ahead and save our photos in the background since we have a kollection id
+        //this will give us a head start on the upload; should the upload fail, as long as the user hits "Save" on the setup view, the save will attempt again since this property will be "dirty" 
+        [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            if (!error) {
+                //success, now we can load it
+                //load the cover photo into our uiimageview now that we've successfully saved it
+                [self loadCoverPhoto:nil];
+            }
+        }];
+    }
+}
+
+- (void)setKollectionObjectPhotoProperties {
+//    NSLog(@"%s", __FUNCTION__);
+    if(self.kollectionCoverPhotoMedium) self.kollection[kKKKollectionCoverPhotoKey] = self.kollectionCoverPhotoMedium;
+    if(self.kollectionCoverPhotoThumbnail) self.kollection[kKKKollectionCoverPhotoThumbnailKey] = self.kollectionCoverPhotoThumbnail;
+}
+
 - (void)selectCoverPhoto:(id)sender{
-    NSLog(@"%s", __FUNCTION__);
+    [self dismissKeyboardAndResetTableContentInset];//in case keyboard is still showing
+//    NSLog(@"%s", __FUNCTION__);
+    //send a notification to the tab bar controller to load the camera or photo picker view as appropriate
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"kollectionPhotoCaptureButtonAction" object:sender];
 }
 
 #pragma mark - AlertView and ActionSheet methods
 - (void)queryParseForCategoryList {
 //    NSLog(@"%s\n", __FUNCTION__);
+    [self dismissKeyboardAndResetTableContentInset];//in case keyboard is still showing
     //put up a spinner to prevent further progress until our query is finished as we can't show the picker view until
     //we have our list of categories to show and we don't want the user doing anything else once they kick off the query
     // Show HUD view
@@ -375,6 +462,11 @@
 }
 
 #pragma mark - Table view delegate
+- (void)dismissKeyboardAndResetTableContentInset{
+    [self.view endEditing:YES];
+    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
+}
+
 - (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
 //    NSLog(@"%s %0.0f", __FUNCTION__, bottomInset);
     CGPoint correctedPoint;
@@ -388,7 +480,6 @@
     }
     
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, bottomInset, 0.0f);
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
@@ -769,16 +860,34 @@
                 cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
                 
                 
-                //add image view to hold the user's profile pic
-                PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(cell.photoButton.frame.origin.x,
-                                                                                                 cell.photoButton.frame.origin.y,
-                                                                                                 99.0f, 67.0f)];
-                coverPhotoImageView.tag = kKollectionCoverPhotoImageViewTag;
-                [cell.contentView addSubview:coverPhotoImageView];
-                [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
-                CALayer *layer = [coverPhotoImageView layer];
-                layer.masksToBounds = YES;
-                coverPhotoImageView.alpha = 0.0f;
+                //add a PF image view to hold the user's kollection pic if an existing kollection
+                //we do this check b/c for new kollections, we want to be able to display the image right away, before
+                //the kollection is saved; however, PFImageViews only display their images after
+                //they've successfully loaded from the server
+                
+                if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
+                    //new kollections use a regular UIImageView
+                    UIImageView *coverPhotoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(cell.photoButton.frame.origin.x + 2,
+                                                                                                     cell.photoButton.frame.origin.y + 2,
+                                                                                                     95.0f, 64.3f)];
+                    coverPhotoImageView.tag = kKollectionCoverPhotoImageViewTag;
+                    [cell.contentView addSubview:coverPhotoImageView];
+                    [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
+                    CALayer *layer = [coverPhotoImageView layer];
+                    layer.masksToBounds = YES;
+                    coverPhotoImageView.alpha = 0.0f;
+                } else {
+                    //existing kollections use a PFImageView so i'll load lazily
+                    PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(cell.photoButton.frame.origin.x + 2,
+                                                                                                     cell.photoButton.frame.origin.y + 2,
+                                                                                                     95.0f, 64.3f)];
+                    coverPhotoImageView.tag = kKollectionCoverPhotoImageViewTag;
+                    [cell.contentView addSubview:coverPhotoImageView];
+                    [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
+                    CALayer *layer = [coverPhotoImageView layer];
+                    layer.masksToBounds = YES;
+                    coverPhotoImageView.alpha = 0.0f;
+                }
                 
                 //load our cover photo if we have one
                 [self loadCoverPhoto:cell];
@@ -786,8 +895,11 @@
                 cell.photoButton.tag = kKollectionCoverPhotoButtonTag;
                 [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionNoCoverPhotoButtonDown.png"] forState:UIControlEventTouchDown];
                 [cell.photoButton addTarget:self action:@selector(selectCoverPhoto:) forControlEvents:UIControlEventTouchUpInside];
+                
+                //track what our indexpath is so we can load our cover photo into our cell
+                self.coverPhotoCellIndexPath = indexPath;
             }
-                        
+            
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
 #pragma mark Long String Cell
@@ -949,6 +1061,7 @@
 
 - (void)goToSubjectsList:(id)sender {
 //    NSLog(@"%s %@", __FUNCTION__, self.kollection);
+    [self dismissKeyboardAndResetTableContentInset];//in case a keyboard is showing
     //tell the delegate to navigate to the subjects list so we can edit it
     [self.delegate pushSubjectsViewControllerWithKollection:self.subjects];
 }
@@ -996,6 +1109,7 @@
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+//    NSLog(@"%s", __FUNCTION__);
     if ([[[textField superview] superview] isKindOfClass:[KKSetupTableNumberCell class]]) {
         NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
         if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
@@ -1009,7 +1123,7 @@
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-    
+//    NSLog(@"%s", __FUNCTION__);
     if ([[[textField superview] superview] isKindOfClass:[KKSetupTableNumberCell class]]) {
         //set what the placeholder string should be
         NSString *stringPlaceholder = @"";
@@ -1089,12 +1203,12 @@
         return NO; // return NO to not exit field
     }
     
-//    [self scrollTableFromSender:textView withInset:0.0f];
     [textView resignFirstResponder];
     return YES;
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+//    NSLog(@"%s", __FUNCTION__);
 //    NSLog(@"textView super view class = %@", [[[textView superview] superview]class]);
     //check our cell type to determine our character limits
     NSUInteger stringLimit;

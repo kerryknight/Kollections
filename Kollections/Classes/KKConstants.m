@@ -64,6 +64,7 @@ NSString *const kKKKollectionCategoryKey = @"category";
 NSString *const kKKKollectionPayoutKey = @"payout";
 NSString *const kKKKollectionDescriptionKey = @"description";
 NSString *const kKKKollectionCoverPhotoKey = @"coverPhotoMedium";
+NSString *const kKKKollectionCoverPhotoThumbnailKey = @"coverPhotoThumbnail";
 
 // Type values
 

@@ -268,7 +268,7 @@
     
     switch (selectedIndex) {
         case KKMyAccountHeaderToolItemKollections:
-            NSLog(@"Kollections touched");
+//            NSLog(@"Kollections touched");
             sections = @[@"My Public Kollections",
                          @"My Private Kollections",
                          @"Subscribed Public Kollections",
@@ -367,12 +367,12 @@
     
     //tell the super class of the table we just pushed in what type of kollection we're working with so it can format accordingly
     NSDictionary *info = @{@"type" : [NSNumber numberWithBool:yesOrNo]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"SetupTableViewControllerSetTypeOfKollection" object:nil userInfo:info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil userInfo:info];
 }
 
 #pragma mark - Custom Methods
 - (void)loadProfilePhoto:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     self.user = [PFUser currentUser];//reset the self.user since we should've updated the currentUser with the new profile pic
     //retrieve the user's profile pic to insert
     PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
@@ -391,6 +391,7 @@
 }
 
 - (void)profilePhotoButtonAction:(id)sender {
+    NSLog(@"%s", __FUNCTION__);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePhotoCaptureButtonAction" object:sender];
 }
 

@@ -111,15 +111,15 @@
                     //check if display name is equal to the additional field; if not, save it that way
                     if ([[_user objectForKey:kKKUserAdditionalKey] isEqualToString:[_user objectForKey:kKKUserDisplayNameKey]]) {
                         //names are equal
-                        NSLog(@"display names are equal");
+//                        NSLog(@"display names are equal");
                     } else {
                         //names not equal
-                        NSLog(@"display names are not equal, so attempt to save");
+//                        NSLog(@"display names are not equal, so attempt to save");
                         [_user setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
                         [_user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                             if (!error) {
                                 //success so can update UI appropriately now
-                                NSLog(@"saved displayName successfully");
+//                                NSLog(@"saved displayName successfully");
                                 //in lieu of making an ADDITIONAL query to Parse for what we just set, go ahead and set it locally to display name
                                 [[PFUser currentUser] setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
                             } else {

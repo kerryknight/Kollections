@@ -103,6 +103,8 @@ extern NSString *const kKKKollectionCategoryKey;
 extern NSString *const kKKKollectionPayoutKey;
 extern NSString *const kKKKollectionDescriptionKey;
 extern NSString *const kKKKollectionCoverPhotoKey;
+extern NSString *const kKKKollectionCoverPhotoThumbnailKey;
+
 
 // Type values
 

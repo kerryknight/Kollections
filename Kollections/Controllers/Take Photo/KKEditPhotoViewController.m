@@ -15,11 +15,13 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) UITextField *commentTextField;
+@property (nonatomic, strong) UIImage *kollectionImage;
 @property (nonatomic, strong) PFFile *photoFile;
 @property (nonatomic, strong) PFFile *thumbnailFile;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier fileUploadBackgroundTaskId;
 @property (nonatomic, assign) UIBackgroundTaskIdentifier photoPostBackgroundTaskId;
 @property (nonatomic, assign) BOOL profilePhotoUploadedSuccessfully;
+@property (nonatomic, assign) BOOL kollectionPhotoUploadedSuccessfully;
 @end
 
 @implementation KKEditPhotoViewController
@@ -82,7 +84,7 @@
     [self.scrollView addSubview:photoImageView];
 
     //check what type of photo we're dealing with; profile pics shouldn't allow comments or get posted like regular pics
-    if (!self.isProfilePhoto) {
+    if (self.photoType == KKEditPhotoViewPhotoTypeRegularPhoto) {
         CGRect footerRect = [KKPhotoDetailsFooterView rectForView];
         footerRect.origin.y = photoImageView.frame.origin.y + photoImageView.frame.size.height;
         
@@ -95,12 +97,13 @@
         //allow room for comments in scrollview
         [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height + footerView.frame.size.height)];
     } else {
-        //we're uploading a profile photo so don't allow comments
+        //we're uploading a profile or kollection photo so don't allow comments
         [self.scrollView setContentSize:CGSizeMake(self.scrollView.bounds.size.width, photoImageView.frame.origin.y + photoImageView.frame.size.height)];
     }
 }
 
 - (void)viewDidLoad {
+    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 
     [self.navigationItem setHidesBackButton:YES];
@@ -112,7 +115,15 @@
     [cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:cancelButton];
     
-    KKToolbarButton *publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Publish"];
+    KKToolbarButton *publishButton;
+    //check what type of photo it is; if it's a regular photo or profile photo, go ahead and upload
+    //if it's a kollection cover photo, don't upload yet as we need to save it with the kollection (in case the kollection doesn't exist)
+    //we'll change the wording on the "publish" vs. "done" buttons to reflect this
+    if (self.photoType != KKEditPhotoViewPhotoTypeKollectionPhoto) {
+        publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Publish"];
+    } else {
+        publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Done"];
+    }
     [publishButton addTarget:self action:@selector(doneButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:publishButton];
     
@@ -142,13 +153,22 @@
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
     NSLog(@"%s", __FUNCTION__);
     
+    NSLog(@"self.phototype @ shouldUPload image = %i", self.photoType);
+    
     //first, check to see if it's a regular photo for submission or a profile photo we're trying to upload
     //if it's a profile photo, since we'll be resizing and processing a bit differently, pass it off to KKUtility instead of uploading here
-    if (self.isProfilePhoto) {
+    if (self.photoType == KKEditPhotoViewPhotoTypeProfilePhoto) {
         NSLog(@"is a profile photo");
         //it's a profile photo, so pass the data off, mark if successful and exit here
         self.profilePhotoUploadedSuccessfully = [KKUtility processLocalProfilePicture:anImage];
         return NO;//return NO here since we'll upload from KKUtility instead
+    } else if (self.photoType == KKEditPhotoViewPhotoTypeKollectionPhoto) {
+        NSLog(@"is a kollection photo so add processing xxxx2");
+        //it's a kollection photo, so we'll pass it back to our kollection setup table view controller from here at doneButtonAction:
+        //so here, just set our local instance variable to our image so we can pass it along from the doneButtonAction:
+        self.kollectionImage = [[UIImage alloc] init];
+        self.kollectionImage = anImage;
+        return NO;//return NO here since we'll upload from KKUtility instead on KKKollectionSetupTableViewController.m
     } else {
         NSLog(@"is a regular non-profile photo");
     }
@@ -213,7 +233,7 @@
 }
 
 - (void)doneButtonAction:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {
@@ -222,18 +242,34 @@
                                   nil];
     }
     
-    //if we don't have image data and it's not a profile pic, show upload error
-    if ((!self.photoFile || !self.thumbnailFile) && !self.profilePhotoUploadedSuccessfully) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
-        [alert show];
+    //check if it's a profile photo
+    if (self.photoType == KKEditPhotoViewPhotoTypeProfilePhoto) {
+        //if it was a profile pic upload, dismiss the view, tell the my account view to update the current profile photo
+        //and then exit without further processing
+        if (self.profilePhotoUploadedSuccessfully) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
+            [self.parentViewController dismissModalViewControllerAnimated:YES];
+            return;
+        }
+    }
+    
+    //check if it's a kollection photo
+    if (self.photoType == KKEditPhotoViewPhotoTypeKollectionPhoto) {
+        //stick the uiimage of our cover photo into a user info dictionary to send with the notification
+        NSDictionary *photoItem = @{kKKKollectionCoverPhotoKey : self.kollectionImage};
+        
+        //send our photo back to our KKKollectionSetupTableViewController to load into our table and save accordingly with our kollection object
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil userInfo:photoItem];
+        
+        //dismiss the edit photo view 
+        [self.parentViewController dismissModalViewControllerAnimated:YES];
         return;
     }
     
-    //if it was a profile pic upload, dismiss the view, tell the my account view to update the current profile photo
-    //and then exit without further processing
-    if (self.profilePhotoUploadedSuccessfully) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
-        [self.parentViewController dismissModalViewControllerAnimated:YES];
+    //if we don't have image data and it's not a profile or kollection pic, show upload error
+    if ((!self.photoFile || !self.thumbnailFile) && !self.profilePhotoUploadedSuccessfully) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+        [alert show];
         return;
     }
     

@@ -165,13 +165,13 @@
     }];
 }
 
-#pragma mark - Parse Account signup
+#pragma mark - Parse Account Profile Picture
 + (BOOL)processLocalProfilePicture:(UIImage *)profileImage {
     return [self saveProfileImageToParse:profileImage];
 }
 
 + (BOOL)saveProfileImageToParse:(UIImage*)profileImage {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     
     UIImage *image = profileImage;
     UIImage *mediumImage = [image thumbnailImage:280 transparentBorder:0 cornerRadius:0 interpolationQuality:kCGInterpolationHigh];
@@ -196,6 +196,10 @@
                 //ensure the UI updates itself even if we haven't officially saved the photo to parse yet since we've set it to the currentUser's photov
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
                 [[PFUser currentUser] saveEventually];
+            } else {
+                NSLog(@"Photo failed to save: %@", error);
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo. Please try again." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                [alert show];
             }
         }];
     }
@@ -208,6 +212,10 @@
                 NSLog(@"Uploaded Profile Picture Thumbnail");
                 [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kKKUserProfilePicSmallKey];
                 [[PFUser currentUser] saveEventually];
+            } else {
+                NSLog(@"Photo failed to save: %@", error);
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo. Please try again." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                [alert show];
             }
         }];
     }
