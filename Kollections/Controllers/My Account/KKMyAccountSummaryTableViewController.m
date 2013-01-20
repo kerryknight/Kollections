@@ -17,22 +17,21 @@
     BOOL objectsAreLoaded;
 }
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
-//@property (nonatomic, strong) NSMutableSet *reusableSectionHeaderViews;
-//@property (nonatomic, strong) NSMutableDictionary *outstandingSectionHeaderQueries;
+@property (nonatomic, strong) NSMutableArray *myPrivateKollections;
+@property (nonatomic, strong) NSMutableArray *myPublicKollections;
+@property (nonatomic, strong) NSMutableArray *subscribedPublicKollections;
+@property (nonatomic, strong) NSMutableArray *subscribedPrivateKollections;
 @end
 
 @implementation KKMyAccountSummaryTableViewController
-//@synthesize reusableSectionHeaderViews;
 @synthesize shouldReloadOnAppear;
-//@synthesize outstandingSectionHeaderQueries;
 @synthesize sectionTitles;
 
 #pragma mark - Initialization
 - (id)initWithStyle:(UITableViewStyle)style {
+//    NSLog(@"%s", __FUNCTION__);
     self = [super initWithStyle:style];
     if (self) {
-        
-//        self.outstandingSectionHeaderQueries = [NSMutableDictionary dictionary];
         
         // The className to query on
         self.className = kKKPhotoClassKey;
@@ -46,9 +45,6 @@
         // The number of objects to show per page
         self.objectsPerPage = [self.sectionTitles count];
         
-//        // Improve scrolling performance by reusing UITableView section headers
-//        self.reusableSectionHeaderViews = [NSMutableSet setWithCapacity:4];
-        
         self.shouldReloadOnAppear = NO;
     }
     return self;
@@ -58,7 +54,14 @@
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
+    
+    //initialize all our local arrays
+    self.myPublicKollections = [[NSMutableArray alloc] initWithCapacity:0];
+    self.myPrivateKollections = [[NSMutableArray alloc] initWithCapacity:0];
+    self.subscribedPrivateKollections = [[NSMutableArray alloc] initWithCapacity:0];
+    self.subscribedPublicKollections = [[NSMutableArray alloc] initWithCapacity:0];
     
     [super viewDidLoad];
 }
@@ -147,6 +150,10 @@
         objectsAreLoaded = YES;
         [self.tableView reloadData];
         if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
+        
+        //once objects are loaded, separate them into their pertinant arrays
+        [self separateReturnedObjectsIntoProperKollectionArrays];
+        
     } else {
         //error loading items
         UILabel *errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, self.tableView.frame.size.width, 45)];
@@ -162,82 +169,18 @@
 }
 
 - (PFQuery *)queryForTable {
-//    NSLog(@"%s", __FUNCTION__);
-//    if (![PFUser currentUser]) {
-//        PFQuery *query = [PFQuery queryWithClassName:self.className];
-//        [query setLimit:0];
-//        return query;
-//    }
-//    
-//    // Query for the friends the current user is following
-//    PFQuery *followingActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
-//    [followingActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeFollow];
-//    [followingActivitiesQuery whereKey:kKKActivityFromUserKey equalTo:[PFUser currentUser]];
-//    followingActivitiesQuery.cachePolicy = kPFCachePolicyNetworkOnly;
-//    followingActivitiesQuery.limit = 1000;
-//    
-//    // Using the activities from the query above, we find all of the photos taken by
-//    // the friends the current user is following
-//    PFQuery *photosFromFollowedUsersQuery = [PFQuery queryWithClassName:self.className];
-//    [photosFromFollowedUsersQuery whereKey:kKKPhotoUserKey matchesKey:kKKActivityToUserKey inQuery:followingActivitiesQuery];
-//    [photosFromFollowedUsersQuery whereKeyExists:kKKPhotoPictureKey];
-//
-//    // We create a second query for the current user's photos
-//    PFQuery *photosFromCurrentUserQuery = [PFQuery queryWithClassName:self.className];
-//    [photosFromCurrentUserQuery whereKey:kKKPhotoUserKey equalTo:[PFUser currentUser]];
-//    [photosFromCurrentUserQuery whereKeyExists:kKKPhotoPictureKey];
-//
-//    // We create a final compound query that will find all of the photos that were
-//    // taken by the user's friends or by the user
-//    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:photosFromFollowedUsersQuery, photosFromCurrentUserQuery, nil]];
-//    [query includeKey:kKKPhotoUserKey];
-//    [query orderByDescending:@"createdAt"];
-//
-//    // A pull-to-refresh should always trigger a network request.
-//    [query setCachePolicy:kPFCachePolicyNetworkOnly];
-//
-//    // If no objects are loaded in memory, we look to the cache first to fill the table
-//    // and then subsequently do a query against the network.
-//    //
-//    // If there is no network connection, we will hit the cache first.
-//    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:@selector(isParseReachable)]) {
-//        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
-//    }
-//
-//    /*
-//     This query will result in an error if the schema hasn't been set beforehand. While Parse usually handles this automatically, this is not the case for a compound query such as this one. The error thrown is:
-//     
-//     Error: bad special key: __type
-//     
-//     To set up your schema, you may post a photo with a caption. This will automatically set up the Photo and Activity classes needed by this query.
-//     
-//     You may also use the Data Browser at Parse.com to set up your classes in the following manner.
-//     
-//     Create a User class: "User" (if it does not exist)
-//     
-//     Create a Custom class: "Activity"
-//     - Add a column of type pointer to "User", named "fromUser"
-//     - Add a column of type pointer to "User", named "toUser"
-//     - Add a string column "type"
-//     
-//     Create a Custom class: "Photo"
-//     - Add a column of type pointer to "User", named "user"
-//     
-//     You'll notice that these correspond to each of the fields used by the preceding query.
-//     */
+    NSLog(@"%s", __FUNCTION__);
     
-//    return query;
-
-    //KAK remove this below once i get the table set up to work with my graphics and uncomment lines above to properly query
-    PFQuery *query = [PFQuery queryWithClassName:@"_User"];
-    [query setLimit:4];
+    PFQuery *query;
     return query;
+
 }
 
 - (PFObject *)objectAtIndexPath:(NSIndexPath *)indexPath {
 //    NSLog(@"%s", __FUNCTION__);
     // overridden, since we want to implement sections
     if (indexPath.section < self.objects.count) {
+//        NSLog(@"[self.objects objectAtIndex:indexPath.section] = %@", [self.objects objectAtIndex:indexPath.section]);
         return [self.objects objectAtIndex:indexPath.section];
     }
     
@@ -313,7 +256,8 @@
     //add the kollection uicollectionview
     self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
     self.kollectionsBar.delegate = self;
-    self.kollectionsBar.kollections = [self.objects mutableCopy];
+//    self.kollectionsBar.kollections = [self.objects mutableCopy];//here i should filter out the proper kollection lists
+    self.kollectionsBar.kollections = [self determineKollectionListToDisplayForIndexPath:indexPath];
     self.kollectionsBar.identifier = identifier;//cell's identifier used to determine kollection's type
     [self addChildViewController:self.kollectionsBar];
     self.kollectionsBar.view.tag = kKOLLECTIONSBARTAG;
@@ -365,23 +309,60 @@
     [cell.contentView setBackgroundColor:rowBackground];
 }
 
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForNextPageAtIndexPath:(NSIndexPath *)indexPath {
-//    static NSString *LoadMoreCellIdentifier = @"LoadMoreCell";
-//    
-//    KKLoadMoreCell *cell = [tableView dequeueReusableCellWithIdentifier:LoadMoreCellIdentifier];
-//    if (!cell) {
-//        cell = [[KKLoadMoreCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:LoadMoreCellIdentifier];
-//        cell.selectionStyle =UITableViewCellSelectionStyleGray;
-//        cell.separatorImageTop.image = [UIImage imageNamed:@"SeparatorTimelineDark.png"];
-//        cell.hideSeparatorBottom = YES;
-//        cell.mainView.backgroundColor = [UIColor clearColor];
-//    }
-//    return cell;
-//}
-
 #pragma mark - ()
+- (void)separateReturnedObjectsIntoProperKollectionArrays {
+//    NSLog(@"%s", __FUNCTION__);
+    //separate my public and private kollections
+    //get current user and compare it with the kollection's owner
+    PFUser *currentUser = [PFUser currentUser];
+    
+    for (PFObject *kollection in self.objects) {
+        PFUser *kollectionUser = (PFUser*)kollection[kKKKollectionUserKey];
+        //check if it's a kollection owned by the current user
+        if ([kollectionUser.objectId isEqualToString:currentUser.objectId]) {
+             //kollection is the same user so it's one of my creations
+            //now separate the owned kollections into public and private
+            if ([kollection[kKKKollectionIsPrivateKey] boolValue] == TRUE) {
+                //it's a private kollection
+                [self.myPrivateKollections addObject:kollection];
+            } else {
+                //it's a public kollection
+                [self.myPublicKollections addObject:kollection];
+            }
+        } else {
+            NSLog(@"kollection not owned by the current user");
+        }
+    }
+}
+
+- (NSMutableArray *)determineKollectionListToDisplayForIndexPath:(NSIndexPath*)indexPath {
+    NSMutableArray *kollectionList;
+    
+    if (indexPath.row == 1) {
+        //middle row where our kollections bar is housed
+        switch (indexPath.section) {
+            case 0://My Public Kollections
+                kollectionList = self.myPublicKollections;
+                break;
+            case 1://My Private Kollections
+                kollectionList = self.myPrivateKollections;
+                break;
+            case 2://Subscribed Public Kollections
+                kollectionList = self.subscribedPublicKollections;
+                break;
+            case 3://Subscribed Private Kollections
+                kollectionList = self.subscribedPrivateKollections;
+                break;
+            default:
+                break;
+        }
+    }
+    
+    return kollectionList;
+}
 
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
+//    NSLog(@"%s", __FUNCTION__);
     for (int i = 0; i < self.objects.count; i++) {
         PFObject *object = [self.objects objectAtIndex:i];
         if ([[object objectId] isEqualToString:[targetObject objectId]]) {
@@ -409,7 +390,6 @@
     NSLog(@"User following changed.");
     self.shouldReloadOnAppear = YES;
 }
-
 
 - (void)didTapOnPhotoAction:(UIButton *)sender {
     PFObject *photo = [self.objects objectAtIndex:sender.tag];

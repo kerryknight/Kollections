@@ -248,7 +248,7 @@
 }
 
 - (void)refreshTable:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [slimeRefreshView performSelector:@selector(endRefresh)
                            withObject:nil afterDelay:0.0
                               inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
@@ -306,6 +306,7 @@
 }
 
 #pragma mark - PFQueryTableViewController
+
 - (void)objectsDidLoad:(NSError *)error {
 //    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
@@ -315,26 +316,53 @@
 
 - (PFQuery *)queryForTable {
 //    NSLog(@"%s", __FUNCTION__);
-//    if (!self.user) {
-//        PFQuery *query = [PFQuery queryWithClassName:self.className];
-//        [query setLimit:0];
-//        return query;
-//    }
-//    
-//    PFQuery *query = [PFQuery queryWithClassName:self.className];
-//    query.cachePolicy = kPFCachePolicyNetworkOnly;
-//    if (self.objects.count == 0) {
-//        query.cachePolicy = kPFCachePolicyCacheThenNetwork;
-//    }
-//    [query whereKey:kKKPhotoUserKey equalTo:self.user];
-//    [query orderByDescending:@"createdAt"];
-//    [query includeKey:kKKPhotoUserKey];
-//    
-//    return query;
     
-    //UPDATE KAK remove this below once i get the table set up to work with my graphics and uncomment lines above to properly query
-    PFQuery *query = [PFQuery queryWithClassName:self.className];
-    [query setLimit:0];
+    /*
+     //kak 19Jan2013 //UPDATE, use the compounding technique below to pull in subscribed kollections as well, not just user-created ones
+     // Query for the friends the current user is following
+     PFQuery *followingActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+     [followingActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeFollow];
+     [followingActivitiesQuery whereKey:kKKActivityFromUserKey equalTo:[PFUser currentUser]];
+     followingActivitiesQuery.cachePolicy = kPFCachePolicyNetworkOnly;
+     followingActivitiesQuery.limit = 1000;
+     
+     // Using the activities from the query above, we find all of the photos taken by
+     // the friends the current user is following
+     PFQuery *photosFromFollowedUsersQuery = [PFQuery queryWithClassName:self.className];
+     [photosFromFollowedUsersQuery whereKey:kKKPhotoUserKey matchesKey:kKKActivityToUserKey inQuery:followingActivitiesQuery];
+     [photosFromFollowedUsersQuery whereKeyExists:kKKPhotoPictureKey];
+     
+     // We create a second query for the current user's photos
+     PFQuery *photosFromCurrentUserQuery = [PFQuery queryWithClassName:self.className];
+     [photosFromCurrentUserQuery whereKey:kKKPhotoUserKey equalTo:[PFUser currentUser]];
+     [photosFromCurrentUserQuery whereKeyExists:kKKPhotoPictureKey];
+     
+     // We create a final compound query that will find all of the photos that were
+     // taken by the user's friends or by the user
+     PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:photosFromFollowedUsersQuery, photosFromCurrentUserQuery, nil]];
+     [query includeKey:kKKPhotoUserKey];
+     [query orderByDescending:@"createdAt"];
+     
+     // If no objects are loaded in memory, we look to the cache first to fill the table
+     // and then subsequently do a query against the network.
+     //
+     // If there is no network connection, we will hit the cache first.
+     if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:@selector(isParseReachable)]) {
+        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
+     }
+     */
+    
+    //Query for the current user's kollections
+    PFQuery *kollectionsQuery = [PFQuery queryWithClassName:kKKKollectionClassKey];
+    [kollectionsQuery whereKey:kKKKollectionUserKey equalTo:[PFUser currentUser]];
+    kollectionsQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;//always pull local stuff first then hit network
+    
+    // create a 2nd query that will have a different cache policy for pull-to-refresh to kick in
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:kollectionsQuery, nil]];
+    [query orderByDescending:@"createdAt"];
+    // A pull-to-refresh should always trigger a network request.
+    [query setCachePolicy:kPFCachePolicyNetworkOnly];
+    
     return query;
 }
 
@@ -362,7 +390,7 @@
         KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
         [self.navigationController pushViewController:createKollectionViewController animated:YES];
     } else {
-        //we want to view an existing kollection
+        //we want to view an existing kollection //UPDATE
     }
     
     //tell the super class of the table we just pushed in what type of kollection we're working with so it can format accordingly
@@ -371,8 +399,9 @@
 }
 
 #pragma mark - Custom Methods
+
 - (void)loadProfilePhoto:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     self.user = [PFUser currentUser];//reset the self.user since we should've updated the currentUser with the new profile pic
     //retrieve the user's profile pic to insert
     PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];

@@ -28,8 +28,8 @@
     return self;
 }
 
-#define TOOLBAR_COLLECTION_ITEM_WIDTH   94.0
-#define TOOLBAR_COLLECTION_ITEM_HEIGHT  94.0
+#define TOOLBAR_COLLECTION_ITEM_WIDTH   111.0
+#define TOOLBAR_COLLECTION_ITEM_HEIGHT  93.0
 #define KK_NORMAL_CELL @"KKKollectionsCell"
 #define KK_ADD_CELL @"KKKollectionsAddCell"
 
@@ -42,6 +42,10 @@
     //the add new cell
     UINib *cellNib = [UINib nibWithNibName:KK_ADD_CELL bundle:nil];
     [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:KK_ADD_CELL];
+    
+    //the regular cell
+    cellNib = [UINib nibWithNibName:KK_NORMAL_CELL bundle:nil];
+    [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:KK_NORMAL_CELL];
     
     
     //set the kollection type based on the identifier we passed in
@@ -90,6 +94,15 @@
         //only show the Add button if there are no kollections to display
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
     } else {
+        
+        //check what cell we're at and if it's the last one in the row
+        if (indexPath.row == [self.kollections count]) {
+            //always make our last cell in the row an "Add" cell
+            cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
+            return cell;
+        }
+        
+        //else, we show a regular cell
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_NORMAL_CELL forIndexPath:indexPath];
         
         UILabel *titleLabel = (UILabel *)[cell viewWithTag:100];//we just added a tag to the nib, no property necessary

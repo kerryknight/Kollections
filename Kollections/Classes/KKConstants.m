@@ -61,6 +61,7 @@ NSString *const kKKKollectionClassKey = @"Kollection";
 NSString *const kKKKollectionUserKey = @"user";
 NSString *const kKKKollectionTitleKey = @"title";
 NSString *const kKKKollectionCategoryKey = @"category";
+NSString *const kKKKollectionIsPrivateKey = @"isPrivate";
 NSString *const kKKKollectionPayoutKey = @"payout";
 NSString *const kKKKollectionDescriptionKey = @"description";
 NSString *const kKKKollectionCoverPhotoKey = @"coverPhotoMedium";

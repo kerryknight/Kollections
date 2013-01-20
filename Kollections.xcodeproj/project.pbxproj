@@ -43,6 +43,9 @@
 		C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
 		C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */; };
 		C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */; };
+		C73F23DC16AC56DD006B96AE /* kkKollectionIconPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */; };
+		C73F23DD16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C73F23DB16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png */; };
+		C73F23E016AC63C0006B96AE /* KKKollectionsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C73F23DF16AC63C0006B96AE /* KKKollectionsCell.xib */; };
 		C74C9E7F16A6F86600207EF1 /* kkFacebookIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */; };
 		C74C9E8016A6F86600207EF1 /* kkFacebookIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */; };
 		C74C9E8116A6F86600207EF1 /* kkFacebookIconSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */; };
@@ -594,6 +597,9 @@
 		C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableLongStringCell.h; sourceTree = "<group>"; };
 		C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableLongStringCell.m; sourceTree = "<group>"; };
 		C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableLongStringCell.xib; sourceTree = "<group>"; };
+		C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkKollectionIconPlaceholder.png; sourceTree = "<group>"; };
+		C73F23DB16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkKollectionIconPlaceholder@2x.png"; sourceTree = "<group>"; };
+		C73F23DF16AC63C0006B96AE /* KKKollectionsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKKollectionsCell.xib; path = KKKollectionsBar/KKKollectionsCell.xib; sourceTree = "<group>"; };
 		C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkFacebookIcon.png; sourceTree = "<group>"; };
 		C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkFacebookIcon@2x.png"; sourceTree = "<group>"; };
 		C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkFacebookIconSelected.png; sourceTree = "<group>"; };
@@ -1406,6 +1412,7 @@
 		C79DA146169C9FFE009C1CE7 /* Kollectionbar */ = {
 			isa = PBXGroup;
 			children = (
+				C73F23DF16AC63C0006B96AE /* KKKollectionsCell.xib */,
 				C79DA147169CA0AB009C1CE7 /* KKKollectionsAddCell.xib */,
 				C79DA148169CA0AB009C1CE7 /* KKKollectionsBarViewController.h */,
 				C79DA149169CA0AB009C1CE7 /* KKKollectionsBarViewController.m */,
@@ -1922,6 +1929,8 @@
 		C7B1CEA916783C8500BA628A /* main ui */ = {
 			isa = PBXGroup;
 			children = (
+				C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */,
+				C73F23DB16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png */,
 				C7B1CEAA16783C8500BA628A /* kkBackButtonNavBar.png */,
 				C7B1CEAB16783C8500BA628A /* kkBackButtonNavBar@2x.png */,
 				C7B1CEAC16783C8500BA628A /* kkBackButtonNavBarSelected.png */,
@@ -2787,6 +2796,9 @@
 				C7B4AE8B16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown@2x.png in Resources */,
 				C7B4AE8C16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp.png in Resources */,
 				C7B4AE8D16A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonUp@2x.png in Resources */,
+				C73F23DC16AC56DD006B96AE /* kkKollectionIconPlaceholder.png in Resources */,
+				C73F23DD16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png in Resources */,
+				C73F23E016AC63C0006B96AE /* KKKollectionsCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
