@@ -148,7 +148,10 @@
                     //existing kollection, subjects already saved
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
+                //create a dictionary to pass our new kollection back to our root view for loading into our kollection bar tables
+                //we do this so we don't have to requery parse for the kollection list and therefore can re-update the UI
+                NSDictionary *userInfo = @{@"kollection" : self.kollection};
+                [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
             } else {
                 NSString *message = [NSString stringWithFormat:@"%@", error];
                 UIAlertView *alertView = [[UIAlertView alloc]
@@ -453,7 +456,7 @@
     BlockPickerButtonCallback completion = ^(id result) {
         //get our picked category result and tell the tableview to reload so it appears in the cell's textfield
         NSDictionary *selectionResult = (NSDictionary*)result;
-        [self.kollection setObject:selectionResult[kKKCategoryTitleKey] forKey:kKKKollectionCategoryKey];
+        if (selectionResult[kKKCategoryTitleKey])[self.kollection setObject:selectionResult[kKKCategoryTitleKey] forKey:kKKKollectionCategoryKey];
         [self.tableView reloadData];
     };
     

@@ -17,10 +17,6 @@
     BOOL objectsAreLoaded;
 }
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
-@property (nonatomic, strong) NSMutableArray *myPrivateKollections;
-@property (nonatomic, strong) NSMutableArray *myPublicKollections;
-@property (nonatomic, strong) NSMutableArray *subscribedPublicKollections;
-@property (nonatomic, strong) NSMutableArray *subscribedPrivateKollections;
 @end
 
 @implementation KKMyAccountSummaryTableViewController
@@ -142,13 +138,12 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     if (!error) {
         //load table rows
         objectsAreLoaded = YES;
-        [self.tableView reloadData];
         if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
         
         //once objects are loaded, separate them into their pertinant arrays
@@ -166,6 +161,9 @@
         errorLabel.text = @"An error occurred loading your\nprofile details. Please try again.";
         [self.view addSubview:errorLabel];
     }
+    
+    //post a notification to tell our subclass to end the slime refresh if it's the reason we loaded objects
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewEndRefreshNotification" object:nil];
 }
 
 - (PFQuery *)queryForTable {
@@ -316,6 +314,13 @@
     //get current user and compare it with the kollection's owner
     PFUser *currentUser = [PFUser currentUser];
     
+    //remove objects from all our tables if they're there
+    //initialize all our local arrays
+    [self.myPublicKollections removeAllObjects];
+    [self.myPrivateKollections removeAllObjects];
+    [self.subscribedPrivateKollections removeAllObjects];
+    [self.subscribedPublicKollections removeAllObjects];
+    
     for (PFObject *kollection in self.objects) {
         PFUser *kollectionUser = (PFUser*)kollection[kKKKollectionUserKey];
         //check if it's a kollection owned by the current user
@@ -333,6 +338,8 @@
             NSLog(@"kollection not owned by the current user");
         }
     }
+    
+    [self.tableView reloadData];
 }
 
 - (NSMutableArray *)determineKollectionListToDisplayForIndexPath:(NSIndexPath*)indexPath {

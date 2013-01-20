@@ -23,5 +23,9 @@ typedef enum {
 @property (nonatomic, strong) NSArray *sectionTitles;
 @property (nonatomic, strong) KKKollectionsBarViewController *kollectionsBar;
 @property (nonatomic, assign) KKMyAccountKollectionsBarType kollectionType;
+@property (nonatomic, strong) NSMutableArray *myPrivateKollections;
+@property (nonatomic, strong) NSMutableArray *myPublicKollections;
+@property (nonatomic, strong) NSMutableArray *subscribedPublicKollections;
+@property (nonatomic, strong) NSMutableArray *subscribedPrivateKollections;
 
 @end

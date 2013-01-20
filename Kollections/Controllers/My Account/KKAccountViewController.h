@@ -9,6 +9,7 @@
 #import "KKMyAccountSummaryTableViewController.h"
 #import "KKSideScrollToolBarViewController.h"
 #import "KKKollectionsBarViewController.h"
+#import "KKCreateKollectionViewController.h"
 
 typedef enum {
     KKMyAccountHeaderToolItemKollections = 0,
@@ -20,7 +21,7 @@ typedef enum {
     KKMyAccountHeaderToolItemStore
 } KKMyAccountHeaderToolItem;
 
-@interface KKAccountViewController : KKMyAccountSummaryTableViewController <SRRefreshDelegate, KKSideScrollToolBarViewControllerDelegate, KKKollectionsBarViewControllerDelegate> {
+@interface KKAccountViewController : KKMyAccountSummaryTableViewController <SRRefreshDelegate, KKSideScrollToolBarViewControllerDelegate, KKKollectionsBarViewControllerDelegate, KKCreateKollectionViewControllerDelegate> {
     
 }
 

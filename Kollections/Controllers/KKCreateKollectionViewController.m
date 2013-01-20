@@ -45,7 +45,7 @@
     [self.view addSubview:self.tableView.view];
     
     //attach notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissView) name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissViewWithNewKollectionNotification:) name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
     
     //add toolbar buttons
     self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
@@ -107,8 +107,11 @@
     [self.tableView resetTableContentInsetsWithIndexPath:indexPath];
 }
 
-- (void)dismissView {
+- (void)dismissViewWithNewKollectionNotification:(NSNotification*)notification {
 //    NSLog(@"%s", __FUNCTION__);
+    NSDictionary *userInfo = notification.userInfo;
+    PFObject *newKollection = (PFObject*)userInfo[@"kollection"];
+    [self.delegate createKollectionViewControllerDidCreateNewKollection:newKollection];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

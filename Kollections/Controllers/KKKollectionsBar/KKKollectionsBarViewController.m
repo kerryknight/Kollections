@@ -7,6 +7,7 @@
 //
 
 #import "KKKollectionsBarViewController.h"
+#import "UIImage+Colorization.h"
 
 @interface KKKollectionsBarViewController () {
     //need to track the index of the tool we've selected so that we don't allow selecting the same tool
@@ -14,7 +15,6 @@
     NSInteger selectedIndex;
 }
 
-@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (nonatomic, assign) KKKollectionType kollectionType;
 @end
 
@@ -32,6 +32,9 @@
 #define TOOLBAR_COLLECTION_ITEM_HEIGHT  93.0
 #define KK_NORMAL_CELL @"KKKollectionsCell"
 #define KK_ADD_CELL @"KKKollectionsAddCell"
+#define kKollectionIconTitleTag         99
+#define kCoverPhotoImageViewTag         100
+#define kNoCoverPhotoLabelTag           101
 
 - (void)viewDidLoad {
 //    NSLog(@"%s", __FUNCTION__);
@@ -67,6 +70,13 @@
     }
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+//    NSLog(@"%s", __FUNCTION__);
+    
+    [self.collectionView reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -92,7 +102,7 @@
     
     if (!self.kollections || [self.kollections count] == 0) {
         //only show the Add button if there are no kollections to display
-        cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
+        cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];    
     } else {
         
         //check what cell we're at and if it's the last one in the row
@@ -105,11 +115,45 @@
         //else, we show a regular cell
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_NORMAL_CELL forIndexPath:indexPath];
         
-        UILabel *titleLabel = (UILabel *)[cell viewWithTag:100];//we just added a tag to the nib, no property necessary
+        UILabel *titleLabel = (UILabel *)[cell viewWithTag:kKollectionIconTitleTag];//we just added a tag to the nib, no property necessary
+        UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
+        noPhotoLabel.hidden = YES;//default
         
-        //set each button's (e.g. collection view cell) text from the array values we pass in
-        NSString *cellData = [self.kollections objectAtIndex:indexPath.row];
-        [titleLabel setText:cellData];
+        //set each button's (e.g. collection view cell) text from the kollection object passed in
+        PFObject *kollection = [self.kollections objectAtIndex:indexPath.row];
+        [titleLabel setText:kollection[kKKKollectionTitleKey]];
+        
+        //now add a PFImageView to the cell to load the kollection's cover photo in the background
+        //add image view to hold the kollections cover photo
+        PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(16.0f, 14.0f, 78.0f, 53.0f)];
+        coverPhotoImageView.tag = kCoverPhotoImageViewTag;
+        [cell.contentView addSubview:coverPhotoImageView];
+        [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
+        CALayer *layer = [coverPhotoImageView layer];
+        layer.masksToBounds = YES;
+        coverPhotoImageView.alpha = 0.0f;
+        
+        //now, lazily load all our kollection cover pictures, if we have them
+        PFFile *imageFile = kollection[kKKKollectionCoverPhotoThumbnailKey];
+        if (imageFile) {
+            [coverPhotoImageView setFile:imageFile];
+            [coverPhotoImageView loadInBackground:^(UIImage *image, NSError *error) {
+                if (!error) {
+                    [UIView animateWithDuration:0.200f animations:^{
+                        coverPhotoImageView.alpha = 1.0f;//load the photo into the imageview
+                        //add a new touch down background
+                        //also, change the down image of the image so we darken the whole thing and don't show the down placeholder image
+                        UIImage *downImage = [UIImage darkenImage:image toLevel:1.2];
+                        [coverPhotoImageView setHighlightedImage:downImage];
+                    }];
+                }
+            }];
+        } else {
+            //show the "no photo" label
+            UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
+            noPhotoLabel.hidden = NO;
+        }
+        
     }
     
     return cell;

@@ -9,8 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "KKKollectionSetupTableViewController.h"
 
+@protocol KKCreateKollectionViewControllerDelegate <NSObject>
+-(void)createKollectionViewControllerDidCreateNewKollection:(PFObject*)kollection;
+@end
+
 @interface KKCreateKollectionViewController : UIViewController <KKKollectionSetupTableViewControllerDelegate, UITextViewDelegate> {
     
 }
+
+@property (nonatomic, strong) id<KKCreateKollectionViewControllerDelegate>delegate;
 
 @end

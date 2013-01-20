@@ -15,7 +15,6 @@
 #import "SRSlimeView.h"
 #import "KKAppDelegate.h"
 #import "KKToolbarButton.h"
-#import "KKCreateKollectionViewController.h"
 
 @interface KKAccountViewController() {
     SRRefreshView *slimeRefreshView;
@@ -37,6 +36,7 @@
 //    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     self.logoutButton.hidden = NO;//this is hidden if we navigate away
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -223,10 +223,12 @@
     
     //add notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadProfilePhoto:) name:@"MyAccountViewLoadProfilePhoto" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endRefreshNotification:) name:@"MyAccountViewEndRefreshNotification" object:nil];
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewLoadProfilePhoto" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewEndRefreshNotification" object:nil];
 }
 
 #pragma mark - Slime Refresh delegate
@@ -248,7 +250,12 @@
 }
 
 - (void)refreshTable:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
+    [self loadObjects];
+}
+
+- (void)endRefreshNotification:(NSNotification*)notification {
+//    NSLog(@"%s", __FUNCTION__);
     [slimeRefreshView performSelector:@selector(endRefresh)
                            withObject:nil afterDelay:0.0
                               inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
@@ -388,6 +395,7 @@
     if (yesOrNo == YES) {
         //we should be a creating or subscribing to a new kollection
         KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
+        createKollectionViewController.delegate = self;
         [self.navigationController pushViewController:createKollectionViewController animated:YES];
     } else {
         //we want to view an existing kollection //UPDATE
@@ -396,6 +404,19 @@
     //tell the super class of the table we just pushed in what type of kollection we're working with so it can format accordingly
     NSDictionary *info = @{@"type" : [NSNumber numberWithBool:yesOrNo]};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil userInfo:info];
+}
+
+#pragma mark - KKCreateKollectionViewControllerDelegate methods
+- (void)createKollectionViewControllerDidCreateNewKollection:(PFObject *)kollection {
+//    NSLog(@"%s", __FUNCTION__);
+    if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
+        //it's a private kollection so add it to the private list
+        [self.myPrivateKollections addObject:kollection];
+    } else {
+        [self.myPublicKollections addObject:kollection];
+    }
+    
+    [self.kollectionsBar.collectionView reloadData];
 }
 
 #pragma mark - Custom Methods
@@ -420,7 +441,7 @@
 }
 
 - (void)profilePhotoButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"profilePhotoCaptureButtonAction" object:sender];
 }
 
