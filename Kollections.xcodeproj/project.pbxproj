@@ -20,6 +20,8 @@
 		C70054E516A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054E316A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m */; };
 		C70054E616A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */; };
 		C70054ED16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */; };
+		C70A13A416ACC1D9007EAA5B /* KKEditKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */; };
+		C70A13AC16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */; };
 		C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703B168265AB00C1B560 /* kkVerticalSeparator.png */; };
 		C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */; };
 		C71270461682666A00C1B560 /* 112-group.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270421682666A00C1B560 /* 112-group.png */; };
@@ -36,7 +38,7 @@
 		C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270851684C1C600C1B560 /* 111-userGray@2x.png */; };
 		C72E42CD169E426100D0C182 /* KKCreateKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */; };
 		C72E42D0169E427F00D0C182 /* KKKollectionSetupTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */; };
-		C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */; };
+		C72E42E3169E5F7100D0C182 /* NewPublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C72E42E2169E5F7100D0C182 /* NewPublicKollectionSetupItems.plist */; };
 		C734812F16A0789E004AD6EB /* KKSetupTableBaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */; };
 		C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */; };
 		C734813916A07C20004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
@@ -568,6 +570,9 @@
 		C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKKollectionSubjectsTableCell.xib; sourceTree = "<group>"; };
 		C70054EB16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSubjectEditViewController.h; sourceTree = "<group>"; };
 		C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSubjectEditViewController.m; sourceTree = "<group>"; };
+		C70A13A216ACC1D9007EAA5B /* KKEditKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKEditKollectionViewController.h; sourceTree = "<group>"; };
+		C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKEditKollectionViewController.m; sourceTree = "<group>"; };
+		C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EditPublicKollectionSetupItems.plist; sourceTree = "<group>"; };
 		C712703B168265AB00C1B560 /* kkVerticalSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkVerticalSeparator.png; sourceTree = "<group>"; };
 		C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkVerticalSeparator@2x.png"; sourceTree = "<group>"; };
 		C71270421682666A00C1B560 /* 112-group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group.png"; sourceTree = "<group>"; };
@@ -589,7 +594,7 @@
 		C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCreateKollectionViewController.m; sourceTree = "<group>"; };
 		C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSetupTableViewController.h; sourceTree = "<group>"; };
 		C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSetupTableViewController.m; sourceTree = "<group>"; };
-		C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PublicKollectionSetupItems.plist; sourceTree = "<group>"; };
+		C72E42E2169E5F7100D0C182 /* NewPublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = NewPublicKollectionSetupItems.plist; sourceTree = "<group>"; };
 		C734812D16A0789E004AD6EB /* KKSetupTableBaseCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableBaseCell.h; sourceTree = "<group>"; };
 		C734812E16A0789E004AD6EB /* KKSetupTableBaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableBaseCell.m; sourceTree = "<group>"; };
 		C734813016A078BF004AD6EB /* KKSetupTableBaseCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableBaseCell.xib; sourceTree = "<group>"; };
@@ -1243,7 +1248,8 @@
 		C72E42E1169E5F4500D0C182 /* plists */ = {
 			isa = PBXGroup;
 			children = (
-				C72E42E2169E5F7100D0C182 /* PublicKollectionSetupItems.plist */,
+				C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */,
+				C72E42E2169E5F7100D0C182 /* NewPublicKollectionSetupItems.plist */,
 			);
 			name = plists;
 			sourceTree = "<group>";
@@ -1432,6 +1438,8 @@
 				C72E42CF169E427F00D0C182 /* KKKollectionSetupTableViewController.m */,
 				C72E42CB169E426100D0C182 /* KKCreateKollectionViewController.h */,
 				C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */,
+				C70A13A216ACC1D9007EAA5B /* KKEditKollectionViewController.h */,
+				C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */,
 			);
 			name = "Kollection editing";
 			sourceTree = "<group>";
@@ -2754,7 +2762,7 @@
 				C79DA144169C9AAF009C1CE7 /* kkAddButtonUp@2x.png in Resources */,
 				C79DA14B169CA0AB009C1CE7 /* KKKollectionsAddCell.xib in Resources */,
 				C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */,
-				C72E42E3169E5F7100D0C182 /* PublicKollectionSetupItems.plist in Resources */,
+				C72E42E3169E5F7100D0C182 /* NewPublicKollectionSetupItems.plist in Resources */,
 				C734813116A078BF004AD6EB /* KKSetupTableBaseCell.xib in Resources */,
 				C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */,
 				C70054C016A46C8A0018F7F7 /* KKSetupTableSegmentCell.xib in Resources */,
@@ -2804,6 +2812,7 @@
 				C73F23DC16AC56DD006B96AE /* kkKollectionIconPlaceholder.png in Resources */,
 				C73F23DD16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png in Resources */,
 				C73F23E016AC63C0006B96AE /* KKKollectionsCell.xib in Resources */,
+				C70A13AC16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2922,6 +2931,7 @@
 				C74C9EF016A72A5600207EF1 /* BlockPickerActionSheet.m in Sources */,
 				C7B4AE8016A8E70700C77C48 /* KKSetupTablePhotoCell.m in Sources */,
 				C73F23E716ACB4CE006B96AE /* UIImage+Colorization.m in Sources */,
+				C70A13A416ACC1D9007EAA5B /* KKEditKollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
