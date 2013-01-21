@@ -226,7 +226,7 @@
 						<string key="IBUIText">000</string>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
-						<int key="IBUITextAlignment">2</int>
+						<int key="IBUITextAlignment">1</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="667088023">
 							<string key="name">OriyaSangamMN</string>
 							<string key="family">Oriya Sangam MN</string>
@@ -512,7 +512,7 @@
 						<string key="IBUIText">000</string>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
-						<int key="IBUITextAlignment">2</int>
+						<int key="IBUITextAlignment">1</int>
 						<reference key="IBUIFontDescription" ref="667088023"/>
 						<reference key="IBUIFont" ref="106506855"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -573,7 +573,7 @@
 						<string key="IBUIText">000</string>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
-						<int key="IBUITextAlignment">2</int>
+						<int key="IBUITextAlignment">1</int>
 						<reference key="IBUIFontDescription" ref="667088023"/>
 						<reference key="IBUIFont" ref="106506855"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
@@ -634,7 +634,7 @@
 						<string key="IBUIText">000</string>
 						<nil key="IBUIHighlightedColor"/>
 						<int key="IBUIBaselineAdjustment">0</int>
-						<int key="IBUITextAlignment">2</int>
+						<int key="IBUITextAlignment">1</int>
 						<reference key="IBUIFontDescription" ref="667088023"/>
 						<reference key="IBUIFont" ref="106506855"/>
 						<bool key="IBUIAdjustsFontSizeToFit">NO</bool>

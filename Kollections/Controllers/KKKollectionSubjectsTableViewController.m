@@ -94,7 +94,7 @@
 }
 
 - (void)editSubject:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     //first, get the index path of the cell whose row button we touched
     UIButton *button = sender;
@@ -388,6 +388,11 @@
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     //delete the selected row and refresh the table
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        //delete our subject from Parse
+        PFObject *subjectToDelete = (PFObject*)[self.subjects objectAtIndex:(indexPath.row - 1)];
+        [subjectToDelete deleteInBackground];
+        
         //delete object from array
         [self.subjects removeObjectAtIndex:(indexPath.row - 1)];
         //delete row from table

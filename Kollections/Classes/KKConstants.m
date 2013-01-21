@@ -41,6 +41,8 @@ NSString *const KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification   =
 
 NSString *const KKKollectionSetupTableDidCreateKollectionNotification          =
     @"com.kerryknight.Kollections.setupTableViewController.createdKollectionNotification";
+NSString *const KKKollectionSetupTableDidEditKollectionNotification          =
+@"com.kerryknight.Kollections.setupTableViewController.editKollectionNotification";
 
 
 #pragma mark - User Info Keys

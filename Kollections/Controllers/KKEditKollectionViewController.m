@@ -1,25 +1,23 @@
 //
-//  KKCreateKollectionViewController.m
+//  KKEditKollectionViewController.m
 //  Kollections
 //
-//  Created by Kerry Knight on 1/9/13.
+//  Editd by Kerry Knight on 1/9/13.
 //  Copyright (c) 2013 Kerry Knight. All rights reserved.
 //
 
-#import "KKCreateKollectionViewController.h"
+#import "KKEditKollectionViewController.h"
 #import "KKKollectionSubjectsTableViewController.h"
 #import "KKToolbarButton.h"
 
-@interface KKCreateKollectionViewController () {
+@interface KKEditKollectionViewController () {
     
 }
 @property (nonatomic, strong) KKKollectionSetupTableViewController *tableView;
-/// The kollection displayed in the view; redeclare so we can edit locally
-@property (nonatomic, strong, readwrite) PFObject *kollection;
 @property (nonatomic, strong) KKToolbarButton *backButton;
 @end
 
-@implementation KKCreateKollectionViewController
+@implementation KKEditKollectionViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -40,20 +38,21 @@
     self.tableView = [[KKKollectionSetupTableViewController alloc] initWithStyle:UITableViewStylePlain];
     self.tableView.delegate = self;
     
-    self.tableView.tableObjects = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"NewPublicKollectionSetupItems" ofType:@"plist"]];
+    self.tableView.tableObjects = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"EditPublicKollectionSetupItems" ofType:@"plist"]];
+    NSLog(@"KKEditKollectionViewController edit here if slightly different questions are ever asked once a kollection has already been created");
     
     [self.view addSubview:self.tableView.view];
     
     //attach notifications
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissViewWithNewKollectionNotification:) name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissViewWithNewKollectionNotification:) name:KKKollectionSetupTableDidEditKollectionNotification object:nil];
     
     //add toolbar buttons
     self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
     [self configureBackButton];//add our custom back button
     
-    //give our table view a kollection object to work with
-    self.tableView.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
-    self.tableView.kollectionSetupType = KKKollectionSetupTypeNew;
+    //give our table view the passed in kollection object to work with
+    self.tableView.kollection = self.kollection;
+    self.tableView.kollectionSetupType = KKKollectionSetupTypeEdit;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -114,15 +113,15 @@
 - (void)dismissViewWithNewKollectionNotification:(NSNotification*)notification {
 //    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userInfo = notification.userInfo;
-    PFObject *newKollection = (PFObject*)userInfo[@"kollection"];
-    [self.delegate createKollectionViewControllerDidCreateNewKollection:newKollection];
+    PFObject *editedKollection = (PFObject*)userInfo[@"kollection"];
+    [self.delegate editKollectionViewControllerDidEditKollection:editedKollection atIndex:self.kollectionToLoadIndex];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)viewDidUnload {
 //    NSLog(@"%s", __FUNCTION__);
     [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKKollectionSetupTableDidEditKollectionNotification object:nil];
 }
 
 @end

@@ -30,7 +30,7 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define kDisplayTableCellContentX 16.0f
 #define kDisplayTableHeaderHeight 40.0f
 #define kDisplayTableFooterHeight 10.0f
-#define kDisplayTableContentRowHeight 100.0f
+#define kDisplayTableContentRowHeight 93.0f
 #define kSETUP_TEXT_OBJECT_WIDTH 280
 #define kSETUP_MAX_FOOTNOTE_LINE_LENGTH  40
 #define kSETUP_ADDITIONAL_LINE_HEIGHT 20
@@ -77,8 +77,8 @@ extern NSString *const KKTabBarControllerDidFinishImageFileUploadNotification;
 extern NSString *const KKPhotoDetailsViewControllerUserDeletedPhotoNotification;
 extern NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification;
 extern NSString *const KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification;
-
 extern NSString *const KKKollectionSetupTableDidCreateKollectionNotification;
+extern NSString *const KKKollectionSetupTableDidEditKollectionNotification;
 
 
 #pragma mark - User Info Keys

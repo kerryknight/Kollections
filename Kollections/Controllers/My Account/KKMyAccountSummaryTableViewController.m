@@ -138,16 +138,13 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     if (!error) {
         //load table rows
         objectsAreLoaded = YES;
         if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
-        
-        //once objects are loaded, separate them into their pertinant arrays
-        [self separateReturnedObjectsIntoProperKollectionArrays];
         
     } else {
         //error loading items
@@ -161,24 +158,18 @@
         errorLabel.text = @"An error occurred loading your\nprofile details. Please try again.";
         [self.view addSubview:errorLabel];
     }
-    
-    //post a notification to tell our subclass to end the slime refresh if it's the reason we loaded objects
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewEndRefreshNotification" object:nil];
 }
 
 - (PFQuery *)queryForTable {
-    NSLog(@"%s", __FUNCTION__);
-    
+//    NSLog(@"%s", __FUNCTION__);
     PFQuery *query;
     return query;
-
 }
 
 - (PFObject *)objectAtIndexPath:(NSIndexPath *)indexPath {
 //    NSLog(@"%s", __FUNCTION__);
     // overridden, since we want to implement sections
     if (indexPath.section < self.objects.count) {
-//        NSLog(@"[self.objects objectAtIndex:indexPath.section] = %@", [self.objects objectAtIndex:indexPath.section]);
         return [self.objects objectAtIndex:indexPath.section];
     }
     
@@ -254,7 +245,6 @@
     //add the kollection uicollectionview
     self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
     self.kollectionsBar.delegate = self;
-//    self.kollectionsBar.kollections = [self.objects mutableCopy];//here i should filter out the proper kollection lists
     self.kollectionsBar.kollections = [self determineKollectionListToDisplayForIndexPath:indexPath];
     self.kollectionsBar.identifier = identifier;//cell's identifier used to determine kollection's type
     [self addChildViewController:self.kollectionsBar];
@@ -308,40 +298,6 @@
 }
 
 #pragma mark - ()
-- (void)separateReturnedObjectsIntoProperKollectionArrays {
-//    NSLog(@"%s", __FUNCTION__);
-    //separate my public and private kollections
-    //get current user and compare it with the kollection's owner
-    PFUser *currentUser = [PFUser currentUser];
-    
-    //remove objects from all our tables if they're there
-    //initialize all our local arrays
-    [self.myPublicKollections removeAllObjects];
-    [self.myPrivateKollections removeAllObjects];
-    [self.subscribedPrivateKollections removeAllObjects];
-    [self.subscribedPublicKollections removeAllObjects];
-    
-    for (PFObject *kollection in self.objects) {
-        PFUser *kollectionUser = (PFUser*)kollection[kKKKollectionUserKey];
-        //check if it's a kollection owned by the current user
-        if ([kollectionUser.objectId isEqualToString:currentUser.objectId]) {
-             //kollection is the same user so it's one of my creations
-            //now separate the owned kollections into public and private
-            if ([kollection[kKKKollectionIsPrivateKey] boolValue] == TRUE) {
-                //it's a private kollection
-                [self.myPrivateKollections addObject:kollection];
-            } else {
-                //it's a public kollection
-                [self.myPublicKollections addObject:kollection];
-            }
-        } else {
-            NSLog(@"kollection not owned by the current user");
-        }
-    }
-    
-    [self.tableView reloadData];
-}
-
 - (NSMutableArray *)determineKollectionListToDisplayForIndexPath:(NSIndexPath*)indexPath {
     NSMutableArray *kollectionList;
     

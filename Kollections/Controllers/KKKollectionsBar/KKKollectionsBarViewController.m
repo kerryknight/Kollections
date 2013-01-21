@@ -43,12 +43,12 @@
     
     //load the nib for each collection view cell
     //the add new cell
-    UINib *cellNib = [UINib nibWithNibName:KK_ADD_CELL bundle:nil];
-    [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:KK_ADD_CELL];
+    UINib *cellNib1 = [UINib nibWithNibName:KK_ADD_CELL bundle:nil];
+    [self.collectionView registerNib:cellNib1 forCellWithReuseIdentifier:KK_ADD_CELL];
     
     //the regular cell
-    cellNib = [UINib nibWithNibName:KK_NORMAL_CELL bundle:nil];
-    [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:KK_NORMAL_CELL];
+    UINib *cellNib2 = [UINib nibWithNibName:KK_NORMAL_CELL bundle:nil];
+    [self.collectionView registerNib:cellNib2 forCellWithReuseIdentifier:KK_NORMAL_CELL];
     
     
     //set the kollection type based on the identifier we passed in
@@ -68,18 +68,28 @@
         default:
             break;
     }
+    
+    //add notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadKollectionData:) name:@"KollectionsBarViewControllerReloadKollectionsData" object:nil];
+    
+    //set to first cell by default
+    selectedIndex = 0;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    NSLog(@"%s", __FUNCTION__);
-    
     [self.collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Custom Methods
+- (void)reloadKollectionData:(NSNotification*)notification {
+    NSLog(@"%s", __FUNCTION__);
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionView Datasource
@@ -98,69 +108,68 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSUInteger kollectionItemCount = [self.kollections count];
     UICollectionViewCell *cell;
     
-    if (!self.kollections || [self.kollections count] == 0) {
-        //only show the Add button if there are no kollections to display
-        cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];    
-    } else {
-        
-        //check what cell we're at and if it's the last one in the row
-        if (indexPath.row == [self.kollections count]) {
-            //always make our last cell in the row an "Add" cell
-            cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
-            return cell;
-        }
-        
-        //else, we show a regular cell
-        cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_NORMAL_CELL forIndexPath:indexPath];
-        
-        UILabel *titleLabel = (UILabel *)[cell viewWithTag:kKollectionIconTitleTag];//we just added a tag to the nib, no property necessary
-        UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
-        noPhotoLabel.hidden = YES;//default
-        
-        //set each button's (e.g. collection view cell) text from the kollection object passed in
-        PFObject *kollection = [self.kollections objectAtIndex:indexPath.row];
-        [titleLabel setText:kollection[kKKKollectionTitleKey]];
-        
-        //now add a PFImageView to the cell to load the kollection's cover photo in the background
-        //add image view to hold the kollections cover photo
-        PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(16.0f, 14.0f, 78.0f, 53.0f)];
-        coverPhotoImageView.tag = kCoverPhotoImageViewTag;
-        [cell.contentView addSubview:coverPhotoImageView];
-        [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
-        CALayer *layer = [coverPhotoImageView layer];
-        layer.masksToBounds = YES;
-        coverPhotoImageView.alpha = 0.0f;
-        
-        //now, lazily load all our kollection cover pictures, if we have them
-        PFFile *imageFile = kollection[kKKKollectionCoverPhotoThumbnailKey];
-        if (imageFile) {
-            [coverPhotoImageView setFile:imageFile];
-            [coverPhotoImageView loadInBackground:^(UIImage *image, NSError *error) {
-                if (!error) {
-                    [UIView animateWithDuration:0.200f animations:^{
-                        coverPhotoImageView.alpha = 1.0f;//load the photo into the imageview
-                        //add a new touch down background
-                        //also, change the down image of the image so we darken the whole thing and don't show the down placeholder image
-                        UIImage *downImage = [UIImage darkenImage:image toLevel:1.2];
-                        [coverPhotoImageView setHighlightedImage:downImage];
-                    }];
-                }
-            }];
-        } else {
-            //show the "no photo" label
-            UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
-            noPhotoLabel.hidden = NO;
-        }
-        
+    if (!self.kollections || kollectionItemCount == 0 || indexPath.row == kollectionItemCount) {
+        //show the Add button if there are no kollections to display or it's the last cell in the row
+        cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
+//        NSLog(@"cell for add before = %@", cell);
+        return cell;
     }
     
+    //else, we show a regular cell
+    cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_NORMAL_CELL forIndexPath:indexPath];
+    
+    UILabel *titleLabel = (UILabel *)[cell viewWithTag:kKollectionIconTitleTag];//we just added a tag to the nib, no property necessary
+    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0];
+    UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
+    noPhotoLabel.hidden = YES;//default
+    
+    //set each button's (e.g. collection view cell) text from the kollection object passed in
+    PFObject *kollection = [self.kollections objectAtIndex:indexPath.row];
+    [titleLabel setText:kollection[kKKKollectionTitleKey]];
+    
+    if ([titleLabel.text length] > 10) {
+        //make it a smaller font
+        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0];
+    }
+    
+    //now add a PFImageView to the cell to load the kollection's cover photo in the background
+    //add image view to hold the kollections cover photo
+    PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(16.0f, 14.0f, 78.0f, 53.0f)];
+    coverPhotoImageView.tag = kCoverPhotoImageViewTag;
+    [cell.contentView addSubview:coverPhotoImageView];
+    [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
+    CALayer *layer = [coverPhotoImageView layer];
+    layer.masksToBounds = YES;
+    coverPhotoImageView.alpha = 0.0f;
+    
+    //now, lazily load all our kollection cover pictures, if we have them
+    PFFile *imageFile = kollection[kKKKollectionCoverPhotoThumbnailKey];
+    if (imageFile) {
+        [coverPhotoImageView setFile:imageFile];
+        [coverPhotoImageView loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.200f animations:^{
+                    coverPhotoImageView.alpha = 1.0f;//load the photo into the imageview
+                    //add a new touch down background
+                    //also, change the down image of the image so we darken the whole thing and don't show the down placeholder image
+                    UIImage *downImage = [UIImage darkenImage:image toLevel:1.2];
+                    [coverPhotoImageView setHighlightedImage:downImage];
+                }];
+            }
+        }];
+    } else {
+        //show the "no photo" label
+        UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
+        noPhotoLabel.hidden = NO;
+    }
     return cell;
 }
 
 //- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-//    
+//
 //    return [[UICollectionReusableView alloc] init];
 //}
 
@@ -187,9 +196,11 @@
     BOOL createNew = NO;
     
     if (([self.kollections count] == 0) || [self.kollections count] == selectedIndex) {
+        NSLog(@"clicked on add new item");
         //we clicked the Add New item
         createNew = YES;
     } else {
+        NSLog(@"clicked on existing item");
         createNew = NO;
     }
     
@@ -224,6 +235,7 @@
 
 - (void)viewDidUnload {
     [self setCollectionView:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionsBarViewControllerReloadKollectionsData" object:nil];
     [super viewDidUnload];
 }
 @end

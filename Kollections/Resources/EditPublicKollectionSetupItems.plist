@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>question</key>
+		<string>Title</string>
+		<key>objectColumn</key>
+		<string>title</string>
+		<key>datatype</key>
+		<integer>2</integer>
+		<key>hint</key>
+		<string>Edit your kollection&apos;s name</string>
+		<key>required</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Cover Photo</string>
+		<key>objectColumn</key>
+		<string>coverPhotoMedium</string>
+		<key>datatype</key>
+		<integer>5</integer>
+		<key>hint</key>
+		<string>OPTIONAL; Touch to modify your kollection&apos;s cover photo</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Description</string>
+		<key>objectColumn</key>
+		<string>description</string>
+		<key>datatype</key>
+		<integer>6</integer>
+		<key>hint</key>
+		<string>OPTIONAL; Describe what this kollection is about</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Kollection Subjects</string>
+		<key>objectColumn</key>
+		<string>subjects</string>
+		<key>datatype</key>
+		<integer>8</integer>
+		<key>hint</key>
+		<string>OPTIONAL; Think of subjects as kollection sub-headings; Example: Maybe you want your kollection to be used as a scavenger hunt; each subject could then be used as a clue </string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Koin Payout</string>
+		<key>objectColumn</key>
+		<string>payout</string>
+		<key>datatype</key>
+		<integer>0</integer>
+		<key>hint</key>
+		<string>Koins are virtual currency in Kollections. How many koins are you willing to award contributors for accepted submissions? Remember, users are more likely to contribute if they receive something in return for their efforts but you can&apos;t pay out more than you have.</string>
+		<key>required</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Public or Private?</string>
+		<key>objectColumn</key>
+		<string>isPrivate</string>
+		<key>datatype</key>
+		<integer>7</integer>
+		<key>hint</key>
+		<string>Is this a public or private kollection? Other users can only access your private kollection(s) using the kollection&apos;s Access ID. If you are making a public kollection private, any users who have submissions to this kollection that you have accepted will be automatically subscribed to this kollection.</string>
+		<key>required</key>
+		<true/>
+	</dict>
+	<dict>
+		<key>question</key>
+		<string>Category</string>
+		<key>objectColumn</key>
+		<string>category</string>
+		<key>datatype</key>
+		<integer>4</integer>
+		<key>hint</key>
+		<string>Edit your kollection&apos;s category</string>
+		<key>required</key>
+		<true/>
+	</dict>
+</array>
+</plist>

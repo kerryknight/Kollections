@@ -84,7 +84,7 @@
 		<key>hint</key>
 		<string>Please choose a category for your kollection.</string>
 		<key>required</key>
-		<false/>
+		<true/>
 	</dict>
 	<dict>
 		<key>question</key>

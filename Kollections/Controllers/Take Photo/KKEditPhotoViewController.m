@@ -103,7 +103,7 @@
 }
 
 - (void)viewDidLoad {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 
     [self.navigationItem setHidesBackButton:YES];
@@ -153,17 +153,13 @@
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
     NSLog(@"%s", __FUNCTION__);
     
-    NSLog(@"self.phototype @ shouldUPload image = %i", self.photoType);
-    
     //first, check to see if it's a regular photo for submission or a profile photo we're trying to upload
     //if it's a profile photo, since we'll be resizing and processing a bit differently, pass it off to KKUtility instead of uploading here
     if (self.photoType == KKEditPhotoViewPhotoTypeProfilePhoto) {
-        NSLog(@"is a profile photo");
         //it's a profile photo, so pass the data off, mark if successful and exit here
         self.profilePhotoUploadedSuccessfully = [KKUtility processLocalProfilePicture:anImage];
         return NO;//return NO here since we'll upload from KKUtility instead
     } else if (self.photoType == KKEditPhotoViewPhotoTypeKollectionPhoto) {
-        NSLog(@"is a kollection photo so add processing xxxx2");
         //it's a kollection photo, so we'll pass it back to our kollection setup table view controller from here at doneButtonAction:
         //so here, just set our local instance variable to our image so we can pass it along from the doneButtonAction:
         self.kollectionImage = [[UIImage alloc] init];

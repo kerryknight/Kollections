@@ -223,12 +223,10 @@
     
     //add notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadProfilePhoto:) name:@"MyAccountViewLoadProfilePhoto" object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endRefreshNotification:) name:@"MyAccountViewEndRefreshNotification" object:nil];
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewLoadProfilePhoto" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewEndRefreshNotification" object:nil];
 }
 
 #pragma mark - Slime Refresh delegate
@@ -251,14 +249,8 @@
 
 - (void)refreshTable:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
+    
     [self loadObjects];
-}
-
-- (void)endRefreshNotification:(NSNotification*)notification {
-//    NSLog(@"%s", __FUNCTION__);
-    [slimeRefreshView performSelector:@selector(endRefresh)
-                           withObject:nil afterDelay:0.0
-                              inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
 }
 
 #pragma mark - KKSideScrollToolBarViewControllerDelegate methods
@@ -313,12 +305,28 @@
 }
 
 #pragma mark - PFQueryTableViewController
-
 - (void)objectsDidLoad:(NSError *)error {
 //    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     self.tableView.tableHeaderView = self.headerView;
+    
+    if (!error) {
+        //once objects are loaded, separate them into their pertinant arrays
+        [self separateReturnedObjectsIntoProperKollectionArrays];
+        
+        //also tell the UI to update itself
+        [self updateKollectionCountLabel];
+    }
+    
+    //tell the table to end refresh in case we did it by hand
+    [slimeRefreshView performSelector:@selector(endRefresh)
+                           withObject:nil afterDelay:0.0
+                              inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
+    
+    //tell our collection views to reload
+//    [self.tableView reloadData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionsBarViewControllerReloadKollectionsData" object:nil];
 }
 
 - (PFQuery *)queryForTable {
@@ -389,21 +397,41 @@
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type shouldCreateNew:(BOOL)yesOrNo {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     
-    //UPDATE need to check if we need to load the create new kollection view or navigate to selected kollection
-    if (yesOrNo == YES) {
-        //we should be a creating or subscribing to a new kollection
-        KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
-        createKollectionViewController.delegate = self;
-        [self.navigationController pushViewController:createKollectionViewController animated:YES];
+    //check kollection type first
+    if (type == KKKollectionTypeMyPublic || type == KKKollectionTypeMyPrivate) {
+        //need to check if we need to load the create new kollection view or navigate to selected kollection
+        if (yesOrNo == YES) {
+            //we should be a creating or subscribing to a new kollection
+            KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
+            createKollectionViewController.delegate = self;
+            [self.navigationController pushViewController:createKollectionViewController animated:YES];
+        } else {
+            NSLog(@"Don't go to editing of a pre-existing kollection; go to view all submitted photos for it****************************");
+            
+            NSLog(@"the below should be accessed from the kollection's view itself, not directly from here");
+            //we want to view an existing kollection
+            KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
+            editKollectionViewController.delegate = self;
+            editKollectionViewController.kollectionToLoadIndex = index;
+        
+            //now decide which kollection we need to pull out of where based on our type
+            if (type == KKKollectionTypeMyPublic) {
+                editKollectionViewController.kollection = (PFObject*)[self.myPublicKollections objectAtIndex:index];
+            } else {
+                //pull from our private list
+                editKollectionViewController.kollection = (PFObject*)[self.myPrivateKollections objectAtIndex:index];
+            }
+            
+            [self.navigationController pushViewController:editKollectionViewController animated:YES];
+        }
+        
     } else {
-        //we want to view an existing kollection //UPDATE
+        //it's a subscribed-to kollection
+        NSLog(@"It's a subscribed-to kollection row");
     }
     
-    //tell the super class of the table we just pushed in what type of kollection we're working with so it can format accordingly
-    NSDictionary *info = @{@"type" : [NSNumber numberWithBool:yesOrNo]};
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil userInfo:info];
 }
 
 #pragma mark - KKCreateKollectionViewControllerDelegate methods
@@ -419,7 +447,64 @@
     [self.kollectionsBar.collectionView reloadData];
 }
 
+#pragma mark - KKEditKollectionViewControllerDelegate methods
+- (void)editKollectionViewControllerDidEditKollection:(PFObject*)kollection atIndex:(NSUInteger)index {
+    if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
+        //it's a private kollection so replace it in the private list
+        NSLog(@"private kollections before = %@\n\n", self.myPrivateKollections);
+        [self.myPrivateKollections replaceObjectAtIndex:index withObject:kollection];
+        NSLog(@"private kollections after = %@\n\n", self.myPrivateKollections);
+    } else {
+        NSLog(@"public kollections before = %@\n\n", self.myPublicKollections);
+        [self.myPublicKollections replaceObjectAtIndex:index withObject:kollection];
+        NSLog(@"public kollections after = %@\n\n", self.myPublicKollections);
+    }
+    
+    [self.kollectionsBar.collectionView reloadData];
+}
+
 #pragma mark - Custom Methods
+- (void)separateReturnedObjectsIntoProperKollectionArrays {
+//    NSLog(@"%s", __FUNCTION__);
+    //separate my public and private kollections
+    //get current user and compare it with the kollection's owner
+    PFUser *currentUser = [PFUser currentUser];
+    
+    //remove objects from all our tables if they're there
+    //initialize all our local arrays
+    [self.myPublicKollections removeAllObjects];
+    [self.myPrivateKollections removeAllObjects];
+    [self.subscribedPrivateKollections removeAllObjects];
+    [self.subscribedPublicKollections removeAllObjects];
+    
+    for (PFObject *kollection in self.objects) {
+        PFUser *kollectionUser = (PFUser*)kollection[kKKKollectionUserKey];
+        //check if it's a kollection owned by the current user
+        if ([kollectionUser.objectId isEqualToString:currentUser.objectId]) {
+            //kollection is the same user so it's one of my creations
+            //now separate the owned kollections into public and private
+            if ([kollection[kKKKollectionIsPrivateKey] boolValue] == TRUE) {
+                //it's a private kollection
+                [self.myPrivateKollections addObject:kollection];
+            } else {
+                //it's a public kollection
+                [self.myPublicKollections addObject:kollection];
+            }
+        } else {
+            NSLog(@"kollection not owned by the current user");
+        }
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (void)updateKollectionCountLabel {
+    if ([self.objects count]) {
+       self.headerViewController.kollectionCountLabel.text = [NSString stringWithFormat:@"%i", [self.objects count]]; 
+    } else {
+        self.headerViewController.kollectionCountLabel.text = @"000";
+    }
+}
 
 - (void)loadProfilePhoto:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);

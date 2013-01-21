@@ -25,8 +25,7 @@
 @interface KKKollectionSetupTableViewController () {
     BOOL shouldShareNewKollectionToFacebook;
 }
-/// The kollection displayed in the view; redeclare so we can edit locally
-@property (nonatomic, strong, readwrite) PFObject *kollection;
+
 @property (nonatomic, strong) NSMutableArray *subjects;
 @property (nonatomic, strong) PFFile *kollectionCoverPhotoMedium;
 @property (nonatomic, strong) PFFile *kollectionCoverPhotoThumbnail;
@@ -70,9 +69,6 @@
     //this notification is called whenever a user edits a kollection and then adds/updates the subjects array for that kollection
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectListUpdated:) name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
     
-    //this notification is used to set what type of kollection we're editing, new or existing
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setTypeOfKollection:) name:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil];
-    
     //this notification is used to to process any new kollection cover photo we might have as we don't want to automatically upload any of these
     //type of photos when we select them; only when we save the new kollection or have already saved it and are working on an existing kollection
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processCoverPhoto:) name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
@@ -87,7 +83,6 @@
 - (void)dealloc {
 //    NSLog(@"%s", __FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSetTypeOfKollection" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
 }
 
@@ -243,23 +238,6 @@
     [self.tableView reloadData];
 }
 
-- (void)setTypeOfKollection:(NSNotification*)notification {
-    NSLog(@"%s\n", __FUNCTION__);
-    NSDictionary *notificationInfo = [notification userInfo];
-    self.kollectionSetupType = [notificationInfo[@"type"] boolValue];//kollectionSetupType used to differentiate certain table functions
-    [self.tableView reloadData];
-    NSLog(@"kollection type = %i", self.kollectionSetupType);
-    
-    if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
-        //UPDATE
-        //need to query for the kollection's subjects here to populate the subject's cell text field
-        NSLog(@"Need to query for the kollection's subjects and then set self.subjects = to the returned objects and reload data");
-    } else {
-        //initialize kollection
-        self.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
-    }
-}
-
 - (void)loadCoverPhoto:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
     
@@ -268,7 +246,7 @@
         //we have a sender, meaning we already have a cover photo to load
         cell = (KKSetupTablePhotoCell*)sender;
     } else {
-        //we'll have to use out table's index path for the cell to get it; this happens when we don't already have a cover photo, perhaps like for a new kollection
+        //we'll have to use our table's index path for the cell to get it; this happens when we don't already have a cover photo, perhaps like for a new kollection
         cell = (KKSetupTablePhotoCell*)[self.tableView cellForRowAtIndexPath:self.coverPhotoCellIndexPath];
     }
     
@@ -307,7 +285,7 @@
 }
 
 - (void)processCoverPhoto:(NSNotification *)notification {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     NSDictionary *data = notification.userInfo;
     
     //get the image from the passed in user info dictionary
@@ -576,7 +554,6 @@
 }
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 
     // Return the number of sections.
