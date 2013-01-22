@@ -30,7 +30,7 @@
 }
 
 - (void)viewDidLoad {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
@@ -54,6 +54,7 @@
     //give our table view a kollection object to work with
     self.tableView.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
     self.tableView.kollectionSetupType = KKKollectionSetupTypeNew;
+    self.tableView.shouldInitializeAsPrivate = self.shouldInitializeAsPrivate;//determine what way the segment should be set to to start
 }
 
 - (void)didReceiveMemoryWarning {

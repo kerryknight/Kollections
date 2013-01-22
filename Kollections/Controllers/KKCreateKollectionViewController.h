@@ -18,5 +18,6 @@
 }
 
 @property (nonatomic, strong) id<KKCreateKollectionViewControllerDelegate>delegate;
+@property (nonatomic, assign) BOOL shouldInitializeAsPrivate;
 
 @end

@@ -15,6 +15,7 @@
 #import "SRSlimeView.h"
 #import "KKAppDelegate.h"
 #import "KKToolbarButton.h"
+#import "NSMutableArray+AddOns.h"
 
 @interface KKAccountViewController() {
     SRRefreshView *slimeRefreshView;
@@ -325,7 +326,6 @@
                               inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
     
     //tell our collection views to reload
-//    [self.tableView reloadData];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionsBarViewControllerReloadKollectionsData" object:nil];
 }
 
@@ -406,6 +406,14 @@
             //we should be a creating or subscribing to a new kollection
             KKCreateKollectionViewController *createKollectionViewController = [[KKCreateKollectionViewController alloc] init];
             createKollectionViewController.delegate = self;
+            //set our bool that initializes our segmented control turn to public or private
+            if (type == KKKollectionTypeMyPrivate) {
+                NSLog(@"create a private kollection");
+                createKollectionViewController.shouldInitializeAsPrivate = YES;
+            } else {
+                NSLog(@"create a public kollection");
+                createKollectionViewController.shouldInitializeAsPrivate = NO;
+            }
             [self.navigationController pushViewController:createKollectionViewController animated:YES];
         } else {
             NSLog(@"Don't go to editing of a pre-existing kollection; go to view all submitted photos for it****************************");
@@ -437,30 +445,27 @@
 #pragma mark - KKCreateKollectionViewControllerDelegate methods
 - (void)createKollectionViewControllerDidCreateNewKollection:(PFObject *)kollection {
 //    NSLog(@"%s", __FUNCTION__);
+    
     if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
-        //it's a private kollection so add it to the private list
-        [self.myPrivateKollections addObject:kollection];
+        //it's a private kollection so replace it in the private list
+        [self.myPrivateKollections addUniqueObject:kollection atIndex:0];//add it to the beginning
     } else {
-        [self.myPublicKollections addObject:kollection];
+        [self.myPublicKollections addUniqueObject:kollection atIndex:0];//add it to the beginning
     }
     
-    [self.kollectionsBar.collectionView reloadData];
+    [self loadObjects];
 }
 
 #pragma mark - KKEditKollectionViewControllerDelegate methods
 - (void)editKollectionViewControllerDidEditKollection:(PFObject*)kollection atIndex:(NSUInteger)index {
     if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
         //it's a private kollection so replace it in the private list
-        NSLog(@"private kollections before = %@\n\n", self.myPrivateKollections);
         [self.myPrivateKollections replaceObjectAtIndex:index withObject:kollection];
-        NSLog(@"private kollections after = %@\n\n", self.myPrivateKollections);
     } else {
-        NSLog(@"public kollections before = %@\n\n", self.myPublicKollections);
         [self.myPublicKollections replaceObjectAtIndex:index withObject:kollection];
-        NSLog(@"public kollections after = %@\n\n", self.myPublicKollections);
     }
     
-    [self.kollectionsBar.collectionView reloadData];
+    [self loadObjects];
 }
 
 #pragma mark - Custom Methods

@@ -74,16 +74,24 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processCoverPhoto:) name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)viewDidUnload {
+//    NSLog(@"%s", __FUNCTION__);
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
+    [super viewDidUnload];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];  
+}
+
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc {
 //    NSLog(@"%s", __FUNCTION__);
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
 }
 
 #define kSETUP_SAVE_NEW_KOLLECTION @"Save Kollection"
@@ -112,7 +120,7 @@
             return;//exit without continuing if we still need to fill stuff in
         }
         
-        NSLog(@"should share to fb = %i", shouldShareNewKollectionToFacebook);
+//        NSLog(@"should share to fb = %i", shouldShareNewKollectionToFacebook);
         //UPDATE need to determine if public/private before setting ACL here
         
         // kollections are public, but may only be modified by the user who uploaded them
@@ -121,46 +129,80 @@
         self.kollection.ACL = kollectionACL;
         
         //save on main thread as don't want to dismiss the view unless saved successfully
-        
-        [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-            if (!error) {
-                NSLog(@"kollection save succeeded; dismiss view");
-                //kollection save succeeded
-                
-                //now, check if we just created a new kollection or were editing and existing one
-                //if a new kollection, we'll need to save any subjects we created; if it's an existing kollection,
-                //we will have already saved our subjects from within the subjectListUpdated: method
-                if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
-                    //it's a new kollection so save any subjects we may have created
-                    //so now set our newly acquired kollection's id for each of our subjects
-                    for (PFObject *subject in self.subjects) {
-                        [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
-                    }
+        // Save PFFile
+        if (self.kollectionCoverPhotoThumbnail.isDirty) {
+            NSLog(@"thumbnail is dirty");
+            [self.kollectionCoverPhotoThumbnail saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+//                    // Hide old HUD, show completed HUD (see example for code)
+//                    
+//                    // Create a PFObject around a PFFile and associate it with the current user
+//                    PFObject *userPhoto = [PFObject objectWithClassName:@"UserPhoto"];
+//                    [userPhoto setObject:imageFile forKey:@"imageFile"];
+//                    
+//                    // Set the access control list to current user for security purposes
+//                    userPhoto.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
+//                    
+//                    PFUser *user = [PFUser currentUser];
+//                    [userPhoto setObject:user forKey:@"user"];
+//                    [self setKollectionObjectPhotoProperties];
+                    NSLog(@"thumbnail saved when dirty successfully");
+                    [self saveKollection];
                     
-                    //save all our subjects at once in the background
-                    if([self.subjects count])[PFObject saveAllInBackground:self.subjects];
-                } else {
-                    //existing kollection, subjects already saved
+                } else{
+                    // Remove hud
+                    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                    // Log details of the failure
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                }
+            }];
+        } else {
+            NSLog(@"thumbnail not dirty");
+//            [self setKollectionObjectPhotoProperties];
+            [self saveKollection];
+        }
+    }
+}
+
+- (void)saveKollection {
+    [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            NSLog(@"kollection save succeeded; dismiss view");
+            //kollection save succeeded
+            
+            //now, check if we just created a new kollection or were editing and existing one
+            //if a new kollection, we'll need to save any subjects we created; if it's an existing kollection,
+            //we will have already saved our subjects from within the subjectListUpdated: method
+            if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
+                //it's a new kollection so save any subjects we may have created
+                //so now set our newly acquired kollection's id for each of our subjects
+                for (PFObject *subject in self.subjects) {
+                    [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
                 }
                 
-                //create a dictionary to pass our new kollection back to our root view for loading into our kollection bar tables
-                //we do this so we don't have to requery parse for the kollection list and therefore can re-update the UI
-                NSDictionary *userInfo = @{@"kollection" : self.kollection};
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
+                //save all our subjects at once in the background
+                if([self.subjects count])[PFObject saveAllInBackground:self.subjects];
             } else {
-                NSString *message = [NSString stringWithFormat:@"%@", error];
-                UIAlertView *alertView = [[UIAlertView alloc]
-                                          initWithTitle:@"Error Creating Kollection"
-                                          message:message delegate:nil
-                                          cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                
-                [alertView show];
+                //existing kollection, subjects already saved
             }
             
-            // Remove hud
-            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-        }];
-    }
+            //create a dictionary to pass our new kollection back to our root view for loading into our kollection bar tables
+            //we do this so we don't have to requery parse for the kollection list and therefore can re-update the UI
+            NSDictionary *userInfo = @{@"kollection" : self.kollection};
+            [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
+        } else {
+            NSString *message = [NSString stringWithFormat:@"%@", error];
+            UIAlertView *alertView = [[UIAlertView alloc]
+                                      initWithTitle:@"Error Creating Kollection"
+                                      message:message delegate:nil
+                                      cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            
+            [alertView show];
+        }
+        
+        // Remove hud
+        [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+    }];
 }
 
 - (BOOL)isRequiredInfoFilledIn {
@@ -256,6 +298,7 @@
         if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
             [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] setFile:imageFile];
             //wait till we load the photo from the server
+            NSLog(@"load in background query called");
             [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] loadInBackground:^(UIImage *image, NSError *error) {
                 if (!error) {
                     [UIView animateWithDuration:0.200f animations:^{
@@ -319,7 +362,8 @@
         [self loadCoverPhoto:nil];
     } else {
         //we can go ahead and save our photos in the background since we have a kollection id
-        //this will give us a head start on the upload; should the upload fail, as long as the user hits "Save" on the setup view, the save will attempt again since this property will be "dirty" 
+        //this will give us a head start on the upload; should the upload fail, as long as the user hits "Save" on the setup view, the save will attempt again since this property will be "dirty"
+        NSLog(@"save in background with block query called");
         [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 //success, now we can load it
@@ -948,8 +992,11 @@
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
             BOOL isPrivateValue = NO;
             if ([self.kollection objectForKey:columnName]) {
-                //check if we've set the isPrivate property to YES; if not, default to Public segment selected
+                //check if we've set the isPrivate property to YES; if not, default to Public segment selected; this would be when editing an existing one
                 [[self.kollection objectForKey:columnName] boolValue] != YES ? [cell.segmentedControl setSelectedSegmentIndex:0] : [cell.segmentedControl setSelectedSegmentIndex:1];
+            } else {
+                //no value set so fall back to our property value; this would be the case for a new kollection
+                self.shouldInitializeAsPrivate == YES ? [cell.segmentedControl setSelectedSegmentIndex:1] : [cell.segmentedControl setSelectedSegmentIndex:0];
             }
             
             //set our isPrivate property based on what we've just set the selected segment index to

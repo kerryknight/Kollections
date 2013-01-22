@@ -42,7 +42,8 @@ typedef enum {
 @property (nonatomic, assign) KKKollectionSetupType kollectionSetupType;//used to set table based on new/existing kollection
 @property (nonatomic, assign) KKKollectionSetupCellDataType cellDataType;//used to dynamically load cells based on input values
 @property (nonatomic, strong) NSMutableArray *tableObjects;//these are the questions/settings/fields pulled in from the plist
-@property (nonatomic, strong) PFObject *kollection; 
+@property (nonatomic, strong) PFObject *kollection;
+@property (nonatomic, assign) BOOL shouldInitializeAsPrivate;
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
 - (void)dismissView;

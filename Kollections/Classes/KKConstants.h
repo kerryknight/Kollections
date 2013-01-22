@@ -30,7 +30,7 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define kDisplayTableCellContentX 16.0f
 #define kDisplayTableHeaderHeight 40.0f
 #define kDisplayTableFooterHeight 10.0f
-#define kDisplayTableContentRowHeight 93.0f
+#define kDisplayTableContentRowHeight 100.0f
 #define kSETUP_TEXT_OBJECT_WIDTH 280
 #define kSETUP_MAX_FOOTNOTE_LINE_LENGTH  40
 #define kSETUP_ADDITIONAL_LINE_HEIGHT 20
@@ -52,7 +52,7 @@ extern NSString *const kKKTwitterConsumerSecret;
 #pragma mark - Fonts
 #define kSetupEntryFont [UIFont fontWithName:@"Helvetica-Light" size:14]
 #define kSetupFooterFont [UIFont fontWithName:@"Helvetica-LightOblique" size:12]
-#define kSetupStringCharacterLimit  30
+#define kSetupStringCharacterLimit  40
 #define kSetupLongStringCharacterLimit  100
 
 

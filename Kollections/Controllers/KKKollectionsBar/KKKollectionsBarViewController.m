@@ -29,7 +29,7 @@
 }
 
 #define TOOLBAR_COLLECTION_ITEM_WIDTH   111.0
-#define TOOLBAR_COLLECTION_ITEM_HEIGHT  93.0
+#define TOOLBAR_COLLECTION_ITEM_HEIGHT  100.0
 #define KK_NORMAL_CELL @"KKKollectionsCell"
 #define KK_ADD_CELL @"KKKollectionsAddCell"
 #define kKollectionIconTitleTag         99
@@ -76,7 +76,7 @@
     selectedIndex = 0;
 }
 
-- (void) viewWillAppear:(BOOL)animated {
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.collectionView reloadData];
 }
@@ -88,8 +88,11 @@
 
 #pragma mark - Custom Methods
 - (void)reloadKollectionData:(NSNotification*)notification {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [self.collectionView reloadData];
+    
+    //reload the collection view data and scroll back to our newly created object
+    [self.collectionView scrollToItemAtIndexPath:0 atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
 }
 
 #pragma mark - UICollectionView Datasource
@@ -122,7 +125,6 @@
     cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_NORMAL_CELL forIndexPath:indexPath];
     
     UILabel *titleLabel = (UILabel *)[cell viewWithTag:kKollectionIconTitleTag];//we just added a tag to the nib, no property necessary
-    titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:13.0];
     UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];
     noPhotoLabel.hidden = YES;//default
     
@@ -130,14 +132,9 @@
     PFObject *kollection = [self.kollections objectAtIndex:indexPath.row];
     [titleLabel setText:kollection[kKKKollectionTitleKey]];
     
-    if ([titleLabel.text length] > 10) {
-        //make it a smaller font
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:9.0];
-    }
-    
     //now add a PFImageView to the cell to load the kollection's cover photo in the background
     //add image view to hold the kollections cover photo
-    PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(16.0f, 14.0f, 78.0f, 53.0f)];
+    PFImageView *coverPhotoImageView = [[PFImageView alloc] initWithFrame:CGRectMake(16.0f, 7.0f, 78.0f, 53.0f)];
     coverPhotoImageView.tag = kCoverPhotoImageViewTag;
     [cell.contentView addSubview:coverPhotoImageView];
     [coverPhotoImageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -147,6 +144,7 @@
     
     //now, lazily load all our kollection cover pictures, if we have them
     PFFile *imageFile = kollection[kKKKollectionCoverPhotoThumbnailKey];
+    
     if (imageFile) {
         [coverPhotoImageView setFile:imageFile];
         [coverPhotoImageView loadInBackground:^(UIImage *image, NSError *error) {
@@ -158,8 +156,11 @@
                     UIImage *downImage = [UIImage darkenImage:image toLevel:1.2];
                     [coverPhotoImageView setHighlightedImage:downImage];
                 }];
+            } else {
+                NSLog(@"error loading in background for index %i = \n\n%@", indexPath.row, [error localizedDescription]);
             }
         }];
+        
     } else {
         //show the "no photo" label
         UILabel *noPhotoLabel = (UILabel*)[cell viewWithTag:kNoCoverPhotoLabelTag];

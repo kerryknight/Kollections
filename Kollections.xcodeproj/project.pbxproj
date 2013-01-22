@@ -22,6 +22,7 @@
 		C70054ED16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */; };
 		C70A13A416ACC1D9007EAA5B /* KKEditKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */; };
 		C70A13AC16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */; };
+		C70A13B016ADF626007EAA5B /* NSMutableArray+AddOns.m in Sources */ = {isa = PBXBuildFile; fileRef = C70A13AF16ADF626007EAA5B /* NSMutableArray+AddOns.m */; };
 		C712703D168265AB00C1B560 /* kkVerticalSeparator.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703B168265AB00C1B560 /* kkVerticalSeparator.png */; };
 		C712703E168265AB00C1B560 /* kkVerticalSeparator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */; };
 		C71270461682666A00C1B560 /* 112-group.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270421682666A00C1B560 /* 112-group.png */; };
@@ -573,6 +574,8 @@
 		C70A13A216ACC1D9007EAA5B /* KKEditKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKEditKollectionViewController.h; sourceTree = "<group>"; };
 		C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKEditKollectionViewController.m; sourceTree = "<group>"; };
 		C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EditPublicKollectionSetupItems.plist; sourceTree = "<group>"; };
+		C70A13AE16ADF626007EAA5B /* NSMutableArray+AddOns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSMutableArray+AddOns.h"; path = "My Categories/NSMutableArray+AddOns.h"; sourceTree = "<group>"; };
+		C70A13AF16ADF626007EAA5B /* NSMutableArray+AddOns.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSMutableArray+AddOns.m"; path = "My Categories/NSMutableArray+AddOns.m"; sourceTree = "<group>"; };
 		C712703B168265AB00C1B560 /* kkVerticalSeparator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkVerticalSeparator.png; sourceTree = "<group>"; };
 		C712703C168265AB00C1B560 /* kkVerticalSeparator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkVerticalSeparator@2x.png"; sourceTree = "<group>"; };
 		C71270421682666A00C1B560 /* 112-group.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "112-group.png"; sourceTree = "<group>"; };
@@ -606,8 +609,8 @@
 		C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkKollectionIconPlaceholder.png; sourceTree = "<group>"; };
 		C73F23DB16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkKollectionIconPlaceholder@2x.png"; sourceTree = "<group>"; };
 		C73F23DF16AC63C0006B96AE /* KKKollectionsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKKollectionsCell.xib; path = KKKollectionsBar/KKKollectionsCell.xib; sourceTree = "<group>"; };
-		C73F23E516ACB4CE006B96AE /* UIImage+Colorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Colorization.h"; sourceTree = "<group>"; };
-		C73F23E616ACB4CE006B96AE /* UIImage+Colorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Colorization.m"; sourceTree = "<group>"; };
+		C73F23E516ACB4CE006B96AE /* UIImage+Colorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+Colorization.h"; path = "../External/UIImage Categories/UIImage+Colorization.h"; sourceTree = "<group>"; };
+		C73F23E616ACB4CE006B96AE /* UIImage+Colorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Colorization.m"; path = "../External/UIImage Categories/UIImage+Colorization.m"; sourceTree = "<group>"; };
 		C74C9E7B16A6F86600207EF1 /* kkFacebookIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkFacebookIcon.png; sourceTree = "<group>"; };
 		C74C9E7C16A6F86600207EF1 /* kkFacebookIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkFacebookIcon@2x.png"; sourceTree = "<group>"; };
 		C74C9E7D16A6F86600207EF1 /* kkFacebookIconSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkFacebookIconSelected.png; sourceTree = "<group>"; };
@@ -1231,6 +1234,17 @@
 			name = "Subjects Table";
 			sourceTree = "<group>";
 		};
+		C70A13AD16ADF5A7007EAA5B /* My Categories */ = {
+			isa = PBXGroup;
+			children = (
+				C73F23E516ACB4CE006B96AE /* UIImage+Colorization.h */,
+				C73F23E616ACB4CE006B96AE /* UIImage+Colorization.m */,
+				C70A13AE16ADF626007EAA5B /* NSMutableArray+AddOns.h */,
+				C70A13AF16ADF626007EAA5B /* NSMutableArray+AddOns.m */,
+			);
+			name = "My Categories";
+			sourceTree = "<group>";
+		};
 		C7127078168283E700C1B560 /* SlimeRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -1447,6 +1461,7 @@
 		C7B1CD4116783C8500BA628A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C70A13AD16ADF5A7007EAA5B /* My Categories */,
 				C734813616A07C0C004AD6EB /* UI Classes */,
 				C7B1CD4216783C8500BA628A /* KKCache.h */,
 				C7B1CD4316783C8500BA628A /* KKCache.m */,
@@ -1613,8 +1628,6 @@
 				C7B1CD8116783C8500BA628A /* UIImage+ResizeAdditions.m */,
 				C7B1CD8216783C8500BA628A /* UIImage+RoundedCornerAdditions.h */,
 				C7B1CD8316783C8500BA628A /* UIImage+RoundedCornerAdditions.m */,
-				C73F23E516ACB4CE006B96AE /* UIImage+Colorization.h */,
-				C73F23E616ACB4CE006B96AE /* UIImage+Colorization.m */,
 			);
 			path = "UIImage Categories";
 			sourceTree = "<group>";
@@ -2932,6 +2945,7 @@
 				C7B4AE8016A8E70700C77C48 /* KKSetupTablePhotoCell.m in Sources */,
 				C73F23E716ACB4CE006B96AE /* UIImage+Colorization.m in Sources */,
 				C70A13A416ACC1D9007EAA5B /* KKEditKollectionViewController.m in Sources */,
+				C70A13B016ADF626007EAA5B /* NSMutableArray+AddOns.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

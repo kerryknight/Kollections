@@ -28,7 +28,7 @@
 }
 
 - (void)viewDidLoad {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
