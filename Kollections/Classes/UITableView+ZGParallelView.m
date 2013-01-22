@@ -15,35 +15,35 @@
 
 
 
-static char UITableViewZGParallelViewDisplayRadio;
+static char UITableViewZGParallelViewDisplayRatio;
 static char UITableViewZGParallelViewViewHeight;
 static char UITableViewZGParallelViewCutOffAtMax;
-static char UITableViewZGParallelViewEmbededScrollView;
+static char UITableViewZGParallelViewEmbeddedScrollView;
 static char UITableViewZGParallelViewIsObserving;
 
 
 @interface UITableView (ZGParallelViewPri)
-@property (nonatomic, assign) CGFloat displayRadio;
+@property (nonatomic, assign) CGFloat displayRatio;
 @property (nonatomic, assign) CGFloat viewHeight;
 @property (nonatomic, assign) BOOL cutOffAtMax;
-@property (nonatomic, strong) ZGScrollView *embededScrollView;
+@property (nonatomic, strong) ZGScrollView *embeddedScrollView;
 @property (nonatomic, assign) BOOL isObserving;
 @end
 
 
 @implementation UITableView (ZGParallelViewPri)
-@dynamic displayRadio, viewHeight, cutOffAtMax, embededScrollView, isObserving;
+@dynamic displayRatio, viewHeight, cutOffAtMax, embeddedScrollView, isObserving;
 
-- (void)setDisplayRadio:(CGFloat)displayRadio {
-    [self willChangeValueForKey:@"displayRadio"];
-    objc_setAssociatedObject(self, &UITableViewZGParallelViewDisplayRadio,
-                             [NSNumber numberWithFloat:displayRadio],
+- (void)setDisplayRatio:(CGFloat)displayRatio {
+    [self willChangeValueForKey:@"displayRatio"];
+    objc_setAssociatedObject(self, &UITableViewZGParallelViewDisplayRatio,
+                             [NSNumber numberWithFloat:displayRatio],
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [self didChangeValueForKey:@"displayRadio"];
+    [self didChangeValueForKey:@"displayRatio"];
 }
 
-- (CGFloat)displayRadio {
-    NSNumber *number = objc_getAssociatedObject(self, &UITableViewZGParallelViewDisplayRadio);
+- (CGFloat)displayRatio {
+    NSNumber *number = objc_getAssociatedObject(self, &UITableViewZGParallelViewDisplayRatio);
     return [number floatValue];
 }
 
@@ -75,16 +75,16 @@ static char UITableViewZGParallelViewIsObserving;
     }
 }
 
-- (void)setEmbededScrollView:(ZGScrollView *)embededScrollView {
-    [self willChangeValueForKey:@"embededScrollView"];
-    objc_setAssociatedObject(self, &UITableViewZGParallelViewEmbededScrollView,
-                             embededScrollView,
+- (void)setEmbeddedScrollView:(ZGScrollView *)embeddedScrollView {
+    [self willChangeValueForKey:@"embeddedScrollView"];
+    objc_setAssociatedObject(self, &UITableViewZGParallelViewEmbeddedScrollView,
+                             embeddedScrollView,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    [self didChangeValueForKey:@"embededScrollView"];
+    [self didChangeValueForKey:@"embeddedScrollView"];
 }
 
-- (ZGScrollView *)embededScrollView {
-    return objc_getAssociatedObject(self, &UITableViewZGParallelViewEmbededScrollView);
+- (ZGScrollView *)embeddedScrollView {
+    return objc_getAssociatedObject(self, &UITableViewZGParallelViewEmbeddedScrollView);
 }
 
 - (void)setIsObserving:(BOOL)isObserving {
@@ -116,34 +116,34 @@ static char UITableViewZGParallelViewIsObserving;
 
 
 
-#define DEFAULT_DISPLAY_RADIO   0.5f
+#define DEFAULT_DISPLAY_Ratio   0.5f
 @implementation UITableView (ZGParallelView)
 - (void)addParallelViewWithUIView:(UIView *)aViewToAdd {
-    [self addParallelViewWithUIView:aViewToAdd withDisplayRadio:DEFAULT_DISPLAY_RADIO];
+    [self addParallelViewWithUIView:aViewToAdd withDisplayRatio:DEFAULT_DISPLAY_Ratio];
 }
 
-- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRadio:(CGFloat)displayRadio{
-    [self addParallelViewWithUIView:aViewToAdd withDisplayRadio:displayRadio cutOffAtMax:NO];
+- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRatio:(CGFloat)displayRatio{
+    [self addParallelViewWithUIView:aViewToAdd withDisplayRatio:displayRatio cutOffAtMax:NO];
 }
 
-- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRadio:(CGFloat)aDisplayRadio cutOffAtMax:(BOOL)cutOffAtMax{
+- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRatio:(CGFloat)aDisplayRatio cutOffAtMax:(BOOL)cutOffAtMax{
     NSAssert(aViewToAdd != nil, @"aViewToAdd can not be nil");
     
     aViewToAdd.frame = CGRectOffset(aViewToAdd.frame, -aViewToAdd.frame.origin.x, -aViewToAdd.frame.origin.y);
-    if (aDisplayRadio>1 && aDisplayRadio<0) {
-        self.displayRadio = 1;
+    if (aDisplayRatio>1 && aDisplayRatio<0) {
+        self.displayRatio = 1;
     } else {
-        self.displayRadio = aDisplayRadio;
+        self.displayRatio = aDisplayRatio;
     }
     self.viewHeight = aViewToAdd.frame.size.height;
     self.cutOffAtMax = cutOffAtMax;
-    self.embededScrollView = [[ZGScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.viewHeight + 80)];
-    self.embededScrollView.tableView = self;
-    [self.embededScrollView addSubview:aViewToAdd];
-    aViewToAdd.frame = CGRectOffset(aViewToAdd.frame, 0, self.viewHeight*(1.f - self.displayRadio)/2.f);
-    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.viewHeight*self.displayRadio)];
-    [headView addSubview:self.embededScrollView];
-    self.embededScrollView.frame = CGRectOffset(self.embededScrollView.frame, 0, self.viewHeight*(self.displayRadio-1.f));
+    self.embeddedScrollView = [[ZGScrollView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.viewHeight + 80)];
+    self.embeddedScrollView.tableView = self;
+    [self.embeddedScrollView addSubview:aViewToAdd];
+    aViewToAdd.frame = CGRectOffset(aViewToAdd.frame, 0, self.viewHeight*(1.f - self.displayRatio)/2.f);
+    UIView *headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.viewHeight*self.displayRatio)];
+    [headView addSubview:self.embeddedScrollView];
+    self.embeddedScrollView.frame = CGRectOffset(self.embeddedScrollView.frame, 0, self.viewHeight*(self.displayRatio-1.f));
     self.tableHeaderView = headView;
     
     if (self.isObserving == NO) {
@@ -154,12 +154,12 @@ static char UITableViewZGParallelViewIsObserving;
 
 - (void)updateParallelView {
     CGFloat yOffset = self.contentOffset.y;
-    if (yOffset<0 && yOffset>self.viewHeight*(self.displayRadio-1.f)) {
-        self.embededScrollView.contentOffset = CGPointMake(0.f, -yOffset*0.5f);
+    if (yOffset<0 && yOffset>self.viewHeight*(self.displayRatio-1.f)) {
+        self.embeddedScrollView.contentOffset = CGPointMake(0.f, -yOffset*0.5f);
     }
     
-    if (self.cutOffAtMax && yOffset<self.viewHeight*(self.displayRadio-1.f)) {
-        self.contentOffset = CGPointMake(0.f, self.viewHeight*(self.displayRadio-1.f));
+    if (self.cutOffAtMax && yOffset<self.viewHeight*(self.displayRatio-1.f)) {
+        self.contentOffset = CGPointMake(0.f, self.viewHeight*(self.displayRatio-1.f));
     }
 }
 

@@ -182,7 +182,7 @@
     [super objectsDidLoad:error];
     
     //add the parallax effect to the table with out cover photo view
-    [self.tableView addParallelViewWithUIView:self.headerView withDisplayRadio:0.4 cutOffAtMax:YES];
+    [self.tableView addParallelViewWithUIView:self.headerView withDisplayRatio:0.4 cutOffAtMax:YES];
     
     if (!error) {
         //load table rows

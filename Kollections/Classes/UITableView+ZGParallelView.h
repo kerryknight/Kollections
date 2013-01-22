@@ -11,7 +11,7 @@
 @interface UITableView (ZGParallelView)
 
 - (void)addParallelViewWithUIView:(UIView *)aViewToAdd;
-- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRadio:(CGFloat )displayRadio;
-- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRadio:(CGFloat )displayRadio cutOffAtMax:(BOOL)cutOffAtMax;
+- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRatio:(CGFloat )displayRatio;
+- (void)addParallelViewWithUIView:(UIView *)aViewToAdd withDisplayRatio:(CGFloat )displayRatio cutOffAtMax:(BOOL)cutOffAtMax;
 
 @end
