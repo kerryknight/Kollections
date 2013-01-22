@@ -52,7 +52,7 @@
         // The number of objects to show per page
         self.objectsPerPage = 10;//[self.subjectTitles count];
         
-        self.shouldReloadOnAppear = NO;
+        self.shouldReloadOnAppear = YES;
     }
     return self;
 }
@@ -64,8 +64,6 @@
 //    NSLog(@"%s", __FUNCTION__);
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
-    
-    self.tableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]];
     self.tableView.showsVerticalScrollIndicator = NO;
     
     //initialize all our local arrays
@@ -107,7 +105,7 @@
     
     if (self.shouldReloadOnAppear) {
         self.shouldReloadOnAppear = NO;
-        [self loadObjects];
+//        [self loadObjects];
     }
 }
 
@@ -118,12 +116,12 @@
     
     //don't show anything until objects are loaded
     if (!objectsAreLoaded) {
-        return 0;
+        return 3;
     }
     
 //    NSInteger sections = [self.subjectTitles count];
 //    return sections;
-    return 1;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -131,35 +129,55 @@
     return 3;//1 for top row header w/label, 1 for main content view and 1 for bottom row graphic
 }
 
-
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    NSLog(@"%s\n", __FUNCTION__);
     
-    //don't show anything until objects are loaded
-    if (!objectsAreLoaded) {
-        return 0.0f;
-    } else {
-        NSInteger sectionRows = 3;
-        NSInteger row = [indexPath row];
-        
-        if (row == 0 && row == sectionRows - 1) {
-            //single row; will this ever happen?
-            return 0;
-        }
-        else if (row == 0) {
-            //top row
-            return kDisplayTableHeaderHeight;
-        }
-        else if (row == sectionRows - 1) {
-            //bottom row
-            return kDisplayTableFooterHeight;
-        }
-        else {
-            //middle row
-            return kDisplayTableContentRowHeight;
-        }
+//    //don't show anything until objects are loaded
+//    if (!objectsAreLoaded) {
+//        return 0.0f;
+//    } else {
+//        
+//        NSInteger sectionRows = 3;
+//        NSInteger row = [indexPath row];
+//        
+//        if (row == 0 && row == sectionRows - 1) {
+//            //single row; will this ever happen?
+//            return 0;
+//        }
+//        else if (row == 0) {
+//            //top row
+//            return kDisplayTableHeaderHeight;
+//        }
+//        else if (row == sectionRows - 1) {
+//            //bottom row
+//            return kDisplayTableFooterHeight;
+//        }
+//        else {
+//            //middle row
+//            return kDisplayTableContentRowHeight;
+//        }
+//    }
+    
+    NSInteger sectionRows = 3;
+    NSInteger row = [indexPath row];
+    
+    if (row == 0 && row == sectionRows - 1) {
+        //single row; will this ever happen?
+        return 0;
+    }
+    else if (row == 0) {
+        //top row
+        return kDisplayTableHeaderHeight;
+    }
+    else if (row == sectionRows - 1) {
+        //bottom row
+        return kDisplayTableFooterHeight;
+    }
+    else {
+        //middle row
+        return kDisplayTableContentRowHeight;
     }
 }
 
@@ -175,7 +193,6 @@
 //    }
 }
 
-
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
     NSLog(@"%s", __FUNCTION__);
@@ -185,9 +202,10 @@
     [self.tableView addParallelViewWithUIView:self.headerView withDisplayRatio:0.4 cutOffAtMax:YES];
     
     if (!error) {
+        NSLog(@"no error loading");
         //load table rows
         objectsAreLoaded = YES;
-        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
+//        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
         
     } else {
         //error loading items
@@ -219,7 +237,7 @@
 }
 
 - (PFObject *)objectAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     // overridden, since we want to implement sections
     if (indexPath.section < self.objects.count) {
         return [self.objects objectAtIndex:indexPath.section];
@@ -232,34 +250,7 @@
 //    NSLog(@"%s", __FUNCTION__);
     NSString *CellIdentifier = [[NSString alloc] init];
     
-    if (indexPath.row == 1) {
-        //middle row where our kollections bar is housed
-        //switch statement to set different cell identifiers
-        //i had to do this roundabout hackish way b/c i couldn't figure out a good way to
-        //differentiate the kollection bars from one another without having different collectionView
-        //subclasses for each section, i.e. when I click on a collection
-        //view item, i could tell what index it was, but not what type of kollection;
-        //i'll also use this to help splitting up PFQueries, since i plan to use 1 query for the
-        //kollections I own and 1 query for the kollections i'm subscribed to
-        //this gets set to one of the kollectionBar's properties
-        switch (indexPath.section) {
-            case 0:
-                CellIdentifier = @"0";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
-                break;
-            case 1:
-                CellIdentifier = @"1";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
-                break;
-            case 2:
-                CellIdentifier = @"2";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
-                break;
-            case 3:
-                CellIdentifier = @"3";//so we can convert to integer for a switch statement on KKKollectionsBarViewController
-                break;
-            default:
-                CellIdentifier = @"Cell";
-                break;
-        }
-    }
+    CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	
@@ -327,6 +318,7 @@
     else if (row == 0) {
         //top row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
+        headerLabel.text = @"header row";
 //        headerLabel.text = self.subjectTitles[indexPath.section];//set the header title text
     }
     else if (row == sectionRows - 1) {
@@ -338,7 +330,6 @@
         //middle row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
         headerLabel.text = @"";
-        //check if we have objects to display in the collection; if not, show the add button
         
         //set the kollection view size to match the cell and unhide it
         kollectionView.hidden = NO;
@@ -395,7 +386,7 @@
 }
 
 - (void)configureEditButton {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //add button to view
     self.editButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Edit"];
     [self.editButton addTarget:self action:@selector(editButtonAction:) forControlEvents:UIControlEventTouchUpInside];
