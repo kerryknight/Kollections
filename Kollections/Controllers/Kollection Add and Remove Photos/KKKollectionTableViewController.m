@@ -1,32 +1,44 @@
 //
-//  KKMyAccountSummaryTableViewController.m
+//  KKKollectionTableViewController.m
 //  Kollections
 //
 //  Created by Kerry Knight
 //
 
-#import "KKMyAccountSummaryTableViewController.h"
-#import "KKPhotoCell.h"
-#import "KKAccountViewController.h"
+#import "KKKollectionTableViewController.h"
+#import "KKEditKollectionViewController.h"
 #import "KKPhotoDetailsViewController.h"
+#import "KKPhotoCell.h"
 #import "KKUtility.h"
 #import "KKLoadMoreCell.h"
+#import "KKToolbarButton.h"
+#import "UITableView+ZGParallelView.h"
 
-@interface KKMyAccountSummaryTableViewController () {
+@interface KKKollectionTableViewController () {
     BOOL objectsAreLoaded;
+    NSMutableArray *kollectionPhotos;
 }
+@property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
+@property (nonatomic, strong) KKToolbarButton *editButton;
+@property (nonatomic, strong) KKToolbarButton *backButton;
+@property (nonatomic, strong) PFObject *kollection;
+
+@property (strong, nonatomic) UIScrollView *headerScrollView;
+@property (strong, nonatomic) UIPageControl *headerPageControl;
+@property (strong, nonatomic) UIView *contentView;
+@property (strong, nonatomic) UIImageView *avatar;
 @end
 
-@implementation KKMyAccountSummaryTableViewController
-@synthesize shouldReloadOnAppear;
-@synthesize sectionTitles;
+@implementation KKKollectionTableViewController
 
 #pragma mark - Initialization
-- (id)initWithStyle:(UITableViewStyle)style {
+- (id)initWithKollection:(PFObject *)kollection {
 //    NSLog(@"%s", __FUNCTION__);
-    self = [super initWithStyle:style];
+    self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
+        
+        self.kollection = kollection;
         
         // The className to query on
         self.className = kKKPhotoClassKey;
@@ -38,7 +50,7 @@
         self.paginationEnabled = NO;
         
         // The number of objects to show per page
-        self.objectsPerPage = [self.sectionTitles count];
+        self.objectsPerPage = 10;//[self.subjectTitles count];
         
         self.shouldReloadOnAppear = NO;
     }
@@ -50,15 +62,44 @@
 
 - (void)viewDidLoad {
 //    NSLog(@"%s", __FUNCTION__);
+    
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
     
+    self.tableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]];
+    self.tableView.showsVerticalScrollIndicator = NO;
+    
     //initialize all our local arrays
-    self.myPublicKollections = [[NSMutableArray alloc] initWithCapacity:0];
-    self.myPrivateKollections = [[NSMutableArray alloc] initWithCapacity:0];
-    self.subscribedPrivateKollections = [[NSMutableArray alloc] initWithCapacity:0];
-    self.subscribedPublicKollections = [[NSMutableArray alloc] initWithCapacity:0];
+    kollectionPhotos = [[NSMutableArray alloc] initWithCapacity:0];
+    
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
+    
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 200.0f)];
+    [self.headerView setBackgroundColor:[UIColor clearColor]];
+    UIImageView *imageView  = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"demo1.png"]];
+    [self.headerView addSubview:imageView];
+    
+    //hide default back button as it's not styled like I want
+    self.navigationItem.hidesBackButton = YES;
+    //set up our toolbar buttons
+    [self configureBackButton];
+    [self configureEditButton];
     
     [super viewDidLoad];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    //    NSLog(@"%s", __FUNCTION__);
+    [super viewWillAppear:animated];
+    self.backButton.hidden = NO;//this is hidden if we navigate away
+    self.editButton.hidden = NO;//this is hidden if we navigate away
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    //    NSLog(@"%s", __FUNCTION__);
+    [super viewWillDisappear:animated];
+    self.backButton.hidden = YES;
+    self.editButton.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -70,7 +111,6 @@
     }
 }
 
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -81,8 +121,9 @@
         return 0;
     }
     
-    NSInteger sections = [self.sectionTitles count];
-    return sections;
+//    NSInteger sections = [self.subjectTitles count];
+//    return sections;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -137,8 +178,11 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
+    
+    //add the parallax effect to the table with out cover photo view
+    [self.tableView addParallelViewWithUIView:self.headerView withDisplayRadio:0.4 cutOffAtMax:YES];
     
     if (!error) {
         //load table rows
@@ -160,13 +204,22 @@
 }
 
 - (PFQuery *)queryForTable {
-//    NSLog(@"%s", __FUNCTION__);
-    PFQuery *query;
+    NSLog(@"%s", __FUNCTION__);
+    //Query for the current user's kollections
+    PFQuery *kollectionsQuery = [PFQuery queryWithClassName:kKKKollectionClassKey];
+    [kollectionsQuery whereKey:kKKKollectionUserKey equalTo:[PFUser currentUser]];
+    kollectionsQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;//always pull local stuff first then hit network
+    
+    // create a 2nd query that will have a different cache policy for pull-to-refresh to kick in
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:kollectionsQuery, nil]];
+    [query orderByDescending:@"createdAt"];
+    // A pull-to-refresh should always trigger a network request.
+    [query setCachePolicy:kPFCachePolicyNetworkOnly];
     return query;
 }
 
 - (PFObject *)objectAtIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     // overridden, since we want to implement sections
     if (indexPath.section < self.objects.count) {
         return [self.objects objectAtIndex:indexPath.section];
@@ -176,6 +229,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+//    NSLog(@"%s", __FUNCTION__);
     NSString *CellIdentifier = [[NSString alloc] init];
     
     if (indexPath.row == 1) {
@@ -241,16 +295,16 @@
     [headerLabel setBackgroundColor:[UIColor clearColor]];
     headerLabel.tag = kHEADERLABELTAG;
     
-    //add the kollection uicollectionview
-    self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
-    self.kollectionsBar.delegate = self;
-    self.kollectionsBar.kollections = [self determineKollectionListToDisplayForIndexPath:indexPath];
-    self.kollectionsBar.identifier = identifier;//cell's identifier used to determine kollection's type
-    [self addChildViewController:self.kollectionsBar];
-    self.kollectionsBar.view.tag = kKOLLECTIONSBARTAG;
-    [cell.contentView addSubview:self.kollectionsBar.view];
-    [self.kollectionsBar didMoveToParentViewController:self];
-    self.kollectionsBar.view.hidden = YES;
+//    //add the kollection uicollectionview
+//    self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
+//    self.kollectionsBar.delegate = self;
+//    self.kollectionsBar.kollections = self.kollectionPhotos;
+//    self.kollectionsBar.identifier = identifier;//cell's identifier used to determine kollection's type
+//    [self addChildViewController:self.kollectionsBar];
+//    self.kollectionsBar.view.tag = kKOLLECTIONSBARTAG;
+//    [cell.contentView addSubview:self.kollectionsBar.view];
+//    [self.kollectionsBar didMoveToParentViewController:self];
+//    self.kollectionsBar.view.hidden = YES;
     
 	return cell;
 }
@@ -273,7 +327,7 @@
     else if (row == 0) {
         //top row
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
-        headerLabel.text = self.sectionTitles[indexPath.section];//set the header title text
+//        headerLabel.text = self.subjectTitles[indexPath.section];//set the header title text
     }
     else if (row == sectionRows - 1) {
         //bottom row
@@ -296,33 +350,15 @@
     [cell.contentView setBackgroundColor:rowBackground];
 }
 
-#pragma mark - ()
-- (NSMutableArray *)determineKollectionListToDisplayForIndexPath:(NSIndexPath*)indexPath {
-    NSMutableArray *kollectionList;
+#pragma mark - KKEditKollectionViewControllerDelegate methods
+- (void)editKollectionViewControllerDidEditKollection:(PFObject*)kollection atIndex:(NSUInteger)index {
+    NSLog(@"%s", __FUNCTION__);
+    self.kollection = kollection;
     
-    if (indexPath.row == 1) {
-        //middle row where our kollections bar is housed
-        switch (indexPath.section) {
-            case 0://My Public Kollections
-                kollectionList = self.myPublicKollections;
-                break;
-            case 1://My Private Kollections
-                kollectionList = self.myPrivateKollections;
-                break;
-            case 2://Subscribed Public Kollections
-                kollectionList = self.subscribedPublicKollections;
-                break;
-            case 3://Subscribed Private Kollections
-                kollectionList = self.subscribedPrivateKollections;
-                break;
-            default:
-                break;
-        }
-    }
-    
-    return kollectionList;
+    //    [self loadObjects];
 }
 
+#pragma mark - Custom Methods
 - (NSIndexPath *)indexPathForObject:(PFObject *)targetObject {
 //    NSLog(@"%s", __FUNCTION__);
     for (int i = 0; i < self.objects.count; i++) {
@@ -335,30 +371,36 @@
     return nil;
 }
 
-- (void)userDidDeletePhoto:(NSNotification *)note {
-    // refresh timeline after a delay
-    [self performSelector:@selector(loadObjects) withObject:nil afterDelay:1.0f];
+//our custom back button
+- (void)configureBackButton {
+    //    NSLog(@"%s", self.self.FUNCTIONself.self.);
+    //add button to view
+    self.backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
+    [self.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.backButton];
 }
 
-- (void)userDidPublishPhoto:(NSNotification *)note {
-    if (self.objects.count > 0) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-    }
-
-    [self loadObjects];
+- (void)backButtonAction:(id)sender {
+    //    NSLog(@"%s", self.self.FUNCTIONself.self.);
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)userFollowingChanged:(NSNotification *)note {
-    NSLog(@"User following changed.");
-    self.shouldReloadOnAppear = YES;
+- (void)editButtonAction:(id)sender {
+    //we want edit our kollection's settings
+    KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
+    editKollectionViewController.delegate = self;
+    editKollectionViewController.kollection = self.kollection;
+    
+    [self.navigationController pushViewController:editKollectionViewController animated:YES];
 }
 
-- (void)didTapOnPhotoAction:(UIButton *)sender {
-    PFObject *photo = [self.objects objectAtIndex:sender.tag];
-    if (photo) {
-        KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] initWithPhoto:photo];
-        [self.navigationController pushViewController:photoDetailsVC animated:YES];
-    }
+- (void)configureEditButton {
+    NSLog(@"%s", __FUNCTION__);
+    //add button to view
+    self.editButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Edit"];
+    [self.editButton addTarget:self action:@selector(editButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.editButton];
+    
 }
 
 @end

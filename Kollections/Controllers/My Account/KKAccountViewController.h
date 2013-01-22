@@ -10,7 +10,6 @@
 #import "KKSideScrollToolBarViewController.h"
 #import "KKKollectionsBarViewController.h"
 #import "KKCreateKollectionViewController.h"
-#import "KKEditKollectionViewController.h"
 
 typedef enum {
     KKMyAccountHeaderToolItemKollections = 0,
@@ -22,8 +21,7 @@ typedef enum {
     KKMyAccountHeaderToolItemStore
 } KKMyAccountHeaderToolItem;
 
-@interface KKAccountViewController : KKMyAccountSummaryTableViewController <SRRefreshDelegate, KKSideScrollToolBarViewControllerDelegate, KKKollectionsBarViewControllerDelegate, KKCreateKollectionViewControllerDelegate, KKEditKollectionViewControllerDelegate> {
-    
+@interface KKAccountViewController : KKMyAccountSummaryTableViewController <SRRefreshDelegate, KKSideScrollToolBarViewControllerDelegate, KKKollectionsBarViewControllerDelegate, KKCreateKollectionViewControllerDelegate> {
 }
 
 @property (nonatomic, assign) KKMyAccountHeaderToolItem headerToolItem; //typedef used in switch statement for determining what toolbar item was touched

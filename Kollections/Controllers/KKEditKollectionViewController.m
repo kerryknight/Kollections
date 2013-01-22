@@ -86,7 +86,7 @@
 
 - (void)backButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - KKKollectionSetupTableViewController delegate

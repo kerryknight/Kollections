@@ -6,11 +6,14 @@
 //  Copyright (c) 2012 Parse. All rights reserved.
 //
 
+//views
 #import "KKAccountViewController.h"
+#import "KKMyAccountHeaderViewController.h"
+#import "KKKollectionTableViewController.h"
+//other stuff
 #import "KKPhotoCell.h"
 #import "TTTTimeIntervalFormatter.h"
 #import "KKLoadMoreCell.h"
-#import "KKMyAccountHeaderViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SRSlimeView.h"
 #import "KKAppDelegate.h"
@@ -416,23 +419,10 @@
             }
             [self.navigationController pushViewController:createKollectionViewController animated:YES];
         } else {
-            NSLog(@"Don't go to editing of a pre-existing kollection; go to view all submitted photos for it****************************");
+            //we selected a pre-existing kollection so load that kollection's photos view
+            KKKollectionTableViewController *nextView = [[KKKollectionTableViewController alloc] initWithKollection:(PFObject*)[self.myPrivateKollections objectAtIndex:index]];
             
-            NSLog(@"the below should be accessed from the kollection's view itself, not directly from here");
-            //we want to view an existing kollection
-            KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
-            editKollectionViewController.delegate = self;
-            editKollectionViewController.kollectionToLoadIndex = index;
-        
-            //now decide which kollection we need to pull out of where based on our type
-            if (type == KKKollectionTypeMyPublic) {
-                editKollectionViewController.kollection = (PFObject*)[self.myPublicKollections objectAtIndex:index];
-            } else {
-                //pull from our private list
-                editKollectionViewController.kollection = (PFObject*)[self.myPrivateKollections objectAtIndex:index];
-            }
-            
-            [self.navigationController pushViewController:editKollectionViewController animated:YES];
+            [self.navigationController pushViewController:nextView animated:YES];
         }
         
     } else {
@@ -451,18 +441,6 @@
         [self.myPrivateKollections addUniqueObject:kollection atIndex:0];//add it to the beginning
     } else {
         [self.myPublicKollections addUniqueObject:kollection atIndex:0];//add it to the beginning
-    }
-    
-    [self loadObjects];
-}
-
-#pragma mark - KKEditKollectionViewControllerDelegate methods
-- (void)editKollectionViewControllerDidEditKollection:(PFObject*)kollection atIndex:(NSUInteger)index {
-    if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
-        //it's a private kollection so replace it in the private list
-        [self.myPrivateKollections replaceObjectAtIndex:index withObject:kollection];
-    } else {
-        [self.myPublicKollections replaceObjectAtIndex:index withObject:kollection];
     }
     
     [self loadObjects];
