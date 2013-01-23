@@ -420,8 +420,15 @@
             [self.navigationController pushViewController:createKollectionViewController animated:YES];
         } else {
             //we selected a pre-existing kollection so load that kollection's photos view
-            KKKollectionTableViewController *nextView = [[KKKollectionTableViewController alloc] initWithKollection:(PFObject*)[self.myPrivateKollections objectAtIndex:index]];
+            PFObject *kollectionToLoad;
+            //determine which array to pull the kollection out of
+            if (type == KKKollectionTypeMyPrivate) {
+                kollectionToLoad = (PFObject*)[self.myPrivateKollections objectAtIndex:index];
+            } else {
+                kollectionToLoad = (PFObject*)[self.myPublicKollections objectAtIndex:index];
+            }
             
+            KKKollectionTableViewController *nextView = [[KKKollectionTableViewController alloc] initWithKollection:kollectionToLoad];
             [self.navigationController pushViewController:nextView animated:YES];
         }
         
@@ -429,7 +436,6 @@
         //it's a subscribed-to kollection
         NSLog(@"It's a subscribed-to kollection row");
     }
-    
 }
 
 #pragma mark - KKCreateKollectionViewControllerDelegate methods

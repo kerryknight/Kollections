@@ -132,15 +132,18 @@ static char UITableViewZGParallelViewIsObserving;
     NSAssert(aViewToAdd != nil, @"aViewToAdd can not be nil");
     
     //let's add a small gradient to appear to be behind the top of the table view
-    UIView *gradientView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 3)];
+    UIView *gradientView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 2)];
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = gradientView.bounds;
     gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor clearColor] CGColor],
-                       (id)[[UIColor colorWithRed:101.0f/255.0f green:101.0f/255.0f blue:101.0f/255.0f alpha:0.8f] CGColor], nil];
+                       (id)[[UIColor colorWithRed:101.0f/255.0f green:101.0f/255.0f blue:101.0f/255.0f alpha:0.7f] CGColor], nil];
     [gradientView.layer insertSublayer:gradient atIndex:0];
     gradientView.tag = kGRADIENT_VIEW_TAG;
     
     aViewToAdd.frame = CGRectOffset(aViewToAdd.frame, -aViewToAdd.frame.origin.x, -aViewToAdd.frame.origin.y);
+    aViewToAdd.backgroundColor = [UIColor blackColor];
+    aViewToAdd.contentMode = UIViewContentModeScaleAspectFit;
+    
     if (aDisplayRatio>1 && aDisplayRatio<0) {
         self.displayRatio = 1;
     } else {
@@ -158,7 +161,7 @@ static char UITableViewZGParallelViewIsObserving;
     self.embeddedScrollView.frame = CGRectOffset(self.embeddedScrollView.frame, 0, self.viewHeight*(self.displayRatio-1.f));
     
     //set the gradient's initial positioning
-    gradientView.frame = CGRectMake(0, aViewToAdd.frame.origin.y + 97, aViewToAdd.frame.size.width, 3);
+    gradientView.frame = CGRectMake(0, aViewToAdd.frame.origin.y + 98, aViewToAdd.frame.size.width, 2);
     
     self.tableHeaderView = headView;
     

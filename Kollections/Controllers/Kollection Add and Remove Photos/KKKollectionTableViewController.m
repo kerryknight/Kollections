@@ -32,13 +32,17 @@
 
 @implementation KKKollectionTableViewController
 
+#define kCOVER_PHOTO_IMAGE_TAG 99
+
 #pragma mark - Initialization
 - (id)initWithKollection:(PFObject *)kollection {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         
         self.kollection = kollection;
+        
+        NSLog(@"kollection at init = %@", self.kollection);
         
         // The className to query on
         self.className = kKKPhotoClassKey;
@@ -72,10 +76,7 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
-    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 200.0f)];
-    [self.headerView setBackgroundColor:[UIColor clearColor]];
-    UIImageView *imageView  = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"demo1.png"]];
-    [self.headerView addSubview:imageView];
+    [self loadCoverPhoto:self];
     
     //hide default back button as it's not styled like I want
     self.navigationItem.hidesBackButton = YES;
@@ -84,6 +85,34 @@
     [self configureEditButton];
     
     [super viewDidLoad];
+}
+
+- (void)loadCoverPhoto:(id)sender {
+//    NSLog(@"%s", __FUNCTION__);
+    
+    self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, self.tableView.bounds.size.width, 200.0f)];
+    [self.headerView setBackgroundColor:[UIColor clearColor]];
+    
+    PFImageView *imageView  = [[PFImageView alloc] initWithImage:[UIImage imageNamed:@"PlaceholderPhoto.png"]];
+    imageView.alpha = 0.0f;
+    imageView.tag = kCOVER_PHOTO_IMAGE_TAG;
+    imageView.frame = CGRectMake(0.0f, 0.0f, 320.0f, 320.0f);
+    imageView.backgroundColor = [UIColor blackColor];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    [self.headerView addSubview:imageView];
+    
+    PFFile *imageFile = [self.kollection objectForKey:kKKKollectionCoverPhotoKey];
+    if (imageFile) {
+        [(PFImageView*)[self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG] setFile:imageFile];
+        [(PFImageView*)[self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG] loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.200f animations:^{
+                    [self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG].alpha = 1.0f;//load the photo into the imageview
+                }];
+            }
+        }];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
