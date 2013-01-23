@@ -68,16 +68,12 @@
     //add notifications
     //this notification is called whenever a user edits a kollection and then adds/updates the subjects array for that kollection
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(subjectListUpdated:) name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
-    
-    //this notification is used to to process any new kollection cover photo we might have as we don't want to automatically upload any of these
-    //type of photos when we select them; only when we save the new kollection or have already saved it and are working on an existing kollection
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processCoverPhoto:) name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
 }
 
 - (void)viewDidUnload {
 //    NSLog(@"%s", __FUNCTION__);
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super viewDidUnload];
 }
 
@@ -131,22 +127,8 @@
         //save on main thread as don't want to dismiss the view unless saved successfully
         // Save PFFile
         if (self.kollectionCoverPhotoThumbnail.isDirty) {
-            NSLog(@"thumbnail is dirty");
             [self.kollectionCoverPhotoThumbnail saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (!error) {
-//                    // Hide old HUD, show completed HUD (see example for code)
-//                    
-//                    // Create a PFObject around a PFFile and associate it with the current user
-//                    PFObject *userPhoto = [PFObject objectWithClassName:@"UserPhoto"];
-//                    [userPhoto setObject:imageFile forKey:@"imageFile"];
-//                    
-//                    // Set the access control list to current user for security purposes
-//                    userPhoto.ACL = [PFACL ACLWithUser:[PFUser currentUser]];
-//                    
-//                    PFUser *user = [PFUser currentUser];
-//                    [userPhoto setObject:user forKey:@"user"];
-//                    [self setKollectionObjectPhotoProperties];
-                    NSLog(@"thumbnail saved when dirty successfully");
                     [self saveKollection];
                     
                 } else{
@@ -157,8 +139,7 @@
                 }
             }];
         } else {
-            NSLog(@"thumbnail not dirty");
-//            [self setKollectionObjectPhotoProperties];
+            //thumbnail is not dirty so just save
             [self saveKollection];
         }
     }
@@ -167,7 +148,6 @@
 - (void)saveKollection {
     [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
-            NSLog(@"kollection save succeeded; dismiss view");
             //kollection save succeeded
             
             //now, check if we just created a new kollection or were editing and existing one
@@ -323,12 +303,16 @@
             }];
         }
     } else {
-        NSLog(@"no image file for cover photo");
+        //no image for cover photo yet
     }
 }
 
 - (void)processCoverPhoto:(NSNotification *)notification {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
+    
+    //remove our observer so it doesn't continually get called
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
+    
     NSDictionary *data = notification.userInfo;
     
     //get the image from the passed in user info dictionary
@@ -383,6 +367,11 @@
 - (void)selectCoverPhoto:(id)sender{
     [self dismissKeyboardAndResetTableContentInset];//in case keyboard is still showing
 //    NSLog(@"%s", __FUNCTION__);
+    
+    //this notification is used to to process any new kollection cover photo we might have as we don't want to automatically upload any of these
+    //type of photos when we select them; only when we save the new kollection or have already saved it and are working on an existing kollection
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(processCoverPhoto:) name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
+    
     //send a notification to the tab bar controller to load the camera or photo picker view as appropriate
     [[NSNotificationCenter defaultCenter] postNotificationName:@"kollectionPhotoCaptureButtonAction" object:sender];
 }

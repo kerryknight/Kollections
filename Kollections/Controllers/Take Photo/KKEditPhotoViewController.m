@@ -151,7 +151,7 @@
 #pragma mark - ()
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     //first, check to see if it's a regular photo for submission or a profile photo we're trying to upload
     //if it's a profile photo, since we'll be resizing and processing a bit differently, pass it off to KKUtility instead of uploading here
@@ -229,7 +229,7 @@
 }
 
 - (void)doneButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {

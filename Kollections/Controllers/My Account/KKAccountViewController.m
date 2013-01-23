@@ -75,7 +75,6 @@
     
     //add the delegates
     self.headerViewController.toolBarViewController.delegate = self;
-    self.kollectionsBar.delegate = self;
 
     //insert pull to refresh slime view
     slimeRefreshView = [[SRRefreshView alloc] init];

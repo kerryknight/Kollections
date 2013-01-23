@@ -242,15 +242,15 @@
     headerLabel.tag = kHEADERLABELTAG;
     
     //add the kollection uicollectionview
-    self.kollectionsBar = [[KKKollectionsBarViewController alloc] init];
-    self.kollectionsBar.delegate = self;
-    self.kollectionsBar.kollections = [self determineKollectionListToDisplayForIndexPath:indexPath];
-    self.kollectionsBar.identifier = identifier;//cell's identifier used to determine kollection's type
-    [self addChildViewController:self.kollectionsBar];
-    self.kollectionsBar.view.tag = kKOLLECTIONSBARTAG;
-    [cell.contentView addSubview:self.kollectionsBar.view];
-    [self.kollectionsBar didMoveToParentViewController:self];
-    self.kollectionsBar.view.hidden = YES;
+    KKKollectionsBarViewController *kb = [[KKKollectionsBarViewController alloc] init];
+    kb.delegate = self;
+    kb.kollections = [self determineKollectionListToDisplayForIndexPath:indexPath];
+    kb.identifier = identifier;//cell's identifier used to determine kollection's type
+    [self addChildViewController:kb];
+    kb.view.tag = kKOLLECTIONSBARTAG;
+    [cell.contentView addSubview:kb.view];
+    [kb didMoveToParentViewController:self];
+    kb.view.hidden = YES;
     
 	return cell;
 }

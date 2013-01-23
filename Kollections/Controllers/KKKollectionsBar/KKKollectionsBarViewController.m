@@ -197,16 +197,11 @@
     BOOL createNew = NO;
     
     if (([self.kollections count] == 0) || [self.kollections count] == selectedIndex) {
-        NSLog(@"clicked on add new item");
         //we clicked the Add New item
         createNew = YES;
     } else {
-        NSLog(@"clicked on existing item");
         createNew = NO;
     }
-    
-//    NSLog(@"didSelectCollectionView kollectiontype = %i", self.kollectionType);
-//    NSLog(@"didSelectCollectionView identifier = %@", self.identifier);
     
     //deselect the selected item
     [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
@@ -218,13 +213,6 @@
 #pragma mark – UICollectionViewDelegateFlowLayout
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-//    NSString *searchTerm = self.searches[indexPath.section];
-//    FlickrPhoto *photo =
-//    self.searchResults[searchTerm][indexPath.row];
-//    // 2
-//    CGSize retval = photo.thumbnail.size.width > 0 ? photo.thumbnail.size : CGSizeMake(100, 100);
-//    retval.height += 35; retval.width += 35;
-//    return retval;
     
     return CGSizeMake(TOOLBAR_COLLECTION_ITEM_WIDTH, TOOLBAR_COLLECTION_ITEM_HEIGHT);
 }

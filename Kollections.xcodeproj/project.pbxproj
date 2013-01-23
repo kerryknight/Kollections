@@ -46,8 +46,6 @@
 		C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
 		C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */; };
 		C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */; };
-		C73ECF1916AF017F00452C63 /* demo1.png in Resources */ = {isa = PBXBuildFile; fileRef = C73ECF1716AF017F00452C63 /* demo1.png */; };
-		C73ECF1A16AF017F00452C63 /* demo1@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C73ECF1816AF017F00452C63 /* demo1@2x.png */; };
 		C73ECF1D16AF135800452C63 /* KKKollectionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */; };
 		C73ECF2A16AF342400452C63 /* UITableView+ZGParallelView.m in Sources */ = {isa = PBXBuildFile; fileRef = C73ECF2916AF342400452C63 /* UITableView+ZGParallelView.m */; };
 		C73F23DC16AC56DD006B96AE /* kkKollectionIconPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */; };
@@ -610,8 +608,6 @@
 		C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableLongStringCell.h; sourceTree = "<group>"; };
 		C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableLongStringCell.m; sourceTree = "<group>"; };
 		C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableLongStringCell.xib; sourceTree = "<group>"; };
-		C73ECF1716AF017F00452C63 /* demo1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = demo1.png; sourceTree = "<group>"; };
-		C73ECF1816AF017F00452C63 /* demo1@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "demo1@2x.png"; sourceTree = "<group>"; };
 		C73ECF1B16AF135800452C63 /* KKKollectionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionTableViewController.h; path = "Kollection Add and Remove Photos/KKKollectionTableViewController.h"; sourceTree = "<group>"; };
 		C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionTableViewController.m; path = "Kollection Add and Remove Photos/KKKollectionTableViewController.m"; sourceTree = "<group>"; };
 		C73ECF2816AF342400452C63 /* UITableView+ZGParallelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ZGParallelView.h"; sourceTree = "<group>"; };
@@ -1333,8 +1329,6 @@
 		C73ECF0A16AEF8F200452C63 /* Kollection Add and Remove Photos */ = {
 			isa = PBXGroup;
 			children = (
-				C73ECF1716AF017F00452C63 /* demo1.png */,
-				C73ECF1816AF017F00452C63 /* demo1@2x.png */,
 				C73ECF1B16AF135800452C63 /* KKKollectionTableViewController.h */,
 				C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */,
 			);
@@ -2858,8 +2852,6 @@
 				C73F23DD16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png in Resources */,
 				C73F23E016AC63C0006B96AE /* KKKollectionsCell.xib in Resources */,
 				C70A13AC16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist in Resources */,
-				C73ECF1916AF017F00452C63 /* demo1.png in Resources */,
-				C73ECF1A16AF017F00452C63 /* demo1@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

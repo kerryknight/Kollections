@@ -126,7 +126,7 @@ typedef enum {
 #pragma mark - ()
 
 - (void)photoCaptureButtonAction:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     //check who the sender is to make sure we don't upload a photo per usual if we're just trying to add a profile picture
     if ([sender respondsToSelector:@selector(name)] && [[sender name] isEqualToString:@"profilePhotoCaptureButtonAction"]) {
         self.photoType = KKTabBarControllerPhotoTypeProfilePhoto;
