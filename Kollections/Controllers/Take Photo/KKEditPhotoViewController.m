@@ -57,7 +57,7 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
-    NSLog(@"Memory warning on Edit");
+    NSLog(@"Memory warning on Edit Photo View Controller");
 }
 
 
@@ -166,13 +166,15 @@
         self.kollectionImage = anImage;
         return NO;//return NO here since we'll upload from KKUtility instead on KKKollectionSetupTableViewController.m
     } else {
-        NSLog(@"is a regular non-profile photo");
+        NSLog(@"is a regular non-profile or kollection cover photo");
     }
     
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
     // JPEG to decrease file size and enable faster uploads & downloads
+    // Get an NSData representation of our images. We use JPEG for the larger image
+    // for better compression and PNG for the thumbnail to keep the corner radius transparency
     NSData *imageData = UIImageJPEGRepresentation(resizedImage, 0.8f);
     NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
     
@@ -230,6 +232,7 @@
 
 - (void)doneButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
+    // Trim comment and save it in a dictionary for use later in our callback block
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     if (trimmedComment.length != 0) {
@@ -264,8 +267,13 @@
     
     //if we don't have image data and it's not a profile or kollection pic, show upload error
     if ((!self.photoFile || !self.thumbnailFile) && !self.profilePhotoUploadedSuccessfully) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't upload your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+        
+        //knightka replaced a regular alert view with our custom subclass
+        BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't upload your photo" message:nil];
+        [alert setCancelButtonWithTitle:@"Dismiss" block:nil];
         [alert show];
+        
+        
         return;
     }
     
@@ -292,6 +300,7 @@
         if (succeeded) {
             NSLog(@"Photo uploaded");
             
+            // Add the photo to the local cache
             [[KKCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
             
             // userInfo might contain any caption which might have been posted by the uploader
@@ -324,7 +333,10 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:KKTabBarControllerDidFinishEditingPhotoNotification object:photo];
         } else {
             NSLog(@"Photo failed to save: %@", error);
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo" message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+            
+            //knightka replaced a regular alert view with our custom subclass
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't post your photo" message:nil];
+            [alert setCancelButtonWithTitle:@"Dismiss" block:nil];
             [alert show];
         }
         

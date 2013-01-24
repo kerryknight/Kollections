@@ -69,6 +69,8 @@
             break;
     }
     
+    //remove any extraneous observers
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     //add notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadKollectionData:) name:@"KollectionsBarViewControllerReloadKollectionsData" object:nil];
     
@@ -77,6 +79,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     [self.collectionView reloadData];
 }
@@ -84,6 +87,10 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) dealloc {
+    [self setCollectionView:nil];
 }
 
 #pragma mark - Custom Methods
@@ -117,7 +124,7 @@
     if (!self.kollections || kollectionItemCount == 0 || indexPath.row == kollectionItemCount) {
         //show the Add button if there are no kollections to display or it's the last cell in the row
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
-//        NSLog(@"cell for add before = %@", cell);
+        //        NSLog(@"cell for add before = %@", cell);
         return cell;
     }
     
@@ -176,12 +183,12 @@
 
 #pragma mark - UICollectionViewDelegate
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    //only allow selection of an item if it's not already selected
-//    if (selectedIndex != indexPath.row) {
-//        return YES;
-//    } else {
-//        return NO;
-//    }
+    //    //only allow selection of an item if it's not already selected
+    //    if (selectedIndex != indexPath.row) {
+    //        return YES;
+    //    } else {
+    //        return NO;
+    //    }
     return YES;
 }
 
@@ -190,7 +197,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"%s", __FUNCTION__);
     //set the selectedIndex to the newly selected item
     selectedIndex = indexPath.row;
     
@@ -222,9 +229,4 @@
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
-- (void)viewDidUnload {
-    [self setCollectionView:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionsBarViewControllerReloadKollectionsData" object:nil];
-    [super viewDidUnload];
-}
 @end

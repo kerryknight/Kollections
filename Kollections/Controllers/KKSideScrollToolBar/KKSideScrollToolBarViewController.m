@@ -28,6 +28,10 @@
     return self;
 }
 
+- (void)dealloc {
+    [self setCollectionView:nil];
+}
+
 #define TOOLBAR_COLLECTION_ITEM_WIDTH 94.0
 
 - (void)viewDidLoad {
@@ -127,8 +131,4 @@
     return UIEdgeInsetsMake(0, 0, 0, 0);
 }
 
-- (void)viewDidUnload {
-    [self setCollectionView:nil];
-    [super viewDidUnload];
-}
 @end

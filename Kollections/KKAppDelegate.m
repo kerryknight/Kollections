@@ -228,7 +228,11 @@
     }
     
     if (!informationComplete) {
-        [[[UIAlertView alloc] initWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!" delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil] show];
+        
+        //knightka replaced a regular alert view with our custom subclass
+        BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Missing Information" message:@"Make sure you fill out all of the information!"];
+        [alert setCancelButtonWithTitle:@"OK" block:nil];
+        [alert show];
     }
     
     return informationComplete;
@@ -239,7 +243,10 @@
     //    NSLog(@"%s", __FUNCTION__);
     [self.welcomeViewController dismissViewControllerAnimated:YES completion:NULL];
     
-    [[[UIAlertView alloc] initWithTitle:@"Success!" message:@"Please look for an email asking you to verify your email address to get the most from Kollections. Now, get started by contributing to someone's kollection or create your own!" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+    //knightka replaced a regular alert view with our custom subclass
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Success!" message:@"Please look for an email asking you to verify your email address to get the most from Kollections. Now, get started by contributing to someone's kollection or create your own!"];
+    [alert setCancelButtonWithTitle:@"OK" block:nil];
+    [alert show];
 }
 
 // Sent to the delegate when the sign up attempt fails.

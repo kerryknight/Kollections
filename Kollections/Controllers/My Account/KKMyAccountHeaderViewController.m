@@ -69,7 +69,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewDidUnload {
+- (void)dealloc {
     [self setKoinsEarnedButton:nil];
     [self setKoinsSpentButton:nil];
     [self setKoinsAvailableButton:nil];
@@ -82,7 +82,6 @@
     [self setFollowingButton:nil];
     [self setKollectionsButton:nil];
     [self setSubmissionsButton:nil];
-    [super viewDidUnload];
 }
 
 @end

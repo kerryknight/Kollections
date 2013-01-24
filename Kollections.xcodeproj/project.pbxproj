@@ -92,6 +92,10 @@
 		C75413D9169B4B650006853C /* KKMyAccountSummaryTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */; };
 		C75413E0169B7A0E0006853C /* footerBGNoActions.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DE169B7A0C0006853C /* footerBGNoActions.png */; };
 		C75413E1169B7A0E0006853C /* footerBGNoActions@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */; };
+		C76A1D9E16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9A16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png */; };
+		C76A1D9F16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */; };
+		C76A1DA016B066E30097DD21 /* kkDestructiveNavBarButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */; };
+		C76A1DA116B066E30097DD21 /* kkDestructiveNavBarButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */; };
 		C79DA139169C8004009C1CE7 /* kkHeaderUserPhotoDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */; };
 		C79DA13A169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */; };
 		C79DA141169C9AAF009C1CE7 /* kkAddButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */; };
@@ -666,6 +670,10 @@
 		C75413D8169B4B650006853C /* KKMyAccountSummaryTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKMyAccountSummaryTableViewController.m; sourceTree = "<group>"; };
 		C75413DE169B7A0C0006853C /* footerBGNoActions.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = footerBGNoActions.png; sourceTree = "<group>"; };
 		C75413DF169B7A0D0006853C /* footerBGNoActions@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "footerBGNoActions@2x.png"; sourceTree = "<group>"; };
+		C76A1D9A16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDestructiveNavBarButtonSelected.png; sourceTree = "<group>"; };
+		C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButtonSelected@2x.png"; sourceTree = "<group>"; };
+		C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDestructiveNavBarButton.png; sourceTree = "<group>"; };
+		C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButton@2x.png"; sourceTree = "<group>"; };
 		C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderUserPhotoDown.png; sourceTree = "<group>"; };
 		C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderUserPhotoDown@2x.png"; sourceTree = "<group>"; };
 		C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkAddButtonDown.png; sourceTree = "<group>"; };
@@ -1429,6 +1437,10 @@
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
 			isa = PBXGroup;
 			children = (
+				C76A1D9A16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png */,
+				C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */,
+				C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */,
+				C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */,
 				C7B4AE8216A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png */,
 				C7B4AE8316A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown@2x.png */,
 				C7B4AE8416A8F19800C77C48 /* kkKollectionNoCoverPhotoButtonDown.png */,
@@ -2852,6 +2864,10 @@
 				C73F23DD16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png in Resources */,
 				C73F23E016AC63C0006B96AE /* KKKollectionsCell.xib in Resources */,
 				C70A13AC16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist in Resources */,
+				C76A1D9E16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png in Resources */,
+				C76A1D9F16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png in Resources */,
+				C76A1DA016B066E30097DD21 /* kkDestructiveNavBarButton.png in Resources */,
+				C76A1DA116B066E30097DD21 /* kkDestructiveNavBarButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

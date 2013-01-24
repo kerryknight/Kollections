@@ -107,6 +107,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc {
+    [self setScrollView:nil];
+    [self setDelegate:nil];
+    [self setSubject:nil];
+    [self setDivider:nil];
+    [self setTitleField:nil];
+    [self setDescriptionField:nil];
+    [self setPayoutField:nil];
+}
+
 #pragma mark - UIViewController
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -182,8 +192,8 @@
 #pragma mark - Scrollview delegate
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     [self.view endEditing:YES];
-    CGPoint bottomOffset = CGPointMake(0, 0);//reset
-    [self.scrollView setContentOffset:bottomOffset animated:YES];
+//    CGPoint bottomOffset = CGPointMake(0, 0);//reset
+//    [self.scrollView setContentOffset:bottomOffset animated:YES];
 }
 
 - (void)hideKeyboard {
@@ -202,12 +212,12 @@
         if (textField.text.length > stringLimit) {
             textField.text = [textField.text substringToIndex:stringLimit - 1];
             NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-            UIAlertView *alertView = [[UIAlertView alloc]
-                                      initWithTitle:@"Character limit"
-                                      message:message delegate:nil
-                                      cancelButtonTitle:@"OK" otherButtonTitles:nil];
             
-            [alertView show];
+            //knightka replaced a regular alert view with our custom subclass
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Character Limit" message:message];
+            [alert setCancelButtonWithTitle:@"OK" block:nil];
+            [alert show];
+            
             return NO; // return NO to not exit field
         }
     } else if (textField == self.payoutField) {
@@ -238,12 +248,12 @@
         if (textField.text.length > stringLimit) {
             textField.text = [textField.text substringToIndex:stringLimit - 1];
             NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-            UIAlertView *alertView = [[UIAlertView alloc]
-                                      initWithTitle:@"Character limit"
-                                      message:message delegate:nil
-                                      cancelButtonTitle:@"OK" otherButtonTitles:nil];
             
-            [alertView show];
+            //knightka replaced a regular alert view with our custom subclass
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Character Limit" message:message];
+            [alert setCancelButtonWithTitle:@"OK" block:nil];
+            [alert show];
+            
             return NO; // return NO to not exit field
         }
     } else if (textField == self.payoutField) {
@@ -308,12 +318,12 @@
         textView.text = stringPlaceholder;
     } else if (textView.text.length > stringLimit) {
         NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"Character limit"
-                                  message:message delegate:nil
-                                  cancelButtonTitle:@"OK" otherButtonTitles:nil];
         
-        [alertView show];
+        //knightka replaced a regular alert view with our custom subclass
+        BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Character Limit" message:message];
+        [alert setCancelButtonWithTitle:@"OK" block:nil];
+        [alert show];
+        
         return NO; // return NO to not exit field
     }
     
@@ -329,12 +339,12 @@
     if (textView.text.length > stringLimit && range.length == 0) {
         textView.text = [textView.text substringToIndex:stringLimit - 1];
         NSString *message = [NSString stringWithFormat:@"This field is limited to %i characters.", stringLimit];
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:@"Character limit"
-                                  message:message delegate:nil
-                                  cancelButtonTitle:@"OK" otherButtonTitles:nil];
         
-        [alertView show];
+        //knightka replaced a regular alert view with our custom subclass
+        BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Character Limit" message:message];
+        [alert setCancelButtonWithTitle:@"OK" block:nil];
+        [alert show];
+        
         return NO; // return NO to not change text
     }
     else {
@@ -373,17 +383,6 @@
     
     [self.subject setObject:textViewtext forKey:kKKSubjectDescriptionKey];
     
-}
-
-- (void)viewDidUnload {
-    [self setScrollView:nil];
-    [self setDelegate:nil];
-    [self setSubject:nil];
-    [self setDivider:nil];
-    [self setTitleField:nil];
-    [self setDescriptionField:nil];
-    [self setPayoutField:nil];
-    [super viewDidUnload];
 }
 
 @end

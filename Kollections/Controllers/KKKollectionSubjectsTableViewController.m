@@ -10,6 +10,7 @@
 #import "KKKollectionSubjectsTableCell.h"
 #import "KKConstants.h"
 #import "KKToolbarButton.h"
+#import "NSMutableArray+AddOns.h"
 
 @interface KKKollectionSubjectsTableViewController () {
     NSUInteger selectedSubjectIndex;
@@ -112,7 +113,7 @@
 - (void)configureToolbarButtons {
 //    NSLog(@"%s", __FUNCTION__);
     //add save button to view
-    self.doneButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Save"];
+    self.doneButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Done"];
     [self.doneButton addTarget:self action:@selector(doneButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:self.doneButton];
     
@@ -141,14 +142,50 @@
         //we were editing an existing subject so replace the existing object with our updated one
         [self.subjects replaceObjectAtIndex:selectedSubjectIndex withObject:subject];
     } else {
-        //we added a new subject so just append the end of the array
-        [self.subjects addObject:subject];
+        
+        //we added a new subject so just append the end of the array if it's unique
+        if ([self shouldAddSubjectToArray:subject]) {
+            [self.subjects addUniqueObject:subject];
+        } else {
+            //knightka replaced a regular alert view with our custom subclass
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Subject Exists" message:@"The subject you tried to add already exists and will not be added."];
+            [alert setCancelButtonWithTitle:@"OK" block:nil];
+            [alert show];
+        }
     }
     
     //add additional scrollable area
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, ([self.subjects count] * 88), 0);
     [self.tableView reloadData];
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (BOOL)shouldAddSubjectToArray:(PFObject*)subject {
+    
+    //we need to do some finagling to determine if the subject is unique
+    //since we haven't saved it yet, it won't have an objectId so we can't compare
+    //the existing objects in self.subjects to see if it contains it b/c they'll
+    //never appear to be equal; so, we'll just enumerate through all the subjects,
+    //concatenating their title + description and only add the object if we get through
+    //them all and none are equal
+    
+    //create the string from our new subject;
+    NSString *newSubjectConcat = [NSString stringWithFormat:@"%@%@", subject[kKKSubjectTitleKey], subject[kKKSubjectDescriptionKey]];
+    newSubjectConcat = [newSubjectConcat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    //loop through all our subjects in the array and do the same
+    for (PFObject *subject in self.subjects) {
+        NSString *subjectConcat = [NSString stringWithFormat:@"%@%@", subject[kKKSubjectTitleKey], subject[kKKSubjectDescriptionKey]];
+        subjectConcat = [subjectConcat stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+        
+        //now compare with our new subject
+        if ([subjectConcat isEqualToString:newSubjectConcat]) {
+            //they are equal so exit and don't save the new subject
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 #define kSUBJECTS_FOOTER_HEIGHT 180.0f
@@ -397,7 +434,7 @@
         [self.subjects removeObjectAtIndex:(indexPath.row - 1)];
         //delete row from table
         [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadData];
+        [self.tableView reloadData]; 
     }
 }
 

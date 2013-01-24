@@ -149,7 +149,7 @@ static UIFont *buttonFont = nil;
         button.titleLabel.font = buttonFont;
         button.titleLabel.minimumFontSize = 18;
         button.titleLabel.adjustsFontSizeToFitWidth = YES;
-        // move text 5 pixels down to ensure vertical centering
+        //knightka - move text 6 pixels down to ensure vertical centering
         [button setTitleEdgeInsets:UIEdgeInsetsMake(6.0, 0.0, 0.0, 0.0)];
         button.titleLabel.textAlignment = UITextAlignmentCenter;
         button.titleLabel.shadowOffset = kActionSheetButtonShadowOffset;

@@ -210,6 +210,8 @@ static UIFont *buttonFont = nil;
         button.frame = CGRectMake(xOffset, _height, width, kAlertButtonHeight);
         button.titleLabel.font = buttonFont;
         button.titleLabel.minimumFontSize = 10;
+        //knightka -  move text 6 pixels down to ensure vertical centering
+        [button setTitleEdgeInsets:UIEdgeInsetsMake(6.0, 0.0, 0.0, 0.0)];
         button.titleLabel.textAlignment = UITextAlignmentCenter;
         button.titleLabel.shadowOffset = kAlertViewButtonShadowOffset;
         button.backgroundColor = [UIColor clearColor];

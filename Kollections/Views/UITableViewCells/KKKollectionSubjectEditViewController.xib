@@ -77,7 +77,6 @@
 						<string key="NSFrame">{{0, 466}, {320, 10}}</string>
 						<reference key="NSSuperview" ref="1064669557"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<int key="IBUITag">201</int>
 						<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -181,7 +180,6 @@
 						<reference key="IBUIHighlightedColor" ref="1034692314"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<int key="IBUINumberOfLines">5</int>
-						<int key="IBUITextAlignment">2</int>
 						<int key="IBUILineBreakMode">0</int>
 						<object class="IBUIFontDescription" key="IBUIFontDescription" id="85376703">
 							<string key="name">HelveticaNeue-LightItalic</string>
@@ -267,7 +265,6 @@
 						<reference key="IBUIHighlightedColor" ref="1034692314"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<int key="IBUINumberOfLines">5</int>
-						<int key="IBUITextAlignment">2</int>
 						<int key="IBUILineBreakMode">0</int>
 						<reference key="IBUIFontDescription" ref="85376703"/>
 						<reference key="IBUIFont" ref="1029269502"/>
@@ -351,7 +348,6 @@
 						<reference key="IBUIHighlightedColor" ref="1034692314"/>
 						<int key="IBUIBaselineAdjustment">0</int>
 						<int key="IBUINumberOfLines">6</int>
-						<int key="IBUITextAlignment">2</int>
 						<int key="IBUILineBreakMode">0</int>
 						<reference key="IBUIFontDescription" ref="85376703"/>
 						<reference key="IBUIFont" ref="1029269502"/>

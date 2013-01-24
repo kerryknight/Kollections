@@ -87,6 +87,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{20, 90}, {280, 1}}</string>
 								<reference key="NSSuperview" ref="158824933"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -113,7 +114,6 @@
 								<reference key="IBUIHighlightedColor" ref="1034692314"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<int key="IBUINumberOfLines">5</int>
-								<int key="IBUITextAlignment">2</int>
 								<int key="IBUILineBreakMode">0</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<string key="name">HelveticaNeue-LightItalic</string>

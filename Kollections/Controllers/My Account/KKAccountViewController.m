@@ -40,7 +40,7 @@
 //    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
     self.logoutButton.hidden = NO;//this is hidden if we navigate away
-    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -226,10 +226,12 @@
     
     //add notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadProfilePhoto:) name:@"MyAccountViewLoadProfilePhoto" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable:) name:@"MyAccountViewRefreshTableByLoadingObjects" object:nil];
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewLoadProfilePhoto" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewRefreshTableByLoadingObjects" object:nil];
 }
 
 #pragma mark - Slime Refresh delegate
@@ -399,7 +401,7 @@
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectKollectionBarItemAtIndex:(NSInteger)index ofKollectionType:(KKKollectionType)type shouldCreateNew:(BOOL)yesOrNo {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     //check kollection type first
     if (type == KKKollectionTypeMyPublic || type == KKKollectionTypeMyPrivate) {
@@ -439,7 +441,7 @@
 
 #pragma mark - KKCreateKollectionViewControllerDelegate methods
 - (void)createKollectionViewControllerDidCreateNewKollection:(PFObject *)kollection {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     
     if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
         //it's a private kollection so replace it in the private list

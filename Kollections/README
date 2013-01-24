@@ -19,8 +19,8 @@ TO DO APP
 - update the UI for adding comments below a photo
 - when creating a kollection, successfully share to FB if toggle turned on
 - create FB objects for sharing a new kollection
-- add deleteInBackground: to subjects table when editing the table to remove from Parse
 - create compound query for returning all Subjects with a Kollection
+- load subjects into cell view and then subjects edit view
 - get kollection cover photos saving with 640 x 427 size
 
 __________________________________________________________________
@@ -47,3 +47,13 @@ FUTURE
 - Add filters and photo manipulation to KKEditPhotoViewController
 - Add ability to make Kollections location-based and only accept submissions from within a certain radius of
   a certain map coordinate
+  
+__________________________________________________________________  
+3RD PARTIES USED
+------------------------------------------------------------------
+- Nimbus
+- BlockAlerts and ActionSheets by Gustavo Ambrozio
+- SlimeRefresh
+- UIImage+Categories
+- MBProgressHUD
+- TTTTimeIntervalFormatter

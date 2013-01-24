@@ -42,24 +42,32 @@
     
     self.tableView.tableObjects = [NSArray arrayWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"NewPublicKollectionSetupItems" ofType:@"plist"]];
     
+    //give our table view a kollection object to work with
+    self.tableView.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
+    self.tableView.kollectionSetupType = KKKollectionSetupTypeNew;
+    self.tableView.shouldInitializeAsPrivate = self.shouldInitializeAsPrivate;//determine what way the segment should be set to to start
+    
     [self.view addSubview:self.tableView.view];
     
+    //remove any outstanding observers
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     //attach notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissViewWithNewKollectionNotification:) name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
     
     //add toolbar buttons
     self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
     [self configureBackButton];//add our custom back button
-    
-    //give our table view a kollection object to work with
-    self.tableView.kollection = [PFObject objectWithClassName:kKKKollectionClassKey];
-    self.tableView.kollectionSetupType = KKKollectionSetupTypeNew;
-    self.tableView.shouldInitializeAsPrivate = self.shouldInitializeAsPrivate;//determine what way the segment should be set to to start
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+}
+
+-(void)dealloc {
+    //remove observers
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
 }
 
 #pragma mark - UIViewController
@@ -91,6 +99,14 @@
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (void)dismissViewWithNewKollectionNotification:(NSNotification*)notification {
+    //    NSLog(@"%s", __FUNCTION__);
+    NSDictionary *userInfo = notification.userInfo;
+    PFObject *newKollection = (PFObject*)userInfo[@"kollection"];
+    [self.delegate createKollectionViewControllerDidCreateNewKollection:newKollection];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 #pragma mark - KKKollectionSetupTableViewController delegate
 - (void)pushSubjectsViewControllerWithKollection:(NSArray *)subjectList {
 //    NSLog(@"%s %@", __FUNCTION__, kollection);
@@ -110,20 +126,6 @@
     
     //tell the superclass table to set the insets back to default 0 and scroll
     [self.tableView resetTableContentInsetsWithIndexPath:indexPath];
-}
-
-- (void)dismissViewWithNewKollectionNotification:(NSNotification*)notification {
-//    NSLog(@"%s", __FUNCTION__);
-    NSDictionary *userInfo = notification.userInfo;
-    PFObject *newKollection = (PFObject*)userInfo[@"kollection"];
-    [self.delegate createKollectionViewControllerDidCreateNewKollection:newKollection];
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)viewDidUnload {
-//    NSLog(@"%s", __FUNCTION__);
-    [super viewDidUnload];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKKollectionSetupTableDidCreateKollectionNotification object:nil];
 }
 
 @end

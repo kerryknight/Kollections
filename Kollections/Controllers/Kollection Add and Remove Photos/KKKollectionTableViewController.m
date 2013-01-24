@@ -36,13 +36,11 @@
 
 #pragma mark - Initialization
 - (id)initWithKollection:(PFObject *)kollection {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
         
         self.kollection = kollection;
-        
-        NSLog(@"kollection at init = %@", self.kollection);
         
         // The className to query on
         self.className = kKKPhotoClassKey;
@@ -224,17 +222,16 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     //add the parallax effect to the table with out cover photo view
     [self.tableView addParallelViewWithUIView:self.headerView withDisplayRatio:0.4 cutOffAtMax:YES];
     
     if (!error) {
-        NSLog(@"no error loading");
         //load table rows
         objectsAreLoaded = YES;
-//        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
+        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
         
     } else {
         //error loading items
@@ -251,7 +248,7 @@
 }
 
 - (PFQuery *)queryForTable {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //Query for the current user's kollections
     PFQuery *kollectionsQuery = [PFQuery queryWithClassName:kKKKollectionClassKey];
     [kollectionsQuery whereKey:kKKKollectionUserKey equalTo:[PFUser currentUser]];

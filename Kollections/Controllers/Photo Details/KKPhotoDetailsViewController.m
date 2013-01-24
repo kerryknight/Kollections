@@ -245,8 +245,12 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
             if (error && [error code] == kPFErrorObjectNotFound) {
                 // Undo cache update and alert user
                 [[KKCache sharedCache] decrementCommentCountForPhoto:self.photo];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not post comment" message:@"This photo was deleted by its owner" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+                
+                //knightka replaced a regular alert view with our custom subclass
+                BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Could not post comment" message:@"This photo was deleted by its owner"];
+                [alert setCancelButtonWithTitle:@"OK" block:nil];
                 [alert show];
+                
                 [self.navigationController popViewControllerAnimated:YES];
             } else if (succeeded) {
                 // refresh cache
@@ -366,7 +370,10 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
 
 - (void)handleCommentTimeout:(NSTimer *)aTimer {
     [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"New Comment" message:@"Your comment will be posted next time there is an Internet connection."  delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+    
+    //knightka replaced a regular alert view with our custom subclass
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"New Comment" message:@"Your comment will be posted next time there is an Internet connection."];
+    [alert setCancelButtonWithTitle:@"OK" block:nil];
     [alert show];
 }
 

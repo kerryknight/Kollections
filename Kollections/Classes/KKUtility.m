@@ -189,6 +189,14 @@
     if (mediumImageData.length > 0) {
 //        NSLog(@"Uploading Medium Profile Picture");
         PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
+        
+        // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+        UIBackgroundTaskIdentifier fileUploadBackgroundTaskId = 0;
+        fileUploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
+        }];
+        
+        NSLog(@"Requested background expiration task with id %d for Kollections profile photo upload", fileUploadBackgroundTaskId);
         [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
                 NSLog(@"Uploaded Medium Profile Picture");
@@ -196,9 +204,14 @@
                 //ensure the UI updates itself even if we haven't officially saved the photo to parse yet since we've set it to the currentUser's photov
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
                 [[PFUser currentUser] saveEventually];
+                [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
             } else {
                 NSLog(@"Photo failed to save: %@", error);
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo. Please try again." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
+                
+                //knightka replaced a regular alert view with our custom subclass
+                BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't post your photo. Please try again." message:nil];
+                [alert setCancelButtonWithTitle:@"Dismiss" block:nil];
                 [alert show];
             }
         }];
@@ -214,7 +227,9 @@
                 [[PFUser currentUser] saveEventually];
             } else {
                 NSLog(@"Photo failed to save: %@", error);
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Couldn't post your photo. Please try again." message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Dismiss", nil];
+                //knightka replaced a regular alert view with our custom subclass
+                BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't post your photo. Please try again." message:nil];
+                [alert setCancelButtonWithTitle:@"Dismiss" block:nil];
                 [alert show];
             }
         }];

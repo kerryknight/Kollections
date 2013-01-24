@@ -21,12 +21,9 @@ void alertMessage ( NSString *format, ... ) {
     
     //be sure we only ever call this from the main thread //kak 09Feb2012
     dispatch_async(dispatch_get_main_queue(), ^{
-        
-        UIAlertView *alertView = [[UIAlertView alloc]
-                                  initWithTitle:kAlertTitle
-                                  message:outstr delegate:nil
-                                  cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        
-        [alertView show];
+        //knightka replaced a regular alert view with our custom subclass
+        BlockAlertView *alert = [BlockAlertView alertWithTitle:kAlertTitle message:outstr];
+        [alert setCancelButtonWithTitle:@"OK" block:nil];
+        [alert show];
     });
 }
