@@ -56,13 +56,13 @@
     self.descriptionField.layer.borderColor = kGray3.CGColor;
     self.descriptionField.layer.borderWidth = 0.75f;
     
-    self.payoutField.backgroundColor = [UIColor colorWithRed:251 green:251 blue:250 alpha:1.0];//almost white
-    self.payoutField.textColor = kMint4;
-    self.payoutField.delegate = self;
+//    self.payoutField.backgroundColor = [UIColor colorWithRed:251 green:251 blue:250 alpha:1.0];//almost white
+//    self.payoutField.textColor = kMint4;
+//    self.payoutField.delegate = self;
     
-    //put border on entry field
-    self.payoutField.layer.borderColor = kGray3.CGColor;
-    self.payoutField.layer.borderWidth = 0.75f;
+//    //put border on entry field
+//    self.payoutField.layer.borderColor = kGray3.CGColor;
+//    self.payoutField.layer.borderWidth = 0.75f;
     
     //add a header label to top of view
     UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, [self.scrollView viewWithTag:200].bounds.size.width - 20.0f, 20.0f)];
@@ -72,7 +72,7 @@
     [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
     [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
     [headerLabel setBackgroundColor:[UIColor clearColor]];
-    headerLabel.text = @"Kollection Subjects";
+    headerLabel.text = @"Add a New Kollection Subject";
     
     //set the submit button up
     UIButton *addButton = [[UIButton alloc] init];
@@ -83,7 +83,7 @@
     [addButton addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     CGSize buttonSize = CGSizeMake(245, 44);
     [addButton setFrame:CGRectMake((self.scrollView.frame.size.width/2 - buttonSize.width/2),
-                                   413,
+                                   300,
                                    buttonSize.width,
                                    buttonSize.height)];
     [self.scrollView addSubview:addButton];
@@ -114,7 +114,7 @@
     [self setDivider:nil];
     [self setTitleField:nil];
     [self setDescriptionField:nil];
-    [self setPayoutField:nil];
+//    [self setPayoutField:nil];
 }
 
 #pragma mark - UIViewController
@@ -150,7 +150,7 @@
     if (self.subject) {
         if (self.subject[kKKKollectionTitleKey])self.titleField.text = self.subject[kKKKollectionTitleKey];
         if (self.subject[kKKKollectionDescriptionKey])self.descriptionField.text = self.subject[kKKKollectionDescriptionKey];
-        if (self.subject[kKKKollectionPayoutKey])self.payoutField.text = [self.subject[kKKKollectionPayoutKey] stringValue];
+//        if (self.subject[kKKKollectionPayoutKey])self.payoutField.text = [self.subject[kKKKollectionPayoutKey] stringValue];
     } else {
         //no subject set or it's a new subject
         self.subject = [PFObject objectWithClassName:kKKSubjectClassKey];//there are 3 fields we're concerned with
@@ -171,7 +171,7 @@
     
     //set all the subject values in it's dictionary
     self.subject[kKKKollectionTitleKey] = self.titleField.text;
-    self.subject[kKKKollectionPayoutKey] = [NSNumber numberWithInt:[self.payoutField.text intValue]];
+//    self.subject[kKKKollectionPayoutKey] = [NSNumber numberWithInt:[self.payoutField.text intValue]];
     if ([self.descriptionField.text isEqualToString:@"100-character limit"]) {
         self.subject[kKKKollectionDescriptionKey] = @"";
     } else {
@@ -220,22 +220,22 @@
             
             return NO; // return NO to not exit field
         }
-    } else if (textField == self.payoutField) {
+    }/* else if (textField == self.payoutField) {
         NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
         if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
             alertMessage(@"Please use only whole numbers.");
             return NO;
         }
-    }
+    }*/
     return YES;
 }
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
   
-    if (textField == self.payoutField) {
-        CGPoint bottomOffset = CGPointMake(0, 200);//scroll the scroll view to show the field
-        [self.scrollView setContentOffset:bottomOffset animated:YES];
-    }
+//    if (textField == self.payoutField) {
+//        CGPoint bottomOffset = CGPointMake(0, 200);//scroll the scroll view to show the field
+//        [self.scrollView setContentOffset:bottomOffset animated:YES];
+//    }
     
     return YES;
 }
@@ -256,13 +256,13 @@
             
             return NO; // return NO to not exit field
         }
-    } else if (textField == self.payoutField) {
+    }/* else if (textField == self.payoutField) {
         NSCharacterSet *set = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
         if ([textField.text rangeOfCharacterFromSet:set].location != NSNotFound) {
             alertMessage(@"Please use only whole numbers.");
             return NO;
         }
-    }
+    }*/
     
     [textField resignFirstResponder];
     return YES;
@@ -273,9 +273,9 @@
     
     if (textField == self.titleField) {
         [self.subject setObject:textFieldtext forKey:kKKSubjectTitleKey];
-    } else if (textField == self.payoutField) {
+    }/* else if (textField == self.payoutField) {
         [self.subject setObject:textFieldtext forKey:kKKSubjectPayoutKey];
-    }
+    }*/
     
 }
 

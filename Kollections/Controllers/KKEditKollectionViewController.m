@@ -238,8 +238,8 @@
 - (void)dismissViewWithEditedKollectionNotification:(NSNotification*)notification {
 //    NSLog(@"%s", __FUNCTION__);
     NSDictionary *userInfo = notification.userInfo;
-    PFObject *editedKollection = (PFObject*)userInfo[@"kollection"];
-    [self.delegate editKollectionViewControllerDidEditKollection:editedKollection atIndex:self.kollectionToLoadIndex];
+//    PFObject *editedKollection = (PFObject*)userInfo[@"kollection"];
+    [self.delegate editKollectionViewControllerDidEditKollectionWithInfo:userInfo atIndex:self.kollectionToLoadIndex];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

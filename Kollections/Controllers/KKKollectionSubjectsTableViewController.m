@@ -380,6 +380,9 @@
             cell.koinsLabel.text = @"K: Default";
         }
         
+        //UPDATE for now, i'm not using custom payouts on a per subject basis, so hide the koin label
+        cell.koinsLabel.hidden = YES;
+        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
@@ -425,17 +428,42 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     //delete the selected row and refresh the table
+    NSLog(@"%s", __FUNCTION__);
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        //delete our subject from Parse
-        PFObject *subjectToDelete = (PFObject*)[self.subjects objectAtIndex:(indexPath.row - 1)];
-        [subjectToDelete deleteInBackground];
-        
-        //delete object from array
-        [self.subjects removeObjectAtIndex:(indexPath.row - 1)];
-        //delete row from table
-        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        [self.tableView reloadData]; 
+        if ([self.subjects count] == 1) {
+            NSLog(@"subjects = 1 so show alert");
+            //we only have one subject, so prevent deletions
+            //this is kinda lazy of me to do it this way (instead of auto-adding one back later) but at the moment i'm tired of messing with this tedious validation crap
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"One Subject Required" message:@"You are required to have at least one subject in your kollection. Simply edit this subject to your liking or add another one first and try your deletion again."];
+            
+            [alert setCancelButtonWithTitle:@"OK" block:nil];
+            [alert show];
+        } else {
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Are you sure?" message:@"If you delete a subject, you will lose access to any photos other users may have submitted for it. This is permanent and can't be reversed. Changing a subject's title will not affect photos."];
+            
+            [alert setCancelButtonWithTitle:@"Cancel" block:nil];
+            [alert setDestructiveButtonWithTitle:@"Delete" block:^{
+                //delete the subject
+                //show hud
+                
+                //delete our subject from Parse
+                PFObject *subjectToDelete = (PFObject*)[self.subjects objectAtIndex:(indexPath.row - 1)];
+                [subjectToDelete deleteInBackground];
+                
+                //delete object from array
+                [self.subjects removeObjectAtIndex:(indexPath.row - 1)];
+                //delete row from table
+                [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [self.tableView reloadData];
+                
+                //UPDATE should we also delete photos that are associated with that subject? what are the implications of having those orphans?
+                //will user's stats remain the same? I don't want them to lose stats b/c their photo has already been accepted, regardless of if
+                //the subject still exists or not
+            }];
+            
+            [alert show];
+        } 
     }
 }
 

@@ -10,7 +10,7 @@
 #import "KKKollectionSetupTableViewController.h"
 
 @protocol KKEditKollectionViewControllerDelegate <NSObject>
--(void)editKollectionViewControllerDidEditKollection:(PFObject*)kollection atIndex:(NSUInteger)index;
+-(void)editKollectionViewControllerDidEditKollectionWithInfo:(NSDictionary*)userInfo atIndex:(NSUInteger)index;
 @end
 
 @interface KKEditKollectionViewController : UIViewController <KKKollectionSetupTableViewControllerDelegate, UITextViewDelegate> {

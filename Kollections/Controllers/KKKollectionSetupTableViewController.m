@@ -183,7 +183,7 @@
             
             //create a dictionary to pass our new kollection back to our root view for loading into our kollection bar tables
             //we do this so we don't have to requery parse for the kollection list and therefore can re-update the UI
-            NSDictionary *userInfo = @{@"kollection" : self.kollection};
+            NSMutableDictionary *userInfo = [@{@"kollection" : self.kollection} mutableCopy];
             
             //now, check if we just created a new kollection or were editing and existing one
             //if a new kollection, we'll need to save any subjects we created; if it's an existing kollection,
@@ -208,16 +208,15 @@
                         }
                     }];
                 } else {
-                    //no subjects
-                    //post notification with our kollection object in the userInfo dict
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
-                    // Remove hud
-                    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                    //no subjects at creation of kollection so we need to create a default one for the user
+                    [self insertDefaultSubjectForKollectionAndDismissViewWithInfo:userInfo forNewKollection:YES];
                 }
             } else {
                 //it's an existing kollection we're just editing
                 //save all our subjects at once in the background and post proper notification
                 if([self.subjects count]) {
+                    //we need to pass our subject list, which may have been edited, back to our base kollection view so we can reset our property there
+                    userInfo[@"subjects"] = self.subjects;
                     [PFObject saveAllInBackground:self.subjects block:^(BOOL succeeded, NSError *error) {
                         if (!error) {
                             //post notification with our kollection object in the userInfo dict
@@ -235,11 +234,8 @@
                         }
                     }];
                 } else {
-                    //no subjects
-                    //post notification with our kollection object in the userInfo dict
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidEditKollectionNotification object:nil userInfo:userInfo];
-                    // Remove hud
-                    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                    //no subjects at edit of kollection so we need to recreate a default one for the user
+                    [self insertDefaultSubjectForKollectionAndDismissViewWithInfo:userInfo forNewKollection:NO];
                 }
             }
             
@@ -255,6 +251,39 @@
             [alert setCancelButtonWithTitle:@"OK" block:nil];
             [alert show];
             
+            // Remove hud
+            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+        }
+    }];
+}
+
+- (void)insertDefaultSubjectForKollectionAndDismissViewWithInfo:(NSDictionary*)userInfo forNewKollection:(BOOL)yesOrNo {
+//    NSLog(@"%s", __FUNCTION__);
+    //first, determine which view we were editing, a new kollection or editing an existing one
+    NSString *notificationToCall;
+    
+    if (yesOrNo == YES) {
+        //create kollection notification
+        notificationToCall = KKKollectionSetupTableDidCreateKollectionNotification;
+    } else {
+        //call the did edit notification
+        notificationToCall = KKKollectionSetupTableDidEditKollectionNotification;
+    }
+    
+    //this default subject will be what all photos are submitted to initially
+    //post notification with our kollection object in the userInfo dict
+    PFObject *defaultSubject = [PFObject objectWithClassName:kKKSubjectClassKey];
+    defaultSubject[kKKSubjectTitleKey] = @"Photos";//default subject title
+    defaultSubject[kKKSubjectKollectionKey] = self.kollection; //set kollection pointer
+    [defaultSubject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (!error) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:notificationToCall object:nil userInfo:userInfo];
+            // Remove hud
+            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+        } else {
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Error Saving Kollection" message:@"There was an error saving your kollection. Please try again."];
+            [alert setCancelButtonWithTitle:@"OK" block:nil];
+            [alert show];
             // Remove hud
             [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
         }
@@ -281,10 +310,6 @@
     }
     
     return YES;
-}
-
-- (void)dismissView {
-    NSLog(@"%s", __FUNCTION__);
 }
 
 - (IBAction)segmentedControlSegmentChosen:(id)sender {
@@ -624,7 +649,7 @@
         //short string
     } else if (datatype == KKKollectionSetupCellDataTypeShare) {
         //share with friends
-        defaultRowHeight = 92.0f;
+        defaultRowHeight = 118.0f;
     } else if (datatype == KKKollectionSetupCellDataTypeCategory) {
         //enter category
         //use default
@@ -639,7 +664,7 @@
         defaultRowHeight = 59.0f;
     } else if (datatype == KKKollectionSetupCellDataTypeNavigate) {
         //drill down in table
-        //use default
+        defaultRowHeight = 160.0f;
     } else {
         //default
     }
@@ -1170,7 +1195,7 @@
 }
 
 - (void)goToSubjectsList:(id)sender {
-//    NSLog(@"%s %@", __FUNCTION__, self.subjects);
+//    NSLog(@"%s", __FUNCTION__);
     [self dismissKeyboardAndResetTableContentInset];//in case a keyboard is showing
     //tell the delegate to navigate to the subjects list so we can edit it
     [self.delegate pushSubjectsViewControllerWithKollection];

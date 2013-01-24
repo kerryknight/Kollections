@@ -23,7 +23,7 @@
 @property (nonatomic, strong) KKToolbarButton *editButton;
 @property (nonatomic, strong) KKToolbarButton *backButton;
 @property (nonatomic, strong) PFObject *kollection;
-
+@property (nonatomic, strong) NSMutableArray *subjectList;
 @property (strong, nonatomic) UIScrollView *headerScrollView;
 @property (strong, nonatomic) UIPageControl *headerPageControl;
 @property (strong, nonatomic) UIView *contentView;
@@ -222,7 +222,7 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     //add the parallax effect to the table with out cover photo view
@@ -230,6 +230,8 @@
     
     if (!error) {
         //load table rows
+//        NSLog(@"setting subject list where self.objects at load = %@", self.objects);
+        self.subjectList = [self.objects mutableCopy];
         objectsAreLoaded = YES;
         if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
         
@@ -249,13 +251,16 @@
 
 - (PFQuery *)queryForTable {
 //    NSLog(@"%s", __FUNCTION__);
-    //Query for the current user's kollections
-    PFQuery *kollectionsQuery = [PFQuery queryWithClassName:kKKKollectionClassKey];
-    [kollectionsQuery whereKey:kKKKollectionUserKey equalTo:[PFUser currentUser]];
-    kollectionsQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;//always pull local stuff first then hit network
     
+    //query for this kollection's subjects
+    PFQuery *subjectQuery = [PFQuery queryWithClassName:kKKSubjectClassKey];
+    [subjectQuery whereKey:kKKSubjectKollectionKey equalTo:self.kollection];
+    subjectQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;//always pull local stuff first then hit network
+    
+    
+    NSLog(@"pull subjects and photos for subjects at same time");
     // create a 2nd query that will have a different cache policy for pull-to-refresh to kick in
-    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:kollectionsQuery, nil]];
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:subjectQuery, nil]];
     [query orderByDescending:@"createdAt"];
     // A pull-to-refresh should always trigger a network request.
     [query setCachePolicy:kPFCachePolicyNetworkOnly];
@@ -368,11 +373,12 @@
 }
 
 #pragma mark - KKEditKollectionViewControllerDelegate methods
-- (void)editKollectionViewControllerDidEditKollection:(PFObject*)kollection atIndex:(NSUInteger)index {
+- (void)editKollectionViewControllerDidEditKollectionWithInfo:(NSDictionary *)userInfo atIndex:(NSUInteger)index {
     NSLog(@"%s", __FUNCTION__);
-    self.kollection = kollection;
-    
-    //    [self loadObjects];
+    self.kollection = (PFObject*)userInfo[@"kollection"];
+    self.subjectList = (NSMutableArray*)userInfo[@"subjects"];
+    //reload objects in case we updated our subjects
+//    [self loadObjects];
 }
 
 #pragma mark - Custom Methods
@@ -404,28 +410,12 @@
 
 - (void)editButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    [MBProgressHUD showHUDAddedTo:self.view.superview animated:NO];
     
-    PFQuery *subjectQuery = [PFQuery queryWithClassName:kKKSubjectClassKey];
-    [subjectQuery whereKey:kKKSubjectKollectionKey equalTo:self.kollection];
-    [subjectQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if (!error) {
-            //we want edit our kollection's settings
-            KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
-            editKollectionViewController.delegate = self;
-            editKollectionViewController.kollection = self.kollection;
-            //set our array and reload the table as needed
-            //we'll use the array set here for comparison of clean vs. dirty data when editing in case the user forgets to hit the Save
-            //button before navigating away to give them the option of saving from there instead of losing changes automatically
-            if([objects count]) editKollectionViewController.subjectsArrayToCompareAgainst = [objects mutableCopy];
-            [self.navigationController pushViewController:editKollectionViewController animated:YES];
-        } else {
-            NSLog(@"error retrieving subjects");
-        }
-        [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
-    }];
-    
-    
+    KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
+    editKollectionViewController.delegate = self;
+    editKollectionViewController.kollection = self.kollection;
+    editKollectionViewController.subjectsArrayToCompareAgainst = self.subjectList;
+    [self.navigationController pushViewController:editKollectionViewController animated:YES];
 }
 
 - (void)configureEditButton {

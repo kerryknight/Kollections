@@ -23,7 +23,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *divider;
 @property (weak, nonatomic) IBOutlet SlightIndentTextField *titleField;
 @property (weak, nonatomic) IBOutlet UITextView *descriptionField;
-@property (weak, nonatomic) IBOutlet UITextField *payoutField;
+//@property (weak, nonatomic) IBOutlet UITextField *payoutField; //not currently used
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @end

@@ -108,14 +108,10 @@
 }
 
 #pragma mark - KKKollectionSetupTableViewController delegate
-- (void)pushSubjectsViewControllerWithKollection:(NSArray *)subjectList {
-//    NSLog(@"%s %@", __FUNCTION__, kollection);
+- (void)pushSubjectsViewControllerWithKollection {
+//    NSLog(@"%s", __FUNCTION__);
     
     KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
-    //pass our subjectList in
-    NSArray *subjects = subjectList;
-    subjectsTableVC.subjects = [NSMutableArray arrayWithArray:subjects];
-    
     [self.navigationController pushViewController:subjectsTableVC animated:YES];
 }
 

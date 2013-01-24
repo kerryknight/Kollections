@@ -47,7 +47,6 @@ typedef enum {
 @property (nonatomic, assign) BOOL shouldInitializeAsPrivate;
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;
-- (void)dismissView;
 
 //alert methods
 - (IBAction)showAlert:(id)sender;

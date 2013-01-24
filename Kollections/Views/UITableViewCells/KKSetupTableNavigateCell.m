@@ -23,11 +23,13 @@
     self.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
     self.headerLabel.textColor = kGray5;
     self.footnoteLabel.textColor = kGray5;
-    self.entryField.textColor = kGray4;
-    self.entryField.backgroundColor = [UIColor clearColor];
+    self.entryField.backgroundColor = [UIColor colorWithRed:251 green:251 blue:250 alpha:1.0];//almost white
+    self.entryField.textColor = kGray3;
+    
+    //put border on entry field
+    self.entryField.layer.borderColor = kGray3.CGColor;
+    self.entryField.layer.borderWidth = 0.75f;
     [self.rowButton setBackgroundImage:[UIImage imageNamed:@"kkRowButtonDown.png"] forState:UIControlStateHighlighted];
-    
-    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
