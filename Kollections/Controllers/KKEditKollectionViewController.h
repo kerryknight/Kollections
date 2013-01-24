@@ -20,4 +20,5 @@
 @property (nonatomic, strong) id<KKEditKollectionViewControllerDelegate>delegate;
 @property (nonatomic, assign) NSUInteger kollectionToLoadIndex;
 @property (nonatomic, strong) PFObject *kollection;
+@property (nonatomic, strong) NSMutableArray *subjectsArrayToCompareAgainst; //use to determine if dirty data or not
 @end

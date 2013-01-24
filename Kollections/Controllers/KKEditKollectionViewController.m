@@ -17,6 +17,7 @@
 @property (nonatomic, strong) KKKollectionSetupTableViewController *tableView;
 @property (nonatomic, strong) KKToolbarButton *backButton;
 @property (nonatomic, strong) KKToolbarButton *deleteButton;
+@property (nonatomic, strong) NSDictionary *kollectionToCompareAgainst; //use to determine if dirty data or not
 @end
 
 @implementation KKEditKollectionViewController
@@ -57,6 +58,17 @@
     self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
     [self configureBackButton];//add our custom back button
     [self configureDeleteButton];//add the delete button
+    
+    //set our clean kollection object to an NSDict which we'll use to compare any changes we make to the kollection object against
+    //if this object doesn't match self.kollection when the user tries to navigate away without saving, we'll alert them
+    self.kollectionToCompareAgainst = @{@"category" : self.kollection[kKKKollectionCategoryKey],
+                                        @"coverPhotoThumbnail": self.kollection[kKKKollectionCoverPhotoThumbnailKey],
+                                        @"coverPhoto": self.kollection[kKKKollectionCoverPhotoKey],
+                                        @"isPrivate": [NSNumber numberWithBool:[self.kollection[kKKKollectionIsPrivateKey] boolValue]],
+                                        @"title": self.kollection[kKKKollectionTitleKey]};
+    
+    //set our initial subject in the table to what we queried for and passed in
+    self.tableView.subjects = self.subjectsArrayToCompareAgainst;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -95,7 +107,67 @@
 
 - (void)backButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    [self.navigationController popViewControllerAnimated:YES];
+    
+    [self.view endEditing:YES];
+    [self checkForDirtyData];
+}
+
+//we'll use this method to compare our kollection when we first navigated to this view with any
+//changes we may have made to it to then alert the user to save changes or lose them before leaving
+- (void)checkForDirtyData {
+//    NSLog(@"%s", __FUNCTION__);
+    //create another nsdictionary from our possibly updated kollection object to compare against our clean dictionary
+    NSDictionary *kollectionAfterPossibleUpdates = @{@"category" : self.kollection[kKKKollectionCategoryKey],
+    @"coverPhotoThumbnail": self.kollection[kKKKollectionCoverPhotoThumbnailKey],
+    @"coverPhoto": self.kollection[kKKKollectionCoverPhotoKey],
+    @"isPrivate": [NSNumber numberWithBool:[self.kollection[kKKKollectionIsPrivateKey] boolValue]],
+    @"title": self.kollection[kKKKollectionTitleKey]};
+    
+    if ([self.kollectionToCompareAgainst isEqualToDictionary:kollectionAfterPossibleUpdates]) {
+        //the overall dictionary is the same so now check for the subjects array for dirtyiness
+        //check first if we had and subjects to begin with
+        if (self.subjectsArrayToCompareAgainst) {
+            if ([self.subjectsArrayToCompareAgainst isEqualToArray:self.tableView.subjects]) {
+                //our subjects are equal too
+                //our data hasn't changed so it's ok to navigate away
+                [self.navigationController popViewControllerAnimated:YES];
+            } else {
+                //subject not equal
+                [self showDataLossAlert:nil];
+            }
+        } else {
+            //if we didn't have subjects to begin with, check if we set any while were were here; if so, warn user they'll lose them if they don't save
+            if ([self.tableView.subjects count]) {
+                //created new subjects while here
+                [self showDataLossAlert:nil];
+            } else {
+                //nothing changed 
+                //our data hasn't changed so it's ok to navigate away
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+        }
+        
+    } else {
+        [self showDataLossAlert:nil];
+    }
+}
+
+- (void)showDataLossAlert:(id)sender {
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"You have unsaved changes" message:@"If you continue, you will lose these. This is not reversible. Do you wish to proceed?"];
+    
+    [alert setCancelButtonWithTitle:@"No, cancel" block:nil];
+    [alert addButtonWithTitle:@"Yes, proceed" block:^{
+        //reset our kollection object to what it was when we navigated here to give the effect of losing changes
+        self.kollection[kKKKollectionCategoryKey] = self.kollectionToCompareAgainst[@"category"];
+        self.kollection[kKKKollectionCoverPhotoThumbnailKey] = self.kollectionToCompareAgainst[@"coverPhotoThumbnail"];
+        self.kollection[kKKKollectionCoverPhotoKey] = self.kollectionToCompareAgainst[@"coverPhoto"];
+        self.kollection[kKKKollectionIsPrivateKey] = self.kollectionToCompareAgainst[@"isPrivate"];
+        self.kollection[kKKKollectionTitleKey] = self.kollectionToCompareAgainst[@"title"];
+        //pop back
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    [alert show];
 }
 
 //our custom delete button
@@ -118,10 +190,10 @@
 - (void)deleteButtonAction:(id)sender {
     //    NSLog(@"%s", __FUNCTION__);
     
-    [self showAlert:sender];
+    [self showDeleteAlert:sender];
 }
 
-- (void)showAlert:(id)sender {
+- (void)showDeleteAlert:(id)sender {
     BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Are you sure?" message:@"Deleting a kollection is permanent and can't be reversed."];
     
     [alert setCancelButtonWithTitle:@"Cancel" block:nil];
@@ -172,13 +244,15 @@
 }
 
 #pragma mark - KKKollectionSetupTableViewController delegate
-- (void)pushSubjectsViewControllerWithKollection:(NSArray *)subjectList {
-//    NSLog(@"%s %@", __FUNCTION__, kollection);
+- (void)pushSubjectsViewControllerWithKollection {
+//    NSLog(@"%s", __FUNCTION__);
     
     KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
-    //pass our subjectList in
-    NSArray *subjects = subjectList;
-    subjectsTableVC.subjects = [NSMutableArray arrayWithArray:subjects];
+    //pass our queried subject list in
+    
+    //we'll use our property set here for comparison later should the user try to exit this view without saving
+    //we'll warn them their changes will be lost if they don't save if the data is dirty
+    subjectsTableVC.subjects = [NSMutableArray arrayWithArray:self.tableView.subjects];
     
     [self.navigationController pushViewController:subjectsTableVC animated:YES];
 }

@@ -34,6 +34,8 @@
         
         // Change button appearance based on button type
         if (isBackButton) {
+            //knightka -  move text 4 pixels to the right to ensure horizontal centering
+            [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 4.0, 0.0, 0.0)];
             //it should be use back button images
             [self setBackgroundImage:[UIImage imageNamed:@"kkBackButtonNavBar.png"] forState:UIControlStateNormal];
             [self setBackgroundImage:[UIImage imageNamed:@"kkBackButtonNavBarSelected.png"] forState:UIControlStateHighlighted];

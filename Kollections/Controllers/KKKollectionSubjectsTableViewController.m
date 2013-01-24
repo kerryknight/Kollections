@@ -21,6 +21,7 @@
 @property (nonatomic, strong) UITextField *payoutField;
 @property (nonatomic, strong) KKToolbarButton *doneButton;
 @property (nonatomic, strong) KKToolbarButton *cancelButton;
+
 @end
 
 @implementation KKKollectionSubjectsTableViewController

@@ -31,7 +31,7 @@ typedef enum {
 @optional
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath;
 - (void)setupTableViewDismissAnyKeyboard;
-- (void)pushSubjectsViewControllerWithKollection:(NSArray*)subjectList;
+- (void)pushSubjectsViewControllerWithKollection;
 @end
 
 @interface KKKollectionSetupTableViewController : UITableViewController <UITableViewDataSource, UITableViewDelegate, UITextViewDelegate, UITextFieldDelegate> {
@@ -43,6 +43,7 @@ typedef enum {
 @property (nonatomic, assign) KKKollectionSetupCellDataType cellDataType;//used to dynamically load cells based on input values
 @property (nonatomic, strong) NSMutableArray *tableObjects;//these are the questions/settings/fields pulled in from the plist
 @property (nonatomic, strong) PFObject *kollection;
+@property (nonatomic, strong) NSMutableArray *subjects;
 @property (nonatomic, assign) BOOL shouldInitializeAsPrivate;
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath;

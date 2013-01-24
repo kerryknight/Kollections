@@ -26,7 +26,6 @@
     BOOL shouldShareNewKollectionToFacebook;
 }
 
-@property (nonatomic, strong) NSMutableArray *subjects;
 @property (nonatomic, strong) PFFile *kollectionCoverPhotoMedium;
 @property (nonatomic, strong) PFFile *kollectionCoverPhotoThumbnail;
 @property (nonatomic, strong) NSIndexPath *coverPhotoCellIndexPath;
@@ -65,21 +64,6 @@
     
     self.view.frame = CGRectMake(0, 0, window.frame.size.width, height);
     
-    //check if we're creating a new one or editing; if editing, query for subject list
-    if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
-        PFQuery *subjectQuery = [PFQuery queryWithClassName:kKKSubjectClassKey];
-        [subjectQuery whereKey:kKKSubjectKollectionKey equalTo:self.kollection];
-        [subjectQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (!error) {
-                //set our array and reload the table as needed
-                if([objects count]) self.subjects = [objects mutableCopy];
-                [self.tableView reloadData];
-            } else {
-                NSLog(@"error retrieving subjects");
-            }
-        }];
-    }
-    
     //remove any extraneous observers
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     //add notifications
@@ -89,6 +73,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -189,27 +174,73 @@
         if (!error) {
             //kollection save succeeded
             NSLog(@"kollection saved successfully");
+            
+            //save any subjects we may have created/edited
+            //so now set our newly acquired kollection's id for each of our subjects
+            for (PFObject *subject in self.subjects) {
+                [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
+            }
+            
+            //create a dictionary to pass our new kollection back to our root view for loading into our kollection bar tables
+            //we do this so we don't have to requery parse for the kollection list and therefore can re-update the UI
+            NSDictionary *userInfo = @{@"kollection" : self.kollection};
+            
             //now, check if we just created a new kollection or were editing and existing one
             //if a new kollection, we'll need to save any subjects we created; if it's an existing kollection,
             //we will have already saved our subjects from within the subjectListUpdated: method
             if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
-                //it's a new kollection so save any subjects we may have created
-                //so now set our newly acquired kollection's id for each of our subjects
-                for (PFObject *subject in self.subjects) {
-                    [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
+                //save all our subjects at once in the background and post proper notification
+                if([self.subjects count]) {
+                    [PFObject saveAllInBackground:self.subjects block:^(BOOL succeeded, NSError *error) {
+                        if (!error) {
+                            //post notification with our kollection object in the userInfo dict
+                            [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
+                            // Remove hud
+                            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                        } else {
+                            //knightka replaced a regular alert view with our custom subclass
+                            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Error Saving Kollection" message:@"There was an error saving your subjects. Please try again."];
+                            [alert setCancelButtonWithTitle:@"OK" block:nil];
+                            [alert show];
+                            
+                            // Remove hud
+                            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                        }
+                    }];
+                } else {
+                    //no subjects
+                    //post notification with our kollection object in the userInfo dict
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
+                    // Remove hud
+                    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
                 }
-                
-                //save all our subjects at once in the background
-                if([self.subjects count])[PFObject saveAllInBackground:self.subjects];
-                
-                //create a dictionary to pass our new kollection back to our root view for loading into our kollection bar tables
-                //we do this so we don't have to requery parse for the kollection list and therefore can re-update the UI
-                NSDictionary *userInfo = @{@"kollection" : self.kollection};
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidCreateKollectionNotification object:nil userInfo:userInfo];
             } else {
-                NSDictionary *userInfo = @{@"kollection" : self.kollection};
-                //existing kollection, subjects already saved so dismiss view
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidEditKollectionNotification object:nil userInfo:userInfo];
+                //it's an existing kollection we're just editing
+                //save all our subjects at once in the background and post proper notification
+                if([self.subjects count]) {
+                    [PFObject saveAllInBackground:self.subjects block:^(BOOL succeeded, NSError *error) {
+                        if (!error) {
+                            //post notification with our kollection object in the userInfo dict
+                            [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidEditKollectionNotification object:nil userInfo:userInfo];
+                            // Remove hud
+                            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                        } else {
+                            //knightka replaced a regular alert view with our custom subclass
+                            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Error Saving Kollection" message:@"There was an error saving your subjects. Please try again."];
+                            [alert setCancelButtonWithTitle:@"OK" block:nil];
+                            [alert show];
+                            
+                            // Remove hud
+                            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                        }
+                    }];
+                } else {
+                    //no subjects
+                    //post notification with our kollection object in the userInfo dict
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KKKollectionSetupTableDidEditKollectionNotification object:nil userInfo:userInfo];
+                    // Remove hud
+                    [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+                }
             }
             
             [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
@@ -223,10 +254,10 @@
             BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Error Creating Kollection" message:message];
             [alert setCancelButtonWithTitle:@"OK" block:nil];
             [alert show];
+            
+            // Remove hud
+            [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
         }
-        
-        // Remove hud
-        [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
     }];
 }
 
@@ -292,31 +323,15 @@
 }
 
 - (void)subjectListUpdated:(NSNotification*)notification {
-    NSLog(@"%s\n", __FUNCTION__);
+//    NSLog(@"%s\n", __FUNCTION__);
+    //extract our object from our passed in dictionary and reset our subjects array
     NSDictionary *notificationInfo = [notification userInfo];
     self.subjects = notificationInfo[@"subjects"];
-    
-    if (self.kollectionSetupType == KKKollectionSetupTypeNew) {
-        //don't save our subjects until we save our new kollection so we'll have a kollection object to point to
-        
-    } else {
-        
-        //i was having trouble with crashes if adding a bunch of subjects, then deleting them and then scrolling the tableview
-        //so, in lieu of continuing to chase the rabbit, i'm just gonna put up a spinner until everything is done
-        
-        //set pointers to our kollection for all our subjects prior to save
-        for (PFObject *subject in self.subjects) {
-            [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
-            //save it 
-            [subject saveInBackground];
-        }
-    }
-    
     [self.tableView reloadData];
 }
 
 - (void)loadCoverPhoto:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     KKSetupTablePhotoCell *cell;
     if (sender) {
@@ -791,6 +806,7 @@
             }
             
             cell.numberField.textColor = kMint4;//set to mint color
+            cell.numberField.text = @""; //initialize as empty
             
             //fill in entry label text from kollection property if available, if not, check for historical response
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
@@ -830,9 +846,10 @@
                 cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
             }
             
+            cell.entryField.text = @""; //initialize as empty
+            
             //fill in entry label text from kollection property if available, if not, check for historical response
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
-//            NSLog(@"[self.kollection objectForKey:columnName] = %@ = %@", columnName, [self.kollection objectForKey:columnName]);
             if ([self.kollection objectForKey:columnName]) {
                 cell.entryField.text = [self.kollection objectForKey:columnName];
                 cell.entryField.textColor = kMint4;//set to mint color text if we have a pre-entered response
@@ -905,6 +922,8 @@
                 cell.entryField.delegate = self;
                 cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
             }
+            
+            cell.entryField.text = @""; //initialize as empty
             
             //add selectors here to each of the buttons as necessary
             [cell.button addTarget:self action:@selector(queryParseForCategoryList) forControlEvents:UIControlEventTouchUpInside];
@@ -1006,6 +1025,8 @@
                 cell.footnoteLabel.text = self.tableObjects[indexPath.row - 1][@"hint"];
             }
             
+            cell.entryField.text = @""; //initialize as empty
+            
             //fill in entry label text from kollection property if available, if not, check for historical response
             NSString *columnName = (NSString*)self.tableObjects[indexPath.row - 1][@"objectColumn"];
             if ([self.kollection objectForKey:columnName]) {
@@ -1018,11 +1039,8 @@
             
             //Get label height
             NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
-//        NSString *entryLength = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];//UPDATE; this doesn't exist yet until pulled from parse
-            
             CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
             CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-//        CGSize entrySize = [entryLength sizeWithFont:kSetupEntryFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
             
             CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
             [cell.footnoteLabel setFrame:CGRectMake(0, cell.entryField.frame.origin.y + cell.entryField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
@@ -1098,6 +1116,8 @@
                 [cell.rowButton addTarget:self action:@selector(goToSubjectsList:) forControlEvents:UIControlEventTouchUpInside];
             }
             
+            cell.entryField.text = @""; //initialize as empty
+            
             //fill in entry label text with a list of subjects
             if (self.subjects) {
                 NSMutableArray *kollectionSubjectTitles = [[NSMutableArray alloc] initWithCapacity:[self.subjects count]];
@@ -1150,10 +1170,10 @@
 }
 
 - (void)goToSubjectsList:(id)sender {
-//    NSLog(@"%s %@", __FUNCTION__, self.kollection);
+//    NSLog(@"%s %@", __FUNCTION__, self.subjects);
     [self dismissKeyboardAndResetTableContentInset];//in case a keyboard is showing
     //tell the delegate to navigate to the subjects list so we can edit it
-    [self.delegate pushSubjectsViewControllerWithKollection:self.subjects];
+    [self.delegate pushSubjectsViewControllerWithKollection];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {

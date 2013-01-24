@@ -78,8 +78,8 @@
     UIButton *addButton = [[UIButton alloc] init];
     [addButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonUp.png"] forState:UIControlStateNormal];
     [addButton setBackgroundImage:[UIImage imageNamed:@"kkSignUpButtonDown.png"] forState:UIControlStateHighlighted];
-    [addButton setTitle:@"Save Subject" forState:UIControlStateNormal];
-    [addButton setTitle:@"Save Subject" forState:UIControlStateHighlighted];
+    [addButton setTitle:@"Done" forState:UIControlStateNormal];
+    [addButton setTitle:@"Done" forState:UIControlStateHighlighted];
     [addButton addTarget:self action:@selector(submit:) forControlEvents:UIControlEventTouchUpInside];
     CGSize buttonSize = CGSizeMake(245, 44);
     [addButton setFrame:CGRectMake((self.scrollView.frame.size.width/2 - buttonSize.width/2),

@@ -390,7 +390,7 @@
 
 //our custom back button
 - (void)configureBackButton {
-    //    NSLog(@"%s", self.self.FUNCTIONself.self.);
+    //    NSLog(@"%s", __FUNCTION__);
     //add button to view
     self.backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
     [self.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -398,17 +398,34 @@
 }
 
 - (void)backButtonAction:(id)sender {
-    //    NSLog(@"%s", self.self.FUNCTIONself.self.);
+    //    NSLog(@"%s", __FUNCTION__);
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)editButtonAction:(id)sender {
-    //we want edit our kollection's settings
-    KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
-    editKollectionViewController.delegate = self;
-    editKollectionViewController.kollection = self.kollection;
+//    NSLog(@"%s", __FUNCTION__);
+    [MBProgressHUD showHUDAddedTo:self.view.superview animated:NO];
     
-    [self.navigationController pushViewController:editKollectionViewController animated:YES];
+    PFQuery *subjectQuery = [PFQuery queryWithClassName:kKKSubjectClassKey];
+    [subjectQuery whereKey:kKKSubjectKollectionKey equalTo:self.kollection];
+    [subjectQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            //we want edit our kollection's settings
+            KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
+            editKollectionViewController.delegate = self;
+            editKollectionViewController.kollection = self.kollection;
+            //set our array and reload the table as needed
+            //we'll use the array set here for comparison of clean vs. dirty data when editing in case the user forgets to hit the Save
+            //button before navigating away to give them the option of saving from there instead of losing changes automatically
+            if([objects count]) editKollectionViewController.subjectsArrayToCompareAgainst = [objects mutableCopy];
+            [self.navigationController pushViewController:editKollectionViewController animated:YES];
+        } else {
+            NSLog(@"error retrieving subjects");
+        }
+        [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
+    }];
+    
+    
 }
 
 - (void)configureEditButton {
