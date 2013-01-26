@@ -7,12 +7,12 @@
 //
 
 #import "KKEditPhotoViewController.h"
+#import "KKImageEditorViewController.h"
+#import "DLCImagePickerController.h"
 
 @protocol KKTabBarControllerDelegate;
 
-@interface KKTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate>
-
-- (BOOL)shouldPresentPhotoCaptureController;
+@interface KKTabBarController : UITabBarController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, DLCImagePickerDelegate>
 
 @end
 

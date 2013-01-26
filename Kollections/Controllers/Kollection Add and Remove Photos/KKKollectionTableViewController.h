@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Parse. All rights reserved.
 //
 
-#import "KKKollectionsBarViewController.h"
+#import "KKPhotosBarViewController.h"
 #import "KKEditKollectionViewController.h"
 
-@interface KKKollectionTableViewController : PFQueryTableViewController <KKKollectionsBarViewControllerDelegate, KKEditKollectionViewControllerDelegate> {
+@interface KKKollectionTableViewController : PFQueryTableViewController <KKPhotosBarViewControllerDelegate, KKEditKollectionViewControllerDelegate> {
     
 }
 

@@ -6,6 +6,7 @@
 //  Copyright (c) 2012 Parse. All rights reserved.
 //
 
+#import <AssetsLibrary/AssetsLibrary.h>
 #import "KKTabBarController.h"
 
 //used to differentiate between regular photos for posting and simply adding a profile pic
@@ -17,8 +18,10 @@ typedef enum {
 
 @interface KKTabBarController () {
 }
-@property (nonatomic,strong) UINavigationController *navController;
+@property (nonatomic, strong) UINavigationController *navController;
 @property (nonatomic, assign) KKTabBarControllerPhotoType photoType;//used to determine how to process the photo
+@property (nonatomic, strong) KKImageEditorViewController *imageEditor;
+@property (nonatomic, strong) ALAssetsLibrary *library; //our photo library
 @end
 
 @implementation KKTabBarController
@@ -29,7 +32,7 @@ typedef enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [[self tabBar] setBackgroundImage:[UIImage imageNamed:@"kkTabBarBackground.png"]];
     [[self tabBar] setSelectionIndicatorImage:[UIImage imageNamed:@"kkTabBarDown.png"]];
     
@@ -49,12 +52,12 @@ typedef enum {
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"%s", __FUNCTION__);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"%s", __FUNCTION__);
 }
 
 #pragma mark - UITabBarController
@@ -69,58 +72,10 @@ typedef enum {
     [cameraButton addTarget:self action:@selector(photoCaptureButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tabBar addSubview:cameraButton];
     
-    UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
-    [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
-    [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
-    [cameraButton addGestureRecognizer:swipeUpGestureRecognizer];
-}
-
-#pragma mark - UIImagePickerDelegate
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissModalViewControllerAnimated:YES];
-}
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-//    NSLog(@"%s", __FUNCTION__);
-    [self dismissModalViewControllerAnimated:NO];
-    
-    UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
-     
-    KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:image];
-    [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    
-    //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo
-    //uploads the same as regular uploads which could get added as submissions, etc.
-    viewController.photoType = self.photoType;
-    
-    [self.navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self.navController pushViewController:viewController animated:NO];
-    
-    [self presentModalViewController:self.navController animated:YES];
-}
-
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        [self shouldStartCameraController];
-    } else if (buttonIndex == 1) {
-        [self shouldStartPhotoLibraryPickerController];
-    }
-}
-
-
-#pragma mark - KKTabBarController
-
-- (BOOL)shouldPresentPhotoCaptureController {
-    BOOL presentedPhotoCaptureController = [self shouldStartCameraController];
-    
-    if (!presentedPhotoCaptureController) {
-        presentedPhotoCaptureController = [self shouldStartPhotoLibraryPickerController];
-    }
-    
-    return presentedPhotoCaptureController;
+    //    UISwipeGestureRecognizer *swipeUpGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    //    [swipeUpGestureRecognizer setDirection:UISwipeGestureRecognizerDirectionUp];
+    //    [swipeUpGestureRecognizer setNumberOfTouchesRequired:1];
+    //    [cameraButton addGestureRecognizer:swipeUpGestureRecognizer];
 }
 
 #pragma mark - ()
@@ -136,86 +91,68 @@ typedef enum {
         self.photoType = KKTabBarControllerPhotoTypeRegularPhoto; //this denotes a regular photo submission and not a profile photo
     }
     
-    BOOL cameraDeviceAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
-    BOOL photoLibraryAvailable = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
+    DLCImagePickerController *picker = [[DLCImagePickerController alloc] init];
+    picker.delegate = self;
+    [self presentModalViewController:picker animated:YES];
     
-    if (cameraDeviceAvailable && photoLibraryAvailable) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take Photo", @"Choose Photo", nil];
-        [actionSheet showFromTabBar:self.tabBar];
-    } else {
-        // if we don't have at least two options, we automatically show whichever is available (camera or roll)
-        [self shouldPresentPhotoCaptureController];
-    }
 }
 
-- (BOOL)shouldStartCameraController {
-    
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO) {
-        return NO;
-    }
-    
-    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
-    
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]
-        && [[UIImagePickerController availableMediaTypesForSourceType:
-             UIImagePickerControllerSourceTypeCamera] containsObject:(NSString *)kUTTypeImage]) {
-        
-        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
-        
-        if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceRear]) {
-            cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceRear;
-        } else if ([UIImagePickerController isCameraDeviceAvailable:UIImagePickerControllerCameraDeviceFront]) {
-            cameraUI.cameraDevice = UIImagePickerControllerCameraDeviceFront;
-        }
-        
-    } else {
-        return NO;
-    }
-    
-    cameraUI.allowsEditing = YES;
-    cameraUI.showsCameraControls = YES;
-    cameraUI.delegate = self;
-    
-    [self presentModalViewController:cameraUI animated:YES];
-    
-    return YES;
+-(void) imagePickerControllerDidCancel:(DLCImagePickerController *)picker{
+    [self dismissModalViewControllerAnimated:YES];
 }
 
-
-- (BOOL)shouldStartPhotoLibraryPickerController {
-    if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary] == NO 
-         && [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum] == NO)) {
-        return NO;
+-(void) imagePickerController:(DLCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
+    NSLog(@"%s", __FUNCTION__);
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];
+    
+    if (info) {
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        [library writeImageDataToSavedPhotosAlbum:[info objectForKey:@"data"] metadata:nil completionBlock:^(NSURL *assetURL, NSError *error)
+         {
+             if (error) {
+                 NSLog(@"ERROR: the image failed to be written");
+             }
+             else {
+                 NSLog(@"PHOTO SAVED - assetURL: %@", assetURL);
+                 
+                 [self dismissModalViewControllerAnimated:NO];
+                 
+                 [library assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+                     
+//                     //get regular-sized image
+//                     ALAssetRepresentation *rep = [asset defaultRepresentation];
+//                     CGImageRef imageRef = [rep fullResolutionImage];
+//                     UIImage *largeImage;
+//                     
+//                     if (imageRef) {
+//                         largeImage = [UIImage imageWithCGImage:imageRef];
+//                     }
+//                     
+//                     //hide hud
+//                     [MBProgressHUD hideAllHUDsForView:self.view.superview animated:NO];
+                     
+                     UIImage *preview = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+                     
+                     //UPDATE most likely we'll want to pop up a kollection picker view here instead of a comments view for the photo
+                     
+                     KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:preview];
+                     [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+                     
+                     //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo
+                     //uploads the same as regular uploads which could get added as submissions, etc.
+                     viewController.photoType = self.photoType;
+                     
+                     [self.navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+                     [self.navController pushViewController:viewController animated:NO];
+                     [self presentModalViewController:self.navController animated:YES];
+                     
+                 } failureBlock:^(NSError *error) {
+                     NSLog(@"Failed to get asset from library");
+                 }];
+                 
+             }
+         }];
     }
-    
-    UIImagePickerController *cameraUI = [[UIImagePickerController alloc] init];
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]
-        && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypePhotoLibrary] containsObject:(NSString *)kUTTypeImage]) {
-        
-        cameraUI.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        
-    } else if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]
-               && [[UIImagePickerController availableMediaTypesForSourceType:UIImagePickerControllerSourceTypeSavedPhotosAlbum] containsObject:(NSString *)kUTTypeImage]) {
-        
-        cameraUI.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
-        cameraUI.mediaTypes = [NSArray arrayWithObject:(NSString *) kUTTypeImage];
-        
-    } else {
-        return NO;
-    }
-    
-    cameraUI.allowsEditing = YES;
-    cameraUI.delegate = self;
-    
-    [self presentModalViewController:cameraUI animated:YES];
-    
-    return YES;
-}
-
-- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer {
-    [self shouldPresentPhotoCaptureController];
 }
 
 @end

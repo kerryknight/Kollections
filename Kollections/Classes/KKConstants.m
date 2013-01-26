@@ -109,6 +109,8 @@ NSString *const kKKPhotoPictureKey         = @"image";
 NSString *const kKKPhotoThumbnailKey       = @"thumbnail";
 NSString *const kKKPhotoUserKey            = @"user";
 NSString *const kKKPhotoOpenGraphIDKey     = @"fbOpenGraphID";
+NSString *const kKKPhotoKollectionKey      = @"kollection";
+NSString *const kKKPhotoSubjectKey         = @"subject";
 
 #pragma mark - Category Class
 // Class key

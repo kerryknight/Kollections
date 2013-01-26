@@ -150,6 +150,8 @@ extern NSString *const kKKPhotoPictureKey;
 extern NSString *const kKKPhotoThumbnailKey;
 extern NSString *const kKKPhotoUserKey;
 extern NSString *const kKKPhotoOpenGraphIDKey;
+extern NSString *const kKKPhotoKollectionKey;
+extern NSString *const kKKPhotoSubjectKey;
 
 #pragma mark - PFObject Category Class
 // Class key

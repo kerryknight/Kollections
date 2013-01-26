@@ -751,7 +751,8 @@
     //    NSLog(@"%s", __FUNCTION__);
     if ([[url host] isEqualToString:kKKLaunchURLHostTakePicture]) {
         if ([PFUser currentUser]) {
-            return [self.tabBarController shouldPresentPhotoCaptureController];
+            NSLog(@"******************* CALLING A METHOD I DELETED BUT DON'T KNOW WHEN THIS WOULD OCCUR************************");
+//            return [self.tabBarController shouldPresentPhotoCaptureController];
         }
     }
     

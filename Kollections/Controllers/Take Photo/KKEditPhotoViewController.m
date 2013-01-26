@@ -64,12 +64,13 @@
 #pragma mark - UIViewController
 
 - (void)loadView {
+    NSLog(@"%s", __FUNCTION__);
     self.scrollView = [[UIScrollView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
     self.scrollView.delegate = self;
     self.scrollView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]];
     self.view = self.scrollView;
     
-    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 25.0f, 280.0f, 280.0f)];
+    UIImageView *photoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(20.0f, 25.0f, 280.0f, 186.6f)];
     [photoImageView setBackgroundColor:[UIColor blackColor]];
     [photoImageView setImage:self.image];
     [photoImageView setContentMode:UIViewContentModeScaleAspectFit];
@@ -169,8 +170,12 @@
         NSLog(@"is a regular non-profile or kollection cover photo");
     }
     
-    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
-    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
+//    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
+    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(640.0f, 427.0f) interpolationQuality:kCGInterpolationHigh];
+    
+    UIImage *thumbnailImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(270.0f, 180.0f) interpolationQuality:kCGInterpolationDefault];
+    
+//    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
     // JPEG to decrease file size and enable faster uploads & downloads
     // Get an NSData representation of our images. We use JPEG for the larger image
