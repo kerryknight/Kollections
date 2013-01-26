@@ -35,6 +35,7 @@
     
     [self configureNextButton];
     [self configureCancelButton];
+    [self configureInstructionLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -81,7 +82,14 @@
 
 - (void)configureCancelButton {
     //add button to view
-    self.cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
+    
+    if (self.isCameraPhoto) {
+        //make it a legit cancel, not back button
+        self.cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:NO andTitle:@"Cancel"];
+    } else {
+        self.cancelButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
+    }
+    
     [self.cancelButton addTarget:self action:@selector(cancelButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     //hide the default back button
     [self.navigationItem setHidesBackButton:YES];
@@ -90,7 +98,30 @@
 
 - (void)cancelButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.isCameraPhoto) {
+        //make it a legit cancel, not back button
+        [self.navigationController dismissModalViewControllerAnimated:YES];
+        self.doneCallback(nil, YES);//tell our block callback it cancelled itself with no image
+    } else {
+        //pop back to image picker
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+}
+
+- (void)configureInstructionLabel {
+    id appDelegate = [[UIApplication sharedApplication] delegate];
+    UIWindow *window = [appDelegate window];
+    
+    UILabel *emptySubjectLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (window.frame.size.height - 150), self.view.frame.size.width, 90)];
+    emptySubjectLabel.text = @"Rotate and size your photo";
+    [emptySubjectLabel setTextColor:kCreme];
+    emptySubjectLabel.textAlignment = UITextAlignmentCenter;
+    emptySubjectLabel.lineBreakMode = UILineBreakModeWordWrap;
+    emptySubjectLabel.numberOfLines = 6;
+    [emptySubjectLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:16]];
+    emptySubjectLabel.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:emptySubjectLabel];
 }
 
 #pragma mark Hooks

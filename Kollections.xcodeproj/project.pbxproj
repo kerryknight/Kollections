@@ -118,8 +118,8 @@
 		C72B0EDA16B330C700DDAADC /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72B0ED916B330C700DDAADC /* OpenGLES.framework */; };
 		C72B0EDC16B330D900DDAADC /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72B0EDB16B330D800DDAADC /* CoreVideo.framework */; };
 		C72B0EDE16B330DF00DDAADC /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72B0EDD16B330DF00DDAADC /* CoreMedia.framework */; };
-		C72B0F7C16B3318300DDAADC /* HFImageEditorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F3316B3318200DDAADC /* HFImageEditorFrameView.m */; };
-		C72B0F7D16B3318300DDAADC /* HFImageEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F3616B3318200DDAADC /* HFImageEditorViewController.m */; };
+		C72B0F7C16B3318300DDAADC /* HFImageEditorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F3316B3318200DDAADC /* HFImageEditorFrameView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		C72B0F7D16B3318300DDAADC /* HFImageEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F3616B3318200DDAADC /* HFImageEditorViewController.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C72B0F8416B334D600DDAADC /* KKImageEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F8316B334D600DDAADC /* KKImageEditorViewController.m */; };
 		C72B0F8916B33E0D00DDAADC /* GPUImageFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F8816B33E0D00DDAADC /* GPUImageFilter.m */; };
 		C72B0FB516B3470A00DDAADC /* KKImageEditorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C72B0FB416B3470A00DDAADC /* KKImageEditorViewController.xib */; };
@@ -789,17 +789,17 @@
 		C72B0ED916B330C700DDAADC /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		C72B0EDB16B330D800DDAADC /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C72B0EDD16B330DF00DDAADC /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		C72B0EE316B3318200DDAADC /* DLCImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DLCImagePickerController.h; path = ../../External/DLCImagePickerController/Classes/DLCImagePickerController.h; sourceTree = "<group>"; };
-		C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DLCImagePickerController.m; path = ../../External/DLCImagePickerController/Classes/DLCImagePickerController.m; sourceTree = "<group>"; };
+		C72B0EE316B3318200DDAADC /* DLCImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DLCImagePickerController.h; path = Classes/DLCImagePickerController.h; sourceTree = "<group>"; };
+		C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DLCImagePickerController.m; path = Classes/DLCImagePickerController.m; sourceTree = "<group>"; };
 		C72B0F3216B3318200DDAADC /* HFImageEditorFrameView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HFImageEditorFrameView.h; sourceTree = "<group>"; };
 		C72B0F3316B3318200DDAADC /* HFImageEditorFrameView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HFImageEditorFrameView.m; sourceTree = "<group>"; };
 		C72B0F3416B3318200DDAADC /* HFImageEditorViewController+SubclassingHooks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HFImageEditorViewController+SubclassingHooks.h"; sourceTree = "<group>"; };
 		C72B0F3516B3318200DDAADC /* HFImageEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HFImageEditorViewController.h; sourceTree = "<group>"; };
 		C72B0F3616B3318200DDAADC /* HFImageEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HFImageEditorViewController.m; sourceTree = "<group>"; };
-		C72B0F8216B334D600DDAADC /* KKImageEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKImageEditorViewController.h; sourceTree = "<group>"; };
-		C72B0F8316B334D600DDAADC /* KKImageEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKImageEditorViewController.m; sourceTree = "<group>"; };
+		C72B0F8216B334D600DDAADC /* KKImageEditorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKImageEditorViewController.h; path = "../../Controllers/Take Photo/KKImageEditorViewController.h"; sourceTree = "<group>"; };
+		C72B0F8316B334D600DDAADC /* KKImageEditorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKImageEditorViewController.m; path = "../../Controllers/Take Photo/KKImageEditorViewController.m"; sourceTree = "<group>"; };
 		C72B0F8816B33E0D00DDAADC /* GPUImageFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GPUImageFilter.m; path = External/GPUImage/Source/GPUImageFilter.m; sourceTree = "<group>"; };
-		C72B0FB416B3470A00DDAADC /* KKImageEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKImageEditorViewController.xib; sourceTree = "<group>"; };
+		C72B0FB416B3470A00DDAADC /* KKImageEditorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKImageEditorViewController.xib; path = "../../Controllers/Take Photo/KKImageEditorViewController.xib"; sourceTree = "<group>"; };
 		C72E42CB169E426100D0C182 /* KKCreateKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKCreateKollectionViewController.h; sourceTree = "<group>"; };
 		C72E42CC169E426100D0C182 /* KKCreateKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCreateKollectionViewController.m; sourceTree = "<group>"; };
 		C72E42CE169E427F00D0C182 /* KKKollectionSetupTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSetupTableViewController.h; sourceTree = "<group>"; };
@@ -1484,6 +1484,8 @@
 		C726D37016B38BF900A3221A /* DLCImagePickerController */ = {
 			isa = PBXGroup;
 			children = (
+				C72B0EE316B3318200DDAADC /* DLCImagePickerController.h */,
+				C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */,
 				C726D37116B38BF900A3221A /* Classes */,
 				C726D37816B38BF900A3221A /* Images */,
 				C726D3B616B38BF900A3221A /* Resources */,
@@ -1671,6 +1673,9 @@
 		C72B0F3116B3318200DDAADC /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
+				C72B0F8216B334D600DDAADC /* KKImageEditorViewController.h */,
+				C72B0F8316B334D600DDAADC /* KKImageEditorViewController.m */,
+				C72B0FB416B3470A00DDAADC /* KKImageEditorViewController.xib */,
 				C72B0F3216B3318200DDAADC /* HFImageEditorFrameView.h */,
 				C72B0F3316B3318200DDAADC /* HFImageEditorFrameView.m */,
 				C72B0F3416B3318200DDAADC /* HFImageEditorViewController+SubclassingHooks.h */,
@@ -2019,11 +2024,6 @@
 			children = (
 				C7B1CD7016783C8500BA628A /* KKEditPhotoViewController.h */,
 				C7B1CD7116783C8500BA628A /* KKEditPhotoViewController.m */,
-				C72B0EE316B3318200DDAADC /* DLCImagePickerController.h */,
-				C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */,
-				C72B0F8216B334D600DDAADC /* KKImageEditorViewController.h */,
-				C72B0F8316B334D600DDAADC /* KKImageEditorViewController.m */,
-				C72B0FB416B3470A00DDAADC /* KKImageEditorViewController.xib */,
 			);
 			path = "Take Photo";
 			sourceTree = "<group>";
