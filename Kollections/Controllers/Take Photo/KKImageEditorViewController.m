@@ -58,7 +58,6 @@
     self.cropSize = CGSizeMake(320, 240);
 }
 
-
 - (IBAction)setLPortraitAction:(id)sender {
     self.cropSize = CGSizeMake(240, 320);
 }
@@ -73,7 +72,7 @@
 }
 
 - (void)nextButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     //show a hud in case it takes awhile to process photo
     [MBProgressHUD showHUDAddedTo:self.view.superview animated:NO];
@@ -90,7 +89,7 @@
 }
 
 - (void)cancelButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [self.navigationController popViewControllerAnimated:YES];
 }
 

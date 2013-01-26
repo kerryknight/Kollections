@@ -8,6 +8,7 @@
 
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "KKTabBarController.h"
+#import "KKAppDelegate.h"
 
 //used to differentiate between regular photos for posting and simply adding a profile pic
 typedef enum {
@@ -81,7 +82,7 @@ typedef enum {
 #pragma mark - ()
 
 - (void)photoCaptureButtonAction:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //check who the sender is to make sure we don't upload a photo per usual if we're just trying to add a profile picture
     if ([sender respondsToSelector:@selector(name)] && [[sender name] isEqualToString:@"profilePhotoCaptureButtonAction"]) {
         self.photoType = KKTabBarControllerPhotoTypeProfilePhoto;
@@ -102,7 +103,7 @@ typedef enum {
 }
 
 -(void) imagePickerController:(DLCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];
     
     if (info) {
@@ -115,27 +116,31 @@ typedef enum {
              else {
                  NSLog(@"PHOTO SAVED - assetURL: %@", assetURL);
                  
+                 
+                 //dismiss hud from the appdelegate's window
+                 id appDelegate = [[UIApplication sharedApplication] delegate];
+                 UIWindow *window = [appDelegate window];
+                 [MBProgressHUD hideHUDForView:window animated:NO];
+                 
+                 //dismiss the filter selector view
                  [self dismissModalViewControllerAnimated:NO];
                  
                  [library assetForURL:assetURL resultBlock:^(ALAsset *asset) {
                      
-//                     //get regular-sized image
-//                     ALAssetRepresentation *rep = [asset defaultRepresentation];
-//                     CGImageRef imageRef = [rep fullResolutionImage];
-//                     UIImage *largeImage;
-//                     
-//                     if (imageRef) {
-//                         largeImage = [UIImage imageWithCGImage:imageRef];
-//                     }
-//                     
-//                     //hide hud
-//                     [MBProgressHUD hideAllHUDsForView:self.view.superview animated:NO];
+                     //get regular-sized image
+                     ALAssetRepresentation *rep = [asset defaultRepresentation];
+                     CGImageRef imageRef = [rep fullResolutionImage];
+                     UIImage *largeImage;
                      
-                     UIImage *preview = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
+                     if (imageRef) {
+                         largeImage = [UIImage imageWithCGImage:imageRef];
+                     }
+                     
+//                     UIImage *preview = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
                      
                      //UPDATE most likely we'll want to pop up a kollection picker view here instead of a comments view for the photo
                      
-                     KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:preview];
+                     KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:largeImage];
                      [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
                      
                      //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo

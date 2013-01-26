@@ -105,7 +105,8 @@
 		C726D40216B38BF900A3221A /* purple-green.acv in Resources */ = {isa = PBXBuildFile; fileRef = C726D3BE16B38BF900A3221A /* purple-green.acv */; };
 		C726D40316B38BF900A3221A /* yellow-red.acv in Resources */ = {isa = PBXBuildFile; fileRef = C726D3BF16B38BF900A3221A /* yellow-red.acv */; };
 		C726D41616B38C8400A3221A /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C726D40E16B38C5300A3221A /* libGPUImage.a */; };
-		C726D41816B38E2400A3221A /* GPUImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C726D41716B38E2400A3221A /* GPUImageView.m */; };
+		C726D41E16B38F7D00A3221A /* GPUImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C726D41D16B38F7D00A3221A /* GPUImageView.m */; };
+		C726D42216B398F000A3221A /* DLCImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */; };
 		C72B0D1716B2EA2400DDAADC /* KKPhotosBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0D1116B2EA2400DDAADC /* KKPhotosBarViewController.m */; };
 		C72B0D1816B2EA2400DDAADC /* KKPhotosBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C72B0D1216B2EA2400DDAADC /* KKPhotosBarViewController.xib */; };
 		C72B0D1A16B2EA2400DDAADC /* KKPhotosCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C72B0D1416B2EA2400DDAADC /* KKPhotosCell.xib */; };
@@ -117,7 +118,6 @@
 		C72B0EDA16B330C700DDAADC /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72B0ED916B330C700DDAADC /* OpenGLES.framework */; };
 		C72B0EDC16B330D900DDAADC /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72B0EDB16B330D800DDAADC /* CoreVideo.framework */; };
 		C72B0EDE16B330DF00DDAADC /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C72B0EDD16B330DF00DDAADC /* CoreMedia.framework */; };
-		C72B0F3816B3318200DDAADC /* DLCImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */; };
 		C72B0F7C16B3318300DDAADC /* HFImageEditorFrameView.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F3316B3318200DDAADC /* HFImageEditorFrameView.m */; };
 		C72B0F7D16B3318300DDAADC /* HFImageEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F3616B3318200DDAADC /* HFImageEditorViewController.m */; };
 		C72B0F8416B334D600DDAADC /* KKImageEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0F8316B334D600DDAADC /* KKImageEditorViewController.m */; };
@@ -776,7 +776,7 @@
 		C726D3BE16B38BF900A3221A /* purple-green.acv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "purple-green.acv"; sourceTree = "<group>"; };
 		C726D3BF16B38BF900A3221A /* yellow-red.acv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "yellow-red.acv"; sourceTree = "<group>"; };
 		C726D40416B38C5300A3221A /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = Kollections/External/GPUImage/GPUImage.xcodeproj; sourceTree = "<group>"; };
-		C726D41716B38E2400A3221A /* GPUImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GPUImageView.m; path = ../External/GPUImage/Source/GPUImageView.m; sourceTree = "<group>"; };
+		C726D41D16B38F7D00A3221A /* GPUImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GPUImageView.m; path = ../../GPUImage/Source/GPUImageView.m; sourceTree = "<group>"; };
 		C72B0D1016B2EA2400DDAADC /* KKPhotosBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPhotosBarViewController.h; sourceTree = "<group>"; };
 		C72B0D1116B2EA2400DDAADC /* KKPhotosBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPhotosBarViewController.m; sourceTree = "<group>"; };
 		C72B0D1216B2EA2400DDAADC /* KKPhotosBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKPhotosBarViewController.xib; sourceTree = "<group>"; };
@@ -1494,6 +1494,7 @@
 		C726D37116B38BF900A3221A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C726D41D16B38F7D00A3221A /* GPUImageView.m */,
 				C726D37216B38BF900A3221A /* BlurOverlayView.h */,
 				C726D37316B38BF900A3221A /* BlurOverlayView.m */,
 				C726D37616B38BF900A3221A /* GrayscaleContrastFilter.h */,
@@ -1932,7 +1933,6 @@
 				C7B1CD6416783C8500BA628A /* Photo Details */,
 				C7B1CD6A16783C8500BA628A /* Settings */,
 				C7B1CD5716783C8500BA628A /* KKTabBarController.h */,
-				C726D41716B38E2400A3221A /* GPUImageView.m */,
 				C7B1CD5816783C8500BA628A /* KKTabBarController.m */,
 			);
 			path = Controllers;
@@ -3411,7 +3411,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C726D41816B38E2400A3221A /* GPUImageView.m in Sources */,
 				C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */,
 				C7EBEBD9167839C100106E25 /* main.m in Sources */,
 				C7EBEBDD167839C100106E25 /* KKAppDelegate.m in Sources */,
@@ -3500,14 +3499,15 @@
 				C70A13B016ADF626007EAA5B /* NSMutableArray+AddOns.m in Sources */,
 				C73ECF1D16AF135800452C63 /* KKKollectionTableViewController.m in Sources */,
 				C73ECF2A16AF342400452C63 /* UITableView+ZGParallelView.m in Sources */,
+				C726D41E16B38F7D00A3221A /* GPUImageView.m in Sources */,
 				C72B0D1716B2EA2400DDAADC /* KKPhotosBarViewController.m in Sources */,
 				C72B0F8916B33E0D00DDAADC /* GPUImageFilter.m in Sources */,
-				C72B0F3816B3318200DDAADC /* DLCImagePickerController.m in Sources */,
 				C72B0F7C16B3318300DDAADC /* HFImageEditorFrameView.m in Sources */,
 				C72B0F7D16B3318300DDAADC /* HFImageEditorViewController.m in Sources */,
 				C72B0F8416B334D600DDAADC /* KKImageEditorViewController.m in Sources */,
 				C726D3C016B38BF900A3221A /* BlurOverlayView.m in Sources */,
 				C726D3C216B38BF900A3221A /* GrayscaleContrastFilter.m in Sources */,
+				C726D42216B398F000A3221A /* DLCImagePickerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
