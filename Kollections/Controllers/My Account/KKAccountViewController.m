@@ -497,7 +497,7 @@
 }
 
 - (void)loadProfilePhoto:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     self.user = [PFUser currentUser];//reset the self.user since we should've updated the currentUser with the new profile pic
     //retrieve the user's profile pic to insert
     PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];
@@ -510,6 +510,10 @@
                     //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
                     [(UIButton*)[self.headerViewController.view viewWithTag:kProfilePictureButtonTag] setBackgroundImage:[UIImage imageNamed:@"kkHeaderUserPhotoDown.png"] forState:UIControlEventTouchDown];
                 }];
+                
+                if (image) {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"tabBarControllerDismissParentViewController" object:nil];
+                }
             }
         }];
     }

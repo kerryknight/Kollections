@@ -191,6 +191,7 @@
 		C79DA14B169CA0AB009C1CE7 /* KKKollectionsAddCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C79DA147169CA0AB009C1CE7 /* KKKollectionsAddCell.xib */; };
 		C79DA14C169CA0AB009C1CE7 /* KKKollectionsBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C79DA149169CA0AB009C1CE7 /* KKKollectionsBarViewController.m */; };
 		C79DA14D169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C79DA14A169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib */; };
+		C7AEBF8716B6DBB60071D5DE /* libCrittercism_v3_4_9.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7AEBF8616B6DBB60071D5DE /* libCrittercism_v3_4_9.a */; };
 		C7B1CF0B16783C8500BA628A /* KKCache.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4316783C8500BA628A /* KKCache.m */; };
 		C7B1CF0C16783C8500BA628A /* KKConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4516783C8500BA628A /* KKConstants.m */; };
 		C7B1CF0D16783C8500BA628A /* KKFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD4716783C8500BA628A /* KKFunctions.m */; };
@@ -885,6 +886,9 @@
 		C79DA148169CA0AB009C1CE7 /* KKKollectionsBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionsBarViewController.h; path = KKKollectionsBar/KKKollectionsBarViewController.h; sourceTree = "<group>"; };
 		C79DA149169CA0AB009C1CE7 /* KKKollectionsBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionsBarViewController.m; path = KKKollectionsBar/KKKollectionsBarViewController.m; sourceTree = "<group>"; };
 		C79DA14A169CA0AB009C1CE7 /* KKKollectionsBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = KKKollectionsBarViewController.xib; path = KKKollectionsBar/KKKollectionsBarViewController.xib; sourceTree = "<group>"; };
+		C7AEBF8416B6DBB60071D5DE /* Crittercism.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Crittercism.h; sourceTree = "<group>"; };
+		C7AEBF8516B6DBB60071D5DE /* CrittercismDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrittercismDelegate.h; sourceTree = "<group>"; };
+		C7AEBF8616B6DBB60071D5DE /* libCrittercism_v3_4_9.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libCrittercism_v3_4_9.a; sourceTree = "<group>"; };
 		C7B1CD4216783C8500BA628A /* KKCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKCache.h; sourceTree = "<group>"; };
 		C7B1CD4316783C8500BA628A /* KKCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKCache.m; sourceTree = "<group>"; };
 		C7B1CD4416783C8500BA628A /* KKConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKConstants.h; sourceTree = "<group>"; };
@@ -1428,6 +1432,7 @@
 				C7EBEBCF167839C100106E25 /* Foundation.framework in Frameworks */,
 				C7EBEBD1167839C100106E25 /* CoreGraphics.framework in Frameworks */,
 				C7B1CF2016783C8500BA628A /* Parse.framework in Frameworks */,
+				C7AEBF8716B6DBB60071D5DE /* libCrittercism_v3_4_9.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1907,6 +1912,16 @@
 			name = "Kollection Create and Edit";
 			sourceTree = "<group>";
 		};
+		C7AEBF8316B6DBB60071D5DE /* CrittercismSDK */ = {
+			isa = PBXGroup;
+			children = (
+				C7AEBF8416B6DBB60071D5DE /* Crittercism.h */,
+				C7AEBF8516B6DBB60071D5DE /* CrittercismDelegate.h */,
+				C7AEBF8616B6DBB60071D5DE /* libCrittercism_v3_4_9.a */,
+			);
+			path = CrittercismSDK;
+			sourceTree = "<group>";
+		};
 		C7B1CD4116783C8500BA628A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -2031,6 +2046,7 @@
 		C7B1CD7216783C8500BA628A /* External */ = {
 			isa = PBXGroup;
 			children = (
+				C7AEBF8316B6DBB60071D5DE /* CrittercismSDK */,
 				C726D37016B38BF900A3221A /* DLCImagePickerController */,
 				C72B0F3116B3318200DDAADC /* ImageEditor */,
 				C7127078168283E700C1B560 /* SlimeRefresh */,
@@ -2744,8 +2760,8 @@
 				C7B1CD4C16783C8500BA628A /* Controllers */,
 				C7EBEBDB167839C100106E25 /* KKAppDelegate.h */,
 				C7EBEBDC167839C100106E25 /* KKAppDelegate.m */,
-				C7B1CD9016783C8500BA628A /* Resources */,
 				C7B1CD7216783C8500BA628A /* External */,
+				C7B1CD9016783C8500BA628A /* Resources */,
 				C7EBEBD3167839C100106E25 /* Supporting Files */,
 			);
 			path = Kollections;
@@ -3625,6 +3641,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Library/Developer/Xcode/DerivedData/Kollections-gahamfuzfujdbaafqpanwizbvgxf/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/Kollections/External/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -3648,6 +3665,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../Library/Developer/Xcode/DerivedData/Kollections-gahamfuzfujdbaafqpanwizbvgxf/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/Kollections/External/CrittercismSDK\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";

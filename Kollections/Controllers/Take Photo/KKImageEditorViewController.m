@@ -29,26 +29,29 @@
 }
 
 - (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
     
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     
-    [self configureNextButton];
-    [self configureCancelButton];
     [self configureInstructionLabel];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    //    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
-    self.nextButton.hidden = NO;//this is hidden if we navigate away
-    self.cancelButton.hidden = NO;//this is hidden if we navigate away
+    
+    //it was a little buggy having the buttons just hide/unhide on appear/disappear so i'm just going to load/reload instead
+    [self configureNextButton];
+    [self configureCancelButton];
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewWillDisappear:animated];
-    self.nextButton.hidden = YES;
-    self.cancelButton.hidden = YES;
+    [self.nextButton removeFromSuperview];
+    [self.cancelButton removeFromSuperview];
 }
 
 - (IBAction)setSquareAction:(id)sender {
@@ -81,6 +84,7 @@
 }
 
 - (void)configureCancelButton {
+//    NSLog(@"%s", __FUNCTION__);
     //add button to view
     
     if (self.isCameraPhoto) {
@@ -113,15 +117,15 @@
     id appDelegate = [[UIApplication sharedApplication] delegate];
     UIWindow *window = [appDelegate window];
     
-    UILabel *emptySubjectLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (window.frame.size.height - 150), self.view.frame.size.width, 90)];
-    emptySubjectLabel.text = @"Rotate and size your photo";
-    [emptySubjectLabel setTextColor:kCreme];
-    emptySubjectLabel.textAlignment = UITextAlignmentCenter;
-    emptySubjectLabel.lineBreakMode = UILineBreakModeWordWrap;
-    emptySubjectLabel.numberOfLines = 6;
-    [emptySubjectLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:16]];
-    emptySubjectLabel.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:emptySubjectLabel];
+    UILabel *instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (window.frame.size.height - 150), self.view.frame.size.width, 90)];
+    instructionLabel.text = @"Rotate and size your photo";
+    [instructionLabel setTextColor:kCreme];
+    instructionLabel.textAlignment = UITextAlignmentCenter;
+    instructionLabel.lineBreakMode = UILineBreakModeWordWrap;
+    instructionLabel.numberOfLines = 6;
+    [instructionLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:16]];
+    instructionLabel.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:instructionLabel];
 }
 
 #pragma mark Hooks

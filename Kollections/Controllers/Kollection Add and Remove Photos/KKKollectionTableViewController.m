@@ -128,6 +128,22 @@
     
     PFFile *imageFile = [self.kollection objectForKey:kKKKollectionCoverPhotoKey];
     if (imageFile) {
+        
+        [(PFImageView*)[self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG] setFile:imageFile];
+        [(PFImageView*)[self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG] loadInBackground:^(UIImage *image, NSError *error) {
+            if (!error) {
+                [UIView animateWithDuration:0.200f animations:^{
+                    [self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG].alpha = 1.0f;//load the photo into the imageview
+                }];
+            }
+        }];
+    }
+}
+
+- (void)reloadCoverPhoto {
+    PFFile *imageFile = [self.kollection objectForKey:kKKKollectionCoverPhotoKey];
+    if (imageFile) {
+        
         [(PFImageView*)[self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG] setFile:imageFile];
         [(PFImageView*)[self.headerView viewWithTag:kCOVER_PHOTO_IMAGE_TAG] loadInBackground:^(UIImage *image, NSError *error) {
             if (!error) {
@@ -410,6 +426,9 @@
     self.kollection = (PFObject*)userInfo[@"kollection"];
     self.subjectList = (NSMutableArray*)userInfo[@"subjects"];
     [self.tableView reloadData];
+    
+    //reload cover photo
+    [self reloadCoverPhoto];
 }
 
 #pragma mark - Custom Methods

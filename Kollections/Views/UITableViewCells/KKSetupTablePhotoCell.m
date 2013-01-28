@@ -23,6 +23,10 @@
     self.contentView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
     self.headerLabel.textColor = kGray5;
     self.footnoteLabel.textColor = kGray5;
+    
+//    //put border on image view
+//    self.noPhotoImage.layer.borderColor = kGray4.CGColor;
+//    self.noPhotoImage.layer.borderWidth = 0.50f;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

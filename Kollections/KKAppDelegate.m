@@ -7,6 +7,7 @@
 //
 
 #import "KKAppDelegate.h"
+#import "Crittercism.h"//crash reporting
 #import "Reachability.h"
 #import "MBProgressHUD.h"
 #import "KKCache.h"
@@ -75,8 +76,10 @@
         [[PFInstallation currentInstallation] saveEventually];
     }
     
-
-    
+    // ****************************************************************************
+    // Turn on Crittercism crash reporting
+    // ****************************************************************************
+    [Crittercism enableWithAppID: @"5106a3ae1abc694416000016"];
     
     
     

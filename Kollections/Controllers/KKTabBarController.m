@@ -23,6 +23,7 @@ typedef enum {
 @property (nonatomic, assign) KKTabBarControllerPhotoType photoType;//used to determine how to process the photo
 @property (nonatomic, strong) KKImageEditorViewController *imageEditor;
 @property (nonatomic, strong) ALAssetsLibrary *library; //our photo library
+@property (nonatomic, assign) BOOL profilePhotoUploadedSuccessfully;
 @end
 
 @implementation KKTabBarController
@@ -44,11 +45,13 @@ typedef enum {
     //these are the same notification but with different names so we can process the photos slightly differently
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoCaptureButtonAction:) name:@"profilePhotoCaptureButtonAction" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photoCaptureButtonAction:) name:@"kollectionPhotoCaptureButtonAction" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissParentViewController) name:@"tabBarControllerDismissParentViewController" object:nil];
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"profilePhotoCaptureButtonAction" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"kollectionPhotoCaptureButtonAction" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"tabBarControllerDismissParentViewController" object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -104,8 +107,6 @@ typedef enum {
 
 -(void) imagePickerController:(DLCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
 //    NSLog(@"%s", __FUNCTION__);
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:NO];
-    
     if (info) {
         ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
         [library writeImageDataToSavedPhotosAlbum:[info objectForKey:@"data"] metadata:nil completionBlock:^(NSURL *assetURL, NSError *error)
@@ -115,15 +116,6 @@ typedef enum {
              }
              else {
                  NSLog(@"PHOTO SAVED - assetURL: %@", assetURL);
-                 
-                 
-                 //dismiss hud from the appdelegate's window
-                 id appDelegate = [[UIApplication sharedApplication] delegate];
-                 UIWindow *window = [appDelegate window];
-                 [MBProgressHUD hideHUDForView:window animated:NO];
-                 
-                 //dismiss the filter selector view
-                 [self dismissModalViewControllerAnimated:NO];
                  
                  [library assetForURL:assetURL resultBlock:^(ALAsset *asset) {
                      
@@ -136,20 +128,45 @@ typedef enum {
                          largeImage = [UIImage imageWithCGImage:imageRef];
                      }
                      
-//                     UIImage *preview = [UIImage imageWithCGImage:[asset aspectRatioThumbnail]];
-                     
-                     //UPDATE most likely we'll want to pop up a kollection picker view here instead of a comments view for the photo
-                     
-                     KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:largeImage];
-                     [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-                     
-                     //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo
-                     //uploads the same as regular uploads which could get added as submissions, etc.
-                     viewController.photoType = self.photoType;
-                     
-                     [self.navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-                     [self.navController pushViewController:viewController animated:NO];
-                     [self presentModalViewController:self.navController animated:YES];
+                     //further process the image based on what type we're trying to collect
+                     if (self.photoType == KKTabBarControllerPhotoTypeProfilePhoto) {
+                         //profile photo
+                         //it's a profile photo, so pass the data off, mark if successful and exit here
+                         
+                         self.profilePhotoUploadedSuccessfully = [KKUtility processLocalProfilePicture:largeImage];
+                         
+                         return;
+                     } else if (self.photoType == KKTabBarControllerPhotoTypeKollectionPhoto) {
+                         NSLog(@"save kollection cover photo");
+                         //kollection cover photo
+                         //stick the uiimage of our cover photo into a user info dictionary to send with the notification
+                         NSDictionary *photoItem = @{kKKKollectionCoverPhotoKey : largeImage};
+                         
+                         //send our photo back to our KKKollectionSetupTableViewController to load into our table and save accordingly with our kollection object
+                         [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil userInfo:photoItem];
+                         
+                     } else {
+                         //dismiss hud from the appdelegate's window
+                         id appDelegate = [[UIApplication sharedApplication] delegate];
+                         UIWindow *window = [appDelegate window];
+                         [MBProgressHUD hideHUDForView:window animated:NO];
+                         
+                         //dismiss the filter selector view
+                         [self dismissModalViewControllerAnimated:NO];
+                         
+                         //regular submission photo
+                         KKEditPhotoViewController *viewController = [[KKEditPhotoViewController alloc] initWithImage:largeImage];
+                         [viewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+                         
+                         //make sure we know what type of photo we're trying to work with as we don't want to treat profile photo
+                         //uploads the same as regular uploads which could get added as submissions, etc.
+                         
+                         viewController.photoType = self.photoType;
+                         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
+                         [self.navController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+                         [self.navController pushViewController:viewController animated:NO];
+                         [self presentModalViewController:self.navController animated:YES];
+                     }
                      
                  } failureBlock:^(NSError *error) {
                      NSLog(@"Failed to get asset from library");
@@ -158,6 +175,19 @@ typedef enum {
              }
          }];
     }
+}
+
+- (void)dismissParentViewController {
+//    NSLog(@"%s", __FUNCTION__);
+    
+    //dismiss hud from the appdelegate's window
+    id appDelegate = [[UIApplication sharedApplication] delegate];
+    UIWindow *window = [appDelegate window];
+    [MBProgressHUD hideHUDForView:window animated:NO];
+    
+    [self.parentViewController dismissModalViewControllerAnimated:YES];
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:YES];
 }
 
 @end

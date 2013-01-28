@@ -12,6 +12,7 @@
 #import "BlockAlertView.h"
 #import "BlockPickerActionSheet.h"
 #import "UIImage+ResizeAdditions.h"
+#import "UIImage+Colorization.h"
 //custom cells
 #import "KKSetupTableShareCell.h"
 #import "KKSetupTableBaseCell.h"
@@ -356,7 +357,7 @@
 }
 
 - (void)loadCoverPhoto:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     
     KKSetupTablePhotoCell *cell;
     if (sender) {
@@ -379,8 +380,12 @@
                     [UIView animateWithDuration:0.200f animations:^{
                         [cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag].alpha = 1.0f;//load the photo into the imageview
                         //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
-                        [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionCoverPhotoOverlayButtonDown.png"] forState:UIControlEventTouchDown];
+                        UIImage *downImage = [UIImage darkenImage:image toLevel:1.2];
+                        [cell.photoButton setBackgroundImage:downImage forState:UIControlEventTouchDown];
+                        
+                        [[NSNotificationCenter defaultCenter] postNotificationName:@"tabBarControllerDismissParentViewController" object:nil];
                     }];
+                    
                 } else {
                     NSLog(@"error loading photo into image = %@", error);
                 }
@@ -403,7 +408,7 @@
 }
 
 - (void)processCoverPhoto:(NSNotification *)notification {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     
     //remove our observer so it doesn't continually get called
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"KollectionSetupTableViewControllerProcessKollectionCoverPhoto" object:nil];
@@ -1022,7 +1027,9 @@
                 [self loadCoverPhoto:cell];
                 
                 cell.photoButton.tag = kKollectionCoverPhotoButtonTag;
-                [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionNoCoverPhotoButtonDown.png"] forState:UIControlEventTouchDown];
+                
+                UIImage *downImage = [UIImage darkenImage:[UIImage imageNamed:@"kkKollectionNoCoverPhotoButtonDown.png"] toLevel:1.2];
+                [cell.photoButton setBackgroundImage:downImage forState:UIControlEventTouchDown];
                 [cell.photoButton addTarget:self action:@selector(selectCoverPhoto:) forControlEvents:UIControlEventTouchUpInside];
                 
                 //track what our indexpath is so we can load our cover photo into our cell

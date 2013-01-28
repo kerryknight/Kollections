@@ -105,7 +105,7 @@
 }
 
 - (void)viewDidLoad {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 
     [self.navigationItem setHidesBackButton:YES];
@@ -121,7 +121,7 @@
     //check what type of photo it is; if it's a regular photo or profile photo, go ahead and upload
     //if it's a kollection cover photo, don't upload yet as we need to save it with the kollection (in case the kollection doesn't exist)
     //we'll change the wording on the "publish" vs. "done" buttons to reflect this
-    if (self.photoType != KKEditPhotoViewPhotoTypeKollectionPhoto) {
+    if (self.photoType == KKEditPhotoViewPhotoTypeRegularPhoto) {
         publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Publish"];
     } else {
         publishButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Done"];
@@ -153,7 +153,11 @@
 #pragma mark - ()
 
 - (BOOL)shouldUploadImage:(UIImage *)anImage {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
+    
+    //knightka - as of 28Jan2013, processing for anything other than a regular photo shouldn't be doing anything from this view controller
+    //all of this should have already been handed off as appropriate from the tab bar controller prior to this view ever getting loaded
+    //however, i've left the original processing code intact on this class for reference and out of laziness
     
     //first, check to see if it's a regular photo for submission or a profile photo we're trying to upload
     //if it's a profile photo, since we'll be resizing and processing a bit differently, pass it off to KKUtility instead of uploading here
@@ -178,9 +182,9 @@
     
 //    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
-    
-    NSLog(@"resizedImage w = %0.0f", resizedImage.size.width);
-    NSLog(@"resizedImage h = %0.0f", resizedImage.size.height);
+//    
+//    NSLog(@"resizedImage w = %0.0f", resizedImage.size.width);
+//    NSLog(@"resizedImage h = %0.0f", resizedImage.size.height);
     
     // JPEG to decrease file size and enable faster uploads & downloads
     // Get an NSData representation of our images. We use JPEG for the larger image
@@ -241,7 +245,7 @@
 }
 
 - (void)doneButtonAction:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     // Trim comment and save it in a dictionary for use later in our callback block
     NSDictionary *userInfo = [NSDictionary dictionary];
     NSString *trimmedComment = [self.commentTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];

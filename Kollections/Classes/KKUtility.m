@@ -205,6 +205,7 @@
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
                 [[PFUser currentUser] saveEventually];
                 [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
+                
             } else {
                 NSLog(@"Photo failed to save: %@", error);
                 [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
