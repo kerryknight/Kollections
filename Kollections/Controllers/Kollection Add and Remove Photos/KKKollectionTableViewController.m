@@ -300,17 +300,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
 //    NSLog(@"%s", __FUNCTION__);
-//    static NSString *CellIdentifier = @"Cell";
-//    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//	
-//	if (cell == nil) {
-//		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier forIndexPath:(NSIndexPath *)indexPath];
-//	}
-//	
-//	// configureCell:cell forIndexPath: sets the text and image for the cell -- the method is factored out as it's also called during minuted-based updates.
-//	[self configureCell:cell forIndexPath:indexPath];
-//	return cell;
     
     //set up background image of cell as well as determine when to show/hide label and disclosure
     UIColor *rowBackground;
@@ -398,32 +387,6 @@
         }
         
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-        if (indexPath.row == 1) {
-            NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
-            if ([subjectPhotos count]) {
-                KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
-                kb.delegate = self;
-                kb.photos = subjectPhotos;
-//                kb.collectionView.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
-//                [kb.collectionView reloadData];
-//                NSLog(@"add kb");
-//                [cell.contentView addSubview:kb.view];
-//                kb.view.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
-//                [kb.view setNeedsDisplay];
-//                [kb didMoveToParentViewController:self];
-            } else {
-                UILabel *noPhotosLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 20.0f, cell.contentView.bounds.size.width - 20.0f, 80.0f)];
-                [cell.contentView addSubview:noPhotosLabel];
-                [noPhotosLabel setTextColor:kGray4];
-                noPhotosLabel.textAlignment = UITextAlignmentCenter;
-                noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
-                noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
-                noPhotosLabel.numberOfLines = 5;
-                [noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
-                [noPhotosLabel setBackgroundColor:[UIColor clearColor]];
-            }
-        }
-        
         [cell.contentView setBackgroundColor:rowBackground];
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
@@ -466,107 +429,25 @@
             kb.view.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
             [kb.view setNeedsDisplay];
             [kb didMoveToParentViewController:self];
-        } 
+        } else {
+            UILabel *noPhotosLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 20.0f, cell.contentView.bounds.size.width - 20.0f, 80.0f)];
+            [cell.contentView addSubview:noPhotosLabel];
+            [noPhotosLabel setTextColor:kGray4];
+            noPhotosLabel.textAlignment = UITextAlignmentCenter;
+            noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
+            noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
+            noPhotosLabel.numberOfLines = 5;
+            [noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
+            [noPhotosLabel setBackgroundColor:[UIColor clearColor]];
+        }
     }
-    
+
     //blank out generic stuff
     cell.textLabel.text = @"";
     cell.detailTextLabel.text = @"";
     
 	return cell;
 }
-
-//- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
-////	NSLog(@"%s for section %i", __FUNCTION__, indexPath.section);
-//	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-//    
-//    //make the cell highlight gray instead of blue
-//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//    cell.accessoryType = UITableViewCellAccessoryNone;
-//    
-//    //add a header label to it
-//    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
-//    [cell.contentView addSubview:headerLabel];
-//    [headerLabel setTextColor:kGray6];
-//    [headerLabel setShadowColor:kCreme];
-//    [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-//    [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
-//    [headerLabel setBackgroundColor:[UIColor clearColor]];
-//    headerLabel.tag = kHEADERLABELTAG;
-//    
-//    //separate out full photo array into pertinant subject-based photo arrays
-//    if (indexPath.row == 1) {
-//        NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
-//        if ([subjectPhotos count]) {
-//            KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
-//            kb.delegate = self;
-//            kb.photos = subjectPhotos;
-//            kb.view.tag = kKOLLECTIONSBARTAG;
-//            kb.collectionView.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
-//            [kb.collectionView reloadData];
-//            [self addChildViewController:kb];
-//            [cell.contentView addSubview:kb.view];
-//            [kb didMoveToParentViewController:self];
-//        } else {
-//            UILabel *noPhotosLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 20.0f, cell.contentView.bounds.size.width - 20.0f, 80.0f)];
-//            [cell.contentView addSubview:noPhotosLabel];
-//            [noPhotosLabel setTextColor:kGray4];
-//            noPhotosLabel.textAlignment = UITextAlignmentCenter;
-//            noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
-//            noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
-//            noPhotosLabel.numberOfLines = 5;
-//            [noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
-//            [noPhotosLabel setBackgroundColor:[UIColor clearColor]];
-//        }
-//    }
-//    
-//	return cell;
-//}
-//
-//- (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-////    NSLog(@"%s for section %i", __FUNCTION__, indexPath.section);
-//    UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
-//    UIView *kollectionView = (UIView*)[cell.contentView viewWithTag:kKOLLECTIONSBARTAG];
-//    kollectionView.hidden = YES;//default
-//    UIColor *rowBackground;
-//    
-//    NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
-//    NSInteger row = [indexPath row];
-//    
-//    if (row == 0 && row == sectionRows - 1) {
-//        //single row; will this ever happen?
-//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-//        headerLabel.text = @"";
-//    }
-//    else if (row == 0) {
-//        //top row
-//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
-//        //extract our subject object from our subject list array and then pull out the title to add to the header label
-//        PFObject *subj = (PFObject*)self.subjectList[indexPath.section];
-//        NSString *title = subj[kKKSubjectTitleKey];
-//        if (self.subjectList[indexPath.section]) {
-//            headerLabel.text = title;//set the header title text
-//        } else {
-//            //no title to display
-//            headerLabel.text = @"";
-//        }
-//    }
-//    else if (row == sectionRows - 1) {
-//        //bottom row
-//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
-//        headerLabel.text = @"";
-//    }
-//    else {
-//        //middle row
-//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-//        headerLabel.text = @"";
-//        kollectionView.hidden = NO;
-//        kollectionView.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
-//        [kollectionView setNeedsDisplay];
-//    }
-//    
-//    [cell.contentView setBackgroundColor:rowBackground];
-//}
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectPhotoBarItemAtIndex:(NSInteger)index{
