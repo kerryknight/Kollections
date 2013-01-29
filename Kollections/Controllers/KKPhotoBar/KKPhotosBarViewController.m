@@ -30,6 +30,7 @@
 #define TOOLBAR_COLLECTION_ITEM_HEIGHT  112.0
 #define KK_PHOTO_CELL @"KKPhotosCell"
 #define kPhotoImageViewTag         100
+#define kNO_SUBJECT_SUBMISSIONS_LABEL 98
 
 - (void)viewDidLoad {
 //    NSLog(@"%s", __FUNCTION__);
@@ -38,8 +39,8 @@
     
     //load the nib for each collection view cell
     //the photo cell
-    UINib *cellNib1 = [UINib nibWithNibName:KK_PHOTO_CELL bundle:nil];
-    [self.collectionView registerNib:cellNib1 forCellWithReuseIdentifier:KK_PHOTO_CELL];
+    UINib *cellNib = [UINib nibWithNibName:KK_PHOTO_CELL bundle:nil];
+    [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:KK_PHOTO_CELL];
     
     //remove any extraneous observers
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -48,12 +49,14 @@
     
     //set to first cell by default
     selectedIndex = 0;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
 //    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
-    [self.collectionView reloadData];
+
+//    [self.collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -293,85 +293,26 @@
     return nil;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-//    NSLog(@"%s", __FUNCTION__);
-    NSString *CellIdentifier = [[NSString alloc] init];
-    
-    CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	if (cell == nil) {
-		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier forIndexPath:(NSIndexPath *)indexPath];
-	}
-	
-	// configureCell:cell forIndexPath: sets the text and image for the cell -- the method is factored out as it's also called during minuted-based updates.
-	[self configureCell:cell forIndexPath:indexPath];
-	return cell;
-}
-
 //tags
 #define kHEADERLABELTAG     1000
 #define kADDNEWBUTTONTAG    1001
 #define kKOLLECTIONSBARTAG  1002
 
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
-//	NSLog(@"%s", __FUNCTION__);
-	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
+//    NSLog(@"%s", __FUNCTION__);
+//    static NSString *CellIdentifier = @"Cell";
+//    
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//	
+//	if (cell == nil) {
+//		cell = [self tableViewCellWithReuseIdentifier:CellIdentifier forIndexPath:(NSIndexPath *)indexPath];
+//	}
+//	
+//	// configureCell:cell forIndexPath: sets the text and image for the cell -- the method is factored out as it's also called during minuted-based updates.
+//	[self configureCell:cell forIndexPath:indexPath];
+//	return cell;
     
-    //make the cell highlight gray instead of blue
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    
-    //add a header label to it
-    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
-    [cell.contentView addSubview:headerLabel];
-    [headerLabel setTextColor:kGray6];
-    [headerLabel setShadowColor:kCreme];
-    [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-    [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
-    [headerLabel setBackgroundColor:[UIColor clearColor]];
-    headerLabel.tag = kHEADERLABELTAG;
-    
-    //add the photos uicollectionview if we've downloaded any photos
-    if ([self.allKollectionPhotos count]) {
-        //separate out full photo array into pertinant subject-based photo arrays
-        NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
-        
-        if ([subjectPhotos count]) {
-            KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
-            kb.delegate = self;
-            kb.photos = subjectPhotos;
-            kb.identifier = identifier;//cell's identifier used to determine kollection's type
-            [self addChildViewController:kb];
-            kb.view.tag = kKOLLECTIONSBARTAG;
-            [cell.contentView addSubview:kb.view];
-            [kb didMoveToParentViewController:self];
-            kb.view.hidden = YES;
-        } else {
-            NSLog(@"add missing label and a button to load the Choose a Photo controller");
-            UILabel *emptySubjectLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, cell.contentView.frame.size.width, 90)];
-            emptySubjectLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from\nthe Photos Drawer below to be the first!";
-            [emptySubjectLabel setTextColor:kGray3];
-            emptySubjectLabel.textAlignment = UITextAlignmentCenter;
-            emptySubjectLabel.lineBreakMode = UILineBreakModeWordWrap;
-            emptySubjectLabel.numberOfLines = 6;
-            [emptySubjectLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
-            emptySubjectLabel.backgroundColor = [UIColor clearColor];
-            [cell.contentView addSubview:emptySubjectLabel];
-        }
-    } else {
-        //UPDATE add a default nothing to show here
-    }
-    
-	return cell;
-}
-
-- (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
-    UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
-    UIView *kollectionView = (UIView*)[cell.contentView viewWithTag:kKOLLECTIONSBARTAG];
-    kollectionView.hidden = YES;//default
+    //set up background image of cell as well as determine when to show/hide label and disclosure
     UIColor *rowBackground;
     
     NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
@@ -379,41 +320,253 @@
     
     if (row == 0 && row == sectionRows - 1) {
         //single row; will this ever happen?
+        
+        static NSString *CellIdentifier = @"CellA";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
+        
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-        headerLabel.text = @"";
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
+        [cell.contentView setBackgroundColor:rowBackground];
+        return cell;
     }
     else if (row == 0) {
         //top row
+        static NSString *CellIdentifier = @"CellB";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
+        
         //extract our subject object from our subject list array and then pull out the title to add to the header label
         PFObject *subj = (PFObject*)self.subjectList[indexPath.section];
         NSString *title = subj[kKKSubjectTitleKey];
+        
+        //add a header label to it
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
+        [cell.contentView addSubview:headerLabel];
+        [headerLabel setTextColor:kGray6];
+        [headerLabel setShadowColor:kCreme];
+        [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
+        [headerLabel setBackgroundColor:[UIColor clearColor]];
+        
         if (self.subjectList[indexPath.section]) {
             headerLabel.text = title;//set the header title text
         } else {
             //no title to display
             headerLabel.text = @"";
         }
+        [cell.contentView setBackgroundColor:rowBackground];
+        return cell;
+        
     }
     else if (row == sectionRows - 1) {
         //bottom row
+        
+        static NSString *CellIdentifier = @"CellC";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+        }
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
-        headerLabel.text = @"";
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
+        [cell.contentView setBackgroundColor:rowBackground];
+        return cell;
     }
     else {
         //middle row
+        static NSString *CellIdentifier = @"CellD";
+        
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+        }
+        
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
-        headerLabel.text = @"";
+        if (indexPath.row == 1) {
+            NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
+            if ([subjectPhotos count]) {
+                KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
+                kb.delegate = self;
+                kb.photos = subjectPhotos;
+//                kb.collectionView.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
+//                [kb.collectionView reloadData];
+//                NSLog(@"add kb");
+//                [cell.contentView addSubview:kb.view];
+//                kb.view.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
+//                [kb.view setNeedsDisplay];
+//                [kb didMoveToParentViewController:self];
+            } else {
+                UILabel *noPhotosLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 20.0f, cell.contentView.bounds.size.width - 20.0f, 80.0f)];
+                [cell.contentView addSubview:noPhotosLabel];
+                [noPhotosLabel setTextColor:kGray4];
+                noPhotosLabel.textAlignment = UITextAlignmentCenter;
+                noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
+                noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
+                noPhotosLabel.numberOfLines = 5;
+                [noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
+                [noPhotosLabel setBackgroundColor:[UIColor clearColor]];
+            }
+        }
         
-        //set the kollection view size to match the cell and unhide it
-        kollectionView.hidden = NO;
-        kollectionView.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
-        [kollectionView setNeedsDisplay];
+        [cell.contentView setBackgroundColor:rowBackground];
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
         
+        return cell;
+    }
+}
+
+
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
+	
+    //this should only ever get called for the top and bottom blank rows of the table; never content middle rows
+    //Create an instance of UITableViewCell and add tagged subviews for the label, imageview and backgrounds
+	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    
+    //blank out generic stuff
+    cell.textLabel.text = @"";
+    cell.detailTextLabel.text = @"";
+    
+	return cell;
+}
+
+- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
+	
+    //this should only ever get called for the top and bottom blank rows of the table; never content middle rows
+    //Create an instance of UITableViewCell and add tagged subviews for the label, imageview and backgrounds
+	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    
+    if (indexPath.row == 1) {
+        NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
+        if ([subjectPhotos count]) {
+            KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
+            kb.delegate = self;
+            kb.photos = subjectPhotos;
+            kb.collectionView.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
+            [kb.collectionView reloadData];
+            [self addChildViewController:kb];
+            NSLog(@"add kb");
+            [cell.contentView addSubview:kb.view];
+            kb.view.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
+            [kb.view setNeedsDisplay];
+            [kb didMoveToParentViewController:self];
+        } 
     }
     
-    [cell.contentView setBackgroundColor:rowBackground];
+    //blank out generic stuff
+    cell.textLabel.text = @"";
+    cell.detailTextLabel.text = @"";
+    
+	return cell;
 }
+
+//- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
+////	NSLog(@"%s for section %i", __FUNCTION__, indexPath.section);
+//	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+//    
+//    //make the cell highlight gray instead of blue
+//    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.accessoryType = UITableViewCellAccessoryNone;
+//    
+//    //add a header label to it
+//    UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
+//    [cell.contentView addSubview:headerLabel];
+//    [headerLabel setTextColor:kGray6];
+//    [headerLabel setShadowColor:kCreme];
+//    [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+//    [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
+//    [headerLabel setBackgroundColor:[UIColor clearColor]];
+//    headerLabel.tag = kHEADERLABELTAG;
+//    
+//    //separate out full photo array into pertinant subject-based photo arrays
+//    if (indexPath.row == 1) {
+//        NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
+//        if ([subjectPhotos count]) {
+//            KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
+//            kb.delegate = self;
+//            kb.photos = subjectPhotos;
+//            kb.view.tag = kKOLLECTIONSBARTAG;
+//            kb.collectionView.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
+//            [kb.collectionView reloadData];
+//            [self addChildViewController:kb];
+//            [cell.contentView addSubview:kb.view];
+//            [kb didMoveToParentViewController:self];
+//        } else {
+//            UILabel *noPhotosLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 20.0f, cell.contentView.bounds.size.width - 20.0f, 80.0f)];
+//            [cell.contentView addSubview:noPhotosLabel];
+//            [noPhotosLabel setTextColor:kGray4];
+//            noPhotosLabel.textAlignment = UITextAlignmentCenter;
+//            noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
+//            noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
+//            noPhotosLabel.numberOfLines = 5;
+//            [noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
+//            [noPhotosLabel setBackgroundColor:[UIColor clearColor]];
+//        }
+//    }
+//    
+//	return cell;
+//}
+//
+//- (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
+////    NSLog(@"%s for section %i", __FUNCTION__, indexPath.section);
+//    UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
+//    UIView *kollectionView = (UIView*)[cell.contentView viewWithTag:kKOLLECTIONSBARTAG];
+//    kollectionView.hidden = YES;//default
+//    UIColor *rowBackground;
+//    
+//    NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
+//    NSInteger row = [indexPath row];
+//    
+//    if (row == 0 && row == sectionRows - 1) {
+//        //single row; will this ever happen?
+//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
+//        headerLabel.text = @"";
+//    }
+//    else if (row == 0) {
+//        //top row
+//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
+//        //extract our subject object from our subject list array and then pull out the title to add to the header label
+//        PFObject *subj = (PFObject*)self.subjectList[indexPath.section];
+//        NSString *title = subj[kKKSubjectTitleKey];
+//        if (self.subjectList[indexPath.section]) {
+//            headerLabel.text = title;//set the header title text
+//        } else {
+//            //no title to display
+//            headerLabel.text = @"";
+//        }
+//    }
+//    else if (row == sectionRows - 1) {
+//        //bottom row
+//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"footerBGNoActions.png"]];
+//        headerLabel.text = @"";
+//    }
+//    else {
+//        //middle row
+//        rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
+//        headerLabel.text = @"";
+//        kollectionView.hidden = NO;
+//        kollectionView.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
+//        [kollectionView setNeedsDisplay];
+//    }
+//    
+//    [cell.contentView setBackgroundColor:rowBackground];
+//}
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectPhotoBarItemAtIndex:(NSInteger)index{
@@ -425,7 +578,15 @@
 //    NSLog(@"%s", __FUNCTION__);
     self.kollection = (PFObject*)userInfo[@"kollection"];
     self.subjectList = (NSMutableArray*)userInfo[@"subjects"];
-    [self.tableView reloadData];
+    
+    //refresh our object and reload our table once complete
+    [self.kollection refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
+        if (!error) {
+            self.kollection = object;
+            [self.tableView reloadData];
+        }
+     
+    }];
     
     //reload cover photo
     [self reloadCoverPhoto];

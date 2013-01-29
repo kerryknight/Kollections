@@ -18,6 +18,5 @@
 
 @property (nonatomic, strong) id<KKPhotosBarViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSMutableArray *photos;
-@property (nonatomic, strong) NSString *identifier;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @end
