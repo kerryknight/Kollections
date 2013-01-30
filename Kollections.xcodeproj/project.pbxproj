@@ -37,6 +37,7 @@
 		C7127083168283E700C1B560 /* SRSlimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = C712707F168283E700C1B560 /* SRSlimeView.m */; };
 		C71270861684C1C600C1B560 /* 111-userGray.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270841684C1C500C1B560 /* 111-userGray.png */; };
 		C71270871684C1C600C1B560 /* 111-userGray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C71270851684C1C600C1B560 /* 111-userGray@2x.png */; };
+		C719D8DC16B86A990040C7A3 /* KKPhotoBarCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C719D8DB16B86A990040C7A3 /* KKPhotoBarCell.m */; };
 		C726D3C016B38BF900A3221A /* BlurOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = C726D37316B38BF900A3221A /* BlurOverlayView.m */; };
 		C726D3C216B38BF900A3221A /* GrayscaleContrastFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C726D37716B38BF900A3221A /* GrayscaleContrastFilter.m */; };
 		C726D3C316B38BF900A3221A /* 1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C726D37A16B38BF900A3221A /* 1.jpg */; };
@@ -182,6 +183,9 @@
 		C76A1D9F16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */; };
 		C76A1DA016B066E30097DD21 /* kkDestructiveNavBarButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */; };
 		C76A1DA116B066E30097DD21 /* kkDestructiveNavBarButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */; };
+		C79D9F4616B974FE00CA1A08 /* kkPhotoTray.png in Resources */ = {isa = PBXBuildFile; fileRef = C79D9F4416B974FE00CA1A08 /* kkPhotoTray.png */; };
+		C79D9F4716B974FE00CA1A08 /* kkPhotoTray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79D9F4516B974FE00CA1A08 /* kkPhotoTray@2x.png */; };
+		C79D9F4C16B9772100CA1A08 /* KKKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */; };
 		C79DA139169C8004009C1CE7 /* kkHeaderUserPhotoDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */; };
 		C79DA13A169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */; };
 		C79DA141169C9AAF009C1CE7 /* kkAddButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */; };
@@ -707,6 +711,8 @@
 		C712707F168283E700C1B560 /* SRSlimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRSlimeView.m; sourceTree = "<group>"; };
 		C71270841684C1C500C1B560 /* 111-userGray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray.png"; sourceTree = "<group>"; };
 		C71270851684C1C600C1B560 /* 111-userGray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "111-userGray@2x.png"; sourceTree = "<group>"; };
+		C719D8DA16B86A990040C7A3 /* KKPhotoBarCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKPhotoBarCell.h; path = KKPhotoBar/KKPhotoBarCell.h; sourceTree = "<group>"; };
+		C719D8DB16B86A990040C7A3 /* KKPhotoBarCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKPhotoBarCell.m; path = KKPhotoBar/KKPhotoBarCell.m; sourceTree = "<group>"; };
 		C726D37216B38BF900A3221A /* BlurOverlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlurOverlayView.h; sourceTree = "<group>"; };
 		C726D37316B38BF900A3221A /* BlurOverlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlurOverlayView.m; sourceTree = "<group>"; };
 		C726D37616B38BF900A3221A /* GrayscaleContrastFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GrayscaleContrastFilter.h; sourceTree = "<group>"; };
@@ -876,6 +882,10 @@
 		C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButtonSelected@2x.png"; sourceTree = "<group>"; };
 		C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDestructiveNavBarButton.png; sourceTree = "<group>"; };
 		C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButton@2x.png"; sourceTree = "<group>"; };
+		C79D9F4416B974FE00CA1A08 /* kkPhotoTray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkPhotoTray.png; sourceTree = "<group>"; };
+		C79D9F4516B974FE00CA1A08 /* kkPhotoTray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkPhotoTray@2x.png"; sourceTree = "<group>"; };
+		C79D9F4A16B9772100CA1A08 /* KKKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionViewController.h; path = "Kollection Add and Remove Photos/KKKollectionViewController.h"; sourceTree = "<group>"; };
+		C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionViewController.m; path = "Kollection Add and Remove Photos/KKKollectionViewController.m"; sourceTree = "<group>"; };
 		C79DA137169C8004009C1CE7 /* kkHeaderUserPhotoDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkHeaderUserPhotoDown.png; sourceTree = "<group>"; };
 		C79DA138169C8004009C1CE7 /* kkHeaderUserPhotoDown@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkHeaderUserPhotoDown@2x.png"; sourceTree = "<group>"; };
 		C79DA13D169C9AAF009C1CE7 /* kkAddButtonDown.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkAddButtonDown.png; sourceTree = "<group>"; };
@@ -1652,6 +1662,7 @@
 		C72B0D1D16B2FB9200DDAADC /* images */ = {
 			isa = PBXGroup;
 			children = (
+				C79D9F4316B974FE00CA1A08 /* Photo Tray */,
 				C72B0D1E16B2FBC000DDAADC /* KKPhotosBar */,
 				C79DA13C169C9AAF009C1CE7 /* buttons */,
 				C7BFB946168252E500FF3DE9 /* my account */,
@@ -1752,8 +1763,12 @@
 		C73ECF0A16AEF8F200452C63 /* Kollection Add and Remove Photos */ = {
 			isa = PBXGroup;
 			children = (
+				C719D8DA16B86A990040C7A3 /* KKPhotoBarCell.h */,
+				C719D8DB16B86A990040C7A3 /* KKPhotoBarCell.m */,
 				C73ECF1B16AF135800452C63 /* KKKollectionTableViewController.h */,
 				C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */,
+				C79D9F4A16B9772100CA1A08 /* KKKollectionViewController.h */,
+				C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */,
 			);
 			name = "Kollection Add and Remove Photos";
 			sourceTree = "<group>";
@@ -1847,6 +1862,15 @@
 				C74C9EB916A71E5E00207EF1 /* alert-window@2x.png */,
 			);
 			path = AlertView;
+			sourceTree = "<group>";
+		};
+		C79D9F4316B974FE00CA1A08 /* Photo Tray */ = {
+			isa = PBXGroup;
+			children = (
+				C79D9F4416B974FE00CA1A08 /* kkPhotoTray.png */,
+				C79D9F4516B974FE00CA1A08 /* kkPhotoTray@2x.png */,
+			);
+			path = "Photo Tray";
 			sourceTree = "<group>";
 		};
 		C79DA13C169C9AAF009C1CE7 /* buttons */ = {
@@ -3393,6 +3417,8 @@
 				C726D40116B38BF900A3221A /* crossprocess.acv in Resources */,
 				C726D40216B38BF900A3221A /* purple-green.acv in Resources */,
 				C726D40316B38BF900A3221A /* yellow-red.acv in Resources */,
+				C79D9F4616B974FE00CA1A08 /* kkPhotoTray.png in Resources */,
+				C79D9F4716B974FE00CA1A08 /* kkPhotoTray@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3524,6 +3550,8 @@
 				C726D3C016B38BF900A3221A /* BlurOverlayView.m in Sources */,
 				C726D3C216B38BF900A3221A /* GrayscaleContrastFilter.m in Sources */,
 				C726D42216B398F000A3221A /* DLCImagePickerController.m in Sources */,
+				C719D8DC16B86A990040C7A3 /* KKPhotoBarCell.m in Sources */,
+				C79D9F4C16B9772100CA1A08 /* KKKollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

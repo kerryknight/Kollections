@@ -56,7 +56,6 @@
 //    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
 
-//    [self.collectionView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {

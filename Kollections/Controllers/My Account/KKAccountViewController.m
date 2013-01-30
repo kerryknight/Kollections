@@ -9,7 +9,7 @@
 //views
 #import "KKAccountViewController.h"
 #import "KKMyAccountHeaderViewController.h"
-#import "KKKollectionTableViewController.h"
+#import "KKKollectionViewController.h"
 //other stuff
 #import "KKPhotoCell.h"
 #import "TTTTimeIntervalFormatter.h"
@@ -429,7 +429,8 @@
                 kollectionToLoad = (PFObject*)[self.myPublicKollections objectAtIndex:index];
             }
             
-            KKKollectionTableViewController *nextView = [[KKKollectionTableViewController alloc] initWithKollection:kollectionToLoad];
+            KKKollectionViewController *nextView = [[KKKollectionViewController alloc] init];
+            nextView.kollection = kollectionToLoad;
             [self.navigationController pushViewController:nextView animated:YES];
         }
         
@@ -441,7 +442,7 @@
 
 #pragma mark - KKCreateKollectionViewControllerDelegate methods
 - (void)createKollectionViewControllerDidCreateNewKollection:(PFObject *)kollection {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     if ([kollection[kKKKollectionIsPrivateKey] boolValue] == YES) {
         //it's a private kollection so replace it in the private list
@@ -497,7 +498,7 @@
 }
 
 - (void)loadProfilePhoto:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     self.user = [PFUser currentUser];//reset the self.user since we should've updated the currentUser with the new profile pic
     //retrieve the user's profile pic to insert
     PFFile *imageFile = [self.user objectForKey:kKKUserProfilePicMediumKey];

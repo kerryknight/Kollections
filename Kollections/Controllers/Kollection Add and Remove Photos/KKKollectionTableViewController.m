@@ -11,19 +11,16 @@
 #import "KKPhotoCell.h"
 #import "KKUtility.h"
 #import "KKLoadMoreCell.h"
-#import "KKToolbarButton.h"
 #import "UITableView+ZGParallelView.h"
 
 @interface KKKollectionTableViewController () {
     BOOL objectsAreLoaded;
-    NSMutableArray *kollectionPhotos;
+    
 }
+@property(nonatomic,copy) KKObjectsLoadedCallback callback;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, assign) BOOL shouldReloadOnAppear;
-@property (nonatomic, strong) KKToolbarButton *editButton;
-@property (nonatomic, strong) KKToolbarButton *backButton;
 @property (nonatomic, strong) PFObject *kollection;
-@property (nonatomic, strong) NSMutableArray *subjectList;
 @property (nonatomic, strong) NSMutableArray *allKollectionPhotos;
 @property (strong, nonatomic) UIScrollView *headerScrollView;
 @property (strong, nonatomic) UIPageControl *headerPageControl;
@@ -60,53 +57,20 @@
     return self;
 }
 
-
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
-    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
-    self.tableView.showsVerticalScrollIndicator = NO;
-    
-    //initialize all our local arrays
-    kollectionPhotos = [[NSMutableArray alloc] initWithCapacity:0];
-    
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
     [self loadCoverPhoto:self];
     
-    //hide default back button as it's not styled like I want
-    self.navigationItem.hidesBackButton = YES;
-    //set up our toolbar buttons
-    [self configureBackButton];
-    [self configureEditButton];
+    [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
+    self.tableView.showsVerticalScrollIndicator = NO;
     
     //add the parallax effect to the table with our cover photo view
     [self.tableView addParallelViewWithUIView:self.headerView withDisplayRatio:0.4 cutOffAtMax:YES];
-    
-    //query Parse for all photos in our kollection
-    //once we have those, we'll be able to separate them into our collection views by their subject id pointers
-    PFQuery *photoQuery = [PFQuery queryWithClassName:kKKPhotoClassKey];
-    [photoQuery whereKey:kKKPhotoKollectionKey equalTo:self.kollection];
-    photoQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;//always hit the network too
-    [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-        if(!error) {
-            //populate our main photo array with all our kollection's photos
-            self.allKollectionPhotos = [objects mutableCopy];
-            
-            //create index paths for each of our photo collection views; these are always on row 1 of each section
-            NSMutableArray *indexPathArray = [[NSMutableArray alloc] initWithCapacity:[self.subjectList count]];
-            for (int i = 0; i < [self.subjectList count]; i++) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:i];
-                [indexPathArray addObject:indexPath];
-            }
-            
-            //reload each collection view row instead of whole table using our created array
-            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithArray:indexPathArray] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-    }];
     
     [super viewDidLoad];
 }
@@ -156,22 +120,18 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    //    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewWillAppear:animated];
-    self.backButton.hidden = NO;//this is hidden if we navigate away
-    self.editButton.hidden = NO;//this is hidden if we navigate away
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     //    NSLog(@"%s", __FUNCTION__);
     [super viewWillDisappear:animated];
-    self.backButton.hidden = YES;
-    self.editButton.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+    NSLog(@"%s", __FUNCTION__);
     if (self.shouldReloadOnAppear) {
         self.shouldReloadOnAppear = NO;
 //        [self loadObjects];
@@ -203,29 +163,24 @@
 //    NSLog(@"%s\n", __FUNCTION__);
     
     //don't show anything until objects are loaded
-    if (!objectsAreLoaded) {
-        return 0.0f;
-    } else {
-        
-        NSInteger sectionRows = 3;
-        NSInteger row = [indexPath row];
-        
-        if (row == 0 && row == sectionRows - 1) {
-            //single row; will this ever happen?
-            return 0;
-        }
-        else if (row == 0) {
-            //top row
-            return kDisplayTableHeaderHeight;
-        }
-        else if (row == sectionRows - 1) {
-            //bottom row
-            return kDisplayTableFooterHeight;
-        }
-        else {
-            //middle row
-            return 124.0f;
-        }
+    NSInteger sectionRows = 3;
+    NSInteger row = [indexPath row];
+    
+    if (row == 0 && row == sectionRows - 1) {
+        //single row; will this ever happen?
+        return 0;
+    }
+    else if (row == 0) {
+        //top row
+        return kDisplayTableHeaderHeight;
+    }
+    else if (row == sectionRows - 1) {
+        //bottom row
+        return kDisplayTableFooterHeight;
+    }
+    else {
+        //middle row
+        return 124.0f;
     }
 }
 
@@ -240,11 +195,41 @@
     [super objectsDidLoad:error];
     
     if (!error) {
-        //load table rows
-        self.subjectList = [self.objects mutableCopy];
-        objectsAreLoaded = YES;
-        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];
-        [self.tableView reloadData];
+        if (!self.isNetworkBusy) {
+            //load table rows
+            self.subjectList = [self.objects mutableCopy];
+            
+            //tell our sublcass to update it's subject list in case we need to edit the kollection
+            [self.delegate kollectionTableViewControllerDidLoadSubjects:[NSArray arrayWithArray:self.subjectList]];
+            
+            self.shouldReloadOnAppear = NO;
+            //once we have our subjects, query Parse for all photos in our kollection
+            //once we have those, we'll be able to separate them into our collection views by their subject id pointers
+            PFQuery *photoQuery = [PFQuery queryWithClassName:kKKPhotoClassKey];
+            [photoQuery whereKey:kKKPhotoKollectionKey equalTo:self.kollection];
+            photoQuery.cachePolicy = kPFCachePolicyNetworkElseCache;//always hit the network too
+            self.isNetworkBusy = YES;
+            [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if(!error && [objects count]) {
+                    //populate our main photo array with all our kollection's photos
+                    self.allKollectionPhotos = [objects mutableCopy];
+                    //now that we have our subjects and all our photos, group them together and reload our table rows
+                    [self createSubjectsWithPhotosArrayWithCompletion:^(NSArray *objects) {
+                        if (objects) {
+                            self.subjectsWithPhotos = [objects mutableCopy];
+                            
+                            objectsAreLoaded = YES;
+                            
+                            //reload our table in case any data has changed
+                            [self.tableView reloadData];
+                        }
+                    }];
+                }
+                
+                self.isNetworkBusy = NO;
+                if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];//spinner
+            }];
+        }
     } else {
         //error loading items
         UILabel *errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, self.tableView.frame.size.width, 45)];
@@ -265,7 +250,7 @@
     //query for this kollection's subjects
     PFQuery *subjectQuery = [PFQuery queryWithClassName:kKKSubjectClassKey];
     [subjectQuery whereKey:kKKSubjectKollectionKey equalTo:self.kollection];
-    subjectQuery.cachePolicy = kPFCachePolicyCacheThenNetwork;//always pull local stuff first then hit network
+    subjectQuery.cachePolicy = kPFCachePolicyNetworkElseCache;//always pull local stuff first then hit network
     [subjectQuery orderByDescending:@"createdAt"];
     
     return subjectQuery;
@@ -295,7 +280,7 @@
 
 //tags
 #define kHEADERLABELTAG     1000
-#define kADDNEWBUTTONTAG    1001
+#define kNOPHOTOSTAG        1001
 #define kKOLLECTIONSBARTAG  1002
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
@@ -306,6 +291,16 @@
     
     NSInteger sectionRows = [self.tableView numberOfRowsInSection:[indexPath section]];
     NSInteger row = [indexPath row];
+    
+    //extract our subject and photos dictionary object from our array
+    //there will only be one for each index path row/section
+    NSDictionary *subjectDictionary = (NSDictionary*)self.subjectsWithPhotos[indexPath.section];
+    NSString *title;
+    
+    //there should only be 1 for this index path
+    for (NSString *key in [subjectDictionary allKeys]) {
+        title = key; //we'll use this for setting our photos array too for the collection view
+    }
     
     if (row == 0 && row == sectionRows - 1) {
         //single row; will this ever happen?
@@ -332,30 +327,24 @@
         
         if (cell == nil) {
             cell = [self tableViewCellWithReuseIdentifier:CellIdentifier];
+            
+            //add a header label to it
+            UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
+            headerLabel.tag = kHEADERLABELTAG;
+            [cell.contentView addSubview:headerLabel];
+            [headerLabel setTextColor:kGray6];
+            [headerLabel setShadowColor:kCreme];
+            [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+            [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
+            [headerLabel setBackgroundColor:[UIColor clearColor]];
         }
+        
+        UILabel *headerLabel = (UILabel*)[cell.contentView viewWithTag:kHEADERLABELTAG];
+        headerLabel.text = title;//set the header title text
+        
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"headerBG.png"]];
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
-        
-        //extract our subject object from our subject list array and then pull out the title to add to the header label
-        PFObject *subj = (PFObject*)self.subjectList[indexPath.section];
-        NSString *title = subj[kKKSubjectTitleKey];
-        
-        //add a header label to it
-        UILabel *headerLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 13.0f, cell.contentView.bounds.size.width - 20.0f, 20.0f)];
-        [cell.contentView addSubview:headerLabel];
-        [headerLabel setTextColor:kGray6];
-        [headerLabel setShadowColor:kCreme];
-        [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
-        [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
-        [headerLabel setBackgroundColor:[UIColor clearColor]];
-        
-        if (self.subjectList[indexPath.section]) {
-            headerLabel.text = title;//set the header title text
-        } else {
-            //no title to display
-            headerLabel.text = @"";
-        }
         [cell.contentView setBackgroundColor:rowBackground];
         return cell;
         
@@ -378,23 +367,45 @@
     }
     else {
         //middle row
-        static NSString *CellIdentifier = @"CellD";
+        static NSString *CellIdentifier = @"KKPhotoBarCell";
         
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        //add our custom photo bar cell which contains our uicollectionview controller
+        KKPhotoBarCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
         if (cell == nil) {
-            cell = [self tableViewCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+            cell = [[KKPhotoBarCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         
+        cell.kb.delegate = self;
+        cell.kb.view.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
+        [self addChildViewController:cell.kb];
+        [cell.kb didMoveToParentViewController:self];
+        
+        //set our photos array
+        NSArray *photos = subjectDictionary[title];
+        cell.kb.photos = [photos mutableCopy];
+        
+        //set our row background first so our "no photos" label doesn't show by itself
         rowBackground = [UIColor colorWithPatternImage:[UIImage imageNamed:@"kkTableBodyBG.png"]];
         [cell.contentView setBackgroundColor:rowBackground];
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
         
+        if ([photos count]) {
+            cell.kb.view.hidden = NO;
+            [cell.kb.collectionView reloadData];
+            cell.noPhotosLabel.hidden = YES;
+        } else {
+            cell.kb.view.hidden = YES;
+            if (objectsAreLoaded) {
+                cell.noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
+                cell.noPhotosLabel.hidden = NO;
+            }
+        }
+        
         return cell;
     }
 }
-
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
 	
@@ -409,127 +420,56 @@
 	return cell;
 }
 
-- (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier forIndexPath:(NSIndexPath *)indexPath {
-	
-    //this should only ever get called for the top and bottom blank rows of the table; never content middle rows
-    //Create an instance of UITableViewCell and add tagged subviews for the label, imageview and backgrounds
-	UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-    
-    if (indexPath.row == 1) {
-        NSMutableArray *subjectPhotos = [self determineKollectionListToDisplayForIndexPath:indexPath];
-        if ([subjectPhotos count]) {
-            KKPhotosBarViewController *kb = [[KKPhotosBarViewController alloc] init];
-            kb.delegate = self;
-            kb.photos = subjectPhotos;
-            kb.collectionView.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
-            [kb.collectionView reloadData];
-            [self addChildViewController:kb];
-            NSLog(@"add kb");
-            [cell.contentView addSubview:kb.view];
-            kb.view.frame = CGRectMake(kDisplayTableCellContentX, cell.contentView.frame.origin.y, kDisplayTableCellContentWidth, [self tableView:self.tableView heightForRowAtIndexPath:indexPath]);
-            [kb.view setNeedsDisplay];
-            [kb didMoveToParentViewController:self];
-        } else {
-            UILabel *noPhotosLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0f, 20.0f, cell.contentView.bounds.size.width - 20.0f, 80.0f)];
-            [cell.contentView addSubview:noPhotosLabel];
-            [noPhotosLabel setTextColor:kGray4];
-            noPhotosLabel.textAlignment = UITextAlignmentCenter;
-            noPhotosLabel.text = @"No photos submitted for this subject yet.\n\nTouch here or drag and drop from the\nPhotos Drawer below to be the first!";
-            noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
-            noPhotosLabel.numberOfLines = 5;
-            [noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];
-            [noPhotosLabel setBackgroundColor:[UIColor clearColor]];
-        }
-    }
-
-    //blank out generic stuff
-    cell.textLabel.text = @"";
-    cell.detailTextLabel.text = @"";
-    
-	return cell;
-}
-
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectPhotoBarItemAtIndex:(NSInteger)index{
     NSLog(@"%s", __FUNCTION__);
 }
 
-#pragma mark - KKEditKollectionViewControllerDelegate methods
-- (void)editKollectionViewControllerDidEditKollectionWithInfo:(NSDictionary *)userInfo atIndex:(NSUInteger)index {
-//    NSLog(@"%s", __FUNCTION__);
-    self.kollection = (PFObject*)userInfo[@"kollection"];
-    self.subjectList = (NSMutableArray*)userInfo[@"subjects"];
-    
-    //refresh our object and reload our table once complete
-    [self.kollection refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
-        if (!error) {
-            self.kollection = object;
-            [self.tableView reloadData];
-        }
-     
-    }];
-    
-    //reload cover photo
-    [self reloadCoverPhoto];
-}
-
 #pragma mark - Custom Methods
-- (NSMutableArray *)determineKollectionListToDisplayForIndexPath:(NSIndexPath*)indexPath {
-    NSMutableArray *photoList = [[NSMutableArray alloc] initWithCapacity:0];
+- (void)createSubjectsWithPhotosArrayWithCompletion:(KKObjectsLoadedCallback)callback {
+//    NSLog(@"%s", __FUNCTION__);
+    //create a mutable array of nsdictionaries
+    //the keys for each dictionary will be the subject title and the objects will be the array of photos for each subject
+    NSMutableArray *subjectsAndPhotosList = [[NSMutableArray alloc] initWithCapacity:0];
     
-//    NSLog(@"\n\nindex path at determine = %@", indexPath);
-    
-    if (indexPath.row == 1) {
-        //middle row where our kollections bar is housed
-        PFObject *subject = (PFObject*)self.subjectList[indexPath.section];
+    //enumerate through our subject list; we'll make our subjects the keys for each dictionary in the array
+    for (PFObject *subject in self.subjectList) {
+        NSString *subjectTitle = subject[kKKSubjectTitleKey];
         NSString *subjectID = subject.objectId;
         
+        //this array will keep each subjects photos; we'll put it in our final NSDictionary for each subject
+        NSMutableArray *subjectPhotos = [[NSMutableArray alloc] initWithCapacity:0];
         //for each subject in our list, pull out all the photos from our photo list that have a subject pointer matching that subject
         for (PFObject *photo in self.allKollectionPhotos) {
             PFObject *photoSubject = photo[kKKPhotoSubjectKey];
             NSString *photoSubjectID = photoSubject.objectId;
             
             if ([photoSubjectID isEqualToString:subjectID]) {
-                //add the photo to our list
-                [photoList addObject:photo];
+                //our IDs match add the photo to our photos array
+                [subjectPhotos addObject:photo];
             }
         }
+        
+        //once we've gone through all the photos, create an NSDictionary with the subject title and the photos
+        NSDictionary *subjectWithPhotos = @{subjectTitle:subjectPhotos};
+        
+        //add it to our full array
+        [subjectsAndPhotosList addObject:subjectWithPhotos];
     }
     
-    return photoList;
+    callback(subjectsAndPhotosList);
 }
 
-//our custom back button
-- (void)configureBackButton {
-    //    NSLog(@"%s", __FUNCTION__);
-    //add button to view
-    self.backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
-    [self.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:self.backButton];
-}
-
-- (void)backButtonAction:(id)sender {
-    //    NSLog(@"%s", __FUNCTION__);
-    [self.navigationController popToRootViewControllerAnimated:YES];
-}
-
-- (void)editButtonAction:(id)sender {
-//    NSLog(@"%s", __FUNCTION__);
+- (void) reloadCollectionViewTableRows {
+    //create index paths for each of our photo collection views; these are always on row 1 of each section
+    NSMutableArray *indexPathArray = [[NSMutableArray alloc] initWithCapacity:[self.subjectsWithPhotos count]];
+    for (int i = 0; i < [self.subjectsWithPhotos count]; i++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:i];
+        [indexPathArray addObject:indexPath];
+    }
     
-    KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
-    editKollectionViewController.delegate = self;
-    editKollectionViewController.kollection = self.kollection;
-    editKollectionViewController.subjectsArrayToCompareAgainst = self.subjectList;
-    [self.navigationController pushViewController:editKollectionViewController animated:YES];
-}
-
-- (void)configureEditButton {
-//    NSLog(@"%s", __FUNCTION__);
-    //add button to view
-    self.editButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@"Edit"];
-    [self.editButton addTarget:self action:@selector(editButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:self.editButton];
-    
+    //reload each collection view row instead of whole table using our created array
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithArray:indexPathArray] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end

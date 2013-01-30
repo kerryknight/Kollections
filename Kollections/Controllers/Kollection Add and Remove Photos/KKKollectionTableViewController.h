@@ -6,13 +6,26 @@
 //  Copyright (c) 2012 Parse. All rights reserved.
 //
 
-#import "KKPhotosBarViewController.h"
-#import "KKEditKollectionViewController.h"
+#import "KKPhotoBarCell.h"
 
-@interface KKKollectionTableViewController : PFQueryTableViewController <KKPhotosBarViewControllerDelegate, KKEditKollectionViewControllerDelegate> {
+typedef void(^KKObjectsLoadedCallback)(NSArray *objects);
+
+@protocol KKKollectionTableViewControllerDelegate
+@optional
+- (void) kollectionTableViewControllerDidLoadSubjects:(NSArray*)subjects;
+@end
+
+@interface KKKollectionTableViewController : PFQueryTableViewController <KKPhotosBarViewControllerDelegate> {
     
 }
 
+@property (nonatomic, strong) id<KKKollectionTableViewControllerDelegate> delegate;
+@property (nonatomic, assign) BOOL isNetworkBusy;
+@property (nonatomic, strong) NSMutableArray *subjectsWithPhotos;
+@property (nonatomic, strong) NSMutableArray *subjectList;
+
 - (id)initWithKollection:(PFObject *)kollection;
+- (void)createSubjectsWithPhotosArrayWithCompletion:(KKObjectsLoadedCallback)callback;
+- (void)reloadCoverPhoto;
 
 @end
