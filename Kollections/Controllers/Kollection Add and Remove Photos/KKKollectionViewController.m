@@ -8,11 +8,18 @@
 
 #import "KKKollectionViewController.h"
 #import "KKToolbarButton.h"
+#import "ELCAlbumPickerController.h"
+
+#define kPHOTO_TRAY_CLOSED_Y self.view.frame.size.height - (self.tabBarController.tabBar.frame.size.height + 91) //91 sets it just right based on current size at 44px high
+#define kPHOTO_TRAY_OPEN_Y kPHOTO_TRAY_CLOSED_Y - 140
+#define kPHOTO_TRAY_HEIGHT 307
 
 @interface KKKollectionViewController () {
     
 }
 @property (nonatomic, strong) KKKollectionTableViewController *tableView;
+@property (nonatomic, strong) ELCImagePickerController *photosTrayPicker;
+@property (nonatomic, strong) ELCAlbumPickerController *photoAlbumPickerController;
 @property (nonatomic, strong) KKToolbarButton *editButton;
 @property (nonatomic, strong) KKToolbarButton *backButton;
 @property (nonatomic, strong) NSMutableArray *subjectList;
@@ -37,7 +44,7 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     
     self.tableView = [[KKKollectionTableViewController alloc] initWithKollection:self.kollection];
-    self.tableView.view.frame = self.view.bounds;
+    self.tableView.view.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height - 46);//allow a little inset padding
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView.view];
     
@@ -46,6 +53,9 @@
     //set up our toolbar buttons
     [self configureBackButton];
     [self configureEditButton];
+    
+    //set up our photos tray
+    [self configurePhotoTray];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -99,6 +109,70 @@
 #pragma mark - KKKollectionTableViewControllerDelegate
 - (void) kollectionTableViewControllerDidLoadSubjects:(NSArray*)subjects {
     self.subjectList = [subjects mutableCopy];
+}
+
+#pragma mark ELCImagePickerControllerDelegate Methods
+- (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info {
+	NSLog(@"%s", __FUNCTION__);
+//	[self dismissModalViewControllerAnimated:YES];
+}
+
+- (void)configurePhotoTray {
+    //add view to hold our photo tray header view; we're going to use this to cover up the navigation controller
+    //that goes with the image picker controllers we're about to add; this is easier to do than removing
+    //the navigation controller from those controllers and then trying to replicated that functionality on our own
+    UIView *photosTrayHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
+    photosTrayHeaderView.frame = CGRectMake(0,
+                                      kPHOTO_TRAY_OPEN_Y,
+                                      self.view.bounds.size.width,
+                                      51);
+    photosTrayHeaderView.backgroundColor = [UIColor clearColor];
+    
+    //add our tray image
+    UIImageView *photoTrayHeaderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkPhotoTrayHeader.png"]];
+    photoTrayHeaderImage.frame = CGRectMake(-4, 0, 328, 51);
+    [photosTrayHeaderView addSubview:photoTrayHeaderImage];
+    
+    //add a view to hold our tray image background
+    UIView *photosTrayView = [[UIView alloc] initWithFrame:CGRectZero];
+    photosTrayView.frame = CGRectMake(0,
+                                      kPHOTO_TRAY_OPEN_Y,
+                                      self.view.bounds.size.width,
+                                      kPHOTO_TRAY_HEIGHT);
+    photosTrayView.backgroundColor = [UIColor clearColor];
+    
+    //add our tray image
+    UIImageView *photoTrayImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkPhotoTray.png"]];
+    photoTrayImage.frame = CGRectMake(-4, 0, 328, kPHOTO_TRAY_HEIGHT);
+    [photosTrayView addSubview:photoTrayImage];
+    
+    //add a container view to hold our picker view controller
+    UIView *photosTrayContainerView = [[UIView alloc] initWithFrame:CGRectZero];
+    photosTrayContainerView.frame = CGRectMake(0,
+                                               2,
+                                               self.view.frame.size.width,
+                                               kPHOTO_TRAY_HEIGHT - 46);
+    photosTrayContainerView.backgroundColor = [UIColor clearColor];
+    
+    //add the custom image picker to the photo tray
+    self.photoAlbumPickerController = [[ELCAlbumPickerController alloc] initWithNibName:@"ELCAlbumPickerController" bundle:[NSBundle mainBundle]];
+	self.photosTrayPicker = [[ELCImagePickerController alloc] initWithRootViewController:self.photoAlbumPickerController];
+    [self.photoAlbumPickerController setParent:self.photosTrayPicker];
+    self.photosTrayPicker.delegate = self;
+    self.photosTrayPicker.view.frame = CGRectMake(0,
+                                                  1,
+                                                  photosTrayContainerView.frame.size.width,
+                                                  photosTrayContainerView.frame.size.height - 75);//add a little inset
+    [self addChildViewController:self.photosTrayPicker];
+    [photosTrayContainerView addSubview:self.photosTrayPicker.view];
+    [self.photosTrayPicker didMoveToParentViewController:self];
+    [photosTrayView addSubview:photosTrayContainerView];
+    [self.view addSubview:photosTrayView];
+    [self.view addSubview:photosTrayHeaderView];//add on top
+}
+
+- (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker {
+    
 }
 
 #pragma mark - Custom Methods

@@ -28,7 +28,7 @@
 
 #define TOOLBAR_COLLECTION_ITEM_WIDTH   158.0
 #define TOOLBAR_COLLECTION_ITEM_HEIGHT  112.0
-#define KK_PHOTO_CELL @"KKPhotosCell"
+#define KK_PHOTO_CELL @"KKPhotoBarCell"
 #define kPhotoImageViewTag         100
 #define kNO_SUBJECT_SUBMISSIONS_LABEL 98
 
