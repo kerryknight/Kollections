@@ -11,7 +11,7 @@
 #import "KKKollectionTableViewController.h"
 #import "ELCImagePickerController.h"
 
-@interface KKKollectionViewController : UIViewController <KKEditKollectionViewControllerDelegate, KKKollectionTableViewControllerDelegate, ELCImagePickerControllerDelegate> {
+@interface KKKollectionViewController : UIViewController <KKEditKollectionViewControllerDelegate, KKKollectionTableViewControllerDelegate, ELCImagePickerControllerDelegate, UIGestureRecognizerDelegate> {
     
 }
 

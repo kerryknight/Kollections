@@ -9,6 +9,7 @@
 #import "ELCAssetCell.h"
 #import "ELCAsset.h"
 #import "ELCAlbumPickerController.h"
+#import "KKToolbarButton.h"
 
 
 @implementation ELCAssetTablePicker
@@ -22,13 +23,11 @@
 	[self.tableView setSeparatorColor:[UIColor clearColor]];
 	[self.tableView setAllowsSelection:NO];
 
+    self.tableView.backgroundColor = [UIColor clearColor];
+    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
     self.elcAssets = tempArray;
 	
-//	UIBarButtonItem *doneButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)];
-//	[self.navigationItem setRightBarButtonItem:doneButtonItem];
-	[self.navigationItem setTitle:@"Loading..."];
-
 	[self performSelectorInBackground:@selector(preparePhotos) withObject:nil];
     
     // Show partial while full list loads
@@ -81,7 +80,7 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return ceil([self.assetGroup numberOfAssets] / 4.0);
+    return (ceil([self.assetGroup numberOfAssets] / 4.0) + 1);
 }
 
 - (NSArray*)assetsForIndexPath:(NSIndexPath*)_indexPath {
@@ -126,23 +125,76 @@
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"Cell";
+    if (indexPath.row == 0) {
+        //put in our pseudo navigation bar
+        static NSString *CellIdentifier = @"CellA";
         
-    ELCAssetCell *cell = (ELCAssetCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            
+            
+        }
+        
+        cell.contentView.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor clearColor];
+        
+//        UIImageView *navBarImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkPhotoTrayNavBar.png"]];
+//        [cell.contentView addSubview:navBarImage];
+        
+        //add a custom back button
+        KKToolbarButton *backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
+        [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [cell.contentView addSubview:backButton];
+        
+        //add a header label to tell us what album we're looking at
+        UILabel *headerLabel = [[UILabel alloc] init];
+        headerLabel.textAlignment = UITextAlignmentCenter;
+        [headerLabel setTextColor:kCreme];
+        [headerLabel setShadowColor:kGray6];
+        [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
+        headerLabel.frame = CGRectMake(75.0f, 2.0f, cell.contentView.frame.size.width - 150.0f, self.tableView.rowHeight);
+        [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:20]];
+        [headerLabel setBackgroundColor:[UIColor clearColor]];
+        headerLabel.text = self.albumTitle;
+        [cell.contentView addSubview:headerLabel];
+        
+        //blank out generic stuff
+        cell.textLabel.text = @"";
+        cell.detailTextLabel.text = @"";
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;//disable selection
+        return cell;
+        
+    } else {
+        static NSString *CellIdentifier = @"Cell";
+        
+        ELCAssetCell *cell = (ELCAssetCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        
+        if (cell == nil)
+        {
+            cell = [[ELCAssetCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier];
+        }
+        else
+        {
+            [cell setAssets:[self assetsForIndexPath:indexPath]];
+        }
+        
+        return cell;
+    }
+}
 
-    if (cell == nil) 
-    {		        
-        cell = [[ELCAssetCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier];
-    }	
-	else 
-    {		
-		[cell setAssets:[self assetsForIndexPath:indexPath]];
-	}
-    
-    return cell;
+- (void)backButtonAction:(id)sender {
+    //    NSLog(@"%s", __FUNCTION__);
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 0) {
+        return 44;
+    }
     
 	return 79;
 }

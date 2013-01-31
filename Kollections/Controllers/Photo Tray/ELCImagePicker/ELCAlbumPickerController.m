@@ -23,9 +23,8 @@
 
     [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"kkBackgroundNavBar.png"] forBarMetrics:UIBarMetricsDefault];
     
-//    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self.parent action:@selector(cancelImagePicker)];
-//	[self.navigationItem setRightBarButtonItem:cancelButton];
-
+    self.tableView.backgroundColor = [UIColor clearColor];
+    
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
 	self.assetGroups = tempArray;
     
@@ -95,10 +94,30 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
+    UILabel *albumTitleLabel;
+    UILabel *accessoryLabel;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
+        albumTitleLabel = [[UILabel alloc] init];
+        albumTitleLabel.textAlignment = UITextAlignmentLeft;
+        [albumTitleLabel setTextColor:kCreme];
+        [albumTitleLabel setShadowColor:kGray6];
+        [albumTitleLabel setShadowOffset:CGSizeMake(0.0f, 1.0f)];
+        albumTitleLabel.frame = CGRectMake(70, 8, 250, tableView.rowHeight);
+        [albumTitleLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:16]];
+        [albumTitleLabel setBackgroundColor:[UIColor clearColor]];
+        [cell.contentView addSubview:albumTitleLabel];
+        
+        accessoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(295, 8, 20, tableView.rowHeight)];
+        accessoryLabel.text = @">";
+        [accessoryLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:24]];
+        [accessoryLabel setTextColor:kGray2];
+        [accessoryLabel setShadowColor:kGray6];
+        accessoryLabel.backgroundColor = [UIColor clearColor];
+        [cell.contentView addSubview:accessoryLabel];
     }
     
     // Get count
@@ -106,10 +125,13 @@
     [g setAssetsFilter:[ALAssetsFilter allPhotos]];
     NSInteger gCount = [g numberOfAssets];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%@ (%d)",[g valueForProperty:ALAssetsGroupPropertyName], gCount];
+    //set the title for the label
+    albumTitleLabel.text = [NSString stringWithFormat:@"%@ (%d)",[g valueForProperty:ALAssetsGroupPropertyName], gCount];
+    
     [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row] posterImage]]];
-	[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-	
+	[cell setAccessoryType:UITableViewCellAccessoryNone];
+	cell.selectionStyle = UITableViewCellSelectionStyleGray;
+    
     return cell;
 }
 
@@ -121,6 +143,11 @@
 	ELCAssetTablePicker *picker = [[ELCAssetTablePicker alloc] initWithNibName:@"ELCAssetTablePicker" bundle:[NSBundle mainBundle]];
 	picker.parent = self;
 
+    //tell the picker what the title should be by getting the title from the cell we just touched
+    // Get count
+    ALAssetsGroup *g = (ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row];
+    picker.albumTitle = [NSString stringWithFormat:@"%@",[g valueForProperty:ALAssetsGroupPropertyName]];
+    
     // Move me    
     picker.assetGroup = [assetGroups objectAtIndex:indexPath.row];
     [picker.assetGroup setAssetsFilter:[ALAssetsFilter allPhotos]];

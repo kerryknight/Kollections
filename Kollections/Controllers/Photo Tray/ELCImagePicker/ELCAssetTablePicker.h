@@ -24,6 +24,7 @@
 @property (nonatomic, strong) ALAssetsGroup *assetGroup;
 @property (nonatomic, strong) NSMutableArray *elcAssets;
 @property (nonatomic, strong) IBOutlet UILabel *selectedAssetsLabel;
+@property (nonatomic, strong) NSString *albumTitle;
 
 -(int)totalSelectedAssets;
 -(void)preparePhotos;
