@@ -13,12 +13,17 @@
 #define kPHOTO_TRAY_CLOSED_Y (self.view.frame.size.height - (self.tabBarController.tabBar.frame.size.height + 91)) //91 sets it just right based on current size at 44px high
 #define kPHOTO_TRAY_OPEN_Y (kPHOTO_TRAY_CLOSED_Y - 140)
 #define kPHOTO_TRAY_HEIGHT 307
-#define kPHOTO_TRAY_SUPERVIEW_MIN_Y (kPHOTO_TRAY_OPEN_Y + 243)//332 total
-#define kPHOTO_TRAY_SUPERVIEW_MAX_Y (kPHOTO_TRAY_CLOSED_Y + 247)//474 total
+
+typedef enum {
+    PhotoTrayPositionOffset = -1,
+    PhotoTrayPositionClosed,
+    PhotoTrayPositionOpen
+} PhotoTrayPosition;
 
 @interface KKKollectionViewController () {
-    BOOL photoTrayIsFullyOpen;
+    PhotoTrayPosition photoTrayPosition;
 }
+
 @property (nonatomic, strong) KKKollectionTableViewController *tableView;
 @property (nonatomic, strong) ELCImagePickerController *photosTrayPicker;
 @property (nonatomic, strong) ELCAlbumPickerController *photoAlbumPickerController;
@@ -47,7 +52,12 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     
     self.tableView = [[KKKollectionTableViewController alloc] initWithKollection:self.kollection];
-    self.tableView.view.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height - 44);//allow a little inset padding
+    self.tableView.view.frame = CGRectMake(self.view.bounds.origin.x, self.view.bounds.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);//allow a little inset padding
+    
+    //give table a bit of content inset so we can see the whole thing since it's fullscreen
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0.0, 0.0, 44, 0.0);
+    self.tableView.tableView.contentInset = contentInsets;
+    
     self.tableView.delegate = self;
     [self.view addSubview:self.tableView.view];
     
@@ -128,7 +138,7 @@
     //add a view to hold our tray image background
     self.photosTrayView = [[UIView alloc] initWithFrame:CGRectZero];
     self.photosTrayView.frame = CGRectMake(0,
-                                           kPHOTO_TRAY_CLOSED_Y,
+                                           kPHOTO_TRAY_CLOSED_Y + 60, //start it offscreen hidden initially
                                            self.view.bounds.size.width,
                                            kPHOTO_TRAY_HEIGHT);
     self.photosTrayView.backgroundColor = [UIColor clearColor];
@@ -188,7 +198,7 @@
     self.photosTrayPicker.view.frame = CGRectMake(0,
                                                   1,
                                                   photosTrayContainerView.frame.size.width,
-                                                  photosTrayContainerView.frame.size.height - 75);//add a little inset
+                                                  photosTrayContainerView.frame.size.height - 73);//add a little inset
     [self addChildViewController:self.photosTrayPicker];
     [photosTrayContainerView addSubview:self.photosTrayPicker.view];
     [self.photosTrayPicker didMoveToParentViewController:self];
@@ -196,7 +206,23 @@
     [self.photosTrayView addSubview:photosTrayHeaderView];//add on top
     [self.view addSubview:self.photosTrayView];
     
-    photoTrayIsFullyOpen = NO;
+    photoTrayPosition = PhotoTrayPositionClosed;//initialize tray as closed
+}
+
+- (void)animatePhotoBarOn {
+    
+    CGRect sliderScrollFrame = self.photosTrayView.frame;
+    sliderScrollFrame.origin.y -= 60;//329 overall for iphone 4s
+    //perform the animation
+    [UIView animateWithDuration:0.25
+                          delay:0.05
+                        options: UIViewAnimationCurveEaseOut
+                     animations:^{
+                         self.photosTrayView.frame = sliderScrollFrame;
+                     }
+                     completion:^(BOOL finished){
+                         //finished animation
+                     }];
 }
 
 - (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker {
@@ -218,38 +244,53 @@
 
 // shift the piece's center by the pan amount
 // reset the gesture recognizer's translation to {0, 0} after applying so the next callback is a delta from the current position
-- (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer
-{
+- (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
     //get the full photo tray view that holds the button we attached the gesture to
     UIView *piece = [[[gestureRecognizer view] superview] superview];
-    
-    NSLog(@"piece y = %0.0f\n", [piece center].y);
     
     [self adjustAnchorPointForGestureRecognizer:gestureRecognizer];
     
     if ([gestureRecognizer state] == UIGestureRecognizerStateBegan || [gestureRecognizer state] == UIGestureRecognizerStateChanged) {
         CGPoint translation = [gestureRecognizer translationInView:[piece superview]];
         
-        if ((([piece center].y + translation.y) >= kPHOTO_TRAY_SUPERVIEW_MIN_Y) && (([piece center].y + translation.y) <= kPHOTO_TRAY_SUPERVIEW_MAX_Y)) {
-            [piece setCenter:CGPointMake([piece center].x/* + translation.x*/, [piece center].y + translation.y)]; //don't add a translation to maintain vertical movement only
-            //set our boolean that tracks if the tray is open or closed
-            if (([piece center].y + translation.y) == kPHOTO_TRAY_SUPERVIEW_MAX_Y) {
-                photoTrayIsFullyOpen = YES;
-            }
+        if (((piece.frame.origin.y + translation.y) >= (kPHOTO_TRAY_OPEN_Y + (piece.frame.size.height/4) + 11)) &&
+            ((piece.frame.origin.y + translation.y) <= (kPHOTO_TRAY_CLOSED_Y + (piece.frame.size.height/4) + 16))) {
             
-            if (([piece center].y + translation.y) == kPHOTO_TRAY_SUPERVIEW_MIN_Y) {
-                photoTrayIsFullyOpen = NO;
-            }
+            [piece setCenter:CGPointMake([piece center].x/* + translation.x*/, [piece center].y + translation.y)]; //don't add a translation to maintain vertical movement only
             
             [gestureRecognizer setTranslation:CGPointZero inView:[piece superview]];
+            
+            //set our boolean that tracks if the tray is open or closed
+            if (piece.frame.origin.y == (kPHOTO_TRAY_OPEN_Y + (piece.frame.size.height/4) + 11)) {
+                photoTrayPosition = PhotoTrayPositionOpen;
+            }
+            
+            if (piece.frame.origin.y == (kPHOTO_TRAY_CLOSED_Y + (piece.frame.size.height/4) + 16)) {
+                photoTrayPosition = PhotoTrayPositionClosed;
+            }
+            
+            //now determine what our positioning is so we can use this to tell our button what to do in case the user
+            //touches it to open fully or close fully instead of continuing to drag
+            if (((piece.frame.origin.y <= (kPHOTO_TRAY_CLOSED_Y + (piece.frame.size.height/4) + 16)) &&
+                 (piece.frame.origin.y >= (kPHOTO_TRAY_OPEN_Y + (piece.frame.size.height/4) + 11))) ||
+                ((piece.frame.origin.y >= (kPHOTO_TRAY_CLOSED_Y + (piece.frame.size.height/4) + 16)) ||
+                 (piece.frame.origin.y <= (kPHOTO_TRAY_OPEN_Y + (piece.frame.size.height/4) + 11)))) {
+                    //not full open/closed
+                    photoTrayPosition = PhotoTrayPositionOffset;
+                }
+            
+            //also, we need to adjust our tablview's insets to reflect our new positioning so that the user can still scroll the whole thing
+            //the higher the tray is pulled or open, the larger the inset needs to be
+            UIEdgeInsets contentInsets = UIEdgeInsetsMake(0, 0, ((piece.frame.size.height - 30) - (piece.frame.origin.y - kPHOTO_TRAY_OPEN_Y)), 0);
+            self.tableView.tableView.contentInset = contentInsets;
+            
         }
     }
 }
 
 // scale and rotation transforms are applied relative to the layer's anchor point
 // this method moves a gesture recognizer's view's anchor point between the user's fingers
-- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer
-{
+- (void)adjustAnchorPointForGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer {
     if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
         UIView *piece = gestureRecognizer.view;
         CGPoint locationInView = [gestureRecognizer locationInView:piece];
@@ -264,49 +305,61 @@
 - (void)dragButtonPressed:(id)sender {
     
     CGRect sliderScrollFrame = self.photosTrayView.frame;
+    NSInteger position = photoTrayPosition;
     
-    if (photoTrayIsFullyOpen == NO) {
+    if (photoTrayPosition == PhotoTrayPositionClosed) {
         //open fully
-        sliderScrollFrame.origin.y -= 148;//329
+        sliderScrollFrame.origin.y -= 144;//329 overall for iphone 4s
+        position = PhotoTrayPositionOpen;
         
-        [UIView animateWithDuration:0.25
-                              delay:0.05
-                            options: UIViewAnimationCurveEaseOut
-                         animations:^{
-                             self.photosTrayView.frame = sliderScrollFrame;
-                         }
-                         completion:^(BOOL finished){
-                             photoTrayIsFullyOpen = YES;
-                         }];
-    } else {
+    } else if (photoTrayPosition == PhotoTrayPositionOpen){
         //close fully
-        sliderScrollFrame.origin.y += 148;//474
+        sliderScrollFrame.origin.y += 144;//474 overall for iphone 4s
+        position = PhotoTrayPositionClosed;
         
-        [UIView animateWithDuration:0.25
-                              delay:0.05
-                            options: UIViewAnimationCurveEaseOut
-                         animations:^{
-                             self.photosTrayView.frame = sliderScrollFrame;
-                         }
-                         completion:^(BOOL finished){
-                             photoTrayIsFullyOpen = NO;
-                         }];
+    } else if (photoTrayPosition == PhotoTrayPositionOffset) {
+        //we're not fully open and not fully closed so determine which one we're closer to and continue to that point
+        //we'll either fully expand or fully contract based on the positioning of the photos tray view
+        CGFloat trayY = self.photosTrayView.frame.origin.y;
+        CGFloat topDifference = trayY - kPHOTO_TRAY_OPEN_Y;
+        CGFloat bottomDifference = kPHOTO_TRAY_CLOSED_Y - trayY; //reverse subtraction since the bottom y is greater than our center y
+        
+        //now that we have the differences, see which one is smallest, i.e. closest to and pop to that position
+        if (topDifference <= bottomDifference) {
+            //popping to the will win in a tie
+            //animate open
+            sliderScrollFrame = CGRectMake(0,
+                                           (kPHOTO_TRAY_OPEN_Y + (self.photosTrayView.frame.size.height/4) + 8),
+                                           self.photosTrayView.frame.size.width,
+                                           self.photosTrayView.frame.size.height);
+            position = PhotoTrayPositionOpen;
+        } else {
+            //animate closed
+            sliderScrollFrame = CGRectMake(0,
+                                           (kPHOTO_TRAY_CLOSED_Y + (self.photosTrayView.frame.size.height/4) + 16),
+                                           self.photosTrayView.frame.size.width,
+                                           self.photosTrayView.frame.size.height);
+            position = PhotoTrayPositionClosed;
+        }
     }
     
-//    //we'll either fully expand or fully contract based on the positioning of the photos tray view
-//    CGFloat trayCenterY = [self.photosTrayView center].y;
-//    CGFloat topDifference = trayCenterY - kPHOTO_TRAY_SUPERVIEW_MIN_Y;
-//    CGFloat bottomDifference = trayCenterY - kPHOTO_TRAY_SUPERVIEW_MIN_Y;
-//    
-//    //now that we have the differences, see which one is smallest, i.e. closest to and pop to that position
-//    if (topDifference <= bottomDifference) {
-//        //popping to the will win in a tie
-//        //animate open
-//        photoTrayIsFullyOpen = YES;
-//    } else {
-//        //animate closed
-//        photoTrayIsFullyOpen = NO;
-//    }
+    //perform the animation
+    [UIView animateWithDuration:0.25
+                          delay:0.05
+                        options: UIViewAnimationCurveEaseOut
+                     animations:^{
+                         self.photosTrayView.frame = sliderScrollFrame;
+                         //also, we need to adjust our tablview's insets to reflect our new positioning so that the user can still scroll the whole thing
+                         //the higher the tray is pulled or open, the larger the inset needs to be
+                         UIEdgeInsets contentInsets = UIEdgeInsetsMake(0,
+                                                                       0,
+                                                                       ((self.photosTrayView.frame.size.height - 30) - (self.photosTrayView.frame.origin.y - kPHOTO_TRAY_OPEN_Y)),
+                                                                       0);
+                         self.tableView.tableView.contentInset = contentInsets;
+                     }
+                     completion:^(BOOL finished){
+                         photoTrayPosition = position;
+                     }];
 }
 
 //our custom back button

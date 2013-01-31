@@ -13,6 +13,7 @@ typedef void(^KKObjectsLoadedCallback)(NSArray *objects);
 @protocol KKKollectionTableViewControllerDelegate
 @optional
 - (void) kollectionTableViewControllerDidLoadSubjects:(NSArray*)subjects;
+- (void)animatePhotoBarOn;
 @end
 
 @interface KKKollectionTableViewController : PFQueryTableViewController <KKPhotosBarViewControllerDelegate> {

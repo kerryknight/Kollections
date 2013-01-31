@@ -222,6 +222,9 @@
                             
                             //reload our table in case any data has changed
                             [self.tableView reloadData];
+                            
+                            //tell the parent view it can show the bottom photos tray bar now
+                            [self.delegate animatePhotoBarOn];
                         }
                     }];
                 }
