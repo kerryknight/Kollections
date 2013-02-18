@@ -16,7 +16,10 @@
 #pragma mark -
 #pragma mark View lifecycle
 
+#define kROW_AND_CONTENT_HEIGHT 57.0f
+
 - (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 	
 	[self.navigationItem setTitle:@"Loading..."];
@@ -36,8 +39,7 @@
         // Group enumerator Block
         void (^assetGroupEnumerator)(ALAssetsGroup *, BOOL *) = ^(ALAssetsGroup *group, BOOL *stop) 
         {
-            if (group == nil) 
-            {
+            if (group == nil)  {
                 return;
             }
             
@@ -49,15 +51,14 @@
         
         // Group Enumerator Failure Block
         void (^assetGroupEnumberatorFailure)(NSError *) = ^(NSError *error) {
-            
-            UIAlertView * alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            //show custom alert
+            BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Error" message:[NSString stringWithFormat:@"Album Error: %@ - %@", [error localizedDescription], [error localizedRecoverySuggestion]]];
+            [alert setCancelButtonWithTitle:@"OK" block:nil];
             [alert show];
-            
-            NSLog(@"A problem occured %@", [error description]);	                                 
         };	
                 
         // Enumerate Albums
-        [library enumerateGroupsWithTypes:ALAssetsGroupAll
+        [library enumerateGroupsWithTypes:ALAssetsGroupAlbum
                                usingBlock:assetGroupEnumerator 
                              failureBlock:assetGroupEnumberatorFailure];
         
@@ -71,7 +72,7 @@
 }
 
 -(void)selectedAssets:(NSArray*)_assets {
-	
+//	NSLog(@"%s", __FUNCTION__);
 	[(ELCImagePickerController*)parent selectedAssets:_assets];
 }
 
@@ -86,7 +87,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return [assetGroups count];
+    return [self.assetGroups count];
 }
 
 
@@ -94,14 +95,20 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
-    UILabel *albumTitleLabel;
-    UILabel *accessoryLabel;
+    
+    static NSUInteger const kAlbumTitleTag = 1;
+    static NSUInteger const kAlbumPhotoTag = 2;
+    
+    UILabel *albumTitleLabel = nil;
+    UIImageView *albumPhotoImageView = nil;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         
+        //add our album title label
         albumTitleLabel = [[UILabel alloc] init];
+        albumTitleLabel.tag = kAlbumTitleTag;
         albumTitleLabel.textAlignment = UITextAlignmentLeft;
         [albumTitleLabel setTextColor:kCreme];
         [albumTitleLabel setShadowColor:kGray6];
@@ -111,24 +118,38 @@
         [albumTitleLabel setBackgroundColor:[UIColor clearColor]];
         [cell.contentView addSubview:albumTitleLabel];
         
-        accessoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(295, 8, 20, tableView.rowHeight)];
+        //add our custom accessory disclosure 
+        UILabel *accessoryLabel = [[UILabel alloc] initWithFrame:CGRectMake(295, 8, 20, kROW_AND_CONTENT_HEIGHT - 10)];
         accessoryLabel.text = @">";
         [accessoryLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:24]];
         [accessoryLabel setTextColor:kGray2];
         [accessoryLabel setShadowColor:kGray6];
         accessoryLabel.backgroundColor = [UIColor clearColor];
         [cell.contentView addSubview:accessoryLabel];
+        
+        //add our album photo image view
+        albumPhotoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kROW_AND_CONTENT_HEIGHT, kROW_AND_CONTENT_HEIGHT)];
+        albumPhotoImageView.tag = kAlbumPhotoTag;
+        albumPhotoImageView.layer.borderColor = kGray3.CGColor;
+        albumPhotoImageView.layer.borderWidth = 1.00f;
+        [cell.contentView addSubview:albumPhotoImageView];
+    } else {
+        // A reusable cell was available, so we just need to get a reference to the subviews using their tags.
+        albumTitleLabel = (UILabel *)[cell.contentView viewWithTag:kAlbumTitleTag];
+        albumPhotoImageView = (UIImageView *)[cell.contentView viewWithTag:kAlbumPhotoTag];
     }
     
-    // Get count
-    ALAssetsGroup *g = (ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row];
+    // Get album count
+    ALAssetsGroup *g = (ALAssetsGroup*)[self.assetGroups objectAtIndex:indexPath.row];
     [g setAssetsFilter:[ALAssetsFilter allPhotos]];
     NSInteger gCount = [g numberOfAssets];
     
     //set the title for the label
     albumTitleLabel.text = [NSString stringWithFormat:@"%@ (%d)",[g valueForProperty:ALAssetsGroupPropertyName], gCount];
     
-    [cell.imageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row] posterImage]]];
+    //set our album photo image
+    [albumPhotoImageView setImage:[UIImage imageWithCGImage:[(ALAssetsGroup*)[self.assetGroups objectAtIndex:indexPath.row] posterImage]]];
+    
 	[cell setAccessoryType:UITableViewCellAccessoryNone];
 	cell.selectionStyle = UITableViewCellSelectionStyleGray;
     
@@ -142,14 +163,17 @@
 	
 	ELCAssetTablePicker *picker = [[ELCAssetTablePicker alloc] initWithNibName:@"ELCAssetTablePicker" bundle:[NSBundle mainBundle]];
 	picker.parent = self;
+    picker.mainView = self.mainView;
+    picker.mainTableView = self.mainTableView;
+    picker.dropTargets = self.dropTargets;
 
     //tell the picker what the title should be by getting the title from the cell we just touched
     // Get count
-    ALAssetsGroup *g = (ALAssetsGroup*)[assetGroups objectAtIndex:indexPath.row];
+    ALAssetsGroup *g = (ALAssetsGroup*)[self.assetGroups objectAtIndex:indexPath.row];
     picker.albumTitle = [NSString stringWithFormat:@"%@",[g valueForProperty:ALAssetsGroupPropertyName]];
     
     // Move me    
-    picker.assetGroup = [assetGroups objectAtIndex:indexPath.row];
+    picker.assetGroup = [self.assetGroups objectAtIndex:indexPath.row];
     [picker.assetGroup setAssetsFilter:[ALAssetsFilter allPhotos]];
     
 	[self.navigationController pushViewController:picker animated:YES];
@@ -157,7 +181,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 	
-	return 57;
+	return kROW_AND_CONTENT_HEIGHT;
 }
 
 #pragma mark -

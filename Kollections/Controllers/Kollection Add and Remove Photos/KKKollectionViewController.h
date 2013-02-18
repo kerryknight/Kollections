@@ -10,11 +10,11 @@
 #import "KKEditKollectionViewController.h"
 #import "KKKollectionTableViewController.h"
 #import "ELCImagePickerController.h"
+#import "JDDroppableView.h"
 
-@interface KKKollectionViewController : UIViewController <KKEditKollectionViewControllerDelegate, KKKollectionTableViewControllerDelegate, ELCImagePickerControllerDelegate, UIGestureRecognizerDelegate> {
+@interface KKKollectionViewController : UIViewController <KKEditKollectionViewControllerDelegate, KKKollectionTableViewControllerDelegate, ELCImagePickerControllerDelegate, UIGestureRecognizerDelegate, JDDroppableViewDelegate> {
     
 }
 
 @property (nonatomic, strong) PFObject *kollection;
-
 @end

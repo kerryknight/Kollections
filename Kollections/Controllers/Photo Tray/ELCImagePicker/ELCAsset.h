@@ -8,6 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 
+@protocol ELCAssetDelegate;
 
 @interface ELCAsset : UIView {
 	ALAsset *asset;
@@ -18,8 +19,18 @@
 
 @property (nonatomic, strong) ALAsset *asset;
 @property (nonatomic, strong) id parent;
+@property (nonatomic, strong) UIView *mainView; //view we want to drop into
+@property (nonatomic, strong) UITableView *tableParent;//container view for our object
+@property (nonatomic, strong) id<ELCAssetDelegate> delegate;
 
 -(id)initWithAsset:(ALAsset*)_asset;
 -(BOOL)selected;
 
+@end
+
+@protocol ELCAssetDelegate
+@optional
+-(void)photoTouchDown:(ELCAsset*)photo;
+-(void)photoTouchUp:(ELCAsset*)photo;
+//-(BOOL) isInsideKollectionView:(ELCAsset *)photo touching:(BOOL)finished;
 @end

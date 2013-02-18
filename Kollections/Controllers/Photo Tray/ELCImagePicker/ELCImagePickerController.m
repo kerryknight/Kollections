@@ -17,13 +17,13 @@
 //@synthesize delegate;
 
 -(void)cancelImagePicker {
-	if([delegate respondsToSelector:@selector(elcImagePickerControllerDidCancel:)]) {
-		[delegate performSelector:@selector(elcImagePickerControllerDidCancel:) withObject:self];
+	if([self.delegate respondsToSelector:@selector(elcImagePickerControllerDidCancel:)]) {
+		[self.delegate performSelector:@selector(elcImagePickerControllerDidCancel:) withObject:self];
 	}
 }
 
 -(void)selectedAssets:(NSArray*)_assets {
-
+//    NSLog(@"%s", __FUNCTION__);
 	NSMutableArray *returnArray = [[NSMutableArray alloc] init];
 	
 	for(ALAsset *asset in _assets) {
@@ -39,20 +39,20 @@
     [self popToRootViewControllerAnimated:NO];
     [[self parentViewController] dismissModalViewControllerAnimated:YES];
     
-	if([delegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
-		[delegate performSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:) withObject:self withObject:[NSArray arrayWithArray:returnArray]];
+	if([self.delegate respondsToSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:)]) {
+		[self.delegate performSelector:@selector(elcImagePickerController:didFinishPickingMediaWithInfo:) withObject:self withObject:[NSArray arrayWithArray:returnArray]];
 	}
 }
 
 #pragma mark -
 #pragma mark Memory management
 - (void)viewDidLoad {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super viewDidLoad];
 }
 
 - (void)didReceiveMemoryWarning {    
-    NSLog(@"ELC Image Picker received memory warning.");
+//    NSLog(@"ELC Image Picker received memory warning.");
     
     [super didReceiveMemoryWarning];
 }

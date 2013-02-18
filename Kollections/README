@@ -47,6 +47,7 @@ FUTURE
 - Add filters and photo manipulation to KKEditPhotoViewController
 - Add ability to make Kollections location-based and only accept submissions from within a certain radius of
   a certain map coordinate
+- Fix photo submissions so a photo will drag immediately on touch instead of requiring a 2nd touch to drag
   
 __________________________________________________________________  
 3RD PARTIES USED

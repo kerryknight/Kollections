@@ -19,7 +19,7 @@
 @synthesize assetGroup, elcAssets;
 
 -(void)viewDidLoad {
-        
+//    NSLog(@"%s", __FUNCTION__);
 	[self.tableView setSeparatorColor:[UIColor clearColor]];
 	[self.tableView setAllowsSelection:NO];
 
@@ -35,9 +35,9 @@
 }
 
 -(void)preparePhotos {
-    
-    NSLog(@"enumerating photos");
-    [self.assetGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop) 
+//    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"enumerating photos");
+    [self.assetGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
      {         
          if(result == nil) 
          {
@@ -48,7 +48,7 @@
          [elcAsset setParent:self];
          [self.elcAssets addObject:elcAsset];
      }];    
-    NSLog(@"done enumerating photos");
+//    NSLog(@"done enumerating photos");
 	
 	[self.tableView reloadData];
 	[self.navigationItem setTitle:@"Photos"];
@@ -60,8 +60,7 @@
 	
 	NSMutableArray *selectedAssetsImages = [[NSMutableArray alloc] init];
 	    
-	for(ELCAsset *elcAsset in self.elcAssets) 
-    {		
+	for(ELCAsset *elcAsset in self.elcAssets) {		
 		if([elcAsset selected]) {
 			
 			[selectedAssetsImages addObject:[elcAsset asset]];
@@ -133,15 +132,10 @@
         
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            
-            
         }
         
         cell.contentView.backgroundColor = [UIColor clearColor];
         cell.backgroundColor = [UIColor clearColor];
-        
-//        UIImageView *navBarImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkPhotoTrayNavBar.png"]];
-//        [cell.contentView addSubview:navBarImage];
         
         //add a custom back button
         KKToolbarButton *backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
@@ -172,21 +166,66 @@
         
         ELCAssetCell *cell = (ELCAssetCell*)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         
-        if (cell == nil)
-        {
+        if (cell == nil) {
             cell = [[ELCAssetCell alloc] initWithAssets:[self assetsForIndexPath:indexPath] reuseIdentifier:CellIdentifier];
         }
-        else
-        {
+        else {
             [cell setAssets:[self assetsForIndexPath:indexPath]];
+        }
+        
+        //set our delegate for each of the items in each cell row
+        for(ELCAsset *elcAsset in cell.rowAssets) {
+            elcAsset.delegate = self;
+            
+            //add our drop targets here 
         }
         
         return cell;
     }
 }
 
+#pragma mark - ELCAssetDelegate
+-(void)photoTouchDown:(ELCAsset*)photo{
+    NSLog(@"%s", __FUNCTION__);
+    
+    self.tableView.scrollEnabled = NO;
+    
+    NSDictionary *userInfo = @{@"photo": photo};
+    
+    //post a notification with our photo object included to be passed to KKKollectionViewController
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PhotosTrayPhotoTouchDown" object:nil userInfo:userInfo];
+}
+
+-(void)photoTouchUp:(ELCAsset*)photo {
+//    NSLog(@"%s", __FUNCTION__);
+    
+    self.tableView.scrollEnabled = YES;
+}
+
+-(BOOL) isInsideKollectionView:(ELCAsset *)photo touching:(BOOL)finished {
+    NSLog(@"%s", __FUNCTION__);
+//    CGPoint newLoc = [self convertPoint:self.recycleBin.frame.origin toView:self.mainView];
+//    CGRect binFrame = self.recycleBin.frame;
+//    binFrame.origin = newLoc;
+//    
+//    if (CGRectIntersectsRect(binFrame, button.frame) == TRUE){
+//        if (finished){
+//            [self removeAttachment:button];
+//        }
+//        return YES;
+//    }
+//    else {
+//        return NO;
+//    }
+    return NO;
+}
+
 - (void)backButtonAction:(id)sender {
     //    NSLog(@"%s", __FUNCTION__);
+    
+    //tell KKKollectionViewController to dismiss any potentially visible enlarged selected photo
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"PhotosTrayDismissAnySelectedPhoto" object:nil];
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

@@ -10,7 +10,6 @@
 
 @interface ELCImagePickerController : UINavigationController {
 
-	id delegate;
 }
 
 @property (nonatomic, assign) id delegate;
@@ -21,7 +20,7 @@
 @end
 
 @protocol ELCImagePickerControllerDelegate
-
+@optional
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info;
 - (void)elcImagePickerControllerDidCancel:(ELCImagePickerController *)picker;
 

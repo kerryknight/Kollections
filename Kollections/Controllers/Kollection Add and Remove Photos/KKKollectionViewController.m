@@ -9,6 +9,7 @@
 #import "KKKollectionViewController.h"
 #import "KKToolbarButton.h"
 #import "ELCAlbumPickerController.h"
+#import "ELCAsset.h"
 
 #define kPHOTO_TRAY_CLOSED_Y (self.view.frame.size.height - (self.tabBarController.tabBar.frame.size.height + 91)) //91 sets it just right based on current size at 44px high
 #define kPHOTO_TRAY_OPEN_Y (kPHOTO_TRAY_CLOSED_Y - 140)
@@ -31,6 +32,10 @@ typedef enum {
 @property (nonatomic, strong) KKToolbarButton *backButton;
 @property (nonatomic, strong) NSMutableArray *subjectList;
 @property (nonatomic, strong) UIView *photosTrayView;
+@property (nonatomic, strong) NSMutableArray *dropTargets;
+@property (nonatomic, strong) JDDroppableView *dropview;
+@property (nonatomic, strong) ELCAsset *photoToSubmit;
+
 @end
 
 @implementation KKKollectionViewController
@@ -44,8 +49,7 @@ typedef enum {
     return self;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
     
@@ -69,6 +73,17 @@ typedef enum {
     
     //set up our photos tray
     [self configurePhotoTray];
+    
+    //add a draggable view of our photo over top
+    self.dropview = [[JDDroppableView alloc] init];
+    self.dropview.tag = 999;
+    self.dropview.delegate = self;
+    [self.dropview becomeFirstResponder];
+    
+    //add a border
+    self.dropview.layer.borderColor = kMint3.CGColor;
+    self.dropview.layer.borderWidth = 0.75f;
+    [self.view addSubview:self.dropview];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -76,6 +91,10 @@ typedef enum {
     [super viewWillAppear:animated];
     self.backButton.hidden = NO;//this is hidden if we navigate away
     self.editButton.hidden = NO;//this is hidden if we navigate away
+    
+    //attach notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(photosTrayPhotoTouchDown:) name:@"PhotosTrayPhotoTouchDown" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismissAnySelectedPhoto:) name:@"PhotosTrayDismissAnySelectedPhoto" object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -83,6 +102,13 @@ typedef enum {
     [super viewWillDisappear:animated];
     self.backButton.hidden = YES;
     self.editButton.hidden = YES;
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"PhotosTrayPhotoTouchDown" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"PhotosTrayDismissAnySelectedPhoto" object:nil];
+}
+
+- (void)dealloc {
+    
 }
 
 #pragma mark - KKEditKollectionViewControllerDelegate methods
@@ -97,7 +123,7 @@ typedef enum {
         //refresh our object and reload our table once complete
         [self.kollection refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if (!error) {
-                NSLog(@"kollection subjects refreshed");
+//                NSLog(@"kollection subjects refreshed");
                 self.kollection = object;
                 self.tableView.isNetworkBusy = NO;
                 
@@ -124,10 +150,200 @@ typedef enum {
     self.subjectList = [subjects mutableCopy];
 }
 
+- (void)kollectionTableViewControllerAddedKollectionRowRect:(CGRect)rowRect {
+    //convert cgrect to obj c object value
+    [self.dropTargets addObject:[NSValue valueWithCGRect:rowRect]];
+}
+
+#pragma mark - Asset Delegate
+- (void)dismissAnySelectedPhoto:(id)sender {
+    //dismiss the drop view if we're hit edit, back or closed the photo tray
+    [self.dropview hide];
+}
+
+#define GROW_ANIMATION_DURATION_SECONDS 0.15
+#define SHRINK_ANIMATION_DURATION_SECONDS 0.15
+- (void)photosTrayPhotoTouchDown:(NSNotification*)notification {
+    NSLog(@"%s", __FUNCTION__);
+    
+    //add all our target rows' rects
+    //    - (CGRect)rectForRowAtIndexPath:(NSIndexPath *)indexPath  //use this method to create CGRects
+    //    [self.dropview addDropTarget:self.dropTarget2];
+    
+    
+    //here's how to add a little menu popover to a view with a selectable action(s)
+//    UIMenuController *menuController = [UIMenuController sharedMenuController];
+//    UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:@"Reset" action:@selector(resetPiece:)];
+//    CGPoint location = [gestureRecognizer locationInView:[gestureRecognizer view]];
+//    
+//    [self becomeFirstResponder];
+//    [menuController setMenuItems:[NSArray arrayWithObject:resetMenuItem]];
+//    [menuController setTargetRect:CGRectMake(location.x, location.y, 0, 0) inView:[gestureRecognizer view]];
+//    [menuController setMenuVisible:YES animated:YES];
+
+    //TODO: Get dropview dragging on FIRST touch; not subsequent second touch
+    
+    [self.dropview becomeFirstResponder];//doesn't appear to help first touch dragging
+    
+    NSDictionary *userInfo = notification.userInfo;
+    
+    //get our passed in photo object from the notification
+    self.photoToSubmit = userInfo[@"photo"];
+    
+    CGPoint touchedPoint = [self.view convertPoint:self.photoToSubmit.center fromView:self.photoToSubmit.superview];
+    CGRect photoFrame = [self.photoToSubmit.superview convertRect:self.photoToSubmit.frame toView:self.view];
+    UIImageView *photoImage = [[UIImageView alloc] initWithImage:[UIImage imageWithCGImage:[self.photoToSubmit.asset thumbnail]]];
+    photoImage.tag = 99999;
+    
+    //set our initial frames for animating larger photo in
+    self.dropview.frame = photoFrame;
+    photoImage.frame = self.dropview.bounds;
+    
+    [[self.dropview viewWithTag:99999] removeFromSuperview];//remove any previous thumbnail images
+    self.dropview.bounds = CGRectMake(0, 0, 75, 75);//set our bounds so we're always the same size on subsequent touches
+    
+    //add our new thumbnail
+    [self.dropview addSubview:photoImage];
+    self.dropview.alpha = 1.0;
+    self.dropview.hidden = NO;
+    
+    //add an instruction label
+    UILabel *dragLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 42, 75, 35)];
+    dragLabel.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.7];
+    dragLabel.text = @"Drag to a Kollection";
+    dragLabel.textColor = kCreme;
+    dragLabel.textAlignment = UITextAlignmentCenter;
+    [dragLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:11]];
+    dragLabel.numberOfLines = 0;
+    dragLabel.lineBreakMode = UILineBreakModeWordWrap;
+    dragLabel.alpha = 0.0;
+    [self.dropview addSubview:dragLabel];
+    
+    [UIView animateWithDuration:GROW_ANIMATION_DURATION_SECONDS animations:^{
+        CGAffineTransform transform = CGAffineTransformMakeScale(1.3, 1.3);
+        self.dropview.transform = transform;
+        self.dropview.center = touchedPoint;
+        photoImage.frame = self.dropview.bounds;
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:SHRINK_ANIMATION_DURATION_SECONDS animations:^{
+            CGAffineTransform transform = CGAffineTransformMakeScale(1.2, 1.2);
+            self.dropview.transform = transform;
+            photoImage.frame = self.dropview.bounds;
+            dragLabel.alpha = 1.0;
+        } completion:^(BOOL finished2) {
+            //done
+            [self.dropview becomeFirstResponder];//doesn't appear to help first touch draggin
+        }];
+    }];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+//	NSLog(@"%s", __FUNCTION__);
+	// We only support single touches, so anyObject retrieves just that touch from touches
+	UITouch *touch = [touches anyObject];
+	
+	// Only move the placard view if the touch was in the placard view
+	if ([touch view] != self.dropview) {
+		return;
+	}
+    
+}
+
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+//	NSLog(@"%s", __FUNCTION__);
+	UITouch *touch = [touches anyObject];
+	
+	// If the touch was in the placardView, move the placardView to its location
+	if ([touch view] == self.dropview) {
+		CGPoint location = [touch locationInView:self.view];
+		self.dropview.center = location;
+		return;
+	}
+}
+
+#pragma JDDroppableViewDelegate
+- (void)droppableViewBeganDragging:(JDDroppableView*)view; {
+//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"droppableViewBeganDragging");
+    
+	[UIView animateWithDuration:0.33 animations:^{
+//        view.backgroundColor = [UIColor yellowColor];
+        view.alpha = 0.8;
+        [view becomeFirstResponder];
+    }];
+}
+
+- (void)droppableViewDidMove:(JDDroppableView*)view; {
+//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"droppableViewDidMove:");
+}
+
+- (void)droppableViewEndedDragging:(JDDroppableView*)view onTarget:(UIView *)target {
+//    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"droppableViewEndedDragging:onTarget: %@", target == nil ? @"no target" : @"on target");
+    
+	[UIView animateWithDuration:0.33 animations:^{
+        if (!target) {
+//            [view removeFromSuperview];
+//            view.hidden = YES;
+        } else {
+            //we're on target
+//            view.backgroundColor = [UIColor greenColor];
+            NSLog(@"%s", __FUNCTION__);
+        }
+        view.alpha = 1.0;
+    }];
+}
+
+- (void)droppableView:(JDDroppableView*)view enteredTarget:(UIView*)target {
+    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"droppableView:enteredTarget: %@", target == self.dropTarget1 ? @"one" : @"two");
+    
+    target.transform = CGAffineTransformMakeScale(1.5, 1.5);
+    
+//    if (target == self.mainTableView) {
+//        target.backgroundColor = [UIColor greenColor];
+//    } else {
+//        target.backgroundColor = [UIColor redColor];
+//    }
+}
+
+- (void)droppableView:(JDDroppableView*)view leftTarget:(UIView*)target {
+    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"droppableView:leftTarget: %@", target == self.dropTarget1 ? @"one" : @"two");
+    
+    target.transform = CGAffineTransformMakeScale(1.0, 1.0);
+//    target.backgroundColor = [UIColor orangeColor];
+}
+
+- (BOOL)shouldAnimateDroppableViewBack:(JDDroppableView*)view wasDroppedOnTarget:(UIView*)target {
+    NSLog(@"%s", __FUNCTION__);
+    //    NSLog(@"shouldAnimateDroppableViewBack:wasDroppedOnTarget: %@", target == self.dropTarget1 ? @"one" : @"two");
+    
+	[self droppableView:view leftTarget:target];
+    
+//    if (target == self.mainTableView) {
+//        return YES;
+//    }
+    
+    // animate out and remove view
+    [UIView animateWithDuration:0.33 animations:^{
+        view.transform = CGAffineTransformMakeScale(0.2, 0.2);
+        view.alpha = 0.2;
+        view.center = target.center;
+    } completion:^(BOOL finished) {
+//        [view removeFromSuperview];
+        view.hidden = YES;
+        NSLog(@"%s", __FUNCTION__);
+    }];
+    
+    return NO;
+}
+
 #pragma mark ELCImagePickerControllerDelegate Methods
 - (void)elcImagePickerController:(ELCImagePickerController *)picker didFinishPickingMediaWithInfo:(NSArray *)info {
-	NSLog(@"%s", __FUNCTION__);
-//	[self dismissModalViewControllerAnimated:YES];
+//	NSLog(@"%s", __FUNCTION__);
+    //	[self dismissModalViewControllerAnimated:YES];
 }
 
 - (void)configurePhotoTray {
@@ -152,9 +368,9 @@ typedef enum {
     //add our header that while hold the drag button
     UIView *photosTrayHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
     photosTrayHeaderView.frame = CGRectMake(0,
-                                      0,
-                                      self.view.bounds.size.width,
-                                      54);
+                                            0,
+                                            self.view.bounds.size.width,
+                                            54);
     photosTrayHeaderView.backgroundColor = [UIColor clearColor];
     
     //create a gradient for a shadow at the top of the tab below the tray button
@@ -172,13 +388,21 @@ typedef enum {
     photoTrayHeaderImage.frame = CGRectMake(-4, 0, 328, 51);
     [photosTrayHeaderView addSubview:photoTrayHeaderImage];
     
-    //add our drag button 
+    //add our drag button
     UIButton *dragButton = [[UIButton alloc] initWithFrame:CGRectMake(247.0f, 10.0f, 63.0f, 33.0f)];
     [dragButton setBackgroundImage:[UIImage imageNamed:@"kkDragButtonUp.png"] forState:UIControlStateNormal];
     [dragButton setBackgroundImage:[UIImage imageNamed:@"kkDragButtonSelected.png"] forState:UIControlStateHighlighted];
     [dragButton addTarget:self action:@selector(dragButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self addGestureRecognizersToDragButton:dragButton];
     [photosTrayHeaderView addSubview:dragButton];
+    
+#define kPHOTO_ICON_WIDTH 40
+    
+    //add our photo icon image button
+    UIButton *photoIconButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width/2 - kPHOTO_ICON_WIDTH/2), 12, kPHOTO_ICON_WIDTH, 27)];
+    [photoIconButton setBackgroundImage:[UIImage imageNamed:@"kkPhotoIcon.png"] forState:UIControlStateNormal];
+    [photoIconButton addTarget:self action:@selector(dragButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [photosTrayHeaderView addSubview:photoIconButton];
     
     //add a container view to hold our picker view controller
     UIView *photosTrayContainerView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -190,6 +414,9 @@ typedef enum {
     
     //add the custom image picker to the photo tray
     self.photoAlbumPickerController = [[ELCAlbumPickerController alloc] initWithNibName:@"ELCAlbumPickerController" bundle:[NSBundle mainBundle]];
+    self.photoAlbumPickerController.mainView = self.view;
+    self.photoAlbumPickerController.mainTableView = self.tableView.view;
+    self.photoAlbumPickerController.dropTargets = [NSArray arrayWithArray:self.dropTargets];
     self.photoAlbumPickerController.view.backgroundColor = [UIColor clearColor];
 	self.photosTrayPicker = [[ELCImagePickerController alloc] initWithRootViewController:self.photoAlbumPickerController];
     self.photoAlbumPickerController.view.backgroundColor = [UIColor clearColor];
@@ -229,9 +456,13 @@ typedef enum {
     
 }
 
-#pragma mark -
-#pragma mark === Touch handling  ===
-#pragma mark
+#pragma mark - Touch handling
+
+// UIMenuController requires that we can become first responder or it won't display
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
 // adds pan gesture recognizers to the drag button
 - (void)addGestureRecognizersToDragButton:(UIButton *)button {
     
@@ -242,9 +473,13 @@ typedef enum {
     [button addGestureRecognizer:panGesture];
 }
 
+//this recognizer is applied to the photo tray for opening and closing it
 // shift the piece's center by the pan amount
 // reset the gesture recognizer's translation to {0, 0} after applying so the next callback is a delta from the current position
 - (void)panPiece:(UIPanGestureRecognizer *)gestureRecognizer {
+    //dismiss any dropview that might be showing
+    [self dismissAnySelectedPhoto:nil];
+    
     //get the full photo tray view that holds the button we attached the gesture to
     UIView *piece = [[[gestureRecognizer view] superview] superview];
     
@@ -303,6 +538,9 @@ typedef enum {
 
 #pragma mark - Custom Methods
 - (void)dragButtonPressed:(id)sender {
+    
+    //dismiss any dropview that might be showing
+    [self dismissAnySelectedPhoto:nil];
     
     CGRect sliderScrollFrame = self.photosTrayView.frame;
     NSInteger position = photoTrayPosition;
@@ -372,12 +610,16 @@ typedef enum {
 }
 
 - (void)backButtonAction:(id)sender {
-    //    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)editButtonAction:(id)sender {
     //    NSLog(@"%s", __FUNCTION__);
+    
+    //dismiss any dropview that might be showing
+    [self dismissAnySelectedPhoto:nil];
     
     KKEditKollectionViewController *editKollectionViewController = [[KKEditKollectionViewController alloc] init];
     editKollectionViewController.delegate = self;

@@ -183,6 +183,8 @@
 		C754B4A916BA13980043ECBF /* kkDragButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C754B4A516BA13980043ECBF /* kkDragButtonSelected.png */; };
 		C754B4AA16BA13980043ECBF /* kkDragButtonUp.png in Resources */ = {isa = PBXBuildFile; fileRef = C754B4A616BA13980043ECBF /* kkDragButtonUp.png */; };
 		C754B4AB16BA13980043ECBF /* kkDragButtonUp@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C754B4A716BA13980043ECBF /* kkDragButtonUp@2x.png */; };
+		C754B4B316BACEEE0043ECBF /* kkPhotoIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = C754B4B116BACEEE0043ECBF /* kkPhotoIcon.png */; };
+		C754B4B416BACEEE0043ECBF /* kkPhotoIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C754B4B216BACEEE0043ECBF /* kkPhotoIcon@2x.png */; };
 		C76A1D9E16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9A16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png */; };
 		C76A1D9F16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */; };
 		C76A1DA016B066E30097DD21 /* kkDestructiveNavBarButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */; };
@@ -596,6 +598,7 @@
 		C7B1D0B416783E6000BA628A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */; };
 		C7B1D0B616783E6B00BA628A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7B1D0B516783E6B00BA628A /* CFNetwork.framework */; };
 		C7B1D37216783F4D00BA628A /* README in Resources */ = {isa = PBXBuildFile; fileRef = C7B1D37116783F4D00BA628A /* README */; };
+		C7B2CB8B16C170CA00731B63 /* JDDroppableView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B2CB8A16C170CA00731B63 /* JDDroppableView.m */; };
 		C7B4AE8016A8E70700C77C48 /* KKSetupTablePhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B4AE7E16A8E70700C77C48 /* KKSetupTablePhotoCell.m */; };
 		C7B4AE8116A8E70700C77C48 /* KKSetupTablePhotoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE7F16A8E70700C77C48 /* KKSetupTablePhotoCell.xib */; };
 		C7B4AE8816A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png in Resources */ = {isa = PBXBuildFile; fileRef = C7B4AE8216A8F19800C77C48 /* kkKollectionCoverPhotoOverlayButtonDown.png */; };
@@ -903,6 +906,8 @@
 		C754B4A516BA13980043ECBF /* kkDragButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDragButtonSelected.png; sourceTree = "<group>"; };
 		C754B4A616BA13980043ECBF /* kkDragButtonUp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDragButtonUp.png; sourceTree = "<group>"; };
 		C754B4A716BA13980043ECBF /* kkDragButtonUp@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDragButtonUp@2x.png"; sourceTree = "<group>"; };
+		C754B4B116BACEEE0043ECBF /* kkPhotoIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkPhotoIcon.png; sourceTree = "<group>"; };
+		C754B4B216BACEEE0043ECBF /* kkPhotoIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkPhotoIcon@2x.png"; sourceTree = "<group>"; };
 		C76A1D9A16B066E30097DD21 /* kkDestructiveNavBarButtonSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDestructiveNavBarButtonSelected.png; sourceTree = "<group>"; };
 		C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButtonSelected@2x.png"; sourceTree = "<group>"; };
 		C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDestructiveNavBarButton.png; sourceTree = "<group>"; };
@@ -1360,6 +1365,8 @@
 		C7B1D0B316783E6000BA628A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		C7B1D0B516783E6B00BA628A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		C7B1D37116783F4D00BA628A /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		C7B2CB8916C170CA00731B63 /* JDDroppableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JDDroppableView.h; sourceTree = "<group>"; };
+		C7B2CB8A16C170CA00731B63 /* JDDroppableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JDDroppableView.m; sourceTree = "<group>"; };
 		C7B4AE7A16A8977600C77C48 /* Parse Snippets */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Parse Snippets"; sourceTree = "<group>"; };
 		C7B4AE7D16A8E70700C77C48 /* KKSetupTablePhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTablePhotoCell.h; sourceTree = "<group>"; };
 		C7B4AE7E16A8E70700C77C48 /* KKSetupTablePhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTablePhotoCell.m; sourceTree = "<group>"; };
@@ -1915,6 +1922,8 @@
 		C79D9F4316B974FE00CA1A08 /* Photo Tray */ = {
 			isa = PBXGroup;
 			children = (
+				C754B4B116BACEEE0043ECBF /* kkPhotoIcon.png */,
+				C754B4B216BACEEE0043ECBF /* kkPhotoIcon@2x.png */,
 				C79D9F8C16B9DDD300CA1A08 /* kkPhotoTrayHeader.png */,
 				C79D9F8D16B9DDD300CA1A08 /* kkPhotoTrayHeader@2x.png */,
 				C79D9F8816B9C67C00CA1A08 /* kkPhotoTrayNavBar.png */,
@@ -1930,6 +1939,7 @@
 		C79D9F4D16B98E6100CA1A08 /* Photo Tray */ = {
 			isa = PBXGroup;
 			children = (
+				C7B2CB8816C170CA00731B63 /* DroppableView */,
 				C79D9F6416B9B06D00CA1A08 /* ELCImagePicker */,
 			);
 			path = "Photo Tray";
@@ -2678,6 +2688,15 @@
 				C7B1CE6F16783C8500BA628A /* Default@2x.png */,
 			);
 			name = "App Store Stuff";
+			sourceTree = "<group>";
+		};
+		C7B2CB8816C170CA00731B63 /* DroppableView */ = {
+			isa = PBXGroup;
+			children = (
+				C7B2CB8916C170CA00731B63 /* JDDroppableView.h */,
+				C7B2CB8A16C170CA00731B63 /* JDDroppableView.m */,
+			);
+			path = DroppableView;
 			sourceTree = "<group>";
 		};
 		C7BC60CA169775B1003C223B /* Buttons */ = {
@@ -3525,6 +3544,8 @@
 				C754B4A916BA13980043ECBF /* kkDragButtonSelected.png in Resources */,
 				C754B4AA16BA13980043ECBF /* kkDragButtonUp.png in Resources */,
 				C754B4AB16BA13980043ECBF /* kkDragButtonUp@2x.png in Resources */,
+				C754B4B316BACEEE0043ECBF /* kkPhotoIcon.png in Resources */,
+				C754B4B416BACEEE0043ECBF /* kkPhotoIcon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3663,6 +3684,7 @@
 				C79D9F7D16B9B06D00CA1A08 /* ELCAssetCell.m in Sources */,
 				C79D9F7F16B9B06D00CA1A08 /* ELCAssetTablePicker.m in Sources */,
 				C79D9F8116B9B06D00CA1A08 /* ELCImagePickerController.m in Sources */,
+				C7B2CB8B16C170CA00731B63 /* JDDroppableView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

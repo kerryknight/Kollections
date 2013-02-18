@@ -10,15 +10,15 @@
 
 @interface ELCAlbumPickerController : UITableViewController {
 	
-	NSMutableArray *assetGroups;
 	NSOperationQueue *queue;
-	id parent;
-    
     ALAssetsLibrary *library;
 }
 
 @property (nonatomic, strong) id parent;
 @property (nonatomic, strong) NSMutableArray *assetGroups;
+@property (nonatomic, strong) UIView *mainView;
+@property (nonatomic, strong) UIView *mainTableView;
+@property (nonatomic, strong) NSArray *dropTargets;
 
 -(void)selectedAssets:(NSArray*)_assets;
 
