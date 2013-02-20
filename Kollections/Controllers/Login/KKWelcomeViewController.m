@@ -33,7 +33,7 @@
     /**************************************************************************************************/
     //HERE IS WHERE I COULD CHECK TO SEE IF THE USER HAS EVER OPENED THE APP AND SHOW A WALKTHROUGH
     //TUTORIAL PRIOR TO GETTING THEM TO LOG IN; I SHOULD ALLOW THEM TO SKIP IT AND GO STRAIGHT TO THE
-    //LOGIN OR SIGN-UP VIEW CONTROLLER FROM THIS TOO  //UPDATE
+    //LOGIN OR SIGN-UP VIEW CONTROLLER FROM THIS TOO  //TODO:
     /**************************************************************************************************/
     
     
@@ -84,7 +84,7 @@
             [request startWithCompletionHandler:nil];
         }
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
-       //we're logged in with Twitter //UPDATE
+       //we're logged in with Twitter //TODO:
     } */
     else {
         //we're logged with via a Parse account so set the displayName

@@ -233,7 +233,9 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
         [[KKCache sharedCache] incrementCommentCountForPhoto:self.photo];
         
         // Show HUD view
-        [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
+        hud.color = kMint4;
+        [hud setDimBackground:YES];
         
         // If more than 5 seconds pass since we post a comment, stop waiting for the server to respond
         NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(handleCommentTimeout:) userInfo:[NSDictionary dictionaryWithObject:comment forKey:@"comment"] repeats:NO];

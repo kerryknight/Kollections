@@ -14,6 +14,8 @@
 + (BOOL)processLocalProfilePicture:(UIImage *)profileImage;
 + (void)processFacebookProfilePictureData:(NSData *)newProfilePictureData;
 
++ (void)uploadPhoto:(UIImage*)image forKollectionSubject:(PFObject*)subject block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
+
 + (BOOL)userHasValidFacebookData:(PFUser *)user;
 + (BOOL)userHasProfilePictures:(PFUser *)user;
 

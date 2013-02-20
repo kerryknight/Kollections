@@ -67,9 +67,9 @@
 //	if (isInTableView == YES) {
 //        NSLog(@"hereE");
 //        
-////        id appDelegate = [[UIApplication sharedApplication] delegate];
-////        UIWindow *window = [appDelegate window];
-//        
+//        id appDelegate = [[UIApplication sharedApplication] delegate];
+//        UIWindow *window = [appDelegate window];
+//
 //		CGPoint newLoc = CGPointZero;
 //        newLoc = [self.superview convertPoint:self.center toView:self.mainView];
 //        

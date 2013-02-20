@@ -152,16 +152,17 @@
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         // user has logged in - we need to fetch all of their Facebook data before we let them in if they logged in with FB
         if (![self shouldProceedToMainInterface:user]) {
-            self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view animated:YES];
-            [self.hud setLabelText:@"Loading"];
+            self.hud = [MBProgressHUD showHUDAddedTo:self.navController.presentedViewController.view  animated:YES];
+            self.hud.color = kMint4;
             [self.hud setDimBackground:YES];
+            [self.hud setLabelText:@"Loading"];
         }
         //we're logged in with Facebook so request the user's name and pic data
         PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture"];
         [request setDelegate:self];
         [request startWithCompletionHandler:NULL];
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
-       //we're logged in with Twitter //UPDATE
+       //we're logged in with Twitter //TODO:
        NSLog(@"logged into twitter, now retrieve twitter name and picture");
     } */else {
         //we're logged with via a Parse account so dismiss the overlay
@@ -272,7 +273,7 @@
     self.myProfileViewController = [[KKAccountViewController alloc] init];
     
     //I'LL NEED TO USE THESE COMMENTED OUT PARTS TO INITIALIZE MY TABLE STYLES ONCE I GET THAT FAR
-    //INSTEAD OF USING THE ABOVE INITS LIKE I AM TO JUST GET THINGS UP AND RUNNING  //UPDATE
+    //INSTEAD OF USING THE ABOVE INITS LIKE I AM TO JUST GET THINGS UP AND RUNNING  //TODO:
     self.homeViewController = [[KKHomeViewController alloc] initWithStyle:UITableViewStylePlain];
     //    [self.homeViewController setFirstLaunch:firstLaunch];
 //    self.activityViewController = [[KKActivityFeedViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -340,7 +341,7 @@
         NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
         [NSURLConnection connectionWithRequest:profilePictureURLRequest delegate:self];
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
-       //we're logged in with Twitter //UPDATE
+       //we're logged in with Twitter //TODO:
     }*/ else {
            //we're logged with via a Parse account
     }
@@ -442,11 +443,12 @@
             if (!error) {
                 [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:NO];
                 if (kollectionFriends.count > 0) {
-                    self.hud = [MBProgressHUD showHUDAddedTo:self.homeViewController.view animated:NO];
+                    self.hud = [MBProgressHUD showHUDAddedTo:self.homeViewController.view  animated:YES];
+                    self.hud.color = kMint4;
                     [self.hud setDimBackground:YES];
                     [self.hud setLabelText:@"Following Friends"];
                 } else {
-                    //                    [self.homeViewController loadObjects]; //UPDATE
+                    //                    [self.homeViewController loadObjects]; //TODO:
                 }
             }
         }

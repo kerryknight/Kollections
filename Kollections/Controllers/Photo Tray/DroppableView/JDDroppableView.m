@@ -7,12 +7,12 @@
 //
 
 #import "JDDroppableView.h"
+#import "NSMutableArray+AddOns.h"
 
 
 #define DROPPABLEVIEW_ANIMATION_DURATION 0.33
 
 @interface JDDroppableView ()
-@property (nonatomic, strong) NSMutableArray *dropTargets;
 @property (nonatomic, weak) UIView *activeDropTarget;
 @property (nonatomic, weak) UIView *outerView;
 @property (nonatomic, weak) UIScrollView *scrollView;
@@ -43,7 +43,7 @@
 	self = [super init];
 	if (self != nil) {
         [self commonInit];
-        [self addDropTarget:target];
+        [self addDropTarget:target forIndexPath:nil];
 	}
 	return self;
 }
@@ -87,8 +87,8 @@
 
 #pragma mark target managment
 
-- (void)addDropTarget:(UIView*)target {
-    NSLog(@"%s", __FUNCTION__);
+- (void)addDropTarget:(UIView*)target forIndexPath:(NSIndexPath*)indexPath {
+//    NSLog(@"%s", __FUNCTION__);
     // lazy initialization
     if (!self.dropTargets) {
         self.dropTargets = [NSMutableArray array];
@@ -96,7 +96,11 @@
     
     // add target
     if ([target isKindOfClass:[UIView class]]) {
-        [self.dropTargets addObject:target];
+        [self.dropTargets addUniqueObject:target];
+    }
+    
+    if (indexPath) {
+        self.activeIndexPath = indexPath;
     }
 }
 
@@ -149,7 +153,7 @@
     if (self.dropTargets.count > 0) {
         for (UIView *dropTarget in self.dropTargets) {
             CGRect intersect = CGRectIntersection(self.frame, dropTarget.frame);
-            BOOL didHitTarget = intersect.size.width > 10 || intersect.size.height > 10;
+            BOOL didHitTarget = intersect.size.width > 50 || intersect.size.height > 50;
             
             // target was hit
             if (didHitTarget) {
@@ -196,14 +200,14 @@
 //    NSLog(@"%s", __FUNCTION__);
     // inform delegate
     if([self.delegate respondsToSelector: @selector(droppableViewEndedDragging:onTarget:)]) {
-        [self.delegate droppableViewEndedDragging: self onTarget:self.activeDropTarget];
+        [self.delegate droppableViewEndedDragging:self onTarget:self.activeDropTarget];
     }
 	
     // check target drop
     BOOL shouldAnimateBack = YES;
     if (self.activeDropTarget != nil) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(shouldAnimateDroppableViewBack:wasDroppedOnTarget:)]) {
-            shouldAnimateBack = [self.delegate shouldAnimateDroppableViewBack:self wasDroppedOnTarget:self.activeDropTarget];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(shouldAnimateDroppableViewBack:wasDroppedOnTarget:forIndexPath:)]) {
+            shouldAnimateBack = [self.delegate shouldAnimateDroppableViewBack:self wasDroppedOnTarget:self.activeDropTarget forIndexPath:self.activeIndexPath];
         }
     }
 

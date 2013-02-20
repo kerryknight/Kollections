@@ -79,7 +79,10 @@
 //    NSLog(@"%s", __FUNCTION__);
     
     //show a hud in case it takes awhile to process photo
-    [MBProgressHUD showHUDAddedTo:self.view.superview animated:NO];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
+    hud.color = kMint4;
+    [hud setDimBackground:YES];
+    
     [self doneAction:sender];
 }
 

@@ -48,6 +48,7 @@ FUTURE
 - Add ability to make Kollections location-based and only accept submissions from within a certain radius of
   a certain map coordinate
 - Fix photo submissions so a photo will drag immediately on touch instead of requiring a 2nd touch to drag
+- Fix ability to touch and drag photo tray open in relation to creating drop targets correctly for photo submission (dragging itself works fine, just not drop target frames)
   
 __________________________________________________________________  
 3RD PARTIES USED

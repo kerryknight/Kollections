@@ -239,6 +239,93 @@
     return YES;
 }
 
+#pragma mark - Generic Photo Upload
++ (void)uploadPhoto:(UIImage*)image forKollectionSubject:(PFObject*)subject block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    //if we don't have image data and it's not a profile or kollection pic, show upload error
+    if (!image) {
+        
+        //knightka replaced a regular alert view with our custom subclass
+        BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't upload your photo. Please try again" message:nil];
+        [alert setCancelButtonWithTitle:@"Dismiss" block:nil];
+        [alert show];
+        
+        return;
+    }
+    
+    //size images appropriately
+    UIImage *resizedImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(640.0f, 427.0f) interpolationQuality:kCGInterpolationHigh];
+    UIImage *thumbnailImage = [image resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(270.0f, 180.0f) interpolationQuality:kCGInterpolationDefault];
+    
+    // JPEG to decrease file size and enable faster uploads & downloads
+    // Get an NSData representation of our images. We use JPEG for the larger image
+    // for better compression and PNG for the thumbnail to keep the corner radius transparency
+    NSData *imageData = UIImageJPEGRepresentation(resizedImage, 0.8f);
+    NSData *thumbnailImageData = UIImagePNGRepresentation(thumbnailImage);
+    
+    if (!imageData || !thumbnailImageData) {
+        return;
+    }
+    
+    //create our photo data files from our imageData
+    PFFile *photoFile = [PFFile fileWithData:imageData];
+    PFFile *thumbnailFile = [PFFile fileWithData:thumbnailImageData];
+    
+    // create a photo object
+    PFObject *photo = [PFObject objectWithClassName:kKKPhotoClassKey];
+    [photo setObject:[PFUser currentUser] forKey:kKKPhotoUserKey];
+    [photo setObject:photoFile forKey:kKKPhotoPictureKey];
+    [photo setObject:thumbnailFile forKey:kKKPhotoThumbnailKey];
+    [photo setObject:subject[kKKPhotoKollectionKey] forKey:kKKPhotoKollectionKey];//this will be the only object in our passed-in subject if we don't have any subjects for this kollection
+    
+    //check if we set a Title for our subject; if we didn't, we're submitting a photo for a kollection without any subjects
+    //in that case, we won't set our subject pointer; otherwise, we'll set our passed in subject as the object point
+    if (subject[kKKSubjectTitleKey]) {
+        [photo setObject:subject forKey:kKKPhotoSubjectKey];
+    }
+    
+    // photos are public, but may only be modified by the user who uploaded them
+    NSLog(@"***** PHOTO ACCESS SHOULD MATCH THE ACCESS OF THE KOLLECTION'S SUBJECT! ******");
+    PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
+    [photoACL setPublicReadAccess:YES];
+    photo.ACL = photoACL;
+    
+    UIBackgroundTaskIdentifier *fileUploadBackgroundTaskId = UIBackgroundTaskInvalid;
+    // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
+    fileUploadBackgroundTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+        [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
+    }];
+    
+    // save
+    [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        
+        if (succeeded) {
+            NSLog(@"Photo uploaded");
+            
+            if (completionBlock) {
+                completionBlock(YES,nil);
+            }
+            
+            // Add the photo to the local cache
+            [[KKCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
+            
+            // Send a notification. The main timeline will refresh itself when caught
+            [[NSNotificationCenter defaultCenter] postNotificationName:KKTabBarControllerDidFinishEditingPhotoNotification object:photo];
+            
+            NSLog(@"***** ALSO TELL OUR KOLLECTION VIEW TO RELOAD ITSELF NOW *****");
+        } else {
+            NSLog(@"Photo failed to save: %@", error);
+            
+            if (completionBlock) {
+                completionBlock(NO,error);
+            }
+        }
+        
+        // If we are currently in the background, suspend the app, otherwise
+        // cancel request for background processing.
+        [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
+    }];
+}
+
 #pragma mark - Facebook
 
 + (void)processFacebookProfilePictureData:(NSData *)newProfilePictureData {

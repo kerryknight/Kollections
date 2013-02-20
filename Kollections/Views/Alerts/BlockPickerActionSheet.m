@@ -64,7 +64,7 @@
             //we have a list to populate the picker with
             self.pickerList = choices;
         } else {
-            //UPDATE after working
+            //TODO: after working
             self.pickerList = [[@[
                                 @{@"title":@"Error: Try again",
                                 @"objectId":@"1"}] mutableCopy] autorelease];
@@ -121,7 +121,7 @@
     pickerTextLabel.opaque = NO;
     
     if (row > 0) {//keep the first row of pickerview blank to make sure user selects an actual entry
-        pickerTextLabel.text = [[self.pickerList objectAtIndex:(int)row - 1] objectForKey:kKKCategoryTitleKey];//UPDATE key if other lists passed in
+        pickerTextLabel.text = [[self.pickerList objectAtIndex:(int)row - 1] objectForKey:kKKCategoryTitleKey];//TODO: key if other lists passed in
     } else {
         pickerTextLabel.text = @"";
         pickerTextLabel.textColor = kGray3;

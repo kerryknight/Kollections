@@ -337,7 +337,7 @@
 //    NSLog(@"%s", __FUNCTION__);
     
     /*
-     //kak 19Jan2013 //UPDATE, use the compounding technique below to pull in subscribed kollections as well, not just user-created ones
+     //kak 19Jan2013 //TODO:, use the compounding technique below to pull in subscribed kollections as well, not just user-created ones
      // Query for the friends the current user is following
      PFQuery *followingActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
      [followingActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeFollow];

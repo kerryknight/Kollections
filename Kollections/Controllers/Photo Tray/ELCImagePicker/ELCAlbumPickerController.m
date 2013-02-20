@@ -165,7 +165,6 @@
 	picker.parent = self;
     picker.mainView = self.mainView;
     picker.mainTableView = self.mainTableView;
-    picker.dropTargets = self.dropTargets;
 
     //tell the picker what the title should be by getting the title from the cell we just touched
     // Get count

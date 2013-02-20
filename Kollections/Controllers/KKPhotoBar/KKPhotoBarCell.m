@@ -17,8 +17,6 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        
-        
         self.kb = [[KKPhotosBarViewController alloc] init];
         kb.view.frame = self.contentView.frame;
         [self.contentView addSubview:kb.view];

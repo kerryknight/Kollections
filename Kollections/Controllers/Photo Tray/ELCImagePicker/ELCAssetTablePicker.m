@@ -84,10 +84,10 @@
 
 - (NSArray*)assetsForIndexPath:(NSIndexPath*)_indexPath {
     
-	int index = (_indexPath.row*4);
-	int maxIndex = (_indexPath.row*4+3);
+	int index = ((_indexPath.row - 1)*4);//knightka subtract 1 since we aren't starting our table rows until after navigation header row at indexpath 0
+	int maxIndex = ((_indexPath.row - 1)*4+3);
     
-	// NSLog(@"Getting assets for %d to %d with array count %d", index, maxIndex, [assets count]);
+//	NSLog(@"Getting assets for %d to %d with array count %d", index, maxIndex, [self.elcAssets count]);
     
 	if(maxIndex < [self.elcAssets count]) {
         
@@ -186,7 +186,7 @@
 
 #pragma mark - ELCAssetDelegate
 -(void)photoTouchDown:(ELCAsset*)photo{
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     self.tableView.scrollEnabled = NO;
     

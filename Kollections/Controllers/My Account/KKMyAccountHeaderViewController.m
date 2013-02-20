@@ -41,7 +41,7 @@
     return self;
 }
 
-//UPDATE for testing Crittercism crash reporting; remove when ready
+//TODO: for testing Crittercism crash reporting; remove when ready
 -(IBAction) crashPressed:(id) sender {
     [NSException raise:NSInvalidArgumentException
                 format:@"Foo must not be nil"];

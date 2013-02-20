@@ -131,7 +131,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     if (self.shouldReloadOnAppear) {
         self.shouldReloadOnAppear = NO;
 //        [self loadObjects];
@@ -222,11 +222,13 @@
                             
                             //reload our table in case any data has changed
                             [self.tableView reloadData];
-                            
-                            //tell the parent view it can show the bottom photos tray bar now
-                            [self.delegate animatePhotoBarOn];
                         }
                     }];
+                }
+                
+                if (!error) {
+                    //tell the parent view it can show the bottom photos tray bar now
+                    [self.delegate animatePhotoBarOn];
                 }
                 
                 self.isNetworkBusy = NO;
@@ -406,8 +408,15 @@
             }
         }
         
+//        [self.delegate kollectionTableViewControllerAddedKollectionRowRect:cell.kb.collectionView];
+        
         return cell;
     }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+//    NSLog(@"%s", __FUNCTION__);
+    [self.delegate kollectionTableViewDidScroll];
 }
 
 - (UITableViewCell *)tableViewCellWithReuseIdentifier:(NSString *)identifier {
@@ -425,7 +434,7 @@
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
 - (void)didSelectPhotoBarItemAtIndex:(NSInteger)index{
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
 }
 
 #pragma mark - Custom Methods

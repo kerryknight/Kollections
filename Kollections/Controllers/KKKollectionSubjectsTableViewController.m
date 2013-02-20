@@ -380,7 +380,7 @@
             cell.koinsLabel.text = @"K: Default";
         }
         
-        //UPDATE for now, i'm not using custom payouts on a per subject basis, so hide the koin label
+        //TODO: for now, i'm not using custom payouts on a per subject basis, so hide the koin label
         cell.koinsLabel.hidden = YES;
         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -457,7 +457,7 @@
                 [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 [self.tableView reloadData];
                 
-                //UPDATE should we also delete photos that are associated with that subject? what are the implications of having those orphans?
+                //TODO: should we also delete photos that are associated with that subject? what are the implications of having those orphans?
                 //will user's stats remain the same? I don't want them to lose stats b/c their photo has already been accepted, regardless of if
                 //the subject still exists or not
             }];

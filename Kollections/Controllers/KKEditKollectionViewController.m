@@ -200,7 +200,8 @@
     [alert setDestructiveButtonWithTitle:@"Delete" block:^{
         //delete the kollection
         //show hud
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview animated:NO];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
+        hud.color = kMint4;
         [hud setDimBackground:YES];
         [hud setLabelText:@"Deleting Kollection"];
         

@@ -108,7 +108,9 @@
     [self dismissKeyboardAndResetTableContentInset];
     
     // Show HUD view
-    [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
+    hud.color = kMint4;
+    [hud setDimBackground:YES];
     
     //check if we've filled everything in
     BOOL infoIsGood = [self isRequiredInfoFilledIn];
@@ -125,7 +127,7 @@
         [self.kollection setObject:[PFUser currentUser] forKey:kKKKollectionUserKey];
         
 //        NSLog(@"should share to fb = %i", shouldShareNewKollectionToFacebook);
-        //UPDATE need to determine if public/private before setting ACL here
+        //TODO: need to determine if public/private before setting ACL here
         
         //set the ACL
         // kollections are public, but may only be modified by the user who uploaded them
@@ -492,7 +494,9 @@
     //put up a spinner to prevent further progress until our query is finished as we can't show the picker view until
     //we have our list of categories to show and we don't want the user doing anything else once they kick off the query
     // Show HUD view
-    [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
+    hud.color = kMint4;
+    [hud setDimBackground:YES];
     
     //create a mutable array to add the returned objects to
     NSMutableArray *categories = [NSMutableArray new];
@@ -676,7 +680,7 @@
     
     //Get label height
     NSString *labelLength = (NSString*)self.tableObjects[indexPath.row - 1][@"hint"];
-    NSString *entryLength = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];//UPDATE; this doesn't exist yet until pulled from parse
+    NSString *entryLength = (NSString*)self.tableObjects[indexPath.row - 1][@"response"];//TODO:; this doesn't exist yet until pulled from parse
     
     CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
     CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
@@ -1185,7 +1189,7 @@
             //do nothing
         }
         
-        //UPDATE and remove this when all cell type accounted for
+        //TODO: and remove this when all cell type accounted for
         static NSString *CellIdentifier = @"CellZ";
         
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];

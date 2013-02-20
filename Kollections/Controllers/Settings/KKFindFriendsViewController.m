@@ -413,8 +413,11 @@ static NSUInteger const kKKCellPhotoNumLabelTag = 5;
 }
 
 - (void)followAllFriendsButtonAction:(id)sender {
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
 
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow  animated:YES];
+    hud.color = kMint4;
+    [hud setDimBackground:YES];
+    
     self.followStatus = KKFindFriendsFollowingAll;
     [self configureUnfollowAllButton];
     
@@ -444,7 +447,9 @@ static NSUInteger const kKKCellPhotoNumLabelTag = 5;
 }
 
 - (void)unfollowAllFriendsButtonAction:(id)sender {
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow  animated:YES];
+    hud.color = kMint4;
+    [hud setDimBackground:YES];
 
     self.followStatus = KKFindFriendsFollowingNone;
     [self configureFollowAllButton];

@@ -74,6 +74,8 @@
     self.view.backgroundColor = [UIColor blackColor];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.color = kMint4;
+    [hud setDimBackground:YES];
     [self.view sendSubviewToBack:hud];
     
     self.photoBar.backgroundColor = [UIColor colorWithPatternImage:
@@ -358,7 +360,7 @@
 //    NSLog(@"%s", __FUNCTION__);
     [viewController.navigationItem setTitle:@"Photos"];
     
-    //UPDATE use custom buttons on the navigation bar with correct up/down states
+    //TODO: use custom buttons on the navigation bar with correct up/down states
     
 //    KKToolbarButton *rightButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemRightFrame isBackButton:NO andTitle:@""];
 //    [rightButton addTarget:self action:@selector(dismissView:) forControlEvents:UIControlEventTouchUpInside];
@@ -639,7 +641,9 @@
         
     } else {
         //we selected done to process and save the photo so show a hud
-        [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview animated:YES];
+        hud.color = kMint4;
+        [hud setDimBackground:YES];
         
         GPUImageOutput<GPUImageInput> *processUpTo;
         

@@ -175,6 +175,8 @@
         NSLog(@"is a regular non-profile or kollection cover photo");
     }
     
+    NSLog(@"****** SHOULDN'T BE ANY DIRECT UPLOADING WITHOUT ADDING TO A KOLLECTION AND/OR SUBJECT TOO *******");
+    
 //    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(640.0f, 427.0f) interpolationQuality:kCGInterpolationHigh];
     
