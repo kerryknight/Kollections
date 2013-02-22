@@ -293,7 +293,7 @@ NSString *const kGPUImageToneCurveFragmentShaderString = SHADER_STRING
 
 - (NSMutableArray *)splineCurve:(NSArray *)points
 {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     NSMutableArray *sdA = [[NSMutableArray alloc] initWithCapacity:0];
     sdA = [self secondDerivative:points];
     

@@ -52,6 +52,8 @@
         // The number of objects to show per page
         self.objectsPerPage = 10;//[self.subjectTitles count];
         
+        //TODO: Be sure to test performance/ui with more than 10 rows/subjects here
+        
         self.shouldReloadOnAppear = YES;
     }
     return self;
@@ -144,7 +146,8 @@
 //    NSLog(@"%s", __FUNCTION__);
     
     //don't show anything until objects are loaded
-    if (!objectsAreLoaded) {
+    //if objects are loaded but we don't have any subjects, just show 1 general section
+    if (!objectsAreLoaded || ![self.subjectList count]) {
         return 1;
     }
     
@@ -154,6 +157,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 //    NSLog(@"%s", __FUNCTION__);
+    
+    //don't show anything until objects are loaded
+    if (!objectsAreLoaded) {
+        return 0;
+    }
+    
     return 3;//1 for top row header w/label, 1 for main content view and 1 for bottom row graphic
 }
 
@@ -191,13 +200,16 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     if (!error) {
         if (!self.isNetworkBusy) {
             //load table rows
             self.subjectList = [self.objects mutableCopy];
+            
+            NSLog(@"need to make sure i add the generically created subject if one isn't created for a new kollection to this list");
+            NSLog(@"subject list = %@", self.subjectList);
             
             //tell our sublcass to update it's subject list in case we need to edit the kollection
             [self.delegate kollectionTableViewControllerDidLoadSubjects:[NSArray arrayWithArray:self.subjectList]];
@@ -208,6 +220,7 @@
             PFQuery *photoQuery = [PFQuery queryWithClassName:kKKPhotoClassKey];
             [photoQuery whereKey:kKKPhotoKollectionKey equalTo:self.kollection];
             photoQuery.cachePolicy = kPFCachePolicyNetworkElseCache;//always hit the network too
+            
             self.isNetworkBusy = YES;
             [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                 if(!error && [objects count]) {
@@ -215,38 +228,57 @@
                     self.allKollectionPhotos = [objects mutableCopy];
                     //now that we have our subjects and all our photos, group them together and reload our table rows
                     [self createSubjectsWithPhotosArrayWithCompletion:^(NSArray *objects) {
-                        if (objects) {
+                        if ([objects count]) {
+                            NSLog(@"set self.subjectsWithPhotos");
                             self.subjectsWithPhotos = [objects mutableCopy];
                             
-                            objectsAreLoaded = YES;
-                            
-                            //reload our table in case any data has changed
-                            [self.tableView reloadData];
+//                            //objects are loaded
+//                            objectsAreLoaded = YES;
+//                            
+//                            //reload our table in case any data has changed
+//                            [self.tableView reloadData];
                         }
                     }];
                 }
                 
-                if (!error) {
-                    //tell the parent view it can show the bottom photos tray bar now
-                    [self.delegate animatePhotoBarOn];
-                }
-                
+                //remove network activity indicators
                 self.isNetworkBusy = NO;
                 if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];//spinner
+                
+                if (!error) {
+                    //regardless of whether we have subjects or not, tell our tableview we've completed loading them
+                    //so it can refresh and reload itself, preparing it's rows accordingly
+                    objectsAreLoaded = YES;
+                    
+                    NSLog(@"reload table data2");
+                    //reload our table in case any data has changed
+                    [self.tableView reloadData];
+                    //tell the parent view it can show the bottom photos tray bar now
+                    [self.delegate animatePhotoBarOn];
+                } else {
+                    //error loading items
+                    [self addErrorLabel];
+                }
+                
             }];
         }
     } else {
         //error loading items
-        UILabel *errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, self.tableView.frame.size.width, 45)];
-        errorLabel.textAlignment = UITextAlignmentCenter;
-        errorLabel.textColor = kGray6;
-        errorLabel.backgroundColor = [UIColor clearColor];
-        errorLabel.tag = 999;
-        errorLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        errorLabel.numberOfLines = 2;
-        errorLabel.text = @"An error occurred loading this\nkollection. Please try again.";
-        [self.view addSubview:errorLabel];
+        [self addErrorLabel];
     }
+}
+
+- (void)addErrorLabel {
+    //error loading items
+    UILabel *errorLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 230, self.tableView.frame.size.width, 45)];
+    errorLabel.textAlignment = UITextAlignmentCenter;
+    errorLabel.textColor = kGray6;
+    errorLabel.backgroundColor = [UIColor clearColor];
+    errorLabel.tag = 999;
+    errorLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    errorLabel.numberOfLines = 2;
+    errorLabel.text = @"An error occurred loading this\nkollection. Please try again.";
+    [self.view addSubview:errorLabel];
 }
 
 - (PFQuery *)queryForTable {
@@ -300,11 +332,17 @@
     //extract our subject and photos dictionary object from our array
     //there will only be one for each index path row/section
     NSDictionary *subjectDictionary = (NSDictionary*)self.subjectsWithPhotos[indexPath.section];
-    NSString *title;
+    NSString *title = @"";
     
-    //there should only be 1 for this index path
-    for (NSString *key in [subjectDictionary allKeys]) {
-        title = key; //we'll use this for setting our photos array too for the collection view
+    if (subjectDictionary) {
+        //we have subjects
+        //there should only be 1 for this index path
+        for (NSString *key in [subjectDictionary allKeys]) {
+            title = key; //we'll use this for setting our photos array too for the collection view
+        }
+    } else {
+        //no subjects so just put the header text to the kollection's title
+        title = self.kollection[kKKKollectionTitleKey];
     }
     
     if (row == 0 && row == sectionRows - 1) {
@@ -342,6 +380,7 @@
             [headerLabel setShadowOffset:CGSizeMake( 0.0f, 1.0f)];
             [headerLabel setFont:[UIFont fontWithName:@"OriyaSangamMN-Bold" size:16]];
             [headerLabel setBackgroundColor:[UIColor clearColor]];
+            headerLabel.text = @"";
         }
         
         UILabel *headerLabel = (UILabel*)[cell.contentView viewWithTag:kHEADERLABELTAG];
@@ -445,29 +484,34 @@
     NSMutableArray *subjectsAndPhotosList = [[NSMutableArray alloc] initWithCapacity:0];
     
     //enumerate through our subject list; we'll make our subjects the keys for each dictionary in the array
-    for (PFObject *subject in self.subjectList) {
-        NSString *subjectTitle = subject[kKKSubjectTitleKey];
-        NSString *subjectID = subject.objectId;
-        
-        //this array will keep each subjects photos; we'll put it in our final NSDictionary for each subject
-        NSMutableArray *subjectPhotos = [[NSMutableArray alloc] initWithCapacity:0];
-        //for each subject in our list, pull out all the photos from our photo list that have a subject pointer matching that subject
-        for (PFObject *photo in self.allKollectionPhotos) {
-            PFObject *photoSubject = photo[kKKPhotoSubjectKey];
-            NSString *photoSubjectID = photoSubject.objectId;
+    //check if we have subjects first; if we don't just use the kollection's title in the subject's place
+    
+    if ([self.subjectList count]) {
+        //we have subjects
+        for (PFObject *subject in self.subjectList) {
+            NSString *subjectTitle = subject[kKKSubjectTitleKey];
+            NSString *subjectID = subject.objectId;
             
-            if ([photoSubjectID isEqualToString:subjectID]) {
-                //our IDs match add the photo to our photos array
-                [subjectPhotos addObject:photo];
+            //this array will keep each subjects photos; we'll put it in our final NSDictionary for each subject
+            NSMutableArray *subjectPhotos = [[NSMutableArray alloc] initWithCapacity:0];
+            //for each subject in our list, pull out all the photos from our photo list that have a subject pointer matching that subject
+            for (PFObject *photo in self.allKollectionPhotos) {
+                PFObject *photoSubject = photo[kKKPhotoSubjectKey];
+                NSString *photoSubjectID = photoSubject.objectId;
+                
+                if ([photoSubjectID isEqualToString:subjectID]) {
+                    //our IDs match add the photo to our photos array
+                    [subjectPhotos addObject:photo];
+                }
             }
+            
+            //once we've gone through all the photos, create an NSDictionary with the subject title and the photos
+            NSDictionary *subjectWithPhotos = @{subjectTitle:subjectPhotos};
+            
+            //add it to our full array
+            [subjectsAndPhotosList addObject:subjectWithPhotos];
         }
-        
-        //once we've gone through all the photos, create an NSDictionary with the subject title and the photos
-        NSDictionary *subjectWithPhotos = @{subjectTitle:subjectPhotos};
-        
-        //add it to our full array
-        [subjectsAndPhotosList addObject:subjectWithPhotos];
-    }
+    } 
     
     callback(subjectsAndPhotosList);
 }

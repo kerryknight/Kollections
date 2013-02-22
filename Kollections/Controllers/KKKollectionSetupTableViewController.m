@@ -261,7 +261,7 @@
 }
 
 - (void)insertDefaultSubjectForKollectionAndDismissViewWithInfo:(NSDictionary*)userInfo forNewKollection:(BOOL)yesOrNo {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     //first, determine which view we were editing, a new kollection or editing an existing one
     NSString *notificationToCall;
     
@@ -276,7 +276,7 @@
     //this default subject will be what all photos are submitted to initially
     //post notification with our kollection object in the userInfo dict
     PFObject *defaultSubject = [PFObject objectWithClassName:kKKSubjectClassKey];
-    defaultSubject[kKKSubjectTitleKey] = @"Photos";//default subject title
+    defaultSubject[kKKSubjectTitleKey] = self.kollection[kKKKollectionTitleKey];//default subject title
     defaultSubject[kKKSubjectKollectionKey] = self.kollection; //set kollection pointer
     [defaultSubject saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
@@ -359,7 +359,7 @@
 }
 
 - (void)loadCoverPhoto:(id)sender {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     
     KKSetupTablePhotoCell *cell;
     if (sender) {
@@ -402,6 +402,8 @@
                 [cell.contentView bringSubviewToFront:[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag]];
                 //also, change the down image of the profile button image so we darken the whole thing and don't show the down placeholder image
                 [cell.photoButton setBackgroundImage:[UIImage imageNamed:@"kkKollectionCoverPhotoOverlayButtonDown.png"] forState:UIControlEventTouchDown];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"tabBarControllerDismissParentViewController" object:nil];
             }];
         }
     } else {
@@ -497,13 +499,14 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
     hud.color = kMint4;
     [hud setDimBackground:YES];
+    [hud setLabelText:@"Loading Categories"];
     
     //create a mutable array to add the returned objects to
     NSMutableArray *categories = [NSMutableArray new];
     
     //create the query for the category list
     PFQuery *queryAllCategories = [PFQuery queryWithClassName:kKKCategoryClassKey];//get all rows in Category class
-    queryAllCategories.maxCacheAge = (60 * 60)/*1hr*/ * 24/*hrs/day*/ * 5/*days*/; //expire the cache in 5 days and requery
+    queryAllCategories.maxCacheAge = (60 * 60)/*1hr*/ * 24/*hrs/day*/ * 2/*days*/; //expire the cache in 2 days and requery
     [queryAllCategories orderByAscending:kKKCategoryTitleKey];
     [queryAllCategories setCachePolicy:kPFCachePolicyCacheElseNetwork];
     
@@ -591,7 +594,17 @@
 #pragma mark - Table view delegate
 - (void)dismissKeyboardAndResetTableContentInset{
     [self.view endEditing:YES];
-    self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
+    
+    //perform the animation
+    [UIView animateWithDuration:0.25
+                          delay:0.05
+                        options: UIViewAnimationCurveEaseOut
+                     animations:^{
+                         self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
+                     }
+                     completion:^(BOOL finished){
+                     }];
+    
 }
 
 - (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
@@ -608,6 +621,13 @@
     
     NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:correctedPoint];
     [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    
+    //adjust content inset so we can see the whole table even if keyboard is showing
+    UIEdgeInsets contentInsets = UIEdgeInsetsMake(0,
+                                                  0,
+                                                  160,
+                                                  0);
+    self.tableView.contentInset = contentInsets;
 }
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath {

@@ -121,12 +121,12 @@
     UIWindow *window = [appDelegate window];
     
     UILabel *instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (window.frame.size.height - 150), self.view.frame.size.width, 90)];
-    instructionLabel.text = @"Rotate and size your photo";
+    instructionLabel.text = @"Use two fingers to rotate and size your photo";
     [instructionLabel setTextColor:kCreme];
     instructionLabel.textAlignment = UITextAlignmentCenter;
     instructionLabel.lineBreakMode = UILineBreakModeWordWrap;
     instructionLabel.numberOfLines = 6;
-    [instructionLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:16]];
+    [instructionLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:15]];
     instructionLabel.backgroundColor = [UIColor clearColor];
     [self.view addSubview:instructionLabel];
 }

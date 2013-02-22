@@ -46,7 +46,7 @@
 		<key>datatype</key>
 		<integer>8</integer>
 		<key>hint</key>
-		<string>OPTIONAL; Think of subjects as kollection sub-headings; Example: Maybe you want your kollection to be used as a scavenger hunt; each subject could then be used as a clue </string>
+		<string>OPTIONAL; Think of subjects as kollection sub-headings; Example: Maybe you want your kollection to be used as a scavenger hunt; each subject could then be used as a clue. If you don&apos;t wish to create subjects, we&apos;ll use your kollection&apos;s title as a general one. </string>
 		<key>required</key>
 		<false/>
 	</dict>
