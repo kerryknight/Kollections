@@ -81,12 +81,18 @@ NSString *const kKKActivityFromUserKey    = @"fromUser";
 NSString *const kKKActivityToUserKey      = @"toUser";
 NSString *const kKKActivityContentKey     = @"content";
 NSString *const kKKActivityPhotoKey       = @"photo";
+NSString *const kKKActivityAwardKey       = @"award";
+NSString *const kKKActivityKollectionKey  = @"kollection";
 
 // Type values
 NSString *const kKKActivityTypeLike       = @"like";
 NSString *const kKKActivityTypeFollow     = @"follow";
 NSString *const kKKActivityTypeComment    = @"comment";
 NSString *const kKKActivityTypeJoined     = @"joined";
+NSString *const kKKActivityTypeSubmitted  = @"submitted";//submitted a photo
+NSString *const kKKActivityTypeAccepted   = @"accepted";//accepted a photo submission
+NSString *const kKKActivityTypeRejected   = @"rejected";//rejected a photo submission
+NSString *const kKKActivityTypeExpired    = @"expired";//didn't moderate photo in time so it was released
 
 #pragma mark - User Class
 // Field keys

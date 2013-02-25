@@ -36,6 +36,7 @@ typedef enum {
 @property (nonatomic, strong) UIView *photosTrayView;
 @property (nonatomic, strong) JDDroppableView *dropview;
 @property (nonatomic, strong) ELCAsset *photoToSubmit;
+@property (nonatomic, strong) UILabel *instructionLabel;
 
 @end
 
@@ -147,17 +148,8 @@ typedef enum {
 }
 
 #pragma mark - KKKollectionTableViewControllerDelegate
-- (void) kollectionTableViewControllerDidLoadSubjects:(NSArray*)subjects {
+- (void)kollectionTableViewControllerDidLoadSubjects:(NSArray*)subjects {
     self.subjectList = [subjects mutableCopy];
-}
-
-- (void)kollectionTableViewControllerAddedKollectionRowRect:(UIView*)kollectionView {
-//    NSLog(@"%s", __FUNCTION__);
-    
-//    //add all our target rows' rects
-//    [self.dropview addDropTarget:kollectionView];
-//    
-//    [self.dropview removeDropTarget:kollectionView];
 }
 
 - (void)animatePhotoBarOn {
@@ -201,7 +193,7 @@ typedef enum {
 //    [menuController setTargetRect:CGRectMake(location.x, location.y, 0, 0) inView:[gestureRecognizer view]];
 //    [menuController setMenuVisible:YES animated:YES];
 
-    //TODO: Get dropview dragging on FIRST touch; not subsequent second touch
+    //TODO: Get dropview dragging on FIRST touch; not on a subsequent second touch
     
     [self.dropview becomeFirstResponder];//doesn't appear to help first touch dragging
     
@@ -491,7 +483,16 @@ typedef enum {
 //                        NSLog(@"rowCenter %@ for indexpath = %@", NSStringFromCGPoint(rowCenter), index);
                         //it's a kollection row, is visible and should be able to be added to drop targets
                         KKPhotoBarCell *cell = (KKPhotoBarCell*)[self.tableView.tableView cellForRowAtIndexPath:index];
-                        [self.dropview addDropTarget:cell.kb.collectionView forIndexPath:index];
+                        //check if we have any existing photos in our collection view; if not, the collectionView doesn't get
+                        //added so we need to pass in our no photos label's frame
+                        if ([cell.kb.photos count]) {
+                            //pass in our collection view
+                            [self.dropview addDropTarget:cell.kb.collectionView forIndexPath:index];
+                        } else {
+                            //no photos, use our no photos label as the view
+                            [self.dropview addDropTarget:cell.noPhotosLabel forIndexPath:index];
+                        }
+                        
                     } 
                 }
             }
@@ -635,6 +636,9 @@ typedef enum {
     [self.view addSubview:self.photosTrayView];
     
     photoTrayPosition = PhotoTrayPositionClosed;//initialize tray as closed
+    
+    //add instruction label that displays when photo tray is opened
+    [self addInstructionLabel];
 }
 
 - (void)dragButtonPressed:(id)sender {
@@ -644,17 +648,20 @@ typedef enum {
     
     CGRect sliderScrollFrame = self.photosTrayView.frame;
     NSInteger position = photoTrayPosition;
+    BOOL shouldShowInstructionLabel = NO;
     
     if (photoTrayPosition == PhotoTrayPositionClosed) {
         //open fully
         sliderScrollFrame.origin.y -= 144;//329 overall for iphone 4s
         position = PhotoTrayPositionOpen;
+        shouldShowInstructionLabel = YES;
         [self.dragButton setTitle:@"Close" forState:UIControlStateNormal];
         
     } else if (photoTrayPosition == PhotoTrayPositionOpen){
         //close fully
         sliderScrollFrame.origin.y += 144;//474 overall for iphone 4s
         position = PhotoTrayPositionClosed;
+        shouldShowInstructionLabel = NO;
         [self.dragButton setTitle:@"Open" forState:UIControlStateNormal];
         
     } else if (photoTrayPosition == PhotoTrayPositionOffset) {
@@ -674,6 +681,7 @@ typedef enum {
                                            self.photosTrayView.frame.size.width,
                                            self.photosTrayView.frame.size.height);
             position = PhotoTrayPositionOpen;
+            shouldShowInstructionLabel = YES;
             [self.dragButton setTitle:@"Close" forState:UIControlStateNormal];
         } else {
             //animate closed
@@ -682,6 +690,7 @@ typedef enum {
                                            self.photosTrayView.frame.size.width,
                                            self.photosTrayView.frame.size.height);
             position = PhotoTrayPositionClosed;
+            shouldShowInstructionLabel = NO;
             [self.dragButton setTitle:@"Open" forState:UIControlStateNormal];
         }
     }
@@ -699,11 +708,18 @@ typedef enum {
                                                                        ((self.photosTrayView.frame.size.height - 30) - (self.photosTrayView.frame.origin.y - kPHOTO_TRAY_OPEN_Y)),
                                                                        0);
                          self.tableView.tableView.contentInset = contentInsets;
+                         
+                         //show or hide instruction label accordingly
+                         if (shouldShowInstructionLabel) {
+                             self.instructionLabel.alpha = 1.0f;
+                         } else {
+                             self.instructionLabel.alpha = 0.0f;
+                         }
                      }
                      completion:^(BOOL finished){
                          photoTrayPosition = position;
                          
-                         //reset our visible area and drop targets for photo submission only to kollection we can see in the view
+                         //reset our visible area and drop targets for photo submission only to the kollection row we can currently see in the view
                          [self resizeVisibleAreaIntersectionAndDropTargets];
                          [self.dragButton setNeedsDisplay];
                      }];
@@ -744,6 +760,19 @@ typedef enum {
     [self.editButton addTarget:self action:@selector(editButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController.navigationBar addSubview:self.editButton];
     
+}
+
+- (void)addInstructionLabel {
+    //error loading items
+    self.instructionLabel = [[UILabel alloc] initWithFrame:CGRectMake(4, 4, 145, 45)];
+    self.instructionLabel.textAlignment = UITextAlignmentLeft;
+    self.instructionLabel.textColor = kCreme;
+    [self.instructionLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:10]];
+    self.instructionLabel.backgroundColor = [UIColor clearColor];
+    self.instructionLabel.numberOfLines = 2;
+    self.instructionLabel.text = @"- Touch photo once to select\n- Touch photo again to drag";
+    self.instructionLabel.alpha = 0.0f; //hidden when tray is closed
+    [self.photosTrayView addSubview:self.instructionLabel];
 }
 
 - (void)didReceiveMemoryWarning

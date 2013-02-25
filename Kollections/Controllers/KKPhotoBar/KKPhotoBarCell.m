@@ -24,7 +24,7 @@
         self.noPhotosLabel = [[UILabel alloc] init];
         [self.noPhotosLabel setTextColor:kGray4];
         self.noPhotosLabel.textAlignment = UITextAlignmentCenter;
-        self.noPhotosLabel.frame = CGRectMake(15.0f, 20.0f, self.contentView.bounds.size.width - 20.0f, 80.0f);
+        self.noPhotosLabel.frame = CGRectMake(18.0f, 0.0f, self.contentView.bounds.size.width - 36.0f, 124.0f);
         self.noPhotosLabel.lineBreakMode = UILineBreakModeWordWrap;
         self.noPhotosLabel.numberOfLines = 5;
         [self.noPhotosLabel setFont:[UIFont fontWithName:@"OriyaSangamMN" size:14]];

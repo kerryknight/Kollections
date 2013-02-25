@@ -13,6 +13,7 @@
     
 }
 + (BOOL)saveProfileImageToParse:(UIImage*)profileImage;
++ (void)createPhotoSubmissionActivityInBackgroundForPhoto:(PFObject*)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 @end
 
 @implementation KKUtility
@@ -49,6 +50,7 @@
                 completionBlock(succeeded,error);
             }
             
+            //if the liker isn't liking his own photo, send a push notification to the user whose photo was just liked
             if (succeeded && ![[[photo objectForKey:kKKPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
                 NSString *privateChannelName = [[photo objectForKey:kKKPhotoUserKey] objectForKey:kKKUserPrivateChannelKey];
                 if (privateChannelName && privateChannelName.length != 0) {
@@ -312,6 +314,15 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:KKTabBarControllerDidFinishEditingPhotoNotification object:photo];
             
             NSLog(@"***** ALSO TELL OUR KOLLECTION VIEW TO RELOAD ITSELF NOW *****");
+            
+            //create a 'submitted' activity now as well
+            [KKUtility createPhotoSubmissionActivityInBackgroundForPhoto:photo block:^(BOOL succeeded, NSError *error) {
+                if (error) {
+                    //error creating submission activity activity
+                    alertMessage(@"Photo submission error: %@", [error localizedDescription]);
+                }
+            }];
+            
         } else {
             NSLog(@"Photo failed to save: %@", error);
             
@@ -475,7 +486,6 @@
     }
 }
 
-
 #pragma mark Push
 
 + (void)sendFollowingPushNotification:(PFUser *)user {
@@ -513,6 +523,59 @@
     return query;
 }
 
++ (void)createPhotoSubmissionActivityInBackgroundForPhoto:(PFObject*)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    
+    //we need to query for our kollection object to get the kollection's owner so we can set the toUser field
+    PFQuery *queryKollection = [PFQuery queryWithClassName:kKKKollectionClassKey];
+    PFObject *kollectionToQuery = (PFObject*)photo[kKKPhotoKollectionKey];
+    
+    [queryKollection getObjectInBackgroundWithId:kollectionToQuery.objectId block:^(PFObject *object, NSError *error) {
+        
+        if (object && !error) {
+            PFObject *kollection = object;
+            PFUser *photoUser = (PFUser*)[photo objectForKey:kKKPhotoUserKey];
+            PFUser *kollectionUser = (PFUser*)[kollection objectForKey:kKKKollectionUserKey];
+            
+            // proceed to creating new submitted activity
+            PFObject *submissionActivity = [PFObject objectWithClassName:kKKActivityClassKey];
+            [submissionActivity setObject:kKKActivityTypeSubmitted forKey:kKKActivityTypeKey];
+            [submissionActivity setObject:[PFUser currentUser] forKey:kKKActivityFromUserKey];
+            [submissionActivity setObject:[kollection objectForKey:kKKKollectionUserKey] forKey:kKKActivityToUserKey];
+            [submissionActivity setObject:photo forKey:kKKActivityPhotoKey];
+            [submissionActivity setObject:kollection forKey:kKKActivityKollectionKey];
+            
+            PFACL *submittedACL = [PFACL ACLWithUser:[PFUser currentUser]];
+            [submittedACL setPublicReadAccess:YES];
+            [submittedACL setWriteAccess:YES forUser:photoUser];//give write access to photo submitter
+            [submittedACL setWriteAccess:YES forUser:kollectionUser];//give write access to kollection owner
+            submissionActivity.ACL = submittedACL;
+            
+            [submissionActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (completionBlock) {
+                    completionBlock(succeeded,error);
+                }
+                
+                //if the submitter isn't submitting a photo to his own kollection, send a push notification to the user whose photo was just liked
+                if (succeeded && ![[[kollection objectForKey:kKKKollectionUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+                    NSString *privateChannelName = [[photo objectForKey:kKKPhotoUserKey] objectForKey:kKKUserPrivateChannelKey];
+                    if (privateChannelName && privateChannelName.length != 0) {
+                        NSDictionary *data = [NSDictionary dictionaryWithObjectsAndKeys:
+                                              [NSString stringWithFormat:@"%@ submitted a photo to one of your kollections.", [KKUtility firstNameForDisplayName:[[PFUser currentUser] objectForKey:kKKUserDisplayNameKey]]], kAPNSAlertKey,
+                                              kKKPushPayloadPayloadTypeActivityKey, kKKPushPayloadPayloadTypeKey,
+                                              kKKPushPayloadActivityLikeKey, kKKPushPayloadActivityTypeKey,
+                                              [[PFUser currentUser] objectId], kKKPushPayloadFromUserObjectIdKey,
+                                              [photo objectId], kKKPushPayloadPhotoObjectIdKey,
+                                              nil];
+                        PFPush *push = [[PFPush alloc] init];
+                        [push setChannel:privateChannelName];
+                        [push setData:data];
+                        [push sendPushInBackground];
+                    }
+                }
+            }];
+        }
+    }];
+}
 
 #pragma mark Shadow Rendering
 

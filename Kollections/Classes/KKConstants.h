@@ -106,10 +106,6 @@ extern NSString *const kKKKollectionDescriptionKey;
 extern NSString *const kKKKollectionCoverPhotoKey;
 extern NSString *const kKKKollectionCoverPhotoThumbnailKey;
 
-
-// Type values
-
-
 #pragma mark - PFObject Activity Class
 // Class key
 extern NSString *const kKKActivityClassKey;
@@ -120,12 +116,18 @@ extern NSString *const kKKActivityFromUserKey;
 extern NSString *const kKKActivityToUserKey;
 extern NSString *const kKKActivityContentKey;
 extern NSString *const kKKActivityPhotoKey;
+extern NSString *const kKKActivityAwardKey;
+extern NSString *const kKKActivityKollectionKey;
 
 // Type values
 extern NSString *const kKKActivityTypeLike;
 extern NSString *const kKKActivityTypeFollow;
 extern NSString *const kKKActivityTypeComment;
 extern NSString *const kKKActivityTypeJoined;
+extern NSString *const kKKActivityTypeSubmitted;//submitted a photo
+extern NSString *const kKKActivityTypeAccepted;//accepted a photo submission
+extern NSString *const kKKActivityTypeRejected;//rejected a photo submission
+extern NSString *const kKKActivityTypeExpired;//didn't moderate photo in time so it was released
 
 
 #pragma mark - PFObject User Class

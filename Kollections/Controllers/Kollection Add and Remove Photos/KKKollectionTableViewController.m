@@ -200,16 +200,13 @@
 
 #pragma mark - PFQueryTableViewController
 - (void)objectsDidLoad:(NSError *)error {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     [super objectsDidLoad:error];
     
     if (!error) {
         if (!self.isNetworkBusy) {
             //load table rows
             self.subjectList = [self.objects mutableCopy];
-            
-            NSLog(@"need to make sure i add the generically created subject if one isn't created for a new kollection to this list");
-            NSLog(@"subject list = %@", self.subjectList);
             
             //tell our sublcass to update it's subject list in case we need to edit the kollection
             [self.delegate kollectionTableViewControllerDidLoadSubjects:[NSArray arrayWithArray:self.subjectList]];
@@ -229,14 +226,9 @@
                     //now that we have our subjects and all our photos, group them together and reload our table rows
                     [self createSubjectsWithPhotosArrayWithCompletion:^(NSArray *objects) {
                         if ([objects count]) {
-                            NSLog(@"set self.subjectsWithPhotos");
+                            
                             self.subjectsWithPhotos = [objects mutableCopy];
                             
-//                            //objects are loaded
-//                            objectsAreLoaded = YES;
-//                            
-//                            //reload our table in case any data has changed
-//                            [self.tableView reloadData];
                         }
                     }];
                 }
@@ -250,7 +242,6 @@
                     //so it can refresh and reload itself, preparing it's rows accordingly
                     objectsAreLoaded = YES;
                     
-                    NSLog(@"reload table data2");
                     //reload our table in case any data has changed
                     [self.tableView reloadData];
                     //tell the parent view it can show the bottom photos tray bar now
@@ -446,8 +437,6 @@
                 cell.noPhotosLabel.hidden = NO;
             }
         }
-        
-//        [self.delegate kollectionTableViewControllerAddedKollectionRowRect:cell.kb.collectionView];
         
         return cell;
     }

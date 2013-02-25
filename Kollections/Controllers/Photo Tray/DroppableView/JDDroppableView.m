@@ -196,7 +196,7 @@
 }
 
 
-- (void) endDrag {
+- (void)endDrag {
 //    NSLog(@"%s", __FUNCTION__);
     // inform delegate
     if([self.delegate respondsToSelector: @selector(droppableViewEndedDragging:onTarget:)]) {
@@ -232,7 +232,7 @@
     }
 }
 
--(void)hide {
+- (void)hide {
     //this is called if we dismiss the current view or close/drag the photo tray view
     [UIView animateWithDuration:DROPPABLEVIEW_ANIMATION_DURATION animations:^{
         self.alpha = 0.0;
@@ -251,7 +251,7 @@
     }
 }
 
-- (void) changeSuperView {
+- (void)changeSuperView {
 //    NSLog(@"%s", __FUNCTION__);
     if (!self.scrollView) {
         [self.superview bringSubviewToFront: self];
