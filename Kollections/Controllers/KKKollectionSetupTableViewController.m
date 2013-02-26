@@ -111,6 +111,7 @@
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view.superview  animated:YES];
     hud.color = kMint4;
     [hud setDimBackground:YES];
+    [hud setLabelText:@"Saving Kollection"];
     
     //check if we've filled everything in
     BOOL infoIsGood = [self isRequiredInfoFilledIn];
@@ -127,12 +128,19 @@
         [self.kollection setObject:[PFUser currentUser] forKey:kKKKollectionUserKey];
         
 //        NSLog(@"should share to fb = %i", shouldShareNewKollectionToFacebook);
-        //TODO: need to determine if public/private before setting ACL here
         
         //set the ACL
-        // kollections are public, but may only be modified by the user who uploaded them
+        // kollections can be public, but may only be modified by the user who uploaded them
         PFACL *kollectionACL = [PFACL ACLWithUser:[PFUser currentUser]];
-        [kollectionACL setPublicReadAccess:YES];
+        //public read access should be based on the kollection's read access being public/private
+        BOOL isNotPublicallyReadable = (BOOL)self.kollection[kKKKollectionIsPrivateKey];
+        if (isNotPublicallyReadable) {
+            //private kollection
+            [kollectionACL setPublicReadAccess:NO];
+        } else {
+            //public kollection
+            [kollectionACL setPublicReadAccess:YES];
+        }
         self.kollection.ACL = kollectionACL;
     } else {
         //we're updating an existing kollection
@@ -214,6 +222,20 @@
                     //no subjects at creation of kollection so we need to create a default one for the user
                     [self insertDefaultSubjectForKollectionAndDismissViewWithInfo:userInfo forNewKollection:YES];
                 }
+                
+                //also, we need to insert a "created" activitity for our kollection
+                //TODO: Do I need to add kollection activity count to cache somewhere like here?
+                [KKUtility createKollectionCreationActivityInBackgroundForKollection:self.kollection block:^(BOOL succeeded, NSError *error) {
+                    if (error) {
+                        //there was an error, try one more time to create the activity entry
+                        [KKUtility createKollectionCreationActivityInBackgroundForKollection:self.kollection block:^(BOOL succeeded, NSError *error) {
+                            if (error) {
+                                NSLog(@"error creating kollection creation activity");
+                            }
+                        }];
+                    }
+                }];
+                
             } else {
                 //it's an existing kollection we're just editing
                 //save all our subjects at once in the background and post proper notification
@@ -876,7 +898,7 @@
             CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
             CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
             
-            CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
+            CGFloat footerHeight = MAX(labelSize.height + 18.0f, 18.0f); //57 is the size of the cell minus the label
             [cell.footnoteLabel setFrame:CGRectMake(cell.headerLabel.frame.origin.x, cell.numberField.frame.origin.y + cell.numberField.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
@@ -1150,7 +1172,7 @@
             CGSize constraint = CGSizeMake(kSETUP_TEXT_OBJECT_WIDTH, 20000.0f);
             CGSize labelSize = [labelLength sizeWithFont:kSetupFooterFont constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
             
-            CGFloat footerHeight = MAX(labelSize.height, 18.0f); //57 is the size of the cell minus the label
+            CGFloat footerHeight = MAX(labelSize.height + 18.0f, 18.0f); //57 is the size of the cell minus the label
             [cell.footnoteLabel setFrame:CGRectMake(cell.headerLabel.frame.origin.x, cell.segmentedControl.frame.origin.y + cell.segmentedControl.frame.size.height, kSETUP_TEXT_OBJECT_WIDTH, footerHeight)];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;

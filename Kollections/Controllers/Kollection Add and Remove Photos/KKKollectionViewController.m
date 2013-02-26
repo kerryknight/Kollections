@@ -519,7 +519,6 @@ typedef enum {
     } else {
         //there are no subjects so create a template one with our current kollection
         subject = [PFObject objectWithClassName:kKKSubjectClassKey];
-        [subject setObject:self.kollection forKey:kKKSubjectKollectionKey];
     }
     
     if (subject) {
@@ -534,6 +533,7 @@ typedef enum {
                 if (succeeded) {
                     hud.labelText = @"Submission Success!";
                     [hud hide:YES afterDelay:1.0];
+                    
                     //uploaded! now, tell our kollection view to reload itself
                     [self.tableView loadObjects];
                     

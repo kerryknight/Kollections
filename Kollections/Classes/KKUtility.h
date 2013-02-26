@@ -35,5 +35,5 @@
 + (void)addBottomDropShadowToNavigationBarForNavigationController:(UINavigationController *)navigationController;
 
 + (PFQuery *)queryForActivitiesOnPhoto:(PFObject *)photo cachePolicy:(PFCachePolicy)cachePolicy;
-
++ (void)createKollectionCreationActivityInBackgroundForKollection:(PFObject*)kollection block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 @end

@@ -194,7 +194,7 @@
 }
 
 - (void)showDeleteAlert:(id)sender {
-    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Are you sure?" message:@"Deleting a kollection is permanent and can't be reversed."];
+    BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Are you sure?" message:@"Deleting a kollection is permanent and can't be undone."];
     
     [alert setCancelButtonWithTitle:@"Cancel" block:nil];
     [alert setDestructiveButtonWithTitle:@"Delete" block:^{
@@ -214,7 +214,7 @@
                     [subject deleteEventually];
                 }
                 
-                //need to update our cache
+                //TODO:need to update our cache
             }
         }];
         
@@ -226,7 +226,54 @@
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
                 
-                //need to update our cache
+                //TODO:need to update our cache
+                
+                //now delete all activities associated with the kollection
+                PFQuery *kollectionActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+                [kollectionActivitiesQuery whereKey:kKKActivityKollectionKey equalTo:self.kollection];
+                //be sure we exclude any photo activities from the deletion query; we'll simply clear the photo activitie
+                //entries' kollection and subject pointers instead so we dont' have re-upload the same files to submit elsewhere
+                [kollectionActivitiesQuery whereKey:kKKActivityTypeKey notEqualTo:kKKActivityTypeSubmitted];
+                [kollectionActivitiesQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    if (!error) {
+                        int activityCount = [objects count];
+                        __block int i = 0;
+                        
+                        for (PFObject *activity in objects) {
+                            //delete each activity eventually
+                            [activity deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                if (succeeded) {
+                                    //increment counter
+                                    i++;
+                                    
+                                    //once we've gone through all the available activities for the deleted kollection, update the kollection count
+                                    if (i == activityCount) {
+                                        //tell the My Account view to update the kollection count label
+                                        [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewRefreshKollectionCount" object:nil];
+                                    }
+                                }
+                            }];
+                            
+                        }
+                    }
+                }];
+                
+                //now clear kollection and subject pointers for any 'Submitted' activities, which would equate to photo uploads
+                PFQuery *photoActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+                [photoActivitiesQuery whereKey:kKKActivityKollectionKey equalTo:self.kollection];
+                [photoActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeSubmitted];
+                [photoActivitiesQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    if (!error) {
+                        for (PFObject *activity in objects) {
+                            //clear the kollection and subject references in our activity table
+                            [activity removeObjectForKey:kKKActivityKollectionKey];
+                            [activity removeObjectForKey:kKKActivitySubjectKey];
+                            //save each activity eventually
+                            [activity saveEventually];
+                        }
+                    }
+                }];
+                
             } else {
                 [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
             }

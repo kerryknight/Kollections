@@ -212,45 +212,70 @@
             [self.delegate kollectionTableViewControllerDidLoadSubjects:[NSArray arrayWithArray:self.subjectList]];
             
             self.shouldReloadOnAppear = NO;
-            //once we have our subjects, query Parse for all photos in our kollection
-            //once we have those, we'll be able to separate them into our collection views by their subject id pointers
-            PFQuery *photoQuery = [PFQuery queryWithClassName:kKKPhotoClassKey];
-            [photoQuery whereKey:kKKPhotoKollectionKey equalTo:self.kollection];
-            photoQuery.cachePolicy = kPFCachePolicyNetworkElseCache;//always hit the network too
+            //once we have our subjects, query Parse for all photos that are assigned to those subjects
             
-            self.isNetworkBusy = YES;
-            [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-                if(!error && [objects count]) {
-                    //populate our main photo array with all our kollection's photos
-                    self.allKollectionPhotos = [objects mutableCopy];
-                    //now that we have our subjects and all our photos, group them together and reload our table rows
-                    [self createSubjectsWithPhotosArrayWithCompletion:^(NSArray *objects) {
-                        if ([objects count]) {
-                            
-                            self.subjectsWithPhotos = [objects mutableCopy];
-                            
+            // Query for the PhotoSubject entries matching our subjectList object IDs
+            PFQuery *photosBySubjectQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+            [photosBySubjectQuery whereKey:kKKActivitySubjectKey containedIn:self.subjectList];
+            
+            [photosBySubjectQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                if (error) {
+                    //error
+                } else {
+                    //returned object will be all activities with a subject field pointer contained in our subjectList
+                    //now query for a photo objects themselves
+                    NSMutableArray *photoIDs = [NSMutableArray new];
+                    
+                    //loop through our objects to extract our photo object ID pointers
+                    for (PFObject *activity in objects) {
+                        PFObject *photo = (PFObject*)activity[kKKActivityPhotoKey];
+                        NSString *objID = photo.objectId;
+                        [photoIDs addObject:objID];
+                    }
+                    
+                    PFQuery *photoQuery = [PFQuery queryWithClassName:kKKPhotoClassKey];
+                    [photoQuery whereKey:@"objectId" containedIn:photoIDs];
+                    [photoQuery orderByDescending:@"createdAt"];
+                    //once we have those, we'll be able to separate them into our collection views by their subject id pointers
+                    photoQuery.cachePolicy = kPFCachePolicyNetworkElseCache;//always hit the network too
+                    
+                    self.isNetworkBusy = YES;
+                    [photoQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                        
+                        if(!error) {
+                            //populate our main photo array with all our kollection's photos
+                            self.allKollectionPhotos = [objects mutableCopy];
+                            //now that we have our subjects and all our photos, group them together and reload our table rows
+                            [self createSubjectsWithPhotosArrayWithCompletion:^(NSArray *objects) {
+                                if ([objects count]) {
+                                    self.subjectsWithPhotos = [objects mutableCopy];
+                                    
+                                    //reload our table in case any data has changed
+                                    [self.tableView reloadData];
+                                }
+                            }];
                         }
+                        
+                        //remove network activity indicators
+                        self.isNetworkBusy = NO;
+                        if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];//spinner
+                        
+                        if (!error) {
+                            //regardless of whether we have subjects or not, tell our tableview we've completed loading them
+                            //so it can refresh and reload itself, preparing it's rows accordingly
+                            objectsAreLoaded = YES;
+                            
+                            //reload our table in case any data has changed
+                            [self.tableView reloadData];
+                            //tell the parent view it can show the bottom photos tray bar now
+                            [self.delegate animatePhotoBarOn];
+                        } else {
+                            //error loading items
+                            [self addErrorLabel];
+                        }
+                        
                     }];
                 }
-                
-                //remove network activity indicators
-                self.isNetworkBusy = NO;
-                if ([self.view viewWithTag:999]) [[self.view viewWithTag:999] removeFromSuperview];//spinner
-                
-                if (!error) {
-                    //regardless of whether we have subjects or not, tell our tableview we've completed loading them
-                    //so it can refresh and reload itself, preparing it's rows accordingly
-                    objectsAreLoaded = YES;
-                    
-                    //reload our table in case any data has changed
-                    [self.tableView reloadData];
-                    //tell the parent view it can show the bottom photos tray bar now
-                    [self.delegate animatePhotoBarOn];
-                } else {
-                    //error loading items
-                    [self addErrorLabel];
-                }
-                
             }];
         }
     } else {
@@ -467,7 +492,7 @@
 
 #pragma mark - Custom Methods
 - (void)createSubjectsWithPhotosArrayWithCompletion:(KKObjectsLoadedCallback)callback {
-//    NSLog(@"%s", __FUNCTION__);
+    NSLog(@"%s", __FUNCTION__);
     //create a mutable array of nsdictionaries
     //the keys for each dictionary will be the subject title and the objects will be the array of photos for each subject
     NSMutableArray *subjectsAndPhotosList = [[NSMutableArray alloc] initWithCapacity:0];
@@ -476,36 +501,61 @@
     //check if we have subjects first; if we don't just use the kollection's title in the subject's place
     
     if ([self.subjectList count]) {
-        //we have subjects
-        for (PFObject *subject in self.subjectList) {
-            NSString *subjectTitle = subject[kKKSubjectTitleKey];
-            NSString *subjectID = subject.objectId;
-            
-            //this array will keep each subjects photos; we'll put it in our final NSDictionary for each subject
-            NSMutableArray *subjectPhotos = [[NSMutableArray alloc] initWithCapacity:0];
-            //for each subject in our list, pull out all the photos from our photo list that have a subject pointer matching that subject
-            for (PFObject *photo in self.allKollectionPhotos) {
-                PFObject *photoSubject = photo[kKKPhotoSubjectKey];
-                NSString *photoSubjectID = photoSubject.objectId;
-                
-                if ([photoSubjectID isEqualToString:subjectID]) {
-                    //our IDs match add the photo to our photos array
-                    [subjectPhotos addObject:photo];
+        
+        //once we have our subjectIds, query the Activity table for all submission activities that are for our kollection
+        PFQuery *activityQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+        [activityQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeSubmitted];
+        [activityQuery whereKey:kKKActivityKollectionKey equalTo:self.kollection];
+        
+        [activityQuery findObjectsInBackgroundWithBlock:^(NSArray *activityObjects, NSError *error) {
+            if (error) {
+                //error
+            } else {
+                //we have subjects
+                for (PFObject *subject in self.subjectList) {
+                    NSString *subjectTitle = subject[kKKSubjectTitleKey];
+                    NSString *subjectID = subject.objectId;
+                    
+                    //this array will keep each subjects photos; we'll put it in our final NSDictionary for each subject
+                    NSMutableArray *subjectPhotos = [[NSMutableArray alloc] initWithCapacity:0];
+                    
+                    for (PFObject *photo in self.allKollectionPhotos){
+                        //all submitted activity objects for our designed subject list
+                        //loop through all activity objects
+                        for (PFObject *activity in activityObjects){
+                            //if our activity's photo matches our photo object, get the subject object for that row
+                            //we need this because our Activity table is the only way we relate a photo to a subject
+                            PFObject *activityPhoto = (PFObject*)activity[kKKActivityPhotoKey];
+                            NSString *activityPhotoID = activityPhoto.objectId;
+                            
+                            if ([activityPhotoID isEqualToString:photo.objectId]) {
+                                //they ids are equal so get the subject id for this activity row
+                                PFObject *activitySubject = (PFObject*)activity[kKKActivitySubjectKey];
+                                NSString *activitySubjectID = activitySubject.objectId;
+                                
+                                if ([activitySubjectID isEqualToString:subjectID]) {
+                                    //our IDs match add the photo to our photos array
+                                    [subjectPhotos addObject:photo];
+                                } 
+                            } 
+                        }
+                    }
+                    
+                    //once we've gone through all the photos, create an NSDictionary with the subject title and the photos
+                    NSDictionary *subjectWithPhotos = @{subjectTitle:subjectPhotos};
+                    
+                    //add it to our full array
+                    [subjectsAndPhotosList addObject:subjectWithPhotos];
                 }
+                
+                callback(subjectsAndPhotosList);
             }
-            
-            //once we've gone through all the photos, create an NSDictionary with the subject title and the photos
-            NSDictionary *subjectWithPhotos = @{subjectTitle:subjectPhotos};
-            
-            //add it to our full array
-            [subjectsAndPhotosList addObject:subjectWithPhotos];
-        }
-    } 
-    
-    callback(subjectsAndPhotosList);
+        }];
+    }
 }
 
 - (void) reloadCollectionViewTableRows {
+    NSLog(@"%s", __FUNCTION__);
     //create index paths for each of our photo collection views; these are always on row 1 of each section
     NSMutableArray *indexPathArray = [[NSMutableArray alloc] initWithCapacity:[self.subjectsWithPhotos count]];
     for (int i = 0; i < [self.subjectsWithPhotos count]; i++) {

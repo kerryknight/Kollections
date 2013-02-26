@@ -428,7 +428,7 @@
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     //delete the selected row and refresh the table
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         if ([self.subjects count] == 1) {
@@ -460,6 +460,23 @@
                 //TODO: should we also delete photos that are associated with that subject? what are the implications of having those orphans?
                 //will user's stats remain the same? I don't want them to lose stats b/c their photo has already been accepted, regardless of if
                 //the subject still exists or not
+                
+                //now clear subject pointers for any 'Submitted' activities, which would equate to photo uploads
+                PFQuery *photoActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+                [photoActivitiesQuery whereKey:kKKActivitySubjectKey equalTo:subjectToDelete];
+                [photoActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeSubmitted];
+                [photoActivitiesQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+                    if (!error) {
+                        for (PFObject *activity in objects) {
+                            //clear the kollection and subject references in our activity table
+                            [activity removeObjectForKey:kKKActivityKollectionKey];
+                            [activity removeObjectForKey:kKKActivitySubjectKey];
+                            //save each activity eventually
+                            [activity saveEventually];
+                        }
+                    }
+                }];
+                
             }];
             
             [alert show];

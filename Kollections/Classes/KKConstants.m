@@ -83,12 +83,14 @@ NSString *const kKKActivityContentKey     = @"content";
 NSString *const kKKActivityPhotoKey       = @"photo";
 NSString *const kKKActivityAwardKey       = @"award";
 NSString *const kKKActivityKollectionKey  = @"kollection";
+NSString *const kKKActivitySubjectKey     = @"subject";
 
 // Type values
 NSString *const kKKActivityTypeLike       = @"like";
 NSString *const kKKActivityTypeFollow     = @"follow";
 NSString *const kKKActivityTypeComment    = @"comment";
 NSString *const kKKActivityTypeJoined     = @"joined";
+NSString *const kKKActivityTypeCreated    = @"created";//created a kollection
 NSString *const kKKActivityTypeSubmitted  = @"submitted";//submitted a photo
 NSString *const kKKActivityTypeAccepted   = @"accepted";//accepted a photo submission
 NSString *const kKKActivityTypeRejected   = @"rejected";//rejected a photo submission
@@ -115,8 +117,14 @@ NSString *const kKKPhotoPictureKey         = @"image";
 NSString *const kKKPhotoThumbnailKey       = @"thumbnail";
 NSString *const kKKPhotoUserKey            = @"user";
 NSString *const kKKPhotoOpenGraphIDKey     = @"fbOpenGraphID";
-NSString *const kKKPhotoKollectionKey      = @"kollection";
-NSString *const kKKPhotoSubjectKey         = @"subject";
+
+#pragma mark - PhotoSubject Class
+// Class key
+NSString *const kKKPhotoSubjectClassKey    = @"PhotoSubject";
+
+// Field keys
+NSString *const kKKPhotoSubjectPhotoKey    = @"photo";
+NSString *const kKKPhotoSubjectSubjectKey  = @"subject";
 
 #pragma mark - Category Class
 // Class key

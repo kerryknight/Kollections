@@ -19,9 +19,6 @@ TO DO APP
 - update the UI for adding comments below a photo
 - when creating a kollection, successfully share to FB if toggle turned on
 - create FB objects for sharing a new kollection
-- create compound query for returning all Subjects with a Kollection
-- load subjects into cell view and then subjects edit view
-- get kollection cover photos saving with 640 x 427 size
 
 __________________________________________________________________
 TO DO CLOUD CODE

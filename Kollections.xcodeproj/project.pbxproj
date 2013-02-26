@@ -2629,7 +2629,7 @@
 				C7BC60CA169775B1003C223B /* Buttons */,
 				C7B1CEF716783C8500BA628A /* Photo Details Views */,
 				C7B1CEFC16783C8500BA628A /* Timeline Views */,
-				C7B1CEFF16783C8500BA628A /* UITableViewCells */,
+				C7B1CEFF16783C8500BA628A /* Custom Table Cells */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2654,7 +2654,7 @@
 			path = "Timeline Views";
 			sourceTree = "<group>";
 		};
-		C7B1CEFF16783C8500BA628A /* UITableViewCells */ = {
+		C7B1CEFF16783C8500BA628A /* Custom Table Cells */ = {
 			isa = PBXGroup;
 			children = (
 				C734812B16A07818004AD6EB /* Data Entry Cells */,
@@ -2664,6 +2664,7 @@
 				C7B1CF0916783C8500BA628A /* KKPhotoCell.h */,
 				C7B1CF0A16783C8500BA628A /* KKPhotoCell.m */,
 			);
+			name = "Custom Table Cells";
 			path = UITableViewCells;
 			sourceTree = "<group>";
 		};

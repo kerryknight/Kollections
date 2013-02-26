@@ -224,14 +224,21 @@
     
     [self configureLogoutButton];
     
+    //get our activities so we can count them
+    [self queryForActivities];
+    
     //add notifications
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadProfilePhoto:) name:@"MyAccountViewLoadProfilePhoto" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshTable:) name:@"MyAccountViewRefreshTableByLoadingObjects" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queryForKollectionActivityCount) name:@"MyAccountViewRefreshKollectionCount" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(queryForSubmissionActivityCount) name:@"MyAccountViewRefreshSubmissionCount" object:nil];
 }
 
 - (void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewLoadProfilePhoto" object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewRefreshTableByLoadingObjects" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewRefreshKollectionCount" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"MyAccountViewRefreshSubmissionCount" object:nil];
 }
 
 #pragma mark - Slime Refresh delegate
@@ -256,6 +263,9 @@
 //    NSLog(@"%s", __FUNCTION__);
     
     [self loadObjects];
+    
+    //requery for activities so we get their counts too
+    [self queryForActivities];
 }
 
 #pragma mark - KKSideScrollToolBarViewControllerDelegate methods
@@ -319,9 +329,6 @@
     if (!error) {
         //once objects are loaded, separate them into their pertinant arrays
         [self separateReturnedObjectsIntoProperKollectionArrays];
-        
-        //also tell the UI to update itself
-        [self updateKollectionCountLabel];
     }
     
     //tell the table to end refresh in case we did it by hand
@@ -452,6 +459,131 @@
     }
     
     [self loadObjects];
+    
+    //requery to get our created kollection count too
+    [self queryForKollectionActivityCount];
+}
+
+#pragma mark - Custom Queries and Methods
+- (void)queryForActivities {
+    // Query for the friends the current user is following
+    PFQuery *followingActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+    [followingActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeFollow];
+    [followingActivitiesQuery whereKey:kKKActivityFromUserKey equalTo:[PFUser currentUser]];
+    
+    PFQuery *submissionActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+    [submissionActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeSubmitted];
+    [submissionActivitiesQuery whereKey:kKKActivityFromUserKey equalTo:[PFUser currentUser]];
+    
+    PFQuery *followerActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+    [followerActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeFollow];
+    [followerActivitiesQuery whereKey:kKKActivityToUserKey equalTo:[PFUser currentUser]];
+    
+    PFQuery *kollectionActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+    [kollectionActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeCreated];
+    [kollectionActivitiesQuery whereKey:kKKActivityToUserKey equalTo:[PFUser currentUser]];
+    
+    // We create a final compound query to get all these activities at once; we'll then pass off and enumerate into array to count them
+    // I do this to cut down on the number of queries instead of using the getCount... queries, which would be easier but waste API calls
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:followingActivitiesQuery, submissionActivitiesQuery, followerActivitiesQuery, kollectionActivitiesQuery, nil]];
+    query.cachePolicy = kPFCachePolicyNetworkElseCache;
+    
+    [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+        if (!error) {
+            //we have our objects, so now let's separate them into the 3 type we queried on and then count them
+            [self separateAndCountActivities:objects];
+        }
+    }];
+}
+
+- (void)separateAndCountActivities:(NSArray*)activities {
+    
+    NSMutableArray *followingActivities  = [NSMutableArray new];
+    NSMutableArray *followerActivities   = [NSMutableArray new];
+    NSMutableArray *submissionActivities = [NSMutableArray new];
+    NSMutableArray *kollectionActivities = [NSMutableArray new];
+    
+//    NSLog(@"activities count = %i", [activities count]);
+    
+    //TODO: Ensure our Follower/Following activities are separating correctly once we get some inserted
+    for (id activity in activities) {
+        if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeFollow] &&
+            [[activity objectForKey:kKKActivityFromUserKey] isEqual:[PFUser currentUser]]) {
+//            NSLog(@"following activity");
+            //it's a following activity so add to our following array
+            [followingActivities addObject:activity];
+        } else if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeFollow] &&
+                   [[activity objectForKey:kKKActivityToUserKey] isEqual:[PFUser currentUser]]) {
+//            NSLog(@"follower activity");
+            //it's a follower activity so add to our follower array
+            [followerActivities addObject:activity];
+        } else if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeSubmitted]) {
+//            NSLog(@"submission activity");
+            //it's a submission activity so add to our submission array
+            [submissionActivities addObject:activity];
+        } else if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeCreated]) {
+//            NSLog(@"kollection activity");
+            //it's a submission activity so add to our submission array
+            [kollectionActivities addObject:activity];
+        }
+    }
+    
+    //Once we've create all our arrays, update the pertinant count labels
+    if ([followingActivities count]) {
+        self.headerViewController.followingCountLabel.text = [NSString stringWithFormat:@"%i", [followingActivities count]];
+    } else {
+        self.headerViewController.followingCountLabel.text = @"000";
+    }
+    
+    if ([followerActivities count]) {
+        self.headerViewController.followerCountLabel.text = [NSString stringWithFormat:@"%i", [followerActivities count]];
+    } else {
+        self.headerViewController.followerCountLabel.text = @"000";
+    }
+    
+    if ([submissionActivities count]) {
+        self.headerViewController.submissionCountLabel.text = [NSString stringWithFormat:@"%i", [submissionActivities count]];
+    } else {
+        self.headerViewController.submissionCountLabel.text = @"000";
+    }
+    
+    if ([kollectionActivities count]) {
+        self.headerViewController.kollectionCountLabel.text = [NSString stringWithFormat:@"%i", [kollectionActivities count]];
+    } else {
+        self.headerViewController.kollectionCountLabel.text = @"000";
+    }
+}
+
+- (void)queryForSubmissionActivityCount {
+//    NSLog(@"%s", __FUNCTION__);
+    PFQuery *submissionActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+    [submissionActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeSubmitted];
+    [submissionActivitiesQuery whereKey:kKKActivityFromUserKey equalTo:[PFUser currentUser]];
+    submissionActivitiesQuery.cachePolicy = kPFCachePolicyNetworkOnly;
+    
+    [submissionActivitiesQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        if (number && !error) {
+            self.headerViewController.submissionCountLabel.text = [NSString stringWithFormat:@"%i", number];
+        } else {
+            self.headerViewController.submissionCountLabel.text = @"000";
+        }
+    }];
+}
+
+- (void)queryForKollectionActivityCount {
+    
+    PFQuery *kollectionActivitiesQuery = [PFQuery queryWithClassName:kKKActivityClassKey];
+    [kollectionActivitiesQuery whereKey:kKKActivityTypeKey equalTo:kKKActivityTypeCreated];
+    [kollectionActivitiesQuery whereKey:kKKActivityFromUserKey equalTo:[PFUser currentUser]];
+    kollectionActivitiesQuery.cachePolicy = kPFCachePolicyNetworkOnly;
+    
+    [kollectionActivitiesQuery countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
+        if (number && !error) {
+            self.headerViewController.kollectionCountLabel.text = [NSString stringWithFormat:@"%i", number];
+        } else {
+            self.headerViewController.kollectionCountLabel.text = @"000";
+        }
+    }];
 }
 
 #pragma mark - Custom Methods
@@ -487,14 +619,6 @@
     }
     
     [self.tableView reloadData];
-}
-
-- (void)updateKollectionCountLabel {
-    if ([self.objects count]) {
-       self.headerViewController.kollectionCountLabel.text = [NSString stringWithFormat:@"%i", [self.objects count]]; 
-    } else {
-        self.headerViewController.kollectionCountLabel.text = @"000";
-    }
 }
 
 - (void)loadProfilePhoto:(id)sender {

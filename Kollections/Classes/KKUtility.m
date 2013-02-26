@@ -13,7 +13,7 @@
     
 }
 + (BOOL)saveProfileImageToParse:(UIImage*)profileImage;
-+ (void)createPhotoSubmissionActivityInBackgroundForPhoto:(PFObject*)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
++ (void)createPhotoSubmissionActivityInBackgroundForPhoto:(PFObject*)photo forSubject:(PFObject*)subject block:(void (^)(BOOL succeeded, NSError *error))completionBlock;
 @end
 
 @implementation KKUtility
@@ -277,13 +277,6 @@
     [photo setObject:[PFUser currentUser] forKey:kKKPhotoUserKey];
     [photo setObject:photoFile forKey:kKKPhotoPictureKey];
     [photo setObject:thumbnailFile forKey:kKKPhotoThumbnailKey];
-    [photo setObject:subject[kKKPhotoKollectionKey] forKey:kKKPhotoKollectionKey];//this will be the only object in our passed-in subject if we don't have any subjects for this kollection
-    
-    //check if we set a Title for our subject; if we didn't, we're submitting a photo for a kollection without any subjects
-    //in that case, we won't set our subject pointer; otherwise, we'll set our passed in subject as the object point
-    if (subject[kKKSubjectTitleKey]) {
-        [photo setObject:subject forKey:kKKPhotoSubjectKey];
-    }
     
     // photos are public, but may only be modified by the user who uploaded them
     NSLog(@"***** PHOTO ACCESS SHOULD MATCH THE ACCESS OF THE KOLLECTION'S SUBJECT! ******");
@@ -303,23 +296,25 @@
         if (succeeded) {
             NSLog(@"Photo uploaded");
             
-            if (completionBlock) {
-                completionBlock(YES,nil);
-            }
-            
             // Add the photo to the local cache
             [[KKCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
             
             // Send a notification. The main timeline will refresh itself when caught
             [[NSNotificationCenter defaultCenter] postNotificationName:KKTabBarControllerDidFinishEditingPhotoNotification object:photo];
             
-            NSLog(@"***** ALSO TELL OUR KOLLECTION VIEW TO RELOAD ITSELF NOW *****");
-            
             //create a 'submitted' activity now as well
-            [KKUtility createPhotoSubmissionActivityInBackgroundForPhoto:photo block:^(BOOL succeeded, NSError *error) {
+            [KKUtility createPhotoSubmissionActivityInBackgroundForPhoto:photo forSubject:subject block:^(BOOL succeeded, NSError *error) {
                 if (error) {
                     //error creating submission activity activity
                     alertMessage(@"Photo submission error: %@", [error localizedDescription]);
+                } else {
+                    
+                    if (completionBlock) {
+                        completionBlock(YES,nil);
+                    }
+                    
+                    //tell the My Account view to update the submission count label
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewRefreshSubmissionCount" object:nil];
                 }
             }];
             
@@ -523,11 +518,11 @@
     return query;
 }
 
-+ (void)createPhotoSubmissionActivityInBackgroundForPhoto:(PFObject*)photo block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
++ (void)createPhotoSubmissionActivityInBackgroundForPhoto:(PFObject*)photo forSubject:(PFObject*)subject block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     
     //we need to query for our kollection object to get the kollection's owner so we can set the toUser field
     PFQuery *queryKollection = [PFQuery queryWithClassName:kKKKollectionClassKey];
-    PFObject *kollectionToQuery = (PFObject*)photo[kKKPhotoKollectionKey];
+    PFObject *kollectionToQuery = (PFObject*)subject[kKKSubjectKollectionKey];
     
     [queryKollection getObjectInBackgroundWithId:kollectionToQuery.objectId block:^(PFObject *object, NSError *error) {
         
@@ -543,6 +538,7 @@
             [submissionActivity setObject:[kollection objectForKey:kKKKollectionUserKey] forKey:kKKActivityToUserKey];
             [submissionActivity setObject:photo forKey:kKKActivityPhotoKey];
             [submissionActivity setObject:kollection forKey:kKKActivityKollectionKey];
+            [submissionActivity setObject:subject forKey:kKKActivitySubjectKey];
             
             PFACL *submittedACL = [PFACL ACLWithUser:[PFUser currentUser]];
             [submittedACL setPublicReadAccess:YES];
@@ -573,6 +569,37 @@
                     }
                 }
             }];
+        }
+    }];
+}
+
++ (void)createKollectionCreationActivityInBackgroundForKollection:(PFObject*)kollection block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
+    
+    // proceed to creating new submitted activity
+    PFObject *createdActivity = [PFObject objectWithClassName:kKKActivityClassKey];
+    [createdActivity setObject:kKKActivityTypeCreated forKey:kKKActivityTypeKey];
+    [createdActivity setObject:[PFUser currentUser] forKey:kKKActivityFromUserKey];
+    [createdActivity setObject:[PFUser currentUser] forKey:kKKActivityToUserKey];
+    [createdActivity setObject:kollection forKey:kKKActivityKollectionKey];
+    
+    PFACL *createdACL = [PFACL ACLWithUser:[PFUser currentUser]];
+    
+    //public read access should be based on the kollection's read access being public/private
+    BOOL isNotPublicallyReadable = (BOOL)kollection[kKKKollectionIsPrivateKey];
+    if (isNotPublicallyReadable) {
+        //private kollection
+        [createdACL setPublicReadAccess:NO];
+    } else {
+        //public kollection
+        [createdACL setPublicReadAccess:YES];
+    }
+    
+    [createdACL setWriteAccess:YES forUser:[PFUser currentUser]];
+    createdActivity.ACL = createdACL;
+    
+    [createdActivity saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (completionBlock) {
+            completionBlock(succeeded,error);
         }
     }];
 }
