@@ -135,7 +135,7 @@ NSString *const kGPUImageHoughAccumulationFragmentShaderString = SHADER_STRING
             minX = MIN(minX, normalizedXCoordinate);
             maxX = MAX(maxX, normalizedXCoordinate);
             
-//            NSLog(@"Parallel line coordinates: (%f, %f) - (%f, %f) - (%f, %f)", -1.0, -normalizedYCoordinate, 0.0, normalizedXCoordinate, 1.0, normalizedYCoordinate);
+//            DLog(@"Parallel line coordinates: (%f, %f) - (%f, %f) - (%f, %f)", -1.0, -normalizedYCoordinate, 0.0, normalizedXCoordinate, 1.0, normalizedYCoordinate);
             // T space coordinates, (-d, -y) to (0, x)
             lineCoordinates[lineStorageIndex++] = -1.0;
             lineCoordinates[lineStorageIndex++] = -normalizedYCoordinate;
@@ -156,10 +156,10 @@ NSString *const kGPUImageHoughAccumulationFragmentShaderString = SHADER_STRING
         currentByte +=8;
     }
     
-//    NSLog(@"Line pairs to render: %d out of max: %d", linePairsToRender, maxLinePairsToRender);
+//    DLog(@"Line pairs to render: %d out of max: %d", linePairsToRender, maxLinePairsToRender);
     
 //    CFAbsoluteTime currentFrameTime = (CFAbsoluteTimeGetCurrent() - startTime);
-//    NSLog(@"Line generation processing time : %f ms", 1000.0 * currentFrameTime);
+//    DLog(@"Line generation processing time : %f ms", 1000.0 * currentFrameTime);
 
     [self setFilterFBO];
     

@@ -194,7 +194,7 @@
         });
     } else {
         // No camera
-        NSLog(@"No camera");
+        DLog(@"No camera");
         runOnMainQueueWithoutDeadlocking(^{
             [self prepareFilter];
         });
@@ -455,7 +455,7 @@
 }
 
 - (void)captureImage {
-//    NSLog(@"%s" ,__FUNCTION__);
+//    DLog(@"%s" ,__FUNCTION__);
     UIImage *img = [self.cropFilter imageFromCurrentlyProcessedOutput];
     [self.stillCamera.inputCamera unlockForConfiguration];
     [self.stillCamera stopCameraCapture];
@@ -503,8 +503,8 @@
     self.imageEditor.doneCallback = ^(UIImage *editedImage, BOOL canceled){
         if(!canceled) {
             
-//            NSLog(@"self.imageEditor.doneCallback editedImage w = %0.0f", editedImage.size.width);
-//            NSLog(@"self.imageEditor.doneCallback editedImage h = %0.0f", editedImage.size.height);
+//            DLog(@"self.imageEditor.doneCallback editedImage w = %0.0f", editedImage.size.width);
+//            DLog(@"self.imageEditor.doneCallback editedImage h = %0.0f", editedImage.size.height);
             
             UIImage *outputImage = editedImage;
             if (outputImage) {
@@ -775,7 +775,7 @@
                 
                 [device unlockForConfiguration];
 			} else {
-                NSLog(@"ERROR = %@", error);
+                DLog(@"ERROR = %@", error);
 			}
 		}
 	}
@@ -966,7 +966,7 @@
         [picker pushViewController:self.imageEditor animated:YES];
         
     } failureBlock:^(NSError *error) {
-        NSLog(@"Failed to get asset from library");
+        DLog(@"Failed to get asset from library");
     }];
 }
 

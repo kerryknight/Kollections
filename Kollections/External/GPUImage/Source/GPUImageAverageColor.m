@@ -94,10 +94,10 @@ NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
 
         NSUInteger numberOfReductionsInX = floor(log(inputTextureSize.width) / log(4.0));
         NSUInteger numberOfReductionsInY = floor(log(inputTextureSize.height) / log(4.0));
-//        NSLog(@"Reductions in X: %d, y: %d", numberOfReductionsInX, numberOfReductionsInY);
+//        DLog(@"Reductions in X: %d, y: %d", numberOfReductionsInX, numberOfReductionsInY);
         
         NSUInteger reductionsToHitSideLimit = MIN(numberOfReductionsInX, numberOfReductionsInY);
-//        NSLog(@"Total reductions: %d", reductionsToHitSideLimit);
+//        DLog(@"Total reductions: %d", reductionsToHitSideLimit);
         for (NSUInteger currentReduction = 0; currentReduction < reductionsToHitSideLimit; currentReduction++)
         {
 //            CGSize currentStageSize = CGSizeMake(ceil(inputTextureSize.width / pow(4.0, currentReduction + 1.0)), ceil(inputTextureSize.height / pow(4.0, currentReduction + 1.0)));
@@ -120,7 +120,7 @@ NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
             [stageTextures addObject:[NSNumber numberWithInt:textureForStage]];
             
-//            NSLog(@"At reduction: %d size in X: %f, size in Y:%f", currentReduction, currentStageSize.width, currentStageSize.height);
+//            DLog(@"At reduction: %d size in X: %f, size in Y:%f", currentReduction, currentStageSize.width, currentStageSize.height);
         }
     });
 }
@@ -180,7 +180,7 @@ NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
             
             CGSize currentFramebufferSize = [[stageSizes objectAtIndex:currentStage] CGSizeValue];
             
-//            NSLog(@"FBO stage size: %f, %f", currentFramebufferSize.width, currentFramebufferSize.height);
+//            DLog(@"FBO stage size: %f, %f", currentFramebufferSize.width, currentFramebufferSize.height);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int)currentFramebufferSize.width, (int)currentFramebufferSize.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, currentTexture, 0);
             GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -263,7 +263,7 @@ NSString *const kGPUImageColorAveragingFragmentShaderString = SHADER_STRING
 //            currentAlphaTotal += (CGFloat)rawImagePixels2[(currentPixel * 4) + 3] / 255.0f;
 //        }
 //        
-//        NSLog(@"Stage %d average image red: %f, green: %f, blue: %f, alpha: %f", currentStage, currentRedTotal / (CGFloat)totalNumberOfPixels, currentGreenTotal / (CGFloat)totalNumberOfPixels, currentBlueTotal / (CGFloat)totalNumberOfPixels, currentAlphaTotal / (CGFloat)totalNumberOfPixels);
+//        DLog(@"Stage %d average image red: %f, green: %f, blue: %f, alpha: %f", currentStage, currentRedTotal / (CGFloat)totalNumberOfPixels, currentGreenTotal / (CGFloat)totalNumberOfPixels, currentBlueTotal / (CGFloat)totalNumberOfPixels, currentAlphaTotal / (CGFloat)totalNumberOfPixels);
 //
 //        
 //        CGImageRef cgImageFromBytes = CGImageCreate((int)currentStageSize.width, (int)currentStageSize.height, 8, 32, 4 * (int)currentStageSize.width, defaultRGBColorSpace, kCGBitmapByteOrderDefault | kCGImageAlphaLast, dataProvider, NULL, NO, kCGRenderingIntentDefault);

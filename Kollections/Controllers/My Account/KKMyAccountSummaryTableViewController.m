@@ -94,7 +94,7 @@
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s\n", __FUNCTION__);
+//    DLog(@"%s\n", __FUNCTION__);
     
     //don't show anything until objects are loaded
     if (!objectsAreLoaded) {
@@ -256,7 +256,7 @@
 }
 
 - (void)configureCell:(UITableViewCell *)cell forIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
+//    DLog(@"%s %@", __FUNCTION__, indexPath);
     UILabel *headerLabel = (UILabel *)[cell.contentView viewWithTag:kHEADERLABELTAG];
     UIView *kollectionView = (UIView*)[cell.contentView viewWithTag:kKOLLECTIONSBARTAG];
     kollectionView.hidden = YES;//default
@@ -349,7 +349,7 @@
 }
 
 - (void)userFollowingChanged:(NSNotification *)note {
-    NSLog(@"User following changed.");
+    DLog(@"User following changed.");
     self.shouldReloadOnAppear = YES;
 }
 

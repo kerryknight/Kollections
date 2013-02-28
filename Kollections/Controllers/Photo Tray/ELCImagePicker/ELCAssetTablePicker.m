@@ -36,7 +36,7 @@
 
 -(void)preparePhotos {
 //    NSLog(@"%s", __FUNCTION__);
-//    NSLog(@"enumerating photos");
+//    DLog(@"enumerating photos");
     [self.assetGroup enumerateAssetsUsingBlock:^(ALAsset *result, NSUInteger index, BOOL *stop)
      {         
          if(result == nil) 
@@ -48,7 +48,7 @@
          [elcAsset setParent:self];
          [self.elcAssets addObject:elcAsset];
      }];    
-//    NSLog(@"done enumerating photos");
+//    DLog(@"done enumerating photos");
 	
 	[self.tableView reloadData];
 	[self.navigationItem setTitle:@"Photos"];
@@ -87,7 +87,7 @@
 	int index = ((_indexPath.row - 1)*4);//knightka subtract 1 since we aren't starting our table rows until after navigation header row at indexpath 0
 	int maxIndex = ((_indexPath.row - 1)*4+3);
     
-//	NSLog(@"Getting assets for %d to %d with array count %d", index, maxIndex, [self.elcAssets count]);
+//	DLog(@"Getting assets for %d to %d with array count %d", index, maxIndex, [self.elcAssets count]);
     
 	if(maxIndex < [self.elcAssets count]) {
         

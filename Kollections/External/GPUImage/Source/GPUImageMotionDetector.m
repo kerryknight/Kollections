@@ -58,7 +58,7 @@ NSString *const kGPUImageMotionComparisonFragmentShaderString = SHADER_STRING
         {
             weakSelf.motionDetectionBlock(CGPointMake(redComponent / alphaComponent, greenComponent / alphaComponent), alphaComponent, frameTime);
         }
-//        NSLog(@"Average X: %f, Y: %f total: %f", redComponent / alphaComponent, greenComponent / alphaComponent, alphaComponent);
+//        DLog(@"Average X: %f, Y: %f total: %f", redComponent / alphaComponent, greenComponent / alphaComponent, alphaComponent);
     }];
     
     [frameComparisonFilter addTarget:averageColor];

@@ -171,7 +171,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
             case NSSecondCalendarUnit:
                 return singular ? NSLocalizedString(@"s.", @"Second Unit (Singular, Abbreviated)") : NSLocalizedString(@"s.", @"Second Unit (Plural, Abbreviated)");
                 // Parse fork: silence unhandled enum error
-            default: NSLog(@"Warning: unexpected unit :%d", unit);
+            default: DLog(@"Warning: unexpected unit :%d", unit);
         }
     } else {
         switch (unit) {
@@ -190,7 +190,7 @@ static inline NSCalendarUnit NSCalendarUnitFromString(NSString *string) {
             case NSSecondCalendarUnit:
                 return singular ? NSLocalizedString(@"second", @"Second Unit (Singular)") : NSLocalizedString(@"seconds", @"Second Unit (Plural)");
                 // Parse fork: silence unhandled enum error
-            default: NSLog(@"Warning: unexpected unit :%d", unit);
+            default: DLog(@"Warning: unexpected unit :%d", unit);
         }
     }
     

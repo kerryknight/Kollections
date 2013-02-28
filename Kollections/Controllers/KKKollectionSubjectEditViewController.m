@@ -332,7 +332,7 @@
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-//    NSLog(@"textView super view class = %@", [[[textView superview] superview]class]);
+//    DLog(@"textView super view class = %@", [[[textView superview] superview]class]);
     //check our cell type to determine our character limits
     NSUInteger stringLimit = kSetupLongStringCharacterLimit;
     

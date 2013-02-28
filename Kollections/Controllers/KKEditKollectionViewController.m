@@ -295,7 +295,7 @@
 - (void)pushSubjectsViewControllerWithKollection {
 //    NSLog(@"%s", __FUNCTION__);
     
-    KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
+    KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] initWithNibName:nil bundle:nil];
     //pass our queried subject list in
     
     //we'll use our property set here for comparison later should the user try to exit this view without saving
@@ -306,7 +306,7 @@
 }
 
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
+//    DLog(@"%s %@", __FUNCTION__, indexPath);
     
     [self.view endEditing:YES];
     

@@ -189,7 +189,7 @@
     }
     
     if (mediumImageData.length > 0) {
-//        NSLog(@"Uploading Medium Profile Picture");
+//        DLog(@"Uploading Medium Profile Picture");
         PFFile *fileMediumImage = [PFFile fileWithData:mediumImageData];
         
         // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
@@ -198,10 +198,10 @@
             [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
         }];
         
-        NSLog(@"Requested background expiration task with id %d for Kollections profile photo upload", fileUploadBackgroundTaskId);
+        DLog(@"Requested background expiration task with id %d for Kollections profile photo upload", fileUploadBackgroundTaskId);
         [fileMediumImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
-                NSLog(@"Uploaded Medium Profile Picture");
+                DLog(@"Uploaded Medium Profile Picture");
                 [[PFUser currentUser] setObject:fileMediumImage forKey:kKKUserProfilePicMediumKey];
                 //ensure the UI updates itself even if we haven't officially saved the photo to parse yet since we've set it to the currentUser's photov
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"MyAccountViewLoadProfilePhoto" object:nil];
@@ -209,7 +209,7 @@
                 [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
                 
             } else {
-                NSLog(@"Photo failed to save: %@", error);
+                DLog(@"Photo failed to save: %@", error);
                 [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
                 
                 //knightka replaced a regular alert view with our custom subclass
@@ -221,15 +221,15 @@
     }
     
     if (smallRoundedImageData.length > 0) {
-//        NSLog(@"Uploading Profile Picture Thumbnail");
+//        DLog(@"Uploading Profile Picture Thumbnail");
         PFFile *fileSmallRoundedImage = [PFFile fileWithData:smallRoundedImageData];
         [fileSmallRoundedImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (!error) {
-                NSLog(@"Uploaded Profile Picture Thumbnail");
+                DLog(@"Uploaded Profile Picture Thumbnail");
                 [[PFUser currentUser] setObject:fileSmallRoundedImage forKey:kKKUserProfilePicSmallKey];
                 [[PFUser currentUser] saveEventually];
             } else {
-                NSLog(@"Photo failed to save: %@", error);
+                DLog(@"Photo failed to save: %@", error);
                 //knightka replaced a regular alert view with our custom subclass
                 BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't post your photo. Please try again." message:nil];
                 [alert setCancelButtonWithTitle:@"Dismiss" block:nil];
@@ -279,7 +279,7 @@
     [photo setObject:thumbnailFile forKey:kKKPhotoThumbnailKey];
     
     // photos are public, but may only be modified by the user who uploaded them
-    NSLog(@"***** PHOTO ACCESS SHOULD MATCH THE ACCESS OF THE KOLLECTION'S SUBJECT! ******");
+    DLog(@"***** PHOTO ACCESS SHOULD MATCH THE ACCESS OF THE KOLLECTION'S SUBJECT! ******");
     PFACL *photoACL = [PFACL ACLWithUser:[PFUser currentUser]];
     [photoACL setPublicReadAccess:YES];
     photo.ACL = photoACL;
@@ -294,7 +294,7 @@
     [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         
         if (succeeded) {
-            NSLog(@"Photo uploaded");
+            DLog(@"Photo uploaded");
             
             // Add the photo to the local cache
             [[KKCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
@@ -319,7 +319,7 @@
             }];
             
         } else {
-            NSLog(@"Photo failed to save: %@", error);
+            DLog(@"Photo failed to save: %@", error);
             
             if (completionBlock) {
                 completionBlock(NO,error);
@@ -336,7 +336,7 @@
 
 + (void)processFacebookProfilePictureData:(NSData *)newProfilePictureData {
     if (newProfilePictureData.length == 0) {
-        NSLog(@"Profile picture did not download successfully.");
+        DLog(@"Profile picture did not download successfully.");
         return;
     }
     
@@ -352,13 +352,13 @@
         NSData *oldProfilePictureData = [NSData dataWithContentsOfFile:[profilePictureCacheURL path]];
         
         if ([oldProfilePictureData isEqualToData:newProfilePictureData]) {
-            NSLog(@"Cached profile picture matches incoming profile picture. Will not update.");
+            DLog(@"Cached profile picture matches incoming profile picture. Will not update.");
             return;
         }
     }
     
     BOOL cachedToDisk = [[NSFileManager defaultManager] createFileAtPath:[profilePictureCacheURL path] contents:newProfilePictureData attributes:nil];
-    NSLog(@"Wrote profile picture to disk cache: %d", cachedToDisk);
+    DLog(@"Wrote profile picture to disk cache: %d", cachedToDisk);
     
     UIImage *image = [UIImage imageWithData:newProfilePictureData];
     

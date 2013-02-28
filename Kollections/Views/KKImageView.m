@@ -37,7 +37,7 @@
                 [self setNeedsDisplay];
             }
         } else {
-            NSLog(@"Error on fetching file");
+            DLog(@"Error on fetching file");
         }
     }]; 
 }

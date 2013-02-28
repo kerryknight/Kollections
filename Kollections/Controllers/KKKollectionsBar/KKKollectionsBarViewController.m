@@ -124,7 +124,7 @@
     if (!self.kollections || kollectionItemCount == 0 || indexPath.row == kollectionItemCount) {
         //show the Add button if there are no kollections to display or it's the last cell in the row
         cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:KK_ADD_CELL forIndexPath:indexPath];
-        //        NSLog(@"cell for add before = %@", cell);
+        //        DLog(@"cell for add before = %@", cell);
         return cell;
     }
     
@@ -164,7 +164,7 @@
                     [coverPhotoImageView setHighlightedImage:downImage];
                 }];
             } else {
-                NSLog(@"error loading in background for index %i = \n\n%@", indexPath.row, [error localizedDescription]);
+                DLog(@"error loading in background for index %i = \n\n%@", indexPath.row, [error localizedDescription]);
             }
         }];
         

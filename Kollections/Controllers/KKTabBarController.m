@@ -112,10 +112,10 @@ typedef enum {
         [library writeImageDataToSavedPhotosAlbum:[info objectForKey:@"data"] metadata:nil completionBlock:^(NSURL *assetURL, NSError *error)
          {
              if (error) {
-                 NSLog(@"ERROR: the image failed to be written");
+                 DLog(@"ERROR: the image failed to be written");
              }
              else {
-                 NSLog(@"PHOTO SAVED - assetURL: %@", assetURL);
+                 DLog(@"PHOTO SAVED - assetURL: %@", assetURL);
                  
                  [library assetForURL:assetURL resultBlock:^(ALAsset *asset) {
                      
@@ -137,7 +137,7 @@ typedef enum {
                          
                          return;
                      } else if (self.photoType == KKTabBarControllerPhotoTypeKollectionPhoto) {
-                         NSLog(@"save kollection cover photo");
+                         DLog(@"save kollection cover photo");
                          //kollection cover photo
                          //stick the uiimage of our cover photo into a user info dictionary to send with the notification
                          NSDictionary *photoItem = @{kKKKollectionCoverPhotoKey : largeImage};
@@ -169,7 +169,7 @@ typedef enum {
                      }
                      
                  } failureBlock:^(NSError *error) {
-                     NSLog(@"Failed to get asset from library");
+                     DLog(@"Failed to get asset from library");
                  }];
                  
              }

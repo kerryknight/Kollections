@@ -111,12 +111,12 @@
 - (void)pushSubjectsViewControllerWithKollection {
 //    NSLog(@"%s", __FUNCTION__);
     
-    KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] init];
+    KKKollectionSubjectsTableViewController *subjectsTableVC = [[KKKollectionSubjectsTableViewController alloc] initWithNibName:nil bundle:nil];
     [self.navigationController pushViewController:subjectsTableVC animated:YES];
 }
 
 - (void)setupTableViewDidSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
+//    DLog(@"%s %@", __FUNCTION__, indexPath);
     
     [self.view endEditing:YES];
     

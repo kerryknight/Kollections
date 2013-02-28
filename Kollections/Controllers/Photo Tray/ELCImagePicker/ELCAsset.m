@@ -59,13 +59,13 @@
     [self.delegate photoTouchDown:self];
 //    self.originalPosition = self.center;
 //    
-//    NSLog(@"main view class = %@", [self.mainView class]);
-//    NSLog(@"main view = %@", self.mainView);
+//    DLog(@"main view class = %@", [self.mainView class]);
+//    DLog(@"main view = %@", self.mainView);
 //    
 //    self.tableParent.scrollEnabled = NO;
 //    
 //	if (isInTableView == YES) {
-//        NSLog(@"hereE");
+//        DLog(@"hereE");
 //        
 //        id appDelegate = [[UIApplication sharedApplication] delegate];
 //        UIWindow *window = [appDelegate window];
@@ -90,7 +90,7 @@
 //		isInTableView = NO;
 //	}
 //	else {
-//		NSLog(@"hereD");
+//		DLog(@"hereD");
 //	}
     
 }
@@ -105,7 +105,7 @@
 //	UITouch *touch = [touches anyObject];
 //	self.center = [touch locationInView:self.superview];
 //    
-//    NSLog(@"Frame: %@", NSStringFromCGRect(self.frame));
+//    DLog(@"Frame: %@", NSStringFromCGRect(self.frame));
 //    
 //	[UIView commitAnimations];
 //    
@@ -118,7 +118,7 @@
 -(void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 //    NSLog(@"%s", __FUNCTION__);
 //    if ([self.delegate isInsideKollectionView:self touching:YES]){
-//        NSLog(@"hereA");
+//        DLog(@"hereA");
 //        UIImageView * animation = [[UIImageView alloc] init];
 //        animation.frame = CGRectMake(self.center.x - 32, self.center.y - 32, 40, 40);
 //        [animation setAnimationDuration:0.35];
@@ -127,7 +127,7 @@
 //        [animation bringSubviewToFront:self.mainView];
 //        ;
 //    } else{
-//        NSLog(@"hereB");
+//        DLog(@"hereB");
 //        [UIView beginAnimations:@"goback" context:nil];
 //        [UIView setAnimationDuration:0.4f];
 //        [UIView setAnimationBeginsFromCurrentState:YES];
@@ -147,7 +147,7 @@
 -(void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {
 //    NSLog(@"%s", __FUNCTION__);
 //    if ([animationID isEqualToString:@"goback"] && finished) {
-//        NSLog(@"hereC");
+//        DLog(@"hereC");
 //        [self removeFromSuperview];
 //        self.center = self.originalPosition;
 //        [self.tableParent addSubview:self];

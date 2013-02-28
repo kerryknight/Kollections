@@ -142,6 +142,7 @@ NSString *const kKKSubjectTitleKey         = @"title";
 NSString *const kKKSubjectDescriptionKey   = @"description";
 NSString *const kKKSubjectPayoutKey        = @"payout";
 NSString *const kKKSubjectKollectionKey    = @"kollection";
+NSString *const kKKSubjectOrderingKey      = @"orderingPosition";
 
 #pragma mark - Cached Photo Attributes
 // keys

@@ -210,7 +210,7 @@
 //        [queryIsFollowing setCachePolicy:kPFCachePolicyCacheThenNetwork];
 //        [queryIsFollowing countObjectsInBackgroundWithBlock:^(int number, NSError *error) {
 //            if (error && [error code] != kPFErrorCacheMiss) {
-//                NSLog(@"Couldn't determine follow relationship: %@", error);
+//                DLog(@"Couldn't determine follow relationship: %@", error);
 //                self.navigationItem.rightBarButtonItem = nil;
 //            } else {
 //                if (number == 0) {
@@ -282,34 +282,34 @@
     
     switch (selectedIndex) {
         case KKMyAccountHeaderToolItemKollections:
-//            NSLog(@"Kollections touched");
+//            DLog(@"Kollections touched");
             sections = @[@"My Public Kollections",
                          @"My Private Kollections",
                          @"Subscribed Public Kollections",
                          @"Subscribed Private Kollections"];
             break;
         case KKMyAccountHeaderToolItemSubmissions:
-            NSLog(@"Submissions touched");
+            DLog(@"Submissions touched");
             sections = @[@"My Submissions"];
             break;
         case KKMyAccountHeaderToolItemFavorites:
-            NSLog(@"Favorites touched");
+            DLog(@"Favorites touched");
             sections = @[@"Favorites"];
             break;
         case KKMyAccountHeaderToolItemFollowers:
-            NSLog(@"Followers touched");
+            DLog(@"Followers touched");
             sections = @[@"Followers"];
             break;
         case KKMyAccountHeaderToolItemFollowing:
-            NSLog(@"Following touched");
+            DLog(@"Following touched");
             sections = @[@"Following"];
             break;
         case KKMyAccountHeaderToolItemAchievements:
-            NSLog(@"Achievements touched");
+            DLog(@"Achievements touched");
             sections = @[@"Achievements"];
             break;
         case KKMyAccountHeaderToolItemStore:
-            NSLog(@"Store touched");
+            DLog(@"Store touched");
             sections = @[@"Kollections Store"];
             break;
         default:
@@ -419,10 +419,10 @@
             createKollectionViewController.delegate = self;
             //set our bool that initializes our segmented control turn to public or private
             if (type == KKKollectionTypeMyPrivate) {
-                NSLog(@"create a private kollection");
+                DLog(@"create a private kollection");
                 createKollectionViewController.shouldInitializeAsPrivate = YES;
             } else {
-                NSLog(@"create a public kollection");
+                DLog(@"create a public kollection");
                 createKollectionViewController.shouldInitializeAsPrivate = NO;
             }
             [self.navigationController pushViewController:createKollectionViewController animated:YES];
@@ -443,7 +443,7 @@
         
     } else {
         //it's a subscribed-to kollection
-        NSLog(@"It's a subscribed-to kollection row");
+        DLog(@"It's a subscribed-to kollection row");
     }
 }
 
@@ -503,26 +503,26 @@
     NSMutableArray *submissionActivities = [NSMutableArray new];
     NSMutableArray *kollectionActivities = [NSMutableArray new];
     
-//    NSLog(@"activities count = %i", [activities count]);
+//    DLog(@"activities count = %i", [activities count]);
     
     //TODO: Ensure our Follower/Following activities are separating correctly once we get some inserted
     for (id activity in activities) {
         if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeFollow] &&
             [[activity objectForKey:kKKActivityFromUserKey] isEqual:[PFUser currentUser]]) {
-//            NSLog(@"following activity");
+//            DLog(@"following activity");
             //it's a following activity so add to our following array
             [followingActivities addObject:activity];
         } else if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeFollow] &&
                    [[activity objectForKey:kKKActivityToUserKey] isEqual:[PFUser currentUser]]) {
-//            NSLog(@"follower activity");
+//            DLog(@"follower activity");
             //it's a follower activity so add to our follower array
             [followerActivities addObject:activity];
         } else if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeSubmitted]) {
-//            NSLog(@"submission activity");
+//            DLog(@"submission activity");
             //it's a submission activity so add to our submission array
             [submissionActivities addObject:activity];
         } else if ([[activity objectForKey:kKKActivityTypeKey] isEqualToString:kKKActivityTypeCreated]) {
-//            NSLog(@"kollection activity");
+//            DLog(@"kollection activity");
             //it's a submission activity so add to our submission array
             [kollectionActivities addObject:activity];
         }
@@ -614,7 +614,7 @@
                 [self.myPublicKollections addObject:kollection];
             }
         } else {
-            NSLog(@"kollection not owned by the current user");
+            DLog(@"kollection not owned by the current user");
         }
     }
     

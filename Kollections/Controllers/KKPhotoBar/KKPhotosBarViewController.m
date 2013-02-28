@@ -131,7 +131,7 @@
                     [photoThumbnailImageView setHighlightedImage:downImage];
                 }];
             } else {
-                NSLog(@"error loading in background for index %i = \n\n%@", indexPath.row, [error localizedDescription]);
+                DLog(@"error loading in background for index %i = \n\n%@", indexPath.row, [error localizedDescription]);
             }
         }];
     

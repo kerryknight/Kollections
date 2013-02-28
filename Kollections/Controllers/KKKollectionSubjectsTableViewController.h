@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "KKKollectionSubjectEditViewController.h"
 
-@interface KKKollectionSubjectsTableViewController : UITableViewController <UITableViewDataSource, KKKollectionSubjectEditViewControllerDelegate> {
+@interface KKKollectionSubjectsTableViewController : UITableViewController <UITableViewDataSource, KKKollectionSubjectEditViewControllerDelegate, UIGestureRecognizerDelegate> {
     
 }
 

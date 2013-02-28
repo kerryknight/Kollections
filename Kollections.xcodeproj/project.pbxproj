@@ -1811,13 +1811,13 @@
 		C73ECF0916AEF8DD00452C63 /* Kollection Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C73ECF0A16AEF8F200452C63 /* Kollection Add and Remove Photos */,
+				C73ECF0A16AEF8F200452C63 /* Kollection Main View */,
 				C79DA180169E2787009C1CE7 /* Kollection Create and Edit */,
 			);
 			name = "Kollection Controllers";
 			sourceTree = "<group>";
 		};
-		C73ECF0A16AEF8F200452C63 /* Kollection Add and Remove Photos */ = {
+		C73ECF0A16AEF8F200452C63 /* Kollection Main View */ = {
 			isa = PBXGroup;
 			children = (
 				C73ECF1B16AF135800452C63 /* KKKollectionTableViewController.h */,
@@ -1825,7 +1825,7 @@
 				C79D9F4A16B9772100CA1A08 /* KKKollectionViewController.h */,
 				C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */,
 			);
-			name = "Kollection Add and Remove Photos";
+			name = "Kollection Main View";
 			sourceTree = "<group>";
 		};
 		C74C9E7916A6EFEE00207EF1 /* Subjects creation */ = {

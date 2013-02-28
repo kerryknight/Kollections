@@ -11,7 +11,7 @@
 @implementation KKSetupTableNavigateCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-//    NSLog(@"%s 1", __FUNCTION__);
+//    DLog(@"%s 1", __FUNCTION__);
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code

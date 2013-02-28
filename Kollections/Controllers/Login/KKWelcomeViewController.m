@@ -42,7 +42,7 @@
     
     // If not logged in, present login view controller
     if (![PFUser currentUser]) {
-        NSLog(@"no current user welcome");
+        DLog(@"no current user welcome");
         [(KKAppDelegate*)[[UIApplication sharedApplication] delegate] presentLoginViewControllerAnimated:NO];
         return;
     }
@@ -61,7 +61,7 @@
 //    NSLog(@"%s", __FUNCTION__);
     // A kPFErrorObjectNotFound error on currentUser refresh signals a deleted user
     if (error && error.code == kPFErrorObjectNotFound) {
-        NSLog(@"User does not exist.");
+        DLog(@"User does not exist.");
         [(KKAppDelegate*)[[UIApplication sharedApplication] delegate] logOut];
         return;
     }
@@ -78,7 +78,7 @@
             [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
             [request startWithCompletionHandler:nil];
         } else {
-            NSLog(@"User missing Facebook ID; Should check to see if they connected via Facebook first before querying again.");
+            DLog(@"User missing Facebook ID; Should check to see if they connected via Facebook first before querying again.");
             PF_FBRequest *request = [PF_FBRequest requestForGraphPath:@"me/?fields=name,picture,email"];
             [request setDelegate:(KKAppDelegate*)[[UIApplication sharedApplication] delegate]];
             [request startWithCompletionHandler:nil];
@@ -111,15 +111,15 @@
                     //check if display name is equal to the additional field; if not, save it that way
                     if ([[_user objectForKey:kKKUserAdditionalKey] isEqualToString:[_user objectForKey:kKKUserDisplayNameKey]]) {
                         //names are equal
-//                        NSLog(@"display names are equal");
+//                        DLog(@"display names are equal");
                     } else {
                         //names not equal
-//                        NSLog(@"display names are not equal, so attempt to save");
+//                        DLog(@"display names are not equal, so attempt to save");
                         [_user setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
                         [_user saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                             if (!error) {
                                 //success so can update UI appropriately now
-//                                NSLog(@"saved displayName successfully");
+//                                DLog(@"saved displayName successfully");
                                 //in lieu of making an ADDITIONAL query to Parse for what we just set, go ahead and set it locally to display name
                                 [[PFUser currentUser] setObject:[_user objectForKey:kKKUserAdditionalKey] forKey:kKKUserDisplayNameKey];
                             } else {

@@ -159,7 +159,7 @@ static NSString *const kKKActivityTypeJoinedString = @"joined Kollections";
 //    //
 //    // If there is no network connection, we will hit the cache first.
 //    if (self.objects.count == 0 || ![[UIApplication sharedApplication].delegate performSelector:@selector(isParseReachable)]) {
-//        NSLog(@"Loading from cache");
+//        DLog(@"Loading from cache");
 //        [query setCachePolicy:kPFCachePolicyCacheThenNetwork];
 //    }
 //    

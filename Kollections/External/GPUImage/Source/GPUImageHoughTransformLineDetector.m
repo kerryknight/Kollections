@@ -183,7 +183,7 @@
     }
     
 //    CFAbsoluteTime currentFrameTime = (CFAbsoluteTimeGetCurrent() - startTime);
-//    NSLog(@"Processing time : %f ms", 1000.0 * currentFrameTime);
+//    DLog(@"Processing time : %f ms", 1000.0 * currentFrameTime);
     
     if (linesDetectedBlock != NULL)
     {

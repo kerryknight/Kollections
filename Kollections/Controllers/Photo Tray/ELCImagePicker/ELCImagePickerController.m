@@ -52,7 +52,7 @@
 }
 
 - (void)didReceiveMemoryWarning {    
-//    NSLog(@"ELC Image Picker received memory warning.");
+//    DLog(@"ELC Image Picker received memory warning.");
     
     [super didReceiveMemoryWarning];
 }

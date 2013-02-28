@@ -163,7 +163,7 @@
         [request startWithCompletionHandler:NULL];
     } /*else if ([PFTwitterUtils isLinkedWithUser:[PFUser currentUser]] ) {
        //we're logged in with Twitter //TODO:
-       NSLog(@"logged into twitter, now retrieve twitter name and picture");
+       DLog(@"logged into twitter, now retrieve twitter name and picture");
     } */else {
         //we're logged with via a Parse account so dismiss the overlay
         [self presentTabBarController];
@@ -172,7 +172,7 @@
     
     // Subscribe to private push channel
     if (user) {
-        NSLog(@"subscribe to private push channel");
+        DLog(@"subscribe to private push channel");
         NSString *privateChannelName = [NSString stringWithFormat:@"user_%@", [user objectId]];
         // Add the user to the installation so we can track the owner of the device
         [[PFInstallation currentInstallation] setObject:user forKey:kKKInstallationUserKey];
@@ -188,7 +188,7 @@
 // Sent to the delegate when the log in attempt fails.
 - (void)logInViewController:(PFLogInViewController *)logInController didFailToLogInWithError:(NSError *)error {
     
-    NSLog(@"Failed to log in with error: %@", error);
+    DLog(@"Failed to log in with error: %@", error);
     alertMessage(@"Uh oh. Something happened and logging in failed with error: %@. Please try again.", [error localizedDescription]);
 }
 
@@ -255,12 +255,12 @@
 
 // Sent to the delegate when the sign up attempt fails.
 - (void)signUpViewController:(PFSignUpViewController *)signUpController didFailToSignUpWithError:(NSError *)error {
-    NSLog(@"Failed to sign up...");
+    DLog(@"Failed to sign up...");
 }
 
 // Sent to the delegate when the sign up screen is dismissed.
 - (void)signUpViewControllerDidCancelSignUp:(PFSignUpViewController *)signUpController {
-    NSLog(@"User dismissed the signUpViewController");
+    DLog(@"User dismissed the signUpViewController");
 }
 
 #pragma mark - Tab Bar Controller
@@ -335,7 +335,7 @@
     //check what type of login we have
     if ([PFFacebookUtils isLinkedWithUser:[PFUser currentUser]]) {
         //we're logged in with Facebook so request the user's name and pic data
-        NSLog(@"Downloading user's profile picture");
+        DLog(@"Downloading user's profile picture");
         // Download user's profile picture
         NSURL *profilePictureURL = [NSURL URLWithString:[NSString stringWithFormat:@"https://graph.facebook.com/%@/picture?type=large", [[PFUser currentUser] objectForKey:kKKUserFacebookIDKey]]];
         NSURLRequest *profilePictureURLRequest = [NSURLRequest requestWithURL:profilePictureURL cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f]; // Facebook profile picture cache policy: Expires in 2 weeks
@@ -475,12 +475,12 @@
 
 - (void)request:(PF_FBRequest *)request didFailWithError:(NSError *)error {
 //    NSLog(@"%s", __FUNCTION__);
-    NSLog(@"Facebook error: %@", error);
+    DLog(@"Facebook error: %@", error);
     
     if ([PFUser currentUser]) {
         if ([[[[error userInfo] objectForKey:@"error"] objectForKey:@"type"]
              isEqualToString: @"OAuthException"]) {
-            NSLog(@"The facebook token was invalidated");
+            DLog(@"The facebook token was invalidated");
             [self logOut];
         }
     }
@@ -503,7 +503,7 @@
         // Make sure they are subscribed to their private push channel
         NSString *privateChannelName = [[PFUser currentUser] objectForKey:kKKUserPrivateChannelKey];
         if (privateChannelName && privateChannelName.length > 0) {
-            NSLog(@"Subscribing user to %@", privateChannelName);
+            DLog(@"Subscribing user to %@", privateChannelName);
             [[PFInstallation currentInstallation] addUniqueObject:privateChannelName forKey:kKKInstallationChannelsKey];
         }
     }
@@ -514,10 +514,10 @@
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     if (error.code == 3010) {
-        NSLog(@"Push notifications are not supported in the iOS Simulator.");
+        DLog(@"Push notifications are not supported in the iOS Simulator.");
     } else {
         // show some alert or otherwise handle the failure to register.
-        NSLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
+        DLog(@"application:didFailToRegisterForRemoteNotificationsWithError: %@", error);
 	}
 }
 
@@ -694,7 +694,7 @@
                 PFObject *targetPhoto = [PFObject objectWithoutDataWithClassName:kKKPhotoClassKey objectId:photoObjectId];
                 for (PFObject *photo in self.homeViewController.objects) {
                     if ([photo.objectId isEqualToString:photoObjectId]) {
-                        NSLog(@"Found a local copy");
+                        DLog(@"Found a local copy");
                         targetPhoto = photo;
                         break;
                     }
@@ -741,7 +741,7 @@
 - (BOOL)shouldProceedToMainInterface:(PFUser *)user {
     //    NSLog(@"%s", __FUNCTION__);
     if ([KKUtility userHasValidFacebookData:[PFUser currentUser]]) {
-        NSLog(@"User has valid Facebook data, granting permission to use app.");
+        DLog(@"User has valid Facebook data, granting permission to use app.");
         [MBProgressHUD hideHUDForView:self.navController.presentedViewController.view animated:YES];
         [self presentTabBarController];
         
@@ -756,7 +756,7 @@
     //    NSLog(@"%s", __FUNCTION__);
     if ([[url host] isEqualToString:kKKLaunchURLHostTakePicture]) {
         if ([PFUser currentUser]) {
-            NSLog(@"******************* CALLING A METHOD I DELETED BUT DON'T KNOW WHEN THIS WOULD OCCUR************************");
+            DLog(@"******************* CALLING A METHOD I DELETED BUT DON'T KNOW WHEN THIS WOULD OCCUR************************");
 //            return [self.tabBarController shouldPresentPhotoCaptureController];
         }
     }
@@ -769,7 +769,7 @@
     //    NSLog(@"%s", __FUNCTION__);
     Reachability *curReach = (Reachability *)[note object];
     NSParameterAssert([curReach isKindOfClass: [Reachability class]]);
-    //    NSLog(@"Reachability changed: %@", curReach);
+    //    DLog(@"Reachability changed: %@", curReach);
     networkStatus = [curReach currentReachabilityStatus];
     
     if ([self isParseReachable] && [PFUser currentUser] && self.homeViewController.objects.count == 0) {
@@ -782,9 +782,9 @@
 - (void)subscribeFinished:(NSNumber *)result error:(NSError *)error {
     //    NSLog(@"%s", __FUNCTION__);
     if ([result boolValue]) {
-        NSLog(@"Kollections successfully subscribed to push notifications on the broadcast channel.");
+        DLog(@"Kollections successfully subscribed to push notifications on the broadcast channel.");
     } else {
-        NSLog(@"Kollections failed to subscribe to push notifications on the broadcast channel.");
+        DLog(@"Kollections failed to subscribe to push notifications on the broadcast channel.");
     }
 }
 

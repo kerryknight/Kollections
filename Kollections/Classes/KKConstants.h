@@ -172,6 +172,7 @@ extern NSString *const kKKSubjectTitleKey;
 extern NSString *const kKKSubjectDescriptionKey;
 extern NSString *const kKKSubjectPayoutKey;
 extern NSString *const kKKSubjectKollectionKey;
+extern NSString *const kKKSubjectOrderingKey;
 
 
 #pragma mark - Cached Photo Attributes

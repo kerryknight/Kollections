@@ -142,7 +142,7 @@ extern BOOL NIDebugAssertionsShouldBreak;
  * of the other logging methods in Nimbus' debugging library.
  */
 #ifdef DEBUG
-#define NIDPRINT(xx, ...)  NSLog(@"%s(%d): " xx, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+#define NIDPRINT(xx, ...)  DLog(@"%s(%d): " xx, __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
 #else
 #define NIDPRINT(xx, ...)  ((void)0)
 #endif // #ifdef DEBUG

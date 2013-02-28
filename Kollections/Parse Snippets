@@ -102,10 +102,10 @@ query.limit = 10;
 ----- Exactly One Result (the first one) -----
 [query getFirstObjectInBackgroundWithBlock:^(PFObject *object, NSError *error) {
   if (!object) {
-    NSLog(@"The getFirstObject request failed.");
+    DLog(@"The getFirstObject request failed.");
   } else {
     // The find succeeded.
-    NSLog(@"Successfully retrieved the object.");
+    DLog(@"Successfully retrieved the object.");
   }
 }];
 
@@ -185,7 +185,7 @@ query.limit = [NSNumber numberWithInt:10];
     for (PFObject *comment in comments) {
          // This does not require a network access.
          PFObject *post = [comment objectForKey:@"post"];
-         NSLog(@"retrieved related post: %@", post);
+         DLog(@"retrieved related post: %@", post);
     }
 }];
 
@@ -211,7 +211,7 @@ PFQuery *query = [PFQuery queryWithClassName:@"GameScore"];
 [query countObjectsInBackgroundWithBlock:^(int count, NSError *error) {
   if (!error) {
     // The count request succeeded. Log the count
-    NSLog(@"Sean has played %d games", count);
+    DLog(@"Sean has played %d games", count);
   } else {
     // The request failed
   }

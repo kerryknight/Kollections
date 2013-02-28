@@ -125,7 +125,7 @@ typedef enum {
         //refresh our object and reload our table once complete
         [self.kollection refreshInBackgroundWithBlock:^(PFObject *object, NSError *error) {
             if (!error) {
-//                NSLog(@"kollection subjects refreshed");
+//                DLog(@"kollection subjects refreshed");
                 self.kollection = object;
                 self.tableView.isNetworkBusy = NO;
                 
@@ -276,7 +276,7 @@ typedef enum {
 #pragma JDDroppableViewDelegate
 - (void)droppableViewBeganDragging:(JDDroppableView*)view; {
 //    NSLog(@"%s", __FUNCTION__);
-    //    NSLog(@"droppableViewBeganDragging");
+    //    DLog(@"droppableViewBeganDragging");
     
 	[UIView animateWithDuration:0.33 animations:^{
         view.alpha = 0.8;
@@ -304,7 +304,7 @@ typedef enum {
 }
 
 - (void)droppableView:(JDDroppableView*)view enteredTarget:(UIView*)target {
-//    NSLog(@"%s view = %@", __FUNCTION__, target);
+//    DLog(@"%s view = %@", __FUNCTION__, target);
     
     [[target layer] setMasksToBounds:YES];
     [[target layer] setBorderColor:kMint4.CGColor];
@@ -476,11 +476,11 @@ typedef enum {
                                                     rowFrame.origin.y + rowFrame.size.height/2);
                     BOOL didHitTarget = CGRectContainsPoint(visibleFrame, rowCenter);
                     
-//                    NSLog(@"visibleFrame = %@", NSStringFromCGRect(visibleFrame));
+//                    DLog(@"visibleFrame = %@", NSStringFromCGRect(visibleFrame));
                     
                     //only 1 drop target available at a time
                     if (didHitTarget && [self.dropview.dropTargets count] == 0) {
-//                        NSLog(@"rowCenter %@ for indexpath = %@", NSStringFromCGPoint(rowCenter), index);
+//                        DLog(@"rowCenter %@ for indexpath = %@", NSStringFromCGPoint(rowCenter), index);
                         //it's a kollection row, is visible and should be able to be added to drop targets
                         KKPhotoBarCell *cell = (KKPhotoBarCell*)[self.tableView.tableView cellForRowAtIndexPath:index];
                         //check if we have any existing photos in our collection view; if not, the collectionView doesn't get

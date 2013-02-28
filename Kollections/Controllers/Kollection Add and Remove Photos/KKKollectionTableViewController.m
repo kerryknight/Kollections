@@ -169,7 +169,7 @@
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s\n", __FUNCTION__);
+//    DLog(@"%s\n", __FUNCTION__);
     
     //don't show anything until objects are loaded
     NSInteger sectionRows = 3;
@@ -304,7 +304,7 @@
     PFQuery *subjectQuery = [PFQuery queryWithClassName:kKKSubjectClassKey];
     [subjectQuery whereKey:kKKSubjectKollectionKey equalTo:self.kollection];
     subjectQuery.cachePolicy = kPFCachePolicyNetworkElseCache;//always pull local stuff first then hit network
-    [subjectQuery orderByDescending:@"createdAt"];
+    [subjectQuery orderByAscending:kKKSubjectOrderingKey];
     
     return subjectQuery;
 }
@@ -349,16 +349,17 @@
     //there will only be one for each index path row/section
     NSDictionary *subjectDictionary = (NSDictionary*)self.subjectsWithPhotos[indexPath.section];
     NSString *title = @"";
-    
-    if (subjectDictionary) {
-        //we have subjects
-        //there should only be 1 for this index path
-        for (NSString *key in [subjectDictionary allKeys]) {
-            title = key; //we'll use this for setting our photos array too for the collection view
+    if (objectsAreLoaded) {
+        if (subjectDictionary) {
+            //we have subjects
+            //there should only be 1 for this index path
+            for (NSString *key in [subjectDictionary allKeys]) {
+                title = key; //we'll use this for setting our photos array too for the collection view
+            }
+        } else {
+            //no subjects so just put the header text to the kollection's title
+            title = self.kollection[kKKKollectionTitleKey];
         }
-    } else {
-        //no subjects so just put the header text to the kollection's title
-        title = self.kollection[kKKKollectionTitleKey];
     }
     
     if (row == 0 && row == sectionRows - 1) {

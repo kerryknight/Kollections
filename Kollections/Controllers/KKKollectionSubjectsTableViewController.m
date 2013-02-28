@@ -14,6 +14,8 @@
 
 @interface KKKollectionSubjectsTableViewController () {
     NSUInteger selectedSubjectIndex;
+    UISwipeGestureRecognizer *swipeRightGestureRecognizer;
+    UISwipeGestureRecognizer *swipeLeftGestureRecognizer;
 }
 
 @property (nonatomic, strong) UITextField *titleField;
@@ -61,6 +63,9 @@
     //add toolbar buttons
     self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
     [self configureToolbarButtons];//add the done button to upper right
+    
+    //add our editing gestures to our table
+    [self addTableGestures];
 }
 
 - (void)didReceiveMemoryWarning
@@ -89,6 +94,9 @@
 #pragma mark - Custom Methods
 - (void)addSubject:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
+    
+    [self exitEditingMode];
+    
     KKKollectionSubjectEditViewController *subjectsEditTableVC = [[KKKollectionSubjectEditViewController alloc] init];
     subjectsEditTableVC.delegate = self;
     selectedSubjectIndex = [self.subjects count]; //we'll use this index to update the array later
@@ -97,6 +105,8 @@
 
 - (void)editSubject:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
+    
+    [self exitEditingMode];
     
     //first, get the index path of the cell whose row button we touched
     UIButton *button = sender;
@@ -126,6 +136,16 @@
 
 - (void)doneButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
+    
+    [self exitEditingMode];
+    
+    //reset all our subject's ordering properties so we can use this to properly display them in order
+    for (int i = 0; i < [self.subjects count]; i++) {
+        PFObject *subjectToEdit = (PFObject*)[self.subjects objectAtIndex:i];
+        subjectToEdit[kKKSubjectOrderingKey] = [NSNumber numberWithInt:i];
+        [self.subjects replaceObjectAtIndex:i withObject:subjectToEdit];
+    }
+    
     NSDictionary *userData = @{@"subjects" : self.subjects};
     [[NSNotificationCenter defaultCenter] postNotificationName:@"KollectionSetupTableViewControllerSubjectListUpdated" object:nil userInfo:userData];
     [self.navigationController popViewControllerAnimated:YES];
@@ -133,7 +153,36 @@
 
 - (void)backButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
+    
+    if (self.tableView.isEditing) [self exitEditingMode];
+    
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+/*
+ *	Initializes gesture recognizers and adds them to self.tableView
+ */
+- (void)addTableGestures {
+	if (self.tableView == nil)
+		return;
+	
+	if (swipeRightGestureRecognizer == nil || [self.tableView.gestureRecognizers containsObject:swipeRightGestureRecognizer] == NO) {
+		swipeRightGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(enterEditingMode)];
+		swipeRightGestureRecognizer.delegate = self;
+		
+		[self.tableView addGestureRecognizer:swipeRightGestureRecognizer];
+		
+        swipeRightGestureRecognizer.direction = UISwipeGestureRecognizerDirectionRight;
+	}
+	
+	if (swipeLeftGestureRecognizer == nil || [self.tableView.gestureRecognizers containsObject:swipeLeftGestureRecognizer] == NO) {
+		swipeLeftGestureRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(exitEditingMode)];
+		swipeLeftGestureRecognizer.delegate = self;
+		
+		[self.tableView addGestureRecognizer:swipeLeftGestureRecognizer];
+		
+        swipeLeftGestureRecognizer.direction = UISwipeGestureRecognizerDirectionLeft;
+	}
 }
 
 #pragma mark - KKKollectionSubjectEditViewController delegate
@@ -408,6 +457,47 @@
 }
 
 #pragma mark - table editing methods
+- (void)enterEditingMode {
+    self.tableView.editing = YES;
+}
+
+- (void)exitEditingMode {
+    if (self.tableView.isEditing) self.tableView.editing = NO;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ((indexPath.row < [self.subjects count] + 1) && indexPath.row > 0) { //add 1 to account for first row header
+        return YES;
+    } else {
+        return  NO;
+    }
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    PFObject *subject = [self.subjects objectAtIndex:(sourceIndexPath.row - 1)];//account for header row
+	[self.subjects removeObjectAtIndex:(sourceIndexPath.row - 1)];//account for header row
+	[self.subjects insertObject:subject atIndex:(destinationIndexPath.row - 1)];//account for header row
+    [self.tableView reloadData];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
+
+    //if we try to move a row below our add button, simply add it at the end of our table
+    if (proposedDestinationIndexPath.row >= [self.subjects count] + 1) { //add 1 to account for first row header
+        NSInteger row = [self.subjects count];
+        return [NSIndexPath indexPathForRow:row inSection:proposedDestinationIndexPath.section];
+    }
+    
+    //if we try to move our row before the header, simply add it at the first subject row
+    if (proposedDestinationIndexPath.row == 0) {
+        NSInteger row = 1;
+        return [NSIndexPath indexPathForRow:row inSection:proposedDestinationIndexPath.section];
+    }
+    
+    //else, move the row where we tried to move it
+    return proposedDestinationIndexPath;
+}
+
 - (BOOL) tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ((indexPath.row < [self.subjects count] + 1) && indexPath.row > 0) { //add 1 to account for first row header

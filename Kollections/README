@@ -3,6 +3,11 @@ README - Kollections
 __________________________________________________________________
 DEVELOPER NOTES
 ------------------------------------------------------------------
+- Creating a kollection creates an entry in the Activity table as "created" with just a kollection pointer added; toUser and fromUser are both filled in as the current user
+- Photo objects have no relation to anything other than the user pointer which points to the photo's creator
+- Subject objects only have pointers to the kollection which they are a part of
+- To link Photo objects with Subject objects, when a Photo object is created/uploaded, and Activity of "submitted" is also created; this Activity object contains a pointer to the kollection, subject and photo objects it pertains to
+- If a kollection or subject object is deleted, the "submitted" activities are modified and the kollection and subject pointers are cleared; the photo object pointers remain and the photo objects are untouched; this will allow users to resubmit the same photo elsewhere without redundant uploads
 
 __________________________________________________________________
 TO DO APP
@@ -31,10 +36,9 @@ COMPLETED
 ------------------------------------------------------------------
 
 __________________________________________________________________
-TIPS
+VIEWS NEEDING TIPS/HINTS
 ------------------------------------------------------------------
-- Swipe up on camera button to go straight to taking a photo
-
+- KKKollectionSubjectsTableViewController to explain swipe left and right to go into/out of editing mode for deleting and reordering subjects 
 
 __________________________________________________________________
 FUTURE
@@ -46,6 +50,7 @@ FUTURE
   a certain map coordinate
 - Fix photo submissions so a photo will drag immediately on touch instead of requiring a 2nd touch to drag
 - Fix ability to touch and drag photo tray open in relation to creating drop targets correctly for photo submission (dragging itself works fine, just not drop target frames)
+- Add ability to have different koin values per subject instead of kollection-wide
   
 __________________________________________________________________  
 3RD PARTIES USED

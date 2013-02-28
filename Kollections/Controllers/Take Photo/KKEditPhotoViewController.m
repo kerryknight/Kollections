@@ -57,7 +57,7 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
-    NSLog(@"Memory warning on Edit Photo View Controller");
+    DLog(@"Memory warning on Edit Photo View Controller");
 }
 
 
@@ -172,10 +172,10 @@
         self.kollectionImage = anImage;
         return NO;//return NO here since we'll upload from KKUtility instead on KKKollectionSetupTableViewController.m
     } else {
-        NSLog(@"is a regular non-profile or kollection cover photo");
+        DLog(@"is a regular non-profile or kollection cover photo");
     }
     
-    NSLog(@"****** SHOULDN'T BE ANY DIRECT UPLOADING WITHOUT ADDING TO A KOLLECTION AND/OR SUBJECT TOO *******");
+    DLog(@"****** SHOULDN'T BE ANY DIRECT UPLOADING WITHOUT ADDING TO A KOLLECTION AND/OR SUBJECT TOO *******");
     
 //    UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFit bounds:CGSizeMake(560.0f, 560.0f) interpolationQuality:kCGInterpolationHigh];
     UIImage *resizedImage = [anImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(640.0f, 427.0f) interpolationQuality:kCGInterpolationHigh];
@@ -185,8 +185,8 @@
 //    UIImage *thumbnailImage = [anImage thumbnailImage:86.0f transparentBorder:0.0f cornerRadius:10.0f interpolationQuality:kCGInterpolationDefault];
     
 //    
-//    NSLog(@"resizedImage w = %0.0f", resizedImage.size.width);
-//    NSLog(@"resizedImage h = %0.0f", resizedImage.size.height);
+//    DLog(@"resizedImage w = %0.0f", resizedImage.size.width);
+//    DLog(@"resizedImage h = %0.0f", resizedImage.size.height);
     
     // JPEG to decrease file size and enable faster uploads & downloads
     // Get an NSData representation of our images. We use JPEG for the larger image
@@ -206,13 +206,13 @@
         [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
     }];
     
-    NSLog(@"Requested background expiration task with id %d for Kollections photo upload", self.fileUploadBackgroundTaskId);
+    DLog(@"Requested background expiration task with id %d for Kollections photo upload", self.fileUploadBackgroundTaskId);
     [self.photoFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            NSLog(@"Photo uploaded successfully");
+            DLog(@"Photo uploaded successfully");
             [self.thumbnailFile saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                 if (succeeded) {
-                    NSLog(@"Thumbnail uploaded successfully");
+                    DLog(@"Thumbnail uploaded successfully");
                 }
                 [[UIApplication sharedApplication] endBackgroundTask:self.fileUploadBackgroundTaskId];
             }];
@@ -314,7 +314,7 @@
     // save
     [photo saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (succeeded) {
-            NSLog(@"Photo uploaded");
+            DLog(@"Photo uploaded");
             
             // Add the photo to the local cache
             [[KKCache sharedCache] setAttributesForPhoto:photo likers:[NSArray array] commenters:[NSArray array] likedByCurrentUser:NO];
@@ -348,7 +348,7 @@
             // Send a notification. The main timeline will refresh itself when caught
             [[NSNotificationCenter defaultCenter] postNotificationName:KKTabBarControllerDidFinishEditingPhotoNotification object:photo];
         } else {
-            NSLog(@"Photo failed to save: %@", error);
+            DLog(@"Photo failed to save: %@", error);
             
             //knightka replaced a regular alert view with our custom subclass
             BlockAlertView *alert = [BlockAlertView alertWithTitle:@"Couldn't post your photo" message:nil];

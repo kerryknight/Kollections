@@ -127,7 +127,7 @@
         //we're adding a new kollection instead of updating an old one so set the user
         [self.kollection setObject:[PFUser currentUser] forKey:kKKKollectionUserKey];
         
-//        NSLog(@"should share to fb = %i", shouldShareNewKollectionToFacebook);
+//        DLog(@"should share to fb = %i", shouldShareNewKollectionToFacebook);
         
         //set the ACL
         // kollections can be public, but may only be modified by the user who uploaded them
@@ -163,7 +163,7 @@
                 // Remove hud
                 [MBProgressHUD hideHUDForView:self.view.superview animated:YES];
                 // Log details of the failure
-                NSLog(@"Error: %@ %@", error, [error userInfo]);
+                DLog(@"Error: %@ %@", error, [error userInfo]);
                 
                 [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
             }
@@ -184,7 +184,7 @@
     [self.kollection saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (!error) {
             //kollection save succeeded
-            NSLog(@"kollection saved successfully");
+            DLog(@"kollection saved successfully");
             
             //save any subjects we may have created/edited
             //so now set our newly acquired kollection's id for each of our subjects
@@ -230,7 +230,7 @@
                         //there was an error, try one more time to create the activity entry
                         [KKUtility createKollectionCreationActivityInBackgroundForKollection:self.kollection block:^(BOOL succeeded, NSError *error) {
                             if (error) {
-                                NSLog(@"error creating kollection creation activity");
+                                DLog(@"error creating kollection creation activity");
                             }
                         }];
                     }
@@ -373,7 +373,7 @@
 }
 
 - (void)subjectListUpdated:(NSNotification*)notification {
-//    NSLog(@"%s\n", __FUNCTION__);
+//    DLog(@"%s\n", __FUNCTION__);
     //extract our object from our passed in dictionary and reset our subjects array
     NSDictionary *notificationInfo = [notification userInfo];
     self.subjects = notificationInfo[@"subjects"];
@@ -398,7 +398,7 @@
         if (self.kollectionSetupType == KKKollectionSetupTypeEdit) {
             [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] setFile:imageFile];
             //wait till we load the photo from the server
-            NSLog(@"load in background query called");
+            DLog(@"load in background query called");
             [(PFImageView*)[cell.contentView viewWithTag:kKollectionCoverPhotoImageViewTag] loadInBackground:^(UIImage *image, NSError *error) {
                 if (!error) {
                     [UIView animateWithDuration:0.200f animations:^{
@@ -411,7 +411,7 @@
                     }];
                     
                 } else {
-                    NSLog(@"error loading photo into image = %@", error);
+                    DLog(@"error loading photo into image = %@", error);
                 }
             }];
         } else {
@@ -473,7 +473,7 @@
     } else {
         //we can go ahead and save our photos in the background since we have a kollection id
         //this will give us a head start on the upload; should the upload fail, as long as the user hits "Save" on the setup view, the save will attempt again since this property will be "dirty"
-        NSLog(@"save in background with block query called");
+        DLog(@"save in background with block query called");
         
         // Request a background execution task to allow us to finish uploading the photo even if the app is backgrounded
         UIBackgroundTaskIdentifier fileUploadBackgroundTaskId = 0;
@@ -513,7 +513,7 @@
 
 #pragma mark - AlertView and ActionSheet methods
 - (void)queryParseForCategoryList {
-//    NSLog(@"%s\n", __FUNCTION__);
+//    DLog(@"%s\n", __FUNCTION__);
     [self dismissKeyboardAndResetTableContentInset];//in case keyboard is still showing
     //put up a spinner to prevent further progress until our query is finished as we can't show the picker view until
     //we have our list of categories to show and we don't want the user doing anything else once they kick off the query
@@ -593,7 +593,7 @@
 }
 
 - (void)showPickerActionSheetWithPickerList:(NSArray*)list {
-//    NSLog(@"%s\n", __FUNCTION__);
+//    DLog(@"%s\n", __FUNCTION__);
     //create a dictionary to pass a pointer into our action sheet for
     NSDictionary *selectionResult;
     BlockPickerActionSheet *sheet = [BlockPickerActionSheet pickerWithTitle:@"Choose Category" withChoices:list pickerSelection:&selectionResult block:^(BlockPickerActionSheet *alert) {
@@ -630,7 +630,7 @@
 }
 
 - (void)scrollTableFromSender:(id)sender withInset:(CGFloat)bottomInset {
-//    NSLog(@"%s %0.0f", __FUNCTION__, bottomInset);
+//    DLog(@"%s %0.0f", __FUNCTION__, bottomInset);
     CGPoint correctedPoint;
     
     if ([sender isKindOfClass:[UITextField class]]) {
@@ -653,14 +653,14 @@
 }
 
 - (void)resetTableContentInsetsWithIndexPath:(NSIndexPath *)indexPath {
-//    NSLog(@"%s %@", __FUNCTION__, indexPath);
+//    DLog(@"%s %@", __FUNCTION__, indexPath);
     NSIndexPath *pathToUpdateTo = indexPath;
     self.tableView.contentInset = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f);
     [self.tableView scrollToRowAtIndexPath:pathToUpdateTo atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    //    NSLog(@"%s\n", __FUNCTION__);
+    //    DLog(@"%s\n", __FUNCTION__);
     
     NSInteger sectionRows = [self.tableObjects count] + 3;//inner content rows + a header and footer row + submit button row
     NSInteger row = [indexPath row];
@@ -861,8 +861,8 @@
         //determine what type of cell we need to show
         
         NSUInteger datatype = [(NSNumber*)self.tableObjects[indexPath.row - 1][@"datatype"] integerValue];
-//        NSLog(@"datatype = %i", datatype);
-//        NSLog(@"self.tableObjects[indexPath.row - 1]label = %@", self.tableObjects[indexPath.row - 1][@"question"]);
+//        DLog(@"datatype = %i", datatype);
+//        DLog(@"self.tableObjects[indexPath.row - 1]label = %@", self.tableObjects[indexPath.row - 1][@"question"]);
 #pragma mark Number Cell
         if (datatype == KKKollectionSetupCellDataTypeNumber) {
             //number picker
@@ -1087,7 +1087,7 @@
 #pragma mark Long String Cell
         } else if (datatype == KKKollectionSetupCellDataTypeLongString) {
             //enter long string
-//            NSLog(@"long string cell");
+//            DLog(@"long string cell");
             static NSString *CustomCellIdentifier = @"KKSetupTableLongStringCell";
             
             KKSetupTableLongStringCell *cell = (KKSetupTableLongStringCell *) [tableView dequeueReusableCellWithIdentifier:CustomCellIdentifier];
@@ -1125,7 +1125,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         } else if (datatype == KKKollectionSetupCellDataTypeSegment) {
-//            NSLog(@"segment cell");
+//            DLog(@"segment cell");
 #pragma mark Segment Cell
             //segmented control or picker
             static NSString *CustomCellIdentifier = @"KKSetupTableSegmentCell";
@@ -1397,7 +1397,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
 //    NSLog(@"%s", __FUNCTION__);
-//    NSLog(@"textView super view class = %@", [[[textView superview] superview]class]);
+//    DLog(@"textView super view class = %@", [[[textView superview] superview]class]);
     //check our cell type to determine our character limits
     NSUInteger stringLimit;
     
