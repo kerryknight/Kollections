@@ -69,7 +69,7 @@
     [self loadCoverPhoto:self];
     
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone]; // PFQueryTableViewController reads this in viewDidLoad -- would prefer to throw this in init, but didn't work
-    self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView.showsVerticalScrollIndicator = YES;
     
     //add the parallax effect to the table with our cover photo view
     [self.tableView addParallelViewWithUIView:self.headerView withDisplayRatio:0.4 cutOffAtMax:YES];
@@ -439,6 +439,7 @@
         
         cell.kb.delegate = self;
         cell.kb.view.tag = (kKOLLECTIONSBARTAG + indexPath.section + 1);
+        cell.kb.section = indexPath.section;
         [self addChildViewController:cell.kb];
         [cell.kb didMoveToParentViewController:self];
         
@@ -487,13 +488,38 @@
 }
 
 #pragma mark - KKKollectionsBarViewControllerDelegate methods
-- (void)didSelectPhotoBarItemAtIndex:(NSInteger)index{
-//    NSLog(@"%s", __FUNCTION__);
+- (void)didSelectPhotoBarItemAtIndexPath:(NSIndexPath *)indexPath {
+//    DLog(@"index = %@", indexPath);
+    
+    //extract our subject and photos dictionary object from our array
+    //there will only be one for each index path row/section
+    NSDictionary *subjectDictionary = (NSDictionary*)self.subjectsWithPhotos[indexPath.section];
+    NSString *title = @"";
+    if (objectsAreLoaded) {
+        if (subjectDictionary) {
+            //we have subjects
+            //there should only be 1 for this index path
+            for (NSString *key in [subjectDictionary allKeys]) {
+                title = key; //we'll use this for setting our photos array too for the collection view
+            }
+        } else {
+            //no subjects so just put the header text to the kollection's title
+            title = self.kollection[kKKKollectionTitleKey];
+        }
+    }
+    
+    //set our photos array
+    NSArray *photos = subjectDictionary[title];
+    
+    //get the selected photo's PFObject
+    PFObject *photo = [photos objectAtIndex:indexPath.row];
+    
+    [self.delegate loadPhotoDetailsViewForPhoto:photo];
 }
 
 #pragma mark - Custom Methods
 - (void)createSubjectsWithPhotosArrayWithCompletion:(KKObjectsLoadedCallback)callback {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //create a mutable array of nsdictionaries
     //the keys for each dictionary will be the subject title and the objects will be the array of photos for each subject
     NSMutableArray *subjectsAndPhotosList = [[NSMutableArray alloc] initWithCapacity:0];
@@ -556,7 +582,7 @@
 }
 
 - (void) reloadCollectionViewTableRows {
-    NSLog(@"%s", __FUNCTION__);
+//    NSLog(@"%s", __FUNCTION__);
     //create index paths for each of our photo collection views; these are always on row 1 of each section
     NSMutableArray *indexPathArray = [[NSMutableArray alloc] initWithCapacity:[self.subjectsWithPhotos count]];
     for (int i = 0; i < [self.subjectsWithPhotos count]; i++) {

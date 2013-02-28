@@ -16,16 +16,20 @@
 #import "KKUtility.h"
 #import "MBProgressHUD.h"
 #import "KKToolbarButton.h"
+#import "SRSlimeView.h"
 
 enum ActionSheetTags {
     MainActionSheetTag = 0,
     ConfirmDeleteActionSheetTag = 1
 };
 
-@interface KKPhotoDetailsViewController ()
+@interface KKPhotoDetailsViewController () {
+    SRRefreshView *slimeRefreshView;
+}
 @property (nonatomic, strong) UITextField *commentTextField;
 @property (nonatomic, strong) KKPhotoDetailsHeaderView *headerView;
 @property (nonatomic, assign) BOOL likersQueryInProgress;
+@property (nonatomic, strong) KKToolbarButton *backButton;
 @end
 
 static const CGFloat kKKCellInsetWidth = 20.0f;
@@ -51,6 +55,9 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
         self.className = kKKActivityClassKey;
         self.objectsPerPage = 10;
         
+        // Whether the built-in pull-to-refresh is enabled
+        self.pullToRefreshEnabled = NO;
+        
         self.likersQueryInProgress = NO;
     }
     return self;
@@ -60,23 +67,26 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
 #pragma mark - UIViewController
 
 - (void)viewDidLoad {
+//    NSLog(@"%s", __FUNCTION__);
     [self.tableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
 
     [super viewDidLoad];
     
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"LogoNavigationBar.png"]];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
 
     [self.navigationItem setHidesBackButton:YES];
 
     //add custom toolbar button
-    KKToolbarButton *backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
-    [backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:backButton];
+    self.backButton = [[KKToolbarButton alloc] initWithFrame:kKKBarButtonItemLeftFrame isBackButton:YES andTitle:@"Back"];
+    [self.backButton addTarget:self action:@selector(backButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar addSubview:self.backButton];
+    
+    //create a custom action button
+    KKToolbarButton *actionButton = [[KKToolbarButton alloc] initAsActionButtonWithFrame:kKKBarButtonItemRightFrame];
+    [actionButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     
     // Set table view properties
-    UIView *texturedBackgroundView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [texturedBackgroundView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"BackgroundLeather.png"]]];
-    self.tableView.backgroundView = texturedBackgroundView;
+    [self.tableView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
     // Set table header
     self.headerView = [[KKPhotoDetailsHeaderView alloc] initWithFrame:[KKPhotoDetailsHeaderView rectForView] photo:self.photo];
@@ -90,14 +100,25 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
     [commentTextField setDelegate:self];
     self.tableView.tableFooterView = footerView;
     
+    //knightka only show the action button if user is the owner of the image
+    //TODO: change this later once we add additional action menu options beyond just deleting a photo, i.e.
+    //saving a photo, posting to facebook, etc.
     if ([[[self.photo objectForKey:kKKPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(actionButtonAction:)];
+        [self.navigationController.navigationBar addSubview:actionButton];
     }
     
     // Register to be notified when the keyboard will be shown to scroll the view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userLikedOrUnlikedPhoto:) name:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
+    
+    //insert pull to refresh slime view
+    slimeRefreshView = [[SRRefreshView alloc] init];
+    slimeRefreshView.delegate = self;
+    slimeRefreshView.upInset = 0;
+    slimeRefreshView.slimeMissWhenGoingBack = YES;
+    slimeRefreshView.slime.bodyColor = kMint3;
+    [self.tableView addSubview:slimeRefreshView];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -112,6 +133,18 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    //    NSLog(@"%s", __FUNCTION__);
+    [super viewWillAppear:animated];
+    
+    self.backButton.hidden = NO;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    //    NSLog(@"%s", __FUNCTION__);
+    [super viewWillDisappear:animated];
+    self.backButton.hidden = YES; //hidden so it doesn't overlap other custom back buttons on other views
+}
 
 #pragma mark - UITableViewDelegate
 
@@ -207,6 +240,30 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
     return cell;
 }
 
+#pragma mark - Slime Refresh delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView scrollViewDidScroll];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    //    NSLog(@"%s", __FUNCTION__);
+    [slimeRefreshView scrollViewDidEndDraging];
+}
+
+- (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView {
+    //    NSLog(@"%s", __FUNCTION__);
+    
+    [self refreshTable:nil];
+    
+}
+
+- (void)refreshTable:(id)sender {
+    //    NSLog(@"%s", __FUNCTION__);
+    
+    [self loadObjects];
+    
+}
 
 #pragma mark - UITextFieldDelegate
 
@@ -386,6 +443,7 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
 }
 
 - (void)backButtonAction:(id)sender {
+//    NSLog(@"%s", __FUNCTION__);
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -409,6 +467,12 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
     PFQuery *query = [KKUtility queryForActivitiesOnPhoto:photo cachePolicy:kPFCachePolicyNetworkOnly];
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         self.likersQueryInProgress = NO;
+        
+        //tell the table to end refresh in case we did it by hand
+        [slimeRefreshView performSelector:@selector(endRefresh)
+                               withObject:nil afterDelay:0.0
+                                  inModes:[NSArray arrayWithObject:NSRunLoopCommonModes]];
+        
         if (error) {
             [self.headerView reloadLikeBar];
             return;

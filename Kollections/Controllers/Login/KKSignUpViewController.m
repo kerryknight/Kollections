@@ -46,7 +46,7 @@
     self.cancelLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     self.cancelLabel.textAlignment = UITextAlignmentCenter;
     self.cancelLabel.backgroundColor = [UIColor clearColor];
-    self.cancelLabel.textColor = [UIColor colorWithRed:190.0f/255.0f green:182.0f/255.0f blue:166.0f/255.0f alpha:1.0];
+    self.cancelLabel.textColor = kTan1;
     self.cancelLabel.text = @"Cancel";
     //give it some depth
     CALayer *cancelLayer = self.cancelLabel.layer;

@@ -177,8 +177,9 @@
     //deselect the selected item
     [self.collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
+    NSIndexPath *indexPathToUse = [NSIndexPath indexPathForItem:selectedIndex inSection:self.section];
     //tell the delegate what item was touched on what row so i can load the proper follow-up view
-    [self.delegate didSelectPhotoBarItemAtIndex:selectedIndex];
+    [self.delegate didSelectPhotoBarItemAtIndexPath:indexPathToUse];
 }
 
 #pragma mark – UICollectionViewDelegateFlowLayout

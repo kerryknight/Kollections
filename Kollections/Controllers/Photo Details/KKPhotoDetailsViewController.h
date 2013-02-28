@@ -9,7 +9,7 @@
 #import "KKPhotoDetailsHeaderView.h"
 #import "KKBaseTextCell.h"
 
-@interface KKPhotoDetailsViewController : PFQueryTableViewController <UITextFieldDelegate, UIActionSheetDelegate, KKPhotoDetailsHeaderViewDelegate, KKBaseTextCellDelegate>
+@interface KKPhotoDetailsViewController : PFQueryTableViewController <UITextFieldDelegate, UIActionSheetDelegate, KKPhotoDetailsHeaderViewDelegate, KKBaseTextCellDelegate, SRRefreshDelegate>
 
 @property (nonatomic, strong) PFObject *photo;
 

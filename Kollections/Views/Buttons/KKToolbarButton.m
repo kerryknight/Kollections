@@ -22,7 +22,7 @@
         self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         self.titleLabel.textAlignment = UITextAlignmentCenter;
         self.titleLabel.backgroundColor = [UIColor clearColor];
-        self.titleLabel.textColor = [UIColor colorWithRed:190.0f/255.0f green:182.0f/255.0f blue:166.0f/255.0f alpha:1.0];
+        self.titleLabel.textColor = kTan1;
         [self setTitle:title forState:UIControlStateNormal];
         
         //give label text some depth
@@ -69,11 +69,46 @@
         self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
         self.titleLabel.textAlignment = UITextAlignmentCenter;
         self.titleLabel.backgroundColor = [UIColor clearColor];
-        self.titleLabel.textColor = [UIColor colorWithRed:190.0f/255.0f green:182.0f/255.0f blue:166.0f/255.0f alpha:1.0];
+        self.titleLabel.textColor = kTan1;
         [self setTitle:title forState:UIControlStateNormal];
         
         //give label text some depth
         CALayer *labelLayer = self.titleLabel.layer;
+        labelLayer.shadowRadius = 0.4;
+        labelLayer.shadowOffset = CGSizeMake(0, -1);
+        labelLayer.shadowColor = [[UIColor colorWithRed:134.0f/255.0f green:119.0f/255.0f blue:111.0f/255.0f alpha:1.0] CGColor];
+        labelLayer.shadowOpacity = 1.0f;
+        
+        [self setBackgroundImage:[UIImage imageNamed:@"kkRegularNavBarButton.png"] forState:UIControlStateNormal];
+        [self setBackgroundImage:[UIImage imageNamed:@"kkRegularNavigationBarSelected.png"] forState:UIControlStateHighlighted];
+        
+    }
+    return self;
+}
+
+- (id)initAsActionButtonWithFrame:(CGRect)frame {
+    self = [super init];
+    if (self) {
+        // Initialization code
+        
+        self = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.frame = frame;
+        
+        //customize the title label
+        self.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
+        self.titleLabel.textAlignment = UITextAlignmentCenter;
+        self.titleLabel.backgroundColor = [UIColor clearColor];
+        self.titleLabel.textColor = kTan1;
+        
+        UIImageView *actionView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"211-action.png"]];
+        actionView.frame = CGRectMake(self.frame.size.width/2 - actionView.frame.size.width/2 + 2, //slightly offcenter
+                                      self.frame.size.height/2 - actionView.frame.size.height/2 - 2, //slightly offcenter
+                                      actionView.frame.size.width,
+                                      actionView.frame.size.height);
+        [self addSubview:actionView];
+        
+        //give label text some depth
+        CALayer *labelLayer = actionView.layer;
         labelLayer.shadowRadius = 0.4;
         labelLayer.shadowOffset = CGSizeMake(0, -1);
         labelLayer.shadowColor = [[UIColor colorWithRed:134.0f/255.0f green:119.0f/255.0f blue:111.0f/255.0f alpha:1.0] CGColor];

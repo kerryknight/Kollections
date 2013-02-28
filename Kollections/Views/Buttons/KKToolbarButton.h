@@ -14,5 +14,6 @@
 
 - (id)initWithFrame:(CGRect)frame isBackButton:(BOOL)isBackButton andTitle:(NSString*)title;
 - (id)initWithTitle:(NSString*)title;
+- (id)initAsActionButtonWithFrame:(CGRect)frame;
 
 @end

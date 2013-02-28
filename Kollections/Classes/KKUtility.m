@@ -242,7 +242,7 @@
 }
 
 #pragma mark - Generic Photo Upload
-+ (void)uploadPhoto:(UIImage*)image forKollectionSubject:(PFObject*)subject block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
++ (void)uploadPhoto:(UIImage*)image withMetadata:(NSDictionary*)metadata forKollectionSubject:(PFObject*)subject block:(void (^)(BOOL succeeded, NSError *error))completionBlock {
     //if we don't have image data and it's not a profile or kollection pic, show upload error
     if (!image) {
         
@@ -252,6 +252,12 @@
         [alert show];
         
         return;
+    }
+    
+    //get photo location from our image metadata
+    PFGeoPoint *location;
+    if(metadata) {
+        location = [KKUtility getPhotoLocationFromMetadata:metadata];
     }
     
     //size images appropriately
@@ -275,8 +281,9 @@
     // create a photo object
     PFObject *photo = [PFObject objectWithClassName:kKKPhotoClassKey];
     [photo setObject:[PFUser currentUser] forKey:kKKPhotoUserKey];
-    [photo setObject:photoFile forKey:kKKPhotoPictureKey];
-    [photo setObject:thumbnailFile forKey:kKKPhotoThumbnailKey];
+    if (photoFile)[photo setObject:photoFile forKey:kKKPhotoPictureKey];
+    if (thumbnailFile)[photo setObject:thumbnailFile forKey:kKKPhotoThumbnailKey];
+    if (location)[photo setObject:location forKey:kKKPhotoLocationKey];
     
     // photos are public, but may only be modified by the user who uploaded them
     DLog(@"***** PHOTO ACCESS SHOULD MATCH THE ACCESS OF THE KOLLECTION'S SUBJECT! ******");
@@ -330,6 +337,38 @@
         // cancel request for background processing.
         [[UIApplication sharedApplication] endBackgroundTask:fileUploadBackgroundTaskId];
     }];
+}
+
++ (PFGeoPoint*)getPhotoLocationFromMetadata:(NSDictionary*)metadata {
+    PFGeoPoint *photoLocation;
+    
+    if (metadata) {
+        //first, check if there are entries for latitude/longitude in the metadata
+        //if there isn't, it probably means we saved the photo from the internet, not from our camera
+        NSDictionary *gpsdata = [metadata objectForKey:@"{GPS}"];
+        
+        if (gpsdata) {
+            NSString *latString = [gpsdata valueForKey:@"Latitude"];
+            NSString *lngString = [gpsdata valueForKey:@"Longitude"];
+            
+            double lat = [latString doubleValue];
+            double lng = [lngString doubleValue];
+            
+            // lat is negative is direction is south
+            if ([[gpsdata valueForKey:@"LatitudeRef"] isEqualToString:@"S"]) {
+                lat = -lat;
+            }
+            
+            // lng is negative if direction is west
+            if ([[gpsdata valueForKey:@"LongitudeRef"] isEqualToString:@"W"]) {
+                lng = -lng;
+            }
+            
+            photoLocation = [PFGeoPoint geoPointWithLatitude:lat longitude:lng];
+        } 
+    }
+    
+    return photoLocation;
 }
 
 #pragma mark - Facebook

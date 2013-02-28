@@ -1074,7 +1074,7 @@
                 
                 cell.photoButton.tag = kKollectionCoverPhotoButtonTag;
                 
-                UIImage *downImage = [UIImage darkenImage:[UIImage imageNamed:@"kkKollectionNoCoverPhotoButtonDown.png"] toLevel:1.2];
+                UIImage *downImage = [UIImage darkenImage:[UIImage imageNamed:@"kkKollectionNoCoverPhotoButtonDown.png"] toLevel:0.4];
                 [cell.photoButton setBackgroundImage:downImage forState:UIControlEventTouchDown];
                 [cell.photoButton addTarget:self action:@selector(selectCoverPhoto:) forControlEvents:UIControlEventTouchUpInside];
                 

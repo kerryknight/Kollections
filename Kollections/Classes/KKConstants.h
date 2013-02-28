@@ -48,6 +48,7 @@ extern NSString *const kKKTwitterConsumerSecret;
 #define kMint2 [UIColor colorWithRed:163.0f/255.0f green:209.0f/255.0f blue:205.0f/255.0f alpha:1.0f] //#a3d1cd
 #define kMint3 [UIColor colorWithRed:149.0f/255.0f green:219.0f/255.0f blue:218.0f/255.0f alpha:1.0f] //#95dbda
 #define kMint4 [UIColor colorWithRed:74.0f/255.0f green:165.0f/255.0f blue:164.0f/255.0f alpha:1.0f] //#4aa5a4
+#define kTan1  [UIColor colorWithRed:190.0f/255.0f green:182.0f/255.0f blue:166.0f/255.0f alpha:1.0]
 
 #pragma mark - Fonts
 #define kSetupEntryFont [UIFont fontWithName:@"Helvetica-Light" size:14]
@@ -154,6 +155,7 @@ extern NSString *const kKKPhotoPictureKey;
 extern NSString *const kKKPhotoThumbnailKey;
 extern NSString *const kKKPhotoUserKey;
 extern NSString *const kKKPhotoOpenGraphIDKey;
+extern NSString *const kKKPhotoLocationKey;
 
 #pragma mark - PFObject Category Class
 // Class key

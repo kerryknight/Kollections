@@ -51,6 +51,7 @@ FUTURE
 - Fix photo submissions so a photo will drag immediately on touch instead of requiring a 2nd touch to drag
 - Fix ability to touch and drag photo tray open in relation to creating drop targets correctly for photo submission (dragging itself works fine, just not drop target frames)
 - Add ability to have different koin values per subject instead of kollection-wide
+- Ability to display where photos in a kollection were taken all on a map (if geopoint available)
   
 __________________________________________________________________  
 3RD PARTIES USED

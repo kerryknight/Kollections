@@ -117,6 +117,7 @@ NSString *const kKKPhotoPictureKey         = @"image";
 NSString *const kKKPhotoThumbnailKey       = @"thumbnail";
 NSString *const kKKPhotoUserKey            = @"user";
 NSString *const kKKPhotoOpenGraphIDKey     = @"fbOpenGraphID";
+NSString *const kKKPhotoLocationKey        = @"location";
 
 #pragma mark - PhotoSubject Class
 // Class key

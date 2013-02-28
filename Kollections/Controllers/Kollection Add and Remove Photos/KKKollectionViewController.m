@@ -11,6 +11,7 @@
 #import "ELCAlbumPickerController.h"
 #import "ELCAsset.h"
 #import <CoreGraphics/CoreGraphics.h>
+#import "KKPhotoDetailsViewController.h"
 
 #define kPHOTO_TRAY_CLOSED_Y (self.view.frame.size.height - (self.tabBarController.tabBar.frame.size.height + 91)) //91 sets it just right based on current size at 44px high
 #define kPHOTO_TRAY_OPEN_Y (kPHOTO_TRAY_CLOSED_Y - 140)
@@ -172,6 +173,14 @@ typedef enum {
     }
 }
 
+- (void)loadPhotoDetailsViewForPhoto:(PFObject*)photo {
+    
+    if (photo) {
+        KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] initWithPhoto:photo];
+        [self.navigationController pushViewController:photoDetailsVC animated:YES];
+    }
+}
+
 #pragma mark - Asset Delegate
 - (void)dismissAnySelectedPhoto:(id)sender {
     //dismiss the drop view if we're hit edit, back or closed the photo tray
@@ -183,6 +192,7 @@ typedef enum {
 - (void)photosTrayPhotoTouchDown:(NSNotification*)notification {
 //    NSLog(@"%s", __FUNCTION__);
     
+    //TODO: here's some example code of how to add a context menu to items onscreen
     //here's how to add a little menu popover to a view with a selectable action(s)
 //    UIMenuController *menuController = [UIMenuController sharedMenuController];
 //    UIMenuItem *resetMenuItem = [[UIMenuItem alloc] initWithTitle:@"Reset" action:@selector(resetPiece:)];
@@ -524,10 +534,12 @@ typedef enum {
     if (subject) {
         //get our fully-sized image; we'll resize and orient in KKUtility
         ALAssetRepresentation *rep = [self.photoToSubmit.asset defaultRepresentation];
+        NSDictionary *metadata = [rep metadata];
+        
         CGImageRef iref = [rep fullResolutionImage];
         if (iref) {
             UIImage *photoImage = [UIImage imageWithCGImage:iref scale:[rep scale] orientation:[rep orientation]];
-            [KKUtility uploadPhoto:photoImage forKollectionSubject:subject block:^(BOOL succeeded, NSError *error) {
+            [KKUtility uploadPhoto:photoImage withMetadata:metadata forKollectionSubject:subject block:^(BOOL succeeded, NSError *error) {
                 //hide hud
                 
                 if (succeeded) {
