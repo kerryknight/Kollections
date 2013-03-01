@@ -95,7 +95,7 @@
                     [[KKCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:succeeded] forKey:KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:succeeded] forKey:KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
             }];
             
         }];
@@ -156,7 +156,7 @@
                     [[KKCache sharedCache] setAttributesForPhoto:photo likers:likers commenters:commenters likedByCurrentUser:isLikedByCurrentUser];
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
             }];
             
         } else {

@@ -11,7 +11,6 @@
 #import "ELCAlbumPickerController.h"
 #import "ELCAsset.h"
 #import <CoreGraphics/CoreGraphics.h>
-#import "KKPhotoDetailsViewController.h"
 
 #define kPHOTO_TRAY_CLOSED_Y (self.view.frame.size.height - (self.tabBarController.tabBar.frame.size.height + 91)) //91 sets it just right based on current size at 44px high
 #define kPHOTO_TRAY_OPEN_Y (kPHOTO_TRAY_CLOSED_Y - 140)
@@ -176,7 +175,9 @@ typedef enum {
 - (void)loadPhotoDetailsViewForPhoto:(PFObject*)photo {
     
     if (photo) {
-        KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] initWithPhoto:photo];
+        KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] init];
+        photoDetailsVC.photo = photo;
+//        photoDetailsVC.delegate = self;
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }

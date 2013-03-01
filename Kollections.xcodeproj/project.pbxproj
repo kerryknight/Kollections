@@ -108,6 +108,9 @@
 		C726D41616B38C8400A3221A /* libGPUImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C726D40E16B38C5300A3221A /* libGPUImage.a */; };
 		C726D41E16B38F7D00A3221A /* GPUImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = C726D41D16B38F7D00A3221A /* GPUImageView.m */; };
 		C726D42216B398F000A3221A /* DLCImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0EE416B3318200DDAADC /* DLCImagePickerController.m */; };
+		C727C2A416E050AA00958E3A /* KKKollectionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C727C2A116E050AA00958E3A /* KKKollectionTableViewController.m */; };
+		C727C2A516E050AA00958E3A /* KKKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C727C2A316E050AA00958E3A /* KKKollectionViewController.m */; };
+		C727C2A816E050F700958E3A /* KKPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C727C2A716E050F700958E3A /* KKPhotoDetailsViewController.m */; };
 		C72B0D1716B2EA2400DDAADC /* KKPhotosBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C72B0D1116B2EA2400DDAADC /* KKPhotosBarViewController.m */; };
 		C72B0D1816B2EA2400DDAADC /* KKPhotosBarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C72B0D1216B2EA2400DDAADC /* KKPhotosBarViewController.xib */; };
 		C72B0D1A16B2EA2400DDAADC /* KKPhotoBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C72B0D1416B2EA2400DDAADC /* KKPhotoBarCell.xib */; };
@@ -133,7 +136,6 @@
 		C734814616A0942D004AD6EB /* SlightIndentTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = C734813816A07C20004AD6EB /* SlightIndentTextField.m */; };
 		C734816A16A13771004AD6EB /* KKSetupTableLongStringCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */; };
 		C734816B16A13771004AD6EB /* KKSetupTableLongStringCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */; };
-		C73ECF1D16AF135800452C63 /* KKKollectionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */; };
 		C73ECF2A16AF342400452C63 /* UITableView+ZGParallelView.m in Sources */ = {isa = PBXBuildFile; fileRef = C73ECF2916AF342400452C63 /* UITableView+ZGParallelView.m */; };
 		C73F23DC16AC56DD006B96AE /* kkKollectionIconPlaceholder.png in Resources */ = {isa = PBXBuildFile; fileRef = C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */; };
 		C73F23DD16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C73F23DB16AC56DD006B96AE /* kkKollectionIconPlaceholder@2x.png */; };
@@ -191,7 +193,6 @@
 		C76A1D9F16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */; };
 		C76A1DA016B066E30097DD21 /* kkDestructiveNavBarButton.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */; };
 		C76A1DA116B066E30097DD21 /* kkDestructiveNavBarButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */; };
-		C79D9F4C16B9772100CA1A08 /* KKKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */; };
 		C79D9F5A16B994BF00CA1A08 /* photoFrame.png in Resources */ = {isa = PBXBuildFile; fileRef = C79D9F5816B994BF00CA1A08 /* photoFrame.png */; };
 		C79D9F5B16B994BF00CA1A08 /* photoFrame@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C79D9F5916B994BF00CA1A08 /* photoFrame@2x.png */; };
 		C79D9F6216B9A9C200CA1A08 /* kkPhotoTray.png in Resources */ = {isa = PBXBuildFile; fileRef = C79D9F6016B9A9C100CA1A08 /* kkPhotoTray.png */; };
@@ -233,7 +234,7 @@
 		C7B1CF1616783C8500BA628A /* KKSignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD5D16783C8500BA628A /* KKSignUpViewController.m */; };
 		C7B1CF1716783C8500BA628A /* KKWelcomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD5F16783C8500BA628A /* KKWelcomeViewController.m */; };
 		C7B1CF1916783C8500BA628A /* KKAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6316783C8500BA628A /* KKAccountViewController.m */; };
-		C7B1CF1A16783C8500BA628A /* KKPhotoDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6616783C8500BA628A /* KKPhotoDetailsViewController.m */; };
+		C7B1CF1A16783C8500BA628A /* KKPhotoDetailsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6616783C8500BA628A /* KKPhotoDetailsTableViewController.m */; };
 		C7B1CF1B16783C8500BA628A /* KKSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6916783C8500BA628A /* KKSearchViewController.m */; };
 		C7B1CF1C16783C8500BA628A /* KKFindFriendsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6C16783C8500BA628A /* KKFindFriendsViewController.m */; };
 		C7B1CF1D16783C8500BA628A /* KKSettingsActionSheetDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C7B1CD6E16783C8500BA628A /* KKSettingsActionSheetDelegate.m */; };
@@ -810,6 +811,12 @@
 		C726D3BF16B38BF900A3221A /* yellow-red.acv */ = {isa = PBXFileReference; lastKnownFileType = file; path = "yellow-red.acv"; sourceTree = "<group>"; };
 		C726D40416B38C5300A3221A /* GPUImage.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = GPUImage.xcodeproj; path = Kollections/External/GPUImage/GPUImage.xcodeproj; sourceTree = "<group>"; };
 		C726D41D16B38F7D00A3221A /* GPUImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GPUImageView.m; path = ../../GPUImage/Source/GPUImageView.m; sourceTree = "<group>"; };
+		C727C2A016E050AA00958E3A /* KKKollectionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionTableViewController.h; path = "Kollection Main View/KKKollectionTableViewController.h"; sourceTree = "<group>"; };
+		C727C2A116E050AA00958E3A /* KKKollectionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionTableViewController.m; path = "Kollection Main View/KKKollectionTableViewController.m"; sourceTree = "<group>"; };
+		C727C2A216E050AA00958E3A /* KKKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionViewController.h; path = "Kollection Main View/KKKollectionViewController.h"; sourceTree = "<group>"; };
+		C727C2A316E050AA00958E3A /* KKKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionViewController.m; path = "Kollection Main View/KKKollectionViewController.m"; sourceTree = "<group>"; };
+		C727C2A616E050F700958E3A /* KKPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPhotoDetailsViewController.h; sourceTree = "<group>"; };
+		C727C2A716E050F700958E3A /* KKPhotoDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPhotoDetailsViewController.m; sourceTree = "<group>"; };
 		C72B0D1016B2EA2400DDAADC /* KKPhotosBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPhotosBarViewController.h; sourceTree = "<group>"; };
 		C72B0D1116B2EA2400DDAADC /* KKPhotosBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPhotosBarViewController.m; sourceTree = "<group>"; };
 		C72B0D1216B2EA2400DDAADC /* KKPhotosBarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKPhotosBarViewController.xib; sourceTree = "<group>"; };
@@ -846,8 +853,6 @@
 		C734816716A13771004AD6EB /* KKSetupTableLongStringCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSetupTableLongStringCell.h; sourceTree = "<group>"; };
 		C734816816A13771004AD6EB /* KKSetupTableLongStringCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSetupTableLongStringCell.m; sourceTree = "<group>"; };
 		C734816916A13771004AD6EB /* KKSetupTableLongStringCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKSetupTableLongStringCell.xib; sourceTree = "<group>"; };
-		C73ECF1B16AF135800452C63 /* KKKollectionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionTableViewController.h; path = "Kollection Add and Remove Photos/KKKollectionTableViewController.h"; sourceTree = "<group>"; };
-		C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionTableViewController.m; path = "Kollection Add and Remove Photos/KKKollectionTableViewController.m"; sourceTree = "<group>"; };
 		C73ECF2816AF342400452C63 /* UITableView+ZGParallelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+ZGParallelView.h"; sourceTree = "<group>"; };
 		C73ECF2916AF342400452C63 /* UITableView+ZGParallelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+ZGParallelView.m"; sourceTree = "<group>"; };
 		C73F23DA16AC56DD006B96AE /* kkKollectionIconPlaceholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkKollectionIconPlaceholder.png; sourceTree = "<group>"; };
@@ -916,8 +921,6 @@
 		C76A1D9B16B066E30097DD21 /* kkDestructiveNavBarButtonSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButtonSelected@2x.png"; sourceTree = "<group>"; };
 		C76A1D9C16B066E30097DD21 /* kkDestructiveNavBarButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkDestructiveNavBarButton.png; sourceTree = "<group>"; };
 		C76A1D9D16B066E30097DD21 /* kkDestructiveNavBarButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "kkDestructiveNavBarButton@2x.png"; sourceTree = "<group>"; };
-		C79D9F4A16B9772100CA1A08 /* KKKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = KKKollectionViewController.h; path = "Kollection Add and Remove Photos/KKKollectionViewController.h"; sourceTree = "<group>"; };
-		C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = KKKollectionViewController.m; path = "Kollection Add and Remove Photos/KKKollectionViewController.m"; sourceTree = "<group>"; };
 		C79D9F5816B994BF00CA1A08 /* photoFrame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = photoFrame.png; sourceTree = "<group>"; };
 		C79D9F5916B994BF00CA1A08 /* photoFrame@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "photoFrame@2x.png"; sourceTree = "<group>"; };
 		C79D9F6016B9A9C100CA1A08 /* kkPhotoTray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kkPhotoTray.png; sourceTree = "<group>"; };
@@ -979,8 +982,8 @@
 		C7B1CD5F16783C8500BA628A /* KKWelcomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKWelcomeViewController.m; sourceTree = "<group>"; };
 		C7B1CD6216783C8500BA628A /* KKAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKAccountViewController.h; sourceTree = "<group>"; };
 		C7B1CD6316783C8500BA628A /* KKAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKAccountViewController.m; sourceTree = "<group>"; };
-		C7B1CD6516783C8500BA628A /* KKPhotoDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPhotoDetailsViewController.h; sourceTree = "<group>"; };
-		C7B1CD6616783C8500BA628A /* KKPhotoDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPhotoDetailsViewController.m; sourceTree = "<group>"; };
+		C7B1CD6516783C8500BA628A /* KKPhotoDetailsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPhotoDetailsTableViewController.h; sourceTree = "<group>"; };
+		C7B1CD6616783C8500BA628A /* KKPhotoDetailsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKPhotoDetailsTableViewController.m; sourceTree = "<group>"; };
 		C7B1CD6816783C8500BA628A /* KKSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKSearchViewController.h; sourceTree = "<group>"; };
 		C7B1CD6916783C8500BA628A /* KKSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKSearchViewController.m; sourceTree = "<group>"; };
 		C7B1CD6B16783C8500BA628A /* KKFindFriendsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKFindFriendsViewController.h; sourceTree = "<group>"; };
@@ -1824,10 +1827,10 @@
 		C73ECF0A16AEF8F200452C63 /* Kollection Main View */ = {
 			isa = PBXGroup;
 			children = (
-				C73ECF1B16AF135800452C63 /* KKKollectionTableViewController.h */,
-				C73ECF1C16AF135800452C63 /* KKKollectionTableViewController.m */,
-				C79D9F4A16B9772100CA1A08 /* KKKollectionViewController.h */,
-				C79D9F4B16B9772100CA1A08 /* KKKollectionViewController.m */,
+				C727C2A016E050AA00958E3A /* KKKollectionTableViewController.h */,
+				C727C2A116E050AA00958E3A /* KKKollectionTableViewController.m */,
+				C727C2A216E050AA00958E3A /* KKKollectionViewController.h */,
+				C727C2A316E050AA00958E3A /* KKKollectionViewController.m */,
 			);
 			name = "Kollection Main View";
 			sourceTree = "<group>";
@@ -2138,8 +2141,10 @@
 		C7B1CD6416783C8500BA628A /* Photo Details */ = {
 			isa = PBXGroup;
 			children = (
-				C7B1CD6516783C8500BA628A /* KKPhotoDetailsViewController.h */,
-				C7B1CD6616783C8500BA628A /* KKPhotoDetailsViewController.m */,
+				C7B1CD6516783C8500BA628A /* KKPhotoDetailsTableViewController.h */,
+				C7B1CD6616783C8500BA628A /* KKPhotoDetailsTableViewController.m */,
+				C727C2A616E050F700958E3A /* KKPhotoDetailsViewController.h */,
+				C727C2A716E050F700958E3A /* KKPhotoDetailsViewController.m */,
 			);
 			path = "Photo Details";
 			sourceTree = "<group>";
@@ -3604,7 +3609,7 @@
 				C7B1CF1616783C8500BA628A /* KKSignUpViewController.m in Sources */,
 				C7B1CF1716783C8500BA628A /* KKWelcomeViewController.m in Sources */,
 				C7B1CF1916783C8500BA628A /* KKAccountViewController.m in Sources */,
-				C7B1CF1A16783C8500BA628A /* KKPhotoDetailsViewController.m in Sources */,
+				C7B1CF1A16783C8500BA628A /* KKPhotoDetailsTableViewController.m in Sources */,
 				C7B1CF1B16783C8500BA628A /* KKSearchViewController.m in Sources */,
 				C7B1CF1C16783C8500BA628A /* KKFindFriendsViewController.m in Sources */,
 				C7B1CF1D16783C8500BA628A /* KKSettingsActionSheetDelegate.m in Sources */,
@@ -3675,7 +3680,6 @@
 				C73F23E716ACB4CE006B96AE /* UIImage+Colorization.m in Sources */,
 				C70A13A416ACC1D9007EAA5B /* KKEditKollectionViewController.m in Sources */,
 				C70A13B016ADF626007EAA5B /* NSMutableArray+AddOns.m in Sources */,
-				C73ECF1D16AF135800452C63 /* KKKollectionTableViewController.m in Sources */,
 				C73ECF2A16AF342400452C63 /* UITableView+ZGParallelView.m in Sources */,
 				C726D41E16B38F7D00A3221A /* GPUImageView.m in Sources */,
 				C72B0D1716B2EA2400DDAADC /* KKPhotosBarViewController.m in Sources */,
@@ -3687,13 +3691,15 @@
 				C726D3C216B38BF900A3221A /* GrayscaleContrastFilter.m in Sources */,
 				C726D42216B398F000A3221A /* DLCImagePickerController.m in Sources */,
 				C719D8DC16B86A990040C7A3 /* KKPhotoBarCell.m in Sources */,
-				C79D9F4C16B9772100CA1A08 /* KKKollectionViewController.m in Sources */,
 				C79D9F7A16B9B06D00CA1A08 /* ELCAlbumPickerController.m in Sources */,
 				C79D9F7C16B9B06D00CA1A08 /* ELCAsset.m in Sources */,
 				C79D9F7D16B9B06D00CA1A08 /* ELCAssetCell.m in Sources */,
 				C79D9F7F16B9B06D00CA1A08 /* ELCAssetTablePicker.m in Sources */,
 				C79D9F8116B9B06D00CA1A08 /* ELCImagePickerController.m in Sources */,
 				C7B2CB8B16C170CA00731B63 /* JDDroppableView.m in Sources */,
+				C727C2A416E050AA00958E3A /* KKKollectionTableViewController.m in Sources */,
+				C727C2A516E050AA00958E3A /* KKKollectionViewController.m in Sources */,
+				C727C2A816E050F700958E3A /* KKPhotoDetailsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

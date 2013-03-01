@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "KKEditKollectionViewController.h"
 #import "KKKollectionTableViewController.h"
+#import "KKPhotoDetailsViewController.h"
 #import "ELCImagePickerController.h"
 #import "JDDroppableView.h"
 
-@interface KKKollectionViewController : UIViewController <KKEditKollectionViewControllerDelegate, KKKollectionTableViewControllerDelegate, ELCImagePickerControllerDelegate, UIGestureRecognizerDelegate, JDDroppableViewDelegate> {
+@interface KKKollectionViewController : UIViewController <KKEditKollectionViewControllerDelegate, KKKollectionTableViewControllerDelegate, ELCImagePickerControllerDelegate, UIGestureRecognizerDelegate, JDDroppableViewDelegate, KKPhotoDetailsTableViewControllerDelegate> {
     
 }
 

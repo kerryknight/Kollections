@@ -1,18 +1,18 @@
 //
-//  KKPhotoDetailViewController.h
+//  KKPhotoDetailsViewController.h
 //  Kollections
 //
-//  Created by Mattieu Gamache-Asselin on 5/15/12.
-//  Copyright (c) 2012 Parse. All rights reserved.
+//  Created by Kerry Knight on 1/9/13.
+//  Copyright (c) 2013 Kerry Knight. All rights reserved.
 //
 
-#import "KKPhotoDetailsHeaderView.h"
-#import "KKBaseTextCell.h"
+#import <UIKit/UIKit.h>
+#import "KKPhotoDetailsTableViewController.h"
 
-@interface KKPhotoDetailsViewController : PFQueryTableViewController <UITextFieldDelegate, UIActionSheetDelegate, KKPhotoDetailsHeaderViewDelegate, KKBaseTextCellDelegate, SRRefreshDelegate>
+@interface KKPhotoDetailsViewController : UIViewController <KKPhotoDetailsTableViewControllerDelegate, UIScrollViewDelegate> {
+    
+}
 
 @property (nonatomic, strong) PFObject *photo;
-
-- (id)initWithPhoto:(PFObject*)aPhoto;
 
 @end

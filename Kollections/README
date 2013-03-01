@@ -52,6 +52,8 @@ FUTURE
 - Fix ability to touch and drag photo tray open in relation to creating drop targets correctly for photo submission (dragging itself works fine, just not drop target frames)
 - Add ability to have different koin values per subject instead of kollection-wide
 - Ability to display where photos in a kollection were taken all on a map (if geopoint available)
+- Ability to upload entire kollection to Facebook at once
+- Ability to import photos from Facebook and Instagram
   
 __________________________________________________________________  
 3RD PARTIES USED

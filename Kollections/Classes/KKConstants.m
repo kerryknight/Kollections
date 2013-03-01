@@ -35,9 +35,9 @@ NSString *const KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification     =
 NSString *const KKUtilityDidFinishProcessingProfilePictureNotification         = @"com.kerryknight.Kollections.utility.didFinishProcessingProfilePictureNotification";
 NSString *const KKTabBarControllerDidFinishEditingPhotoNotification            = @"com.kerryknight.Kollections.tabBarController.didFinishEditingPhoto";
 NSString *const KKTabBarControllerDidFinishImageFileUploadNotification         = @"com.kerryknight.Kollections.tabBarController.didFinishImageFileUploadNotification";
-NSString *const KKPhotoDetailsViewControllerUserDeletedPhotoNotification       = @"com.kerryknight.Kollections.photoDetailsViewController.userDeletedPhoto";
-NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification  = @"com.kerryknight.Kollections.photoDetailsViewController.userLikedUnlikedPhotoInDetailsViewNotification";
-NSString *const KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification   = @"com.kerryknight.Kollections.photoDetailsViewController.userCommentedOnPhotoInDetailsViewNotification";
+NSString *const KKPhotoDetailsTableViewControllerUserDeletedPhotoNotification       = @"com.kerryknight.Kollections.photoDetailsViewController.userDeletedPhoto";
+NSString *const KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotification  = @"com.kerryknight.Kollections.photoDetailsViewController.userLikedUnlikedPhotoInDetailsViewNotification";
+NSString *const KKPhotoDetailsTableViewControllerUserCommentedOnPhotoNotification   = @"com.kerryknight.Kollections.photoDetailsViewController.userCommentedOnPhotoInDetailsViewNotification";
 
 NSString *const KKKollectionSetupTableDidCreateKollectionNotification          =
     @"com.kerryknight.Kollections.setupTableViewController.createdKollectionNotification";
@@ -46,7 +46,7 @@ NSString *const KKKollectionSetupTableDidEditKollectionNotification          =
 
 
 #pragma mark - User Info Keys
-NSString *const KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey = @"liked";
+NSString *const KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey = @"liked";
 NSString *const kKKEditPhotoViewControllerUserInfoCommentKey = @"comment";
 
 #pragma mark - Installation Class

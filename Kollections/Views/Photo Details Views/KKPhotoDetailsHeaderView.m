@@ -374,7 +374,7 @@ static TTTTimeIntervalFormatter *timeFormatter;
         }];
     }
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:self.photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:liked] forKey:KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotification object:self.photo userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithBool:liked] forKey:KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotificationUserInfoLikedKey]];
 }
 
 - (void)didTapLikerButtonAction:(UIButton *)button {

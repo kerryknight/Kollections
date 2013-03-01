@@ -706,7 +706,8 @@
                         UINavigationController *homeNavigationController = [[self.tabBarController viewControllers] objectAtIndex:KKHomeTabBarItemIndex];
                         [self.tabBarController setSelectedViewController:homeNavigationController];
                         
-                        KKPhotoDetailsViewController *detailViewController = [[KKPhotoDetailsViewController alloc] initWithPhoto:object];
+                        KKPhotoDetailsViewController *detailViewController = [[KKPhotoDetailsViewController alloc] init];
+                        detailViewController.photo = object;
                         [homeNavigationController pushViewController:detailViewController animated:YES];
                     }
                 }];

@@ -29,10 +29,10 @@
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KKTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KKUtilityUserFollowingChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKPhotoDetailsTableViewControllerUserCommentedOnPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KKPhotoDetailsTableViewControllerUserDeletedPhotoNotification object:nil];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style {
@@ -75,10 +75,10 @@
         
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidPublishPhoto:) name:KKTabBarControllerDidFinishEditingPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userFollowingChanged:) name:KKUtilityUserFollowingChangedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:KKPhotoDetailsViewControllerUserDeletedPhotoNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:KKPhotoDetailsViewControllerUserLikedUnlikedPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidDeletePhoto:) name:KKPhotoDetailsTableViewControllerUserDeletedPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:KKPhotoDetailsTableViewControllerUserLikedUnlikedPhotoNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLikeOrUnlikePhoto:) name:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:KKPhotoDetailsViewControllerUserCommentedOnPhotoNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidCommentOnPhoto:) name:KKPhotoDetailsTableViewControllerUserCommentedOnPhotoNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -446,7 +446,8 @@
 }
 
 - (void)photoHeaderView:(KKPhotoHeaderView *)photoHeaderView didTapCommentOnPhotoButton:(UIButton *)button  photo:(PFObject *)photo {
-    KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] initWithPhoto:photo];
+    KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] init];
+    photoDetailsVC.photo = photo;
     [self.navigationController pushViewController:photoDetailsVC animated:YES];
 }
 
@@ -496,7 +497,8 @@
 - (void)didTapOnPhotoAction:(UIButton *)sender {
     PFObject *photo = [self.objects objectAtIndex:sender.tag];
     if (photo) {
-        KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] initWithPhoto:photo];
+        KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] init];
+        photoDetailsVC.photo = photo;
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }

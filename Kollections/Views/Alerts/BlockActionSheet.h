@@ -25,12 +25,12 @@ typedef void (^BlockPickerButtonCallback) (id result);
 
 - (id)initWithTitle:(NSString *)title;
 
-- (void)setCancelButtonWithTitle:(NSString *) title block:(BlockPickerButtonCallback)completion;
-- (void)setDestructiveButtonWithTitle:(NSString *) title block:(BlockPickerButtonCallback)completion;
+- (void)setCancelButtonWithTitle:(NSString *) title block:(void (^)()) block;
+- (void)setDestructiveButtonWithTitle:(NSString *) title block:(void (^)()) block;
 - (void)addButtonWithTitle:(NSString *) title block:(BlockPickerButtonCallback)completion;
 
-- (void)setCancelButtonWithTitle:(NSString *) title atIndex:(NSInteger)index block:(BlockPickerButtonCallback)completion;
-- (void)setDestructiveButtonWithTitle:(NSString *) title atIndex:(NSInteger)index block:(BlockPickerButtonCallback)completion;
+- (void)setCancelButtonWithTitle:(NSString *) title atIndex:(NSInteger)index block:(void (^)()) block;
+- (void)setDestructiveButtonWithTitle:(NSString *) title atIndex:(NSInteger)index block:(void (^)()) block;
 - (void)addButtonWithTitle:(NSString *) title atIndex:(NSInteger)index block:(BlockPickerButtonCallback)completion;
 - (void)dismissWithClickedButtonIndex:(NSInteger)buttonIndex withObject:(id)object animated:(BOOL)animated;
 - (void)showInView:(UIView *)view;
