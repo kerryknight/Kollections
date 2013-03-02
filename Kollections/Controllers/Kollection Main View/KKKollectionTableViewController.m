@@ -508,13 +508,50 @@
         }
     }
     
-    //set our photos array
-    NSArray *photos = subjectDictionary[title];
+    //get our subject's photos array
+    NSMutableArray *photos = subjectDictionary[title];
     
-    //get the selected photo's PFObject
-    PFObject *photo = [photos objectAtIndex:indexPath.row];
+    //reorder our array based on the photo we selected so our selected photo is first 
+    photos = [self reorderPhotosArray:photos basedOnSelectedPhotoAtIndexPath:indexPath];
     
-    [self.delegate loadPhotoDetailsViewForPhoto:photo];
+    [self.delegate loadPhotoDetailsViewForSubjectPhotos:photos];
+}
+
+- (NSMutableArray*)reorderPhotosArray:(NSArray*)photos basedOnSelectedPhotoAtIndexPath:(NSIndexPath*)indexPath {
+    
+    NSMutableArray *passedInPhotos = [NSMutableArray arrayWithArray:photos];
+    
+//    PFObject *photo = (PFObject*)[photos objectAtIndex:indexPath.row];
+//    NSLog(@"\ntouched photo = %@\n\n", photo.objectId);
+//    
+//    for (int i = 0; i < [passedInPhotos count]; i++) {
+//        PFObject *photo = (PFObject*)[passedInPhotos objectAtIndex:i];
+//        NSLog(@"photo id before = %@", photo.objectId);
+//    }
+//    NSLog(@"\n\n");
+    
+    //create a temporary array of photos from the main array that are listed order before our selected photo
+    //we'll then tack these back on to a main array at the end so that we can scroll through our photos
+    //from the photo details view and give the illusion of keep our photos in the order they are in when
+    //viewing them in the subject's photo bar on the kollection view
+    NSMutableArray *photosToAddAtEndArray = [NSMutableArray new];
+    //index.row is the index of the photo we selected to view
+    //loop through all our photos until we get to the selected photo; add photo to temp dict and remove it from main array
+    for (int i = 0; i < indexPath.row; i++) {
+        [photosToAddAtEndArray addObject:[passedInPhotos objectAtIndex:i]];
+    }
+    
+    for (PFObject *photo in photosToAddAtEndArray) {
+        [passedInPhotos removeObjectIdenticalTo:photo];//remove from beginning
+        [passedInPhotos addObject:photo];//tack right back on at the end
+    }
+
+//    for (int i = 0; i < [passedInPhotos count]; i++) {
+//        PFObject *photo = (PFObject*)[passedInPhotos objectAtIndex:i];
+//        NSLog(@"photo id after = %@", photo.objectId);
+//    }
+    
+    return passedInPhotos;
 }
 
 #pragma mark - Custom Methods

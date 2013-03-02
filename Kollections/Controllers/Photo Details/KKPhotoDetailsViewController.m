@@ -9,12 +9,14 @@
 #import "KKPhotoDetailsViewController.h"
 #import "KKToolbarButton.h"
 #import "KKAppDelegate.h"
+#import "DMLazyScrollView.h"
 
-@interface KKPhotoDetailsViewController () {
-    
+
+@interface KKPhotoDetailsViewController () <DMLazyScrollViewDelegate> {
+    NSMutableArray *photoViewControllerArray;
 }
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) KKPhotoDetailsTableViewController *tableView;
+
+@property (nonatomic, strong) DMLazyScrollView *scrollView;
 @property (nonatomic, strong) KKToolbarButton *backButton;
 @property (nonatomic, strong) KKToolbarButton *actionButton;
 @end
@@ -37,42 +39,13 @@
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"kkTitleBarLogo.png"]];
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"kkMainBG.png"]]];//set background image
     
-    //need our app delegate tabbar's height
-    KKAppDelegate *appDelegate = (KKAppDelegate *)[[UIApplication sharedApplication] delegate];
-    //get the space from the bottom of the navigation bar to the top of the tab bar;
-    CGRect visibleFrame = CGRectMake(0,
-                                     0,
-                                     self.navigationController.navigationBar.frame.size.width,
-                                     appDelegate.tabBarController.tabBar.frame.origin.y - self.navigationController.navigationBar.frame.size.height);
-    
-    self.scrollView = [[UIScrollView alloc] initWithFrame:visibleFrame];
-    [self.scrollView setScrollEnabled:NO]; //up and down scrolling controlled by child tableview
-    [self.scrollView setPagingEnabled:YES];//so we can slide left to right
-    
-    //add our table view
-    self.tableView = [[KKPhotoDetailsTableViewController alloc] initWithPhoto:self.photo];
-    self.tableView.delegate = self;
-    self.tableView.view.frame = self.scrollView.frame;
-    self.tableView.tableView.bounds = self.scrollView.bounds;
-    
-    //size our current view to fit the visible area
-    CGRect slideFrame = self.view.frame;
-    slideFrame.origin.y -= (self.navigationController.navigationBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);
-    self.view.frame = slideFrame; //move ourselves down the size of the navigation bar
-    
-    [self.scrollView addSubview:self.tableView.view];
-    [self.view addSubview:self.scrollView];
-    
     //add toolbar buttons
     self.navigationItem.hidesBackButton = YES;//hide default back button as it's not styled like I want
     [self configureBackButton];//add our custom back button
     
-    //knightka only show the action button if user is the owner of the image
-    //TODO: change this later once we add additional action menu options beyond just deleting a photo, i.e.
-    //saving a photo, posting to facebook, instagram, emailing, texting, etc.
-    if ([[[self.photo objectForKey:kKKPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
-        [self configureActionButton];//add our custom action button
-    }
+    //we could potentially pass in an array of 1 or more photos or a single photo object
+    //we need to determine that first, and then we'll load our photo view based on that
+    [self determineHowToLoadPhotos];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -81,7 +54,7 @@
     
 }
 
--(void)dealloc {
+- (void)dealloc {
     //remove observers
 }
 
@@ -102,6 +75,123 @@
 }
 
 #pragma mark - Custom Methods
+- (void)determineHowToLoadPhotos {
+    //determine if we passed in a array of photos (this happens when we click on a photo contained in a kollection's collectionview photo bar
+    //if not, check if we passed in a single photo object, which could happen from a feed view or elsewhere
+    if (self.photosArray && [self.photosArray count] > 1) {
+        //we passed in an array of photos so add our lazy, paging scrollview
+        [self configureLazyScrollView];
+    } else {
+        //check if we passed in a single photo object
+        if (self.photo) {
+            //if so, we'll just add our photo details tableview directly to self.view, skipping the any scrollview addition
+            [self configureTableViewDirectlyForPhoto:self.photo];
+        } else if ([self.photosArray count] == 1) {//we passed in a single object array
+            PFObject *photo = (PFObject*)[self.photosArray objectAtIndex:0];//should always be at 0
+            self.photo = photo;
+            [self configureTableViewDirectlyForPhoto:self.photo];
+        }
+    }
+}
+
+- (void)configureTableViewDirectlyForPhoto:(PFObject*)photo {
+//    NSLog(@"%s", __FUNCTION__);
+    //prepare the lazy scroll view's layout
+    //need our app delegate tabbar's height
+    KKAppDelegate *appDelegate = (KKAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    //from bottom of nav bar to top of tab bar
+    CGRect visibleFrame = CGRectMake(0,
+                                     0,
+                                     appDelegate.tabBarController.tabBar.frame.size.width,
+                                     appDelegate.tabBarController.tabBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);//need to add this in b/c we're in different coordinate sets
+    
+    //now add our table view
+    KKPhotoDetailsTableViewController *tableView = [[KKPhotoDetailsTableViewController alloc] initWithPhoto:self.photo];
+    tableView.delegate = self;
+    tableView.view.frame = visibleFrame;
+    tableView.tableView.bounds = visibleFrame;
+    [self.view addSubview:tableView.view];
+    
+    //knightka only show the action button if user is the owner of the image
+    //TODO: change this later once we add additional action menu options beyond just deleting a photo, i.e.
+    //saving a photo, posting to facebook, instagram, emailing, texting, etc.
+    if ([[[self.photo objectForKey:kKKPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        [self configureActionButton];//add our custom action button
+    }
+}
+
+- (void)configureLazyScrollView {
+//    NSLog(@"%s", __FUNCTION__);
+    // get page count from number of photos in kollection
+    NSUInteger numberOfPages;
+    
+    if (self.photosArray && [self.photosArray count]) {
+        numberOfPages = [self.photosArray count];
+    } else {
+        numberOfPages = 1;//we have only one photo to show
+    }
+    
+    photoViewControllerArray = [[NSMutableArray alloc] initWithCapacity:numberOfPages];
+    for (NSUInteger k = 0; k < numberOfPages; ++k) {
+        [photoViewControllerArray addObject:[NSNull null]];
+    }
+    
+    //prepare the lazy scroll view's layout
+    //need our app delegate tabbar's height
+    KKAppDelegate *appDelegate = (KKAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    //from bottom of nav bar to top of tab bar
+    CGRect visibleFrame = CGRectMake(0,
+                                     0,
+                                     appDelegate.tabBarController.tabBar.frame.size.width,
+                                     appDelegate.tabBarController.tabBar.frame.origin.y + self.navigationController.navigationBar.frame.size.height);//need to add this in b/c we're in different coordinate sets
+    
+    self.scrollView = [[DMLazyScrollView alloc] initWithFrame:visibleFrame];
+    self.scrollView.controlDelegate = self;
+    
+    //knightka workaround to alleviate "capturing self strongly within this block likely to cause retain cyle" error
+    __weak KKPhotoDetailsViewController *weakSelf = self;
+    self.scrollView.dataSource = ^(NSUInteger index) {
+        return [weakSelf controllerAtIndex:index];
+    };
+    
+    self.scrollView.numberOfPages = numberOfPages;
+    [self.view addSubview:self.scrollView];
+}
+
+- (KKPhotoDetailsTableViewController *)controllerAtIndex:(NSInteger)index {
+//    NSLog(@"%s", __FUNCTION__);
+    if (index > photoViewControllerArray.count || index < 0) return nil;
+    
+    id res = [photoViewControllerArray objectAtIndex:index];
+    
+    PFObject *photoToLoad = (PFObject*)[self.photosArray objectAtIndex:index];
+    self.photo = photoToLoad;
+    
+    //knightka only show the action button if user is the owner of the image
+    //TODO: change this later once we add additional action menu options beyond just deleting a photo, i.e.
+    //saving a photo, posting to facebook, instagram, emailing, texting, etc.
+    if ([[[self.photo objectForKey:kKKPhotoUserKey] objectId] isEqualToString:[[PFUser currentUser] objectId]]) {
+        [self configureActionButton];//add our custom action button
+    }
+    
+    //if we haven't loaded the photo, alloc a new photo details view, which will load it
+    if (res == [NSNull null]) {
+        KKPhotoDetailsTableViewController *tableView = [[KKPhotoDetailsTableViewController alloc] initWithPhoto:self.photo];
+        tableView.delegate = self;
+        tableView.view.frame = self.scrollView.frame;
+        tableView.tableView.bounds = self.scrollView.bounds;
+        [self.scrollView addSubview:tableView.view];
+        [photoViewControllerArray replaceObjectAtIndex:index withObject:tableView];
+        
+        return tableView;
+    }
+    
+    //else, we've already loaded the photo so just return it
+    return res;
+}
+
 //our custom back button
 - (void)configureBackButton {
 //    NSLog(@"%s", __FUNCTION__);
@@ -113,14 +203,18 @@
 
 - (void)backButtonAction:(id)sender {
 //    NSLog(@"%s", __FUNCTION__);
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)configureActionButton {
     //create a custom action button
-    self.actionButton = [[KKToolbarButton alloc] initAsActionButtonWithFrame:kKKBarButtonItemRightFrame];
-    [self.actionButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationController.navigationBar addSubview:self.actionButton];
+    if(!self.actionButton) {
+        self.actionButton = [[KKToolbarButton alloc] initAsActionButtonWithFrame:kKKBarButtonItemRightFrame];
+        [self.actionButton addTarget:self action:@selector(actionButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.navigationController.navigationBar addSubview:self.actionButton];
+    } else {
+        self.backButton.hidden = NO;//might be hidden from viewWillDisappear
+    }
 }
 
 - (void)actionButtonAction:(id)sender {

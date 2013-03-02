@@ -172,12 +172,11 @@ typedef enum {
     }
 }
 
-- (void)loadPhotoDetailsViewForPhoto:(PFObject*)photo {
+- (void)loadPhotoDetailsViewForSubjectPhotos:(NSArray*)photos {
     
-    if (photo) {
+    if (photos) {
         KKPhotoDetailsViewController *photoDetailsVC = [[KKPhotoDetailsViewController alloc] init];
-        photoDetailsVC.photo = photo;
-//        photoDetailsVC.delegate = self;
+        photoDetailsVC.photosArray = photos;
         [self.navigationController pushViewController:photoDetailsVC animated:YES];
     }
 }
@@ -511,7 +510,7 @@ typedef enum {
     }
 }
 
-- (void) kollectionTableViewDidScroll {
+- (void)kollectionTableViewDidScroll {
     [self resizeVisibleAreaIntersectionAndDropTargets];
 }
 

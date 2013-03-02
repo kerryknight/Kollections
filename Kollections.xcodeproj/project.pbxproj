@@ -20,6 +20,7 @@
 		C70054E516A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054E316A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.m */; };
 		C70054E616A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */; };
 		C70054ED16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */; };
+		C7025CA316E12D8500CFED73 /* DMLazyScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = C7025CA216E12D8500CFED73 /* DMLazyScrollView.m */; };
 		C70A13A416ACC1D9007EAA5B /* KKEditKollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */; };
 		C70A13AC16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist in Resources */ = {isa = PBXBuildFile; fileRef = C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */; };
 		C70A13B016ADF626007EAA5B /* NSMutableArray+AddOns.m in Sources */ = {isa = PBXBuildFile; fileRef = C70A13AF16ADF626007EAA5B /* NSMutableArray+AddOns.m */; };
@@ -716,6 +717,8 @@
 		C70054E416A4C21F0018F7F7 /* KKKollectionSubjectsTableCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = KKKollectionSubjectsTableCell.xib; sourceTree = "<group>"; };
 		C70054EB16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKollectionSubjectEditViewController.h; sourceTree = "<group>"; };
 		C70054EC16A4D27A0018F7F7 /* KKKollectionSubjectEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKollectionSubjectEditViewController.m; sourceTree = "<group>"; };
+		C7025CA116E12D8500CFED73 /* DMLazyScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMLazyScrollView.h; sourceTree = "<group>"; };
+		C7025CA216E12D8500CFED73 /* DMLazyScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMLazyScrollView.m; sourceTree = "<group>"; };
 		C70A13A216ACC1D9007EAA5B /* KKEditKollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKEditKollectionViewController.h; sourceTree = "<group>"; };
 		C70A13A316ACC1D9007EAA5B /* KKEditKollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKEditKollectionViewController.m; sourceTree = "<group>"; };
 		C70A13AB16ADBCF8007EAA5B /* EditPublicKollectionSetupItems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = EditPublicKollectionSetupItems.plist; sourceTree = "<group>"; };
@@ -1530,6 +1533,15 @@
 			name = "Subjects Table";
 			sourceTree = "<group>";
 		};
+		C7025CA016E12D8500CFED73 /* DMLazyScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				C7025CA116E12D8500CFED73 /* DMLazyScrollView.h */,
+				C7025CA216E12D8500CFED73 /* DMLazyScrollView.m */,
+			);
+			path = DMLazyScrollView;
+			sourceTree = "<group>";
+		};
 		C70A13AD16ADF5A7007EAA5B /* My Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -2141,6 +2153,7 @@
 		C7B1CD6416783C8500BA628A /* Photo Details */ = {
 			isa = PBXGroup;
 			children = (
+				C7025CA016E12D8500CFED73 /* DMLazyScrollView */,
 				C7B1CD6516783C8500BA628A /* KKPhotoDetailsTableViewController.h */,
 				C7B1CD6616783C8500BA628A /* KKPhotoDetailsTableViewController.m */,
 				C727C2A616E050F700958E3A /* KKPhotoDetailsViewController.h */,
@@ -3700,6 +3713,7 @@
 				C727C2A416E050AA00958E3A /* KKKollectionTableViewController.m in Sources */,
 				C727C2A516E050AA00958E3A /* KKKollectionViewController.m in Sources */,
 				C727C2A816E050F700958E3A /* KKPhotoDetailsViewController.m in Sources */,
+				C7025CA316E12D8500CFED73 /* DMLazyScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

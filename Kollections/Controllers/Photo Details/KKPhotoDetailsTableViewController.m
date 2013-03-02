@@ -41,14 +41,6 @@ static const CGFloat kKKCellInsetWidth = 20.0f;
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KKUtilityUserLikedUnlikedPhotoCallbackFinishedNotification object:self.photo];
 }
 
-//- (id)initWithStyle:(UITableViewStyle)style {
-//    self = [super initWithStyle:style];
-//    if (self) {
-//        // Custom initialization
-//    }
-//    return self;
-//}
-
 - (id)initWithPhoto:(PFObject *)aPhoto {
     self = [super initWithStyle:UITableViewStylePlain];
     if (self) {
